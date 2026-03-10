@@ -60,5 +60,5 @@ Complete and commit one component at a time. Check off after each commit.
 - [x] toggle-group
 
 ### Specialized
-- [ ] avatar
+- [x] avatar
 - [ ] visually-hidden
