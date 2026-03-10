@@ -42,6 +42,9 @@ yarn-error.log
 # turbo
 .turbo
 
+# fumadocs (auto-generated)
+.source
+
 #arweave
 wallet.json
 keyfile.json
