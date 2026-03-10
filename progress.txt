@@ -62,3 +62,31 @@ Complete and commit one component at a time. Check off after each commit.
 ### Specialized
 - [x] avatar
 - [x] visually-hidden (custom)
+
+---
+
+# Phase 3: Docs Infrastructure
+
+- [ ] Content structure
+- [ ] Component page templates
+- [ ] MDX rendering
+- [ ] Example/playground infrastructure
+
+---
+
+# Phase 4: Cleanup
+
+- [ ] Update README
+- [ ] Write MIGRATION_FROM_AURA.md
+- [ ] Delete legacy code (packages/react/, .storybook/, _templates/)
+- [ ] Update package.json scripts
+- [ ] Deprecate @aura-ui/react on npm
+
+---
+
+# Phase 5: Registry Setup
+
+- [ ] Fix `@/components/lib/utils` → `@/lib/utils` in all registry JSONs
+- [ ] Test all registry JSONs with shadcn CLI locally
+- [ ] Verify dependencies in each JSON
+- [ ] Deploy to ora-ui.com/r/

@@ -102,6 +102,7 @@ Box, Container, Flex, Grid, Typography, IconButton, Link
 7. Specialized (Avatar, AspectRatio, Separator, VisuallyHidden)
 8. Docs infrastructure
 9. Cleanup & polish
+10. Registry setup & testing
 
 **Note**: Break into ~9-12 commits
 
@@ -176,24 +177,25 @@ When shadcn supports Base UI variant, **prefer Base UI**:
 - Complex components (5)
 - Specialized (4)
 
-### Phase 7: Registry Setup
-- Generate registry JSONs
-- Test with shadcn CLI
-- Verify dependencies
-
-### Phase 8: Docs Infrastructure
+### Phase 7: Docs Infrastructure
 - Content structure
 - Component page templates
 - MDX rendering
 - Example/playground infrastructure
 
-### Phase 9: Cleanup
+### Phase 8: Cleanup
 - Update README
 - Write MIGRATION_FROM_AURA.md
 - Delete legacy code
 - Update package.json scripts
 - Deprecate @aura-ui/react on npm
 - Deploy docs to ora-ui.com
+
+### Phase 9: Registry Setup
+- Fix `@/components/lib/utils` → `@/lib/utils` in all registry JSONs
+- Test with shadcn CLI locally
+- Verify dependencies in each JSON
+- Deploy to ora-ui.com/r/
 
 ## Key Decisions
 
