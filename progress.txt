@@ -40,7 +40,7 @@ Complete and commit one component at a time. Check off after each commit.
 - [x] textarea
 
 ### Form
-- [ ] checkbox
+- [x] checkbox
 - [ ] radio-group
 - [ ] switch
 
