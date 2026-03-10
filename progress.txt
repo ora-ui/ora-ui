@@ -67,10 +67,31 @@ Complete and commit one component at a time. Check off after each commit.
 
 # Phase 3: Docs Infrastructure
 
-- [ ] Content structure
-- [ ] Component page templates
-- [ ] MDX rendering
+- [x] Content structure (content/docs/ + components/meta.json)
+- [x] MDX rendering (fumadocs-mdx + source loader + [[...slug]] page route)
+- [x] Docs layout (DocsLayout, RootProvider, search API)
+- [ ] Component page templates (one done for verification, rest pending)
 - [ ] Example/playground infrastructure
+
+## Created
+- apps/docs/source.config.ts - fumadocs-mdx config
+- apps/docs/next.config.mjs - renamed from .ts, added createMDX plugin
+- apps/docs/src/lib/source.ts - fumadocs source loader
+- apps/docs/src/lib/layout.shared.tsx - shared nav options
+- apps/docs/src/components/mdx.tsx - MDX component registry
+- apps/docs/src/app/docs/layout.tsx - DocsLayout wrapper
+- apps/docs/src/app/docs/[[...slug]]/page.tsx - dynamic docs page
+- apps/docs/src/app/api/search/route.ts - full-text search
+- apps/docs/content/docs/ - MDX content root (index + components)
+
+## Modified
+- apps/docs/tsconfig.json - added collections/* alias
+- apps/docs/src/app/globals.css - added fumadocs CSS imports
+- apps/docs/src/app/layout.tsx - added RootProvider, cleaned up fonts
+- .gitignore - added .source (fumadocs auto-generated)
+
+## Installed
+- @types/mdx (devDep)
 
 ---
 
