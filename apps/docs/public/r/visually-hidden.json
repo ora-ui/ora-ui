@@ -1,0 +1,13 @@
+{
+  "name": "visually-hidden",
+  "type": "registry:ui",
+  "files": [
+    {
+      "path": "components/ui/visually-hidden.tsx",
+      "content": "import * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nfunction VisuallyHidden({\n  className,\n  ...props\n}: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-slot=\"visually-hidden\"\n      className={cn(\n        \"absolute h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [clip:rect(0,0,0,0)]\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { VisuallyHidden }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": []
+}

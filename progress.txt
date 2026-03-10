@@ -61,4 +61,4 @@ Complete and commit one component at a time. Check off after each commit.
 
 ### Specialized
 - [x] avatar
-- [ ] visually-hidden
+- [x] visually-hidden (custom)
