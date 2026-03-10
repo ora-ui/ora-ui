@@ -50,7 +50,7 @@ Complete and commit one component at a time. Check off after each commit.
 - [x] dialog
 - [x] alert-dialog
 - [x] dropdown-menu
-- [ ] tooltip
+- [x] tooltip
 
 ### Complex
 - [ ] accordion
