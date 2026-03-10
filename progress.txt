@@ -29,6 +29,8 @@
 Install each shadcn component into apps/docs/src/components/ui/.
 Complete and commit one component at a time. Check off after each commit.
 
+**Known issue**: shadcn installs components with `@/components/lib/utils` instead of `@/lib/utils` (likely due to style preset). All components will need this import path fixed before publishing registry JSONs.
+
 ## Checklist
 
 ### Simple
@@ -45,7 +47,7 @@ Complete and commit one component at a time. Check off after each commit.
 - [x] switch
 
 ### Overlay
-- [ ] dialog
+- [x] dialog
 - [ ] alert-dialog
 - [ ] dropdown-menu
 - [ ] tooltip
