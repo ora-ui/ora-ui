@@ -34,7 +34,7 @@ Complete and commit one component at a time. Check off after each commit.
 ### Simple
 - [x] badge
 - [x] button
-- [ ] input
+- [x] input
 - [ ] kbd
 - [ ] label
 - [ ] textarea
