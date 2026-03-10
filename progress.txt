@@ -37,7 +37,7 @@ Complete and commit one component at a time. Check off after each commit.
 - [x] input
 - [x] kbd
 - [x] label
-- [ ] textarea
+- [x] textarea
 
 ### Form
 - [ ] checkbox
