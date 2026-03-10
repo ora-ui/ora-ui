@@ -57,7 +57,7 @@ Complete and commit one component at a time. Check off after each commit.
 - [x] toast (sonner)
 - [x] toolbar (custom, Base UI)
 - [x] toggle
-- [ ] toggle-group
+- [x] toggle-group
 
 ### Specialized
 - [ ] avatar
