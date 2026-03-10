@@ -76,8 +76,10 @@ Box, Container, Flex, Grid, Typography, IconButton, Link
    - Test: `npx shadcn add "http://localhost:3000/r/[component].json"`
 
 3. **Commit the component**
+   Run each command separately (do NOT chain with &&):
    ```bash
-   git add .
+   cd /Users/gregogun/webdev/ora-ui/ora-ui
+   git add apps/docs/src/components/ui/[component].tsx apps/docs/public/r/[component].json progress.txt
    git commit -m "feat: add [component] shadcn component"
    ```
 
