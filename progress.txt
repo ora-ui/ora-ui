@@ -48,7 +48,7 @@ Complete and commit one component at a time. Check off after each commit.
 
 ### Overlay
 - [x] dialog
-- [ ] alert-dialog
+- [x] alert-dialog
 - [ ] dropdown-menu
 - [ ] tooltip
 
