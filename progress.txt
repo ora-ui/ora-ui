@@ -53,7 +53,7 @@ Complete and commit one component at a time. Check off after each commit.
 - [x] tooltip
 
 ### Complex
-- [ ] accordion
+- [x] accordion
 - [ ] toast
 - [ ] toolbar
 - [ ] toggle
