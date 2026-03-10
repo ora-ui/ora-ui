@@ -56,7 +56,7 @@ Complete and commit one component at a time. Check off after each commit.
 - [x] accordion
 - [x] toast (sonner)
 - [x] toolbar (custom, Base UI)
-- [ ] toggle
+- [x] toggle
 - [ ] toggle-group
 
 ### Specialized
