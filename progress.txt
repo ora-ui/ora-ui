@@ -1,0 +1,62 @@
+# Phase 1: Infrastructure - COMPLETE
+
+## Created
+- apps/docs/ - Next.js app w/ Tailwind v4
+- apps/docs/components.json - shadcn config
+- apps/docs/src/lib/utils.ts - cn() + ariaAttr + dataAttr helpers
+- apps/docs/tailwind.config.ts - minimal config
+- apps/docs/src/app/globals.css - CSS vars (light/dark)
+- apps/docs/public/r/ - registry dir (empty)
+
+## Modified
+- pnpm-workspace.yaml - added 'apps/*'
+
+## Installed
+- fumadocs-core, fumadocs-mdx, fumadocs-ui
+- class-variance-authority, clsx, tailwind-merge
+- @radix-ui/react-slot, @radix-ui/react-icons
+
+## Verified
+- Dev server runs (localhost:3000)
+- TypeScript paths work (@/lib/utils)
+- cn() helper functional
+- Tailwind CSS operational
+
+---
+
+# Phase 2: Component Migration
+
+Install each shadcn component into apps/docs/src/components/ui/.
+Complete and commit one component at a time. Check off after each commit.
+
+## Checklist
+
+### Simple
+- [ ] badge
+- [ ] button
+- [ ] input
+- [ ] kbd
+- [ ] label
+- [ ] textarea
+
+### Form
+- [ ] checkbox
+- [ ] radio-group
+- [ ] switch
+
+### Overlay
+- [ ] dialog
+- [ ] alert-dialog
+- [ ] dropdown-menu
+- [ ] tooltip
+
+### Complex
+- [ ] accordion
+- [ ] toast
+- [ ] toolbar
+- [ ] toggle
+- [ ] toggle-group
+
+### Specialized
+- [ ] avatar
+- [ ] visually-hidden
