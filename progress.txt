@@ -42,7 +42,7 @@ Complete and commit one component at a time. Check off after each commit.
 ### Form
 - [x] checkbox
 - [x] radio-group
-- [ ] switch
+- [x] switch
 
 ### Overlay
 - [ ] dialog
