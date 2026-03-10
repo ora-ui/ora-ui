@@ -55,7 +55,7 @@ Complete and commit one component at a time. Check off after each commit.
 ### Complex
 - [x] accordion
 - [x] toast (sonner)
-- [ ] toolbar
+- [x] toolbar (custom, Base UI)
 - [ ] toggle
 - [ ] toggle-group
 
