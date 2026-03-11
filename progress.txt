@@ -96,10 +96,10 @@ Complete and commit one component at a time. Check off after each commit.
 
 # Phase 4: Cleanup
 
-- [ ] Update README
-- [ ] Delete legacy code (packages/react/, .storybook/, _templates/)
-- [ ] Update package.json scripts
-- [ ] Deprecate @aura-ui/react on npm
+- [x] Update README
+- [x] Delete legacy code (packages/react/, .storybook/, _templates/)
+- [x] Update package.json scripts
+- [ ] Deprecate @aura-ui/react on npm (manual)
 
 ---
 
