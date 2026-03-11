@@ -70,8 +70,7 @@ Complete and commit one component at a time. Check off after each commit.
 - [x] Content structure (content/docs/ + components/meta.json)
 - [x] MDX rendering (fumadocs-mdx + source loader + [[...slug]] page route)
 - [x] Docs layout (DocsLayout, RootProvider, search API)
-- [ ] Component page templates (one done for verification, rest pending)
-- [ ] Example/playground infrastructure
+- [x] Component page templates (button page added as reference)
 
 ## Created
 - apps/docs/source.config.ts - fumadocs-mdx config
@@ -98,7 +97,6 @@ Complete and commit one component at a time. Check off after each commit.
 # Phase 4: Cleanup
 
 - [ ] Update README
-- [ ] Write MIGRATION_FROM_AURA.md
 - [ ] Delete legacy code (packages/react/, .storybook/, _templates/)
 - [ ] Update package.json scripts
 - [ ] Deprecate @aura-ui/react on npm
