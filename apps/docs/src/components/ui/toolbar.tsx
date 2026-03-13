@@ -1,23 +1,20 @@
-"use client"
+'use client';
 
-import { Toolbar as ToolbarPrimitive } from "@base-ui/react/toolbar"
+import { Toolbar as ToolbarPrimitive } from '@base-ui/react/toolbar';
 
-import { cn } from "@/components/lib/utils"
+import { cn } from '@/lib/utils';
 
 function Toolbar({ className, ...props }: ToolbarPrimitive.Root.Props) {
   return (
     <ToolbarPrimitive.Root
       data-slot="toolbar"
-      className={cn("flex items-center gap-1", className)}
+      className={cn('flex items-center gap-1', className)}
       {...props}
     />
-  )
+  );
 }
 
-function ToolbarButton({
-  className,
-  ...props
-}: ToolbarPrimitive.Button.Props) {
+function ToolbarButton({ className, ...props }: ToolbarPrimitive.Button.Props) {
   return (
     <ToolbarPrimitive.Button
       data-slot="toolbar-button"
@@ -27,7 +24,7 @@ function ToolbarButton({
       )}
       {...props}
     />
-  )
+  );
 }
 
 function ToolbarLink({ className, ...props }: ToolbarPrimitive.Link.Props) {
@@ -40,30 +37,27 @@ function ToolbarLink({ className, ...props }: ToolbarPrimitive.Link.Props) {
       )}
       {...props}
     />
-  )
+  );
 }
 
 function ToolbarGroup({ className, ...props }: ToolbarPrimitive.Group.Props) {
   return (
     <ToolbarPrimitive.Group
       data-slot="toolbar-group"
-      className={cn("flex items-center gap-1", className)}
+      className={cn('flex items-center gap-1', className)}
       {...props}
     />
-  )
+  );
 }
 
-function ToolbarSeparator({
-  className,
-  ...props
-}: ToolbarPrimitive.Separator.Props) {
+function ToolbarSeparator({ className, ...props }: ToolbarPrimitive.Separator.Props) {
   return (
     <ToolbarPrimitive.Separator
       data-slot="toolbar-separator"
-      className={cn("mx-1 h-5 w-px shrink-0 bg-border/50", className)}
+      className={cn('mx-1 h-5 w-px shrink-0 bg-border/50', className)}
       {...props}
     />
-  )
+  );
 }
 
-export { Toolbar, ToolbarButton, ToolbarLink, ToolbarGroup, ToolbarSeparator }
+export { Toolbar, ToolbarButton, ToolbarLink, ToolbarGroup, ToolbarSeparator };
