@@ -99,13 +99,7 @@ Complete and commit one component at a time. Check off after each commit.
 - [x] Update README
 - [x] Delete legacy code (packages/react/, .storybook/, _templates/)
 - [x] Update package.json scripts
-- [ ] Deprecate @aura-ui/react on npm (manual)
-
----
-
-# Phase 5: Registry Setup
-
-- [ ] Fix `@/components/lib/utils` → `@/lib/utils` in all registry JSONs
-- [ ] Test all registry JSONs with shadcn CLI locally
-- [ ] Verify dependencies in each JSON
-- [ ] Deploy to ora-ui.com/r/
+- [x] Fix `@/components/lib/utils` → `@/lib/utils` in all registry JSONs
+- [x] Fix stale pnpm-lock.yaml (regenerated from current package.json)
+- [x] Set up CI (pnpm/action-setup@v4, Node 20, reads pnpm version from packageManager)
+- [x] Set up pre-commit hooks (husky + lint-staged + prettier + typecheck)
