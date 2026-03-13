@@ -1,0 +1,56 @@
+---
+title: Button
+description: Triggers an action or event, such as submitting a form or opening a dialog.
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://ora-ui.com/r/button.json"
+```
+
+## Usage
+
+```tsx
+import { Button } from "@/components/ui/button"
+```
+
+```tsx
+<Button>Click me</Button>
+```
+
+## Variants
+
+The `variant` prop controls the visual style of the button.
+
+```tsx
+<Button variant="default">Default</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="destructive">Destructive</Button>
+<Button variant="link">Link</Button>
+```
+
+## Sizes
+
+The `size` prop controls the button dimensions.
+
+```tsx
+<Button size="xs">Extra Small</Button>
+<Button size="sm">Small</Button>
+<Button size="default">Default</Button>
+<Button size="lg">Large</Button>
+```
+
+Icon-only sizes are also available: `icon-xs`, `icon-sm`, `icon`, `icon-lg`.
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `variant` | `"default" \| "secondary" \| "outline" \| "ghost" \| "destructive" \| "link"` | `"default"` |
+| `size` | `"xs" \| "sm" \| "default" \| "lg" \| "icon-xs" \| "icon-sm" \| "icon" \| "icon-lg"` | `"default"` |
+| `className` | `string` | — |
+
+All other props are forwarded to the underlying [Base UI Button](https://base-ui.com/components/button) primitive.

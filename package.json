@@ -1,38 +1,24 @@
 {
-  "name": "aura-ui",
+  "name": "ora-ui",
   "private": true,
   "scripts": {
-    "postinstall": "husky install",
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
     "clean": "turbo run clean && rm -rf node_modules",
     "prettier": "prettier --write '**/*.{json,md,js,ts,jsx,tsx,yml,css}'",
-    "prestorybook": "pnpm clean && pnpm install",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "generate:package": "npx hygen package new",
     "version": "pnpm changeset version && pnpm install --lockfile-only",
-    "release": "pnpm changeset publish"
+    "release": "pnpm changeset publish",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@changesets/cli": "2.23.0",
-    "@storybook/addon-a11y": "6.5.13",
-    "@storybook/addon-actions": "6.5.13",
-    "@storybook/addon-docs": "6.5.16",
-    "@storybook/addon-essentials": "6.5.13",
-    "@storybook/addon-links": "6.5.13",
-    "@storybook/addons": "6.5.16",
-    "@storybook/react": "6.5.13",
-    "@storybook/theming": "6.5.16",
-    "husky": "8.0.1",
-    "lint-staged": "12.4.1",
-    "prettier": "2.6.2",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-icons": "4.7.1",
-    "storybook-dark-mode": "2.1.1",
-    "turbo": "1.4.7",
-    "typescript": "4.7.4"
-  }
+    "@changesets/cli": "^2.30.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.3",
+    "prettier": "^3.8.1",
+    "turbo": "^2.8.16",
+    "typescript": "^5.9.3"
+  },
+  "packageManager": "pnpm@9.0.0"
 }

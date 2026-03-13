@@ -1,0 +1,25 @@
+{
+  "title": "Components",
+  "pages": [
+    "accordion",
+    "alert-dialog",
+    "avatar",
+    "badge",
+    "button",
+    "checkbox",
+    "dialog",
+    "dropdown-menu",
+    "input",
+    "kbd",
+    "label",
+    "radio-group",
+    "switch",
+    "textarea",
+    "toast",
+    "toggle",
+    "toggle-group",
+    "toolbar",
+    "tooltip",
+    "visually-hidden"
+  ]
+}
