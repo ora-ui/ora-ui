@@ -43,17 +43,16 @@
   /* semantic */
   --app: var(--gray-base);
   --subtle: var(--gray-50);
-  --element: var(--gray-100);
-  --element-hover: var(--gray-200);
-  --element-active: var(--gray-300);
+  --overlay: oklch(1 0 0);
+  --ui: var(--gray-100);
+  --ui-hover: var(--gray-200);
+  --ui-active: var(--gray-300);
   --border-subtle: var(--gray-400);
-  --border-element: var(--gray-500);
-  --border-hover: var(--gray-600);
-  --solid: var(--gray-700);
-  --solid-hover: var(--gray-800);
-  --text-lo: var(--gray-900);
-  --text-hi: var(--gray-950);
-  --text-solid: oklch(0.997 0 0);
+  --border: var(--gray-500);
+  --fill: var(--gray-700);
+  --fill-hover: var(--gray-800);
+  --text-secondary: var(--gray-900);
+  --text-primary: var(--gray-950);
 
   /* app */
   --header-height: 48px;
@@ -145,17 +144,16 @@
   /* semantic */
   --app: var(--gray-base);
   --subtle: var(--gray-50);
-  --element: var(--gray-100);
-  --element-hover: var(--gray-200);
-  --element-active: var(--gray-300);
+  --overlay: var(--gray-50);
+  --ui: var(--gray-100);
+  --ui-hover: var(--gray-200);
+  --ui-active: var(--gray-300);
   --border-subtle: var(--gray-400);
-  --border-element: var(--gray-500);
-  --border-hover: var(--gray-600);
-  --solid: var(--gray-700);
-  --solid-hover: var(--gray-800);
-  --text-lo: var(--gray-900);
-  --text-hi: var(--gray-950);
-  --text-solid: oklch(0.16 0 0);
+  --border: var(--gray-500);
+  --fill: var(--gray-700);
+  --fill-hover: var(--gray-800);
+  --text-secondary: var(--gray-900);
+  --text-primary: var(--gray-950);
 
   /* overrides */
   --gray-base: oklch(0.179 0.004 286);
@@ -250,17 +248,15 @@
   /* semantic */
   --color-app: var(--app);
   --color-subtle: var(--subtle);
-  --color-element: var(--element);
-  --color-element-hover: var(--element-hover);
-  --color-element-active: var(--element-active);
+  --color-overlay: var(--overlay);
+  --color-ui: var(--ui);
+  --color-ui-hover: var(--ui-hover);
+  --color-ui-active: var(--ui-active);
   --color-border-subtle: var(--border-subtle);
-  --color-border-element: var(--border-element);
-  --color-border-hover: var(--border-hover);
-  --color-solid: var(--solid);
-  --color-solid-hover: var(--solid-hover);
-  --color-text-lo: var(--text-lo);
-  --color-text-hi: var(--text-hi);
-  --color-text-solid: var(--text-solid);
+  --color-fill: var(--fill);
+  --color-fill-hover: var(--fill-hover);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-primary: var(--text-primary);
 
   /* overrides */
   --color-gray-base: var(--gray-base);
