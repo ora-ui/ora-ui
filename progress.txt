@@ -94,6 +94,22 @@ Complete and commit one component at a time. Check off after each commit.
 
 ---
 
+# Phase 5: Theme Tokens
+
+- [x] Add component build strategy doc (plans/COMPONENT-STRATEGY.md)
+- [x] Replace custom color tokens with 12-step Radix-inspired semantic scale
+  - Steps 1–5: background layer (app, subtle, element, element-hover, element-active)
+  - Steps 6–8: border layer (border-subtle, border-element, border-hover)
+  - Steps 9–10: solid layer (solid, solid-hover)
+  - Steps 11–12: text layer (text-lo, text-hi)
+  - Plus text-solid for text on solid backgrounds
+  - All semantic tokens derived from gray scale vars (light + dark)
+  - Resolved --border conflict with shadcn token
+- [x] Switch radius scale to multiplicative (avoids negatives, collapses to 0 when --radius: 0)
+  - Scale: xs (0.4x), sm (0.6x), md (0.8x), lg (1x), xl (1.4x), full (9999px)
+
+---
+
 # Phase 4: Cleanup
 
 - [x] Update README
