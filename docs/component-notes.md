@@ -42,6 +42,12 @@ Things worth keeping an eye on that are not yet problems. Patterns that might ca
 
 ---
 
+## Updating the index
+
+When you create or update a component notes file, also update the index table in `notes/components/README.md`. Each row should link to the file and reflect the component's current status.
+
+---
+
 ## What does not belong here
 
 - Implementation details already readable from the code
