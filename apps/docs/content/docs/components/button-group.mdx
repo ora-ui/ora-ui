@@ -1,0 +1,296 @@
+---
+title: Button Group
+description: Groups related buttons together with shared borders and consistent styling.
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://ora-ui.com/r/button-group.json"
+```
+
+## Usage
+
+```tsx
+import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from '@/components/ui/button-group';
+import { Button } from '@/components/ui/button';
+
+<ButtonGroup>
+  <Button variant="surface">One</Button>
+  <Button variant="surface">Two</Button>
+  <Button variant="surface">Three</Button>
+</ButtonGroup>;
+```
+
+## Examples
+
+### Default
+
+A horizontal group of buttons sharing a continuous border.
+
+<ButtonGroup>
+  <ButtonGroup>
+    <Button variant="surface" size="icon">
+      <ChevronLeftIcon />
+    </Button>
+  </ButtonGroup>
+  <ButtonGroup>
+    <Button variant="surface">One</Button>
+    <Button variant="surface">Two</Button>
+    <Button variant="surface">Three</Button>
+  </ButtonGroup>
+</ButtonGroup>
+
+```tsx
+import { ChevronLeftIcon } from '@heroicons/react/16/solid';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { Button } from '@/components/ui/button';
+
+export default function ButtonGroupDefault() {
+  return (
+    <ButtonGroup>
+      <ButtonGroup>
+        <Button variant="surface" size="icon">
+          <ChevronLeftIcon />
+        </Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button variant="surface">One</Button>
+        <Button variant="surface">Two</Button>
+        <Button variant="surface">Three</Button>
+      </ButtonGroup>
+    </ButtonGroup>
+  );
+}
+```
+
+### Vertical
+
+Use `orientation="vertical"` to stack buttons.
+
+<ButtonGroup orientation="vertical">
+  <Button variant="surface" size="icon">
+    <PlusIcon />
+  </Button>
+  <Button variant="surface" size="icon">
+    <MinusIcon />
+  </Button>
+</ButtonGroup>
+
+```tsx
+import { MinusIcon, PlusIcon } from '@heroicons/react/16/solid';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { Button } from '@/components/ui/button';
+
+export default function ButtonGroupVertical() {
+  return (
+    <ButtonGroup orientation="vertical">
+      <Button variant="surface" size="icon">
+        <PlusIcon />
+      </Button>
+      <Button variant="surface" size="icon">
+        <MinusIcon />
+      </Button>
+    </ButtonGroup>
+  );
+}
+```
+
+### With Icons
+
+Buttons in a group support icons the same way standalone buttons do.
+
+<ButtonGroup>
+  <Button variant="surface">
+    <ChevronLeftIcon />
+    Previous
+  </Button>
+  <Button variant="surface">
+    Next
+    <ChevronRightIcon />
+  </Button>
+</ButtonGroup>
+
+```tsx
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/16/solid';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { Button } from '@/components/ui/button';
+
+export default function ButtonGroupWithIcons() {
+  return (
+    <ButtonGroup>
+      <Button variant="surface">
+        <ChevronLeftIcon />
+        Previous
+      </Button>
+      <Button variant="surface">
+        Next
+        <ChevronRightIcon />
+      </Button>
+    </ButtonGroup>
+  );
+}
+```
+
+### Icon Buttons
+
+Groups of icon-only buttons for compact action bars.
+
+<ButtonGroup>
+  <Button variant="surface" size="icon">
+    <PencilSquareIcon className="size-3.5" />
+  </Button>
+  <Button variant="surface" size="icon">
+    <ShareIcon className="size-3.5" />
+  </Button>
+  <Button variant="surface" size="icon">
+    <BookmarkIcon className="size-3.5" />
+  </Button>
+  <Button variant="surface" size="icon">
+    <TrashIcon className="size-3.5" />
+  </Button>
+</ButtonGroup>
+
+```tsx
+import { BookmarkIcon, PencilSquareIcon, ShareIcon, TrashIcon } from '@heroicons/react/16/solid';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { Button } from '@/components/ui/button';
+
+export default function ButtonGroupIconButtons() {
+  return (
+    <ButtonGroup>
+      <Button variant="surface" size="icon">
+        <PencilSquareIcon className="size-3.5" />
+      </Button>
+      <Button variant="surface" size="icon">
+        <ShareIcon className="size-3.5" />
+      </Button>
+      <Button variant="surface" size="icon">
+        <BookmarkIcon className="size-3.5" />
+      </Button>
+      <Button variant="surface" size="icon">
+        <TrashIcon className="size-3.5" />
+      </Button>
+    </ButtonGroup>
+  );
+}
+```
+
+### With Separator
+
+Use `ButtonGroupSeparator` to divide buttons. Recommended for `solid` and `soft` variants — not needed for `outline`, which relies on its border for separation.
+
+<ButtonGroup>
+  <ButtonGroup>
+    <Button>
+      <MagnifyingGlassIcon />
+      Search
+    </Button>
+    <ButtonGroupSeparator />
+    <Button>
+      <PlusCircleIcon />
+      New
+    </Button>
+  </ButtonGroup>
+  <ButtonGroup>
+    <Button variant="soft">
+      <MagnifyingGlassIcon />
+      Search
+    </Button>
+    <ButtonGroupSeparator />
+    <Button variant="soft">
+      <PlusCircleIcon />
+      New
+    </Button>
+  </ButtonGroup>
+</ButtonGroup>
+
+```tsx
+import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/16/solid';
+import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group';
+import { Button } from '@/components/ui/button';
+
+export default function ButtonGroupWithSeparator() {
+  return (
+    <ButtonGroup>
+      <ButtonGroup>
+        <Button>
+          <MagnifyingGlassIcon />
+          Search
+        </Button>
+        <ButtonGroupSeparator />
+        <Button>
+          <PlusCircleIcon />
+          New
+        </Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button variant="soft">
+          <MagnifyingGlassIcon />
+          Search
+        </Button>
+        <ButtonGroupSeparator />
+        <Button variant="soft">
+          <PlusCircleIcon />
+          New
+        </Button>
+      </ButtonGroup>
+    </ButtonGroup>
+  );
+}
+```
+
+### With Text
+
+Use `ButtonGroupText` to attach a non-interactive label to the group.
+
+<ButtonGroup>
+  <ButtonGroupText>Sort by</ButtonGroupText>
+  <Button variant="surface">Name</Button>
+  <Button variant="surface">Date</Button>
+  <Button variant="surface">Size</Button>
+</ButtonGroup>
+
+```tsx
+import { ButtonGroup, ButtonGroupText } from '@/components/ui/button-group';
+import { Button } from '@/components/ui/button';
+
+export default function ButtonGroupWithText() {
+  return (
+    <ButtonGroup>
+      <ButtonGroupText>Sort by</ButtonGroupText>
+      <Button variant="surface">Name</Button>
+      <Button variant="surface">Date</Button>
+      <Button variant="surface">Size</Button>
+    </ButtonGroup>
+  );
+}
+```
+
+## Props
+
+### ButtonGroup
+
+| Prop          | Type                         | Default        |
+| ------------- | ---------------------------- | -------------- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
+| `className`   | `string`                     | —              |
+
+All other props are forwarded to the underlying `<div>` element.
+
+### ButtonGroupSeparator
+
+| Prop          | Type                         | Default      |
+| ------------- | ---------------------------- | ------------ |
+| `orientation` | `"horizontal" \| "vertical"` | `"vertical"` |
+| `className`   | `string`                     | —            |
+
+All other props are forwarded to the [Separator](/docs/components/separator) primitive.
+
+### ButtonGroupText
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` | —       |
+
+All other props are forwarded to the underlying `<div>` element.
