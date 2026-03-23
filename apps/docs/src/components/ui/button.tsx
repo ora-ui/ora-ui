@@ -38,9 +38,9 @@ const buttonVariants = cva(
         solid:
           'bg-(--btn-theme-700) hover:bg-(--btn-theme-700)/90 active:bg-(--btn-theme-700)/80 text-white focus-visible:outline-offset-2',
         outline:
-          'border border-(--btn-theme-400) hover:border-(--btn-theme-500)/75 active:border-(--btn-theme-500) hover:bg-(--btn-theme-400)/25 active:bg-(--btn-theme-400)/40 text-(--btn-theme-800)',
+          'border border-(--btn-theme-600) hover:bg-(--btn-theme-400)/40 active:bg-(--btn-theme-400)/60 text-(--btn-theme-800)',
         surface:
-          'border border-(--btn-theme-500) hover:border-(--btn-theme-500)/75 active:border-(--btn-theme-500) bg-(--btn-theme-400)/25 hover:bg-(--btn-theme-400)/35 active:bg-(--btn-theme-400)/50 text-(--btn-theme-800)',
+          'border border-(--btn-theme-600) bg-(--btn-theme-400)/25 hover:bg-(--btn-theme-400)/40 active:bg-(--btn-theme-400)/60 text-(--btn-theme-800)',
         soft: 'bg-(--btn-theme-300)/50  hover:bg-(--btn-theme-400)/50 active:bg-(--btn-theme-400)/65 text-(--btn-theme-900)',
         ghost:
           'hover:bg-(--btn-theme-400)/50 active:bg-(--btn-theme-400)/65 text-(--btn-theme-900)',
@@ -69,14 +69,12 @@ const buttonVariants = cva(
       {
         variant: 'outline',
         theme: 'gray',
-        class:
-          'text-(--btn-theme-950) hover:border-(--btn-theme-500) active:border-(--btn-theme-600)',
+        class: 'text-(--btn-theme-950)',
       },
       {
         variant: 'surface',
         theme: 'gray',
-        class:
-          'text-(--btn-theme-950) hover:border-(--btn-theme-600) active:border-(--btn-theme-700)',
+        class: 'text-(--btn-theme-950)',
       },
       {
         variant: 'soft',
