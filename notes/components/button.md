@@ -38,5 +38,4 @@ None yet.
 
 ## Considerations
 
-- **`dark:border-input` on `outline` and `surface`**: Carried over from the shadcn base. With the ring approach, this may be redundant or conflicting. Worth auditing when dark mode styling is properly reviewed.
-- **`outline + gray` compound only overrides text**: The ring color adjustment for gray outline was stripped during cleanup. May need revisiting once visually tested against accent and destructive variants.
+None currently.
