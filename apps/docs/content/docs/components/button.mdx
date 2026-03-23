@@ -12,45 +12,116 @@ npx shadcn@latest add "https://ora-ui.com/r/button.json"
 ## Usage
 
 ```tsx
-import { Button } from "@/components/ui/button"
-```
+import { Button } from '@/components/ui/button';
 
-```tsx
-<Button>Click me</Button>
+<Button>Button</Button>;
 ```
 
 ## Variants
 
 The `variant` prop controls the visual style of the button.
 
-```tsx
-<Button variant="default">Default</Button>
-<Button variant="secondary">Secondary</Button>
-<Button variant="outline">Outline</Button>
-<Button variant="ghost">Ghost</Button>
-<Button variant="destructive">Destructive</Button>
-<Button variant="link">Link</Button>
-```
-
-## Sizes
-
-The `size` prop controls the button dimensions.
+<div className="flex gap-2">
+  <Button variant="solid">Solid</Button>
+  <Button variant="outline">Outline</Button>
+  <Button variant="surface">Surface</Button>
+  <Button variant="soft">Soft</Button>
+  <Button variant="ghost">Ghost</Button>
+</div>
 
 ```tsx
-<Button size="xs">Extra Small</Button>
-<Button size="sm">Small</Button>
-<Button size="default">Default</Button>
-<Button size="lg">Large</Button>
+import { Button } from '@/components/ui/button';
+
+export default function ButtonVariants() {
+  return (
+    <div className="flex gap-2">
+      <Button variant="solid">Solid</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="surface">Surface</Button>
+      <Button variant="soft">Soft</Button>
+      <Button variant="ghost">Ghost</Button>
+    </div>
+  );
+}
 ```
 
-Icon-only sizes are also available: `icon-xs`, `icon-sm`, `icon`, `icon-lg`.
+## Theme
+
+The `theme` prop applies a color scheme across all variants.
+
+<div className="flex gap-2">
+  <Button variant="solid" theme="gray">
+    Gray
+  </Button>
+  <Button variant="solid" theme="accent">
+    Accent
+  </Button>
+  <Button variant="solid" theme="destructive">
+    Destructive
+  </Button>
+</div>
+
+```tsx
+import { Button } from '@/components/ui/button';
+
+export default function ButtonTheme() {
+  return (
+    <div className="flex gap-2">
+      <Button variant="solid" theme="gray">
+        Gray
+      </Button>
+      <Button variant="solid" theme="accent">
+        Accent
+      </Button>
+      <Button variant="solid" theme="destructive">
+        Destructive
+      </Button>
+    </div>
+  );
+}
+```
+
+## With Icon
+
+Icons can be placed alongside button text. The button handles icon sizing automatically.
+
+<div className="flex gap-2">
+  <Button>
+    <PlusCircleIcon />
+    Create New
+  </Button>
+  <Button variant="soft">
+    <CloudArrowUpIcon />
+    Upload
+  </Button>
+</div>
+
+```tsx
+import { CloudArrowUpIcon, PlusCircleIcon } from '@heroicons/react/16/solid';
+import { Button } from '@/components/ui/button';
+
+export default function ButtonWithIcon() {
+  return (
+    <div className="flex gap-2">
+      <Button>
+        <PlusCircleIcon />
+        Create New
+      </Button>
+      <Button variant="soft">
+        <CloudArrowUpIcon />
+        Upload
+      </Button>
+    </div>
+  );
+}
+```
 
 ## Props
 
-| Prop | Type | Default |
-| --- | --- | --- |
-| `variant` | `"default" \| "secondary" \| "outline" \| "ghost" \| "destructive" \| "link"` | `"default"` |
-| `size` | `"xs" \| "sm" \| "default" \| "lg" \| "icon-xs" \| "icon-sm" \| "icon" \| "icon-lg"` | `"default"` |
-| `className` | `string` | — |
+| Prop        | Type                                                     | Default   |
+| ----------- | -------------------------------------------------------- | --------- |
+| `variant`   | `"solid" \| "outline" \| "surface" \| "soft" \| "ghost"` | `"solid"` |
+| `theme`     | `"gray" \| "accent" \| "destructive"`                    | `"gray"`  |
+| `className` | `string`                                                 | —         |
 
 All other props are forwarded to the underlying [Base UI Button](https://base-ui.com/components/button) primitive.
