@@ -132,7 +132,7 @@ function AlertDialogAction({ className, ...props }: React.ComponentProps<typeof 
 function AlertDialogCancel({
   className,
   variant = 'outline',
-  size = 'default',
+  size = 'md',
   ...props
 }: AlertDialogPrimitive.Close.Props &
   Pick<React.ComponentProps<typeof Button>, 'variant' | 'size'>) {
