@@ -38,7 +38,7 @@ const buttonVariants = cva(
         solid:
           'bg-(--btn-theme-700) hover:bg-(--btn-theme-700)/90 active:bg-(--btn-theme-700)/80 text-white focus-visible:outline-offset-2',
         outline:
-          'ring-inset ring-1 ring-(--btn-theme-500) hover:ring-(--btn-theme-500)/75 active:ring-(--btn-theme-500) hover:bg-(--btn-theme-400)/25 active:bg-(--btn-theme-400)/40 text-(--btn-theme-800) dark:border-input',
+          'ring-inset ring-1 ring-(--btn-theme-400) hover:ring-(--btn-theme-500)/75 active:ring-(--btn-theme-500) hover:bg-(--btn-theme-400)/25 active:bg-(--btn-theme-400)/40 text-(--btn-theme-800) dark:border-input',
         surface:
           'ring-inset ring-1 ring-(--btn-theme-500) hover:ring-(--btn-theme-500)/75 active:ring-(--btn-theme-500) bg-(--btn-theme-400)/25 hover:bg-(--btn-theme-400)/50 active:bg-(--btn-theme-400)/65 text-(--btn-theme-800) dark:border-input',
         soft: 'bg-(--btn-theme-300)/50  hover:bg-(--btn-theme-400)/50 active:bg-(--btn-theme-400)/65 text-(--btn-theme-900)',
@@ -49,9 +49,9 @@ const buttonVariants = cva(
         sm: "h-8 rounded-sm gap-1.5 px-3 has-[>svg]:px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3",
         md: 'h-7.5 px-3 has-[>svg]:px-2.5',
         lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
-        icon: 'size-9',
-        'icon-sm': 'size-8',
-        'icon-lg': 'size-10',
+        icon: 'size-7.5',
+        'icon-sm': 'size-7',
+        'icon-lg': 'size-9',
       },
       theme: {
         gray: '',
@@ -69,14 +69,12 @@ const buttonVariants = cva(
       {
         variant: 'outline',
         theme: 'gray',
-        class:
-          'text-(--btn-theme-950) ring-(--btn-theme-700)/75 hover:ring-(--btn-theme-700) active:ring-(--btn-theme-700)',
+        class: 'text-(--btn-theme-950)',
       },
       {
         variant: 'surface',
         theme: 'gray',
-        class:
-          'text-(--btn-theme-950) ring-(--btn-theme-700)/75 hover:ring-(--btn-theme-700) active:ring-(--btn-theme-700)',
+        class: 'text-(--btn-theme-950) hover:ring-(--btn-theme-500) active:ring-(--btn-theme-500)',
       },
       {
         variant: 'soft',
