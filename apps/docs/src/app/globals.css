@@ -83,6 +83,18 @@
   --success-900: oklch(0.543 0.112 159.5);
   --success-950: oklch(0.322 0.048 164.5);
 
+  --warning-50: oklch(0.994 0.003 84.559);
+  --warning-100: oklch(0.986 0.024 99.096);
+  --warning-200: oklch(0.97 0.068 100.388);
+  --warning-300: oklch(0.945 0.103 97.909);
+  --warning-400: oklch(0.918 0.133 98.231);
+  --warning-500: oklch(0.827 0.122 86.695);
+  --warning-600: oklch(0.758 0.14 76.72);
+  --warning-700: oklch(0.854 0.157 84.13);
+  --warning-800: oklch(0.831 0.168 80.847);
+  --warning-900: oklch(0.571 0.129 63.938);
+  --warning-950: oklch(0.352 0.049 54.169);
+
   --accent-50: oklch(0.993 0.003 247.9);
   --accent-100: oklch(0.982 0.009 242.8);
   --accent-200: oklch(0.96 0.02 238.7);
@@ -180,6 +192,18 @@
   --success-800: oklch(0.675 0.141 157.7);
   --success-900: oklch(0.779 0.165 157.3);
   --success-950: oklch(0.905 0.083 158.2);
+
+  --warning-50: oklch(0.185 0.013 77.796);
+  --warning-100: oklch(0.212 0.018 81.986);
+  --warning-200: oklch(0.258 0.044 74.478);
+  --warning-300: oklch(0.296 0.063 73.879);
+  --warning-400: oklch(0.336 0.072 72.898);
+  --warning-500: oklch(0.454 0.082 74.958);
+  --warning-600: oklch(0.536 0.096 73.435);
+  --warning-700: oklch(0.854 0.157 84.13);
+  --warning-800: oklch(0.885 0.181 94.784);
+  --warning-900: oklch(0.862 0.173 89.018);
+  --warning-950: oklch(0.935 0.072 86.068);
 
   --accent-50: oklch(0.194 0.025 256.5);
   --accent-100: oklch(0.213 0.03 261.3);
@@ -283,6 +307,18 @@
   --color-success-800: var(--success-800);
   --color-success-900: var(--success-900);
   --color-success-950: var(--success-950);
+
+  --color-warning-50: var(--warning-50);
+  --color-warning-100: var(--warning-100);
+  --color-warning-200: var(--warning-200);
+  --color-warning-300: var(--warning-300);
+  --color-warning-400: var(--warning-400);
+  --color-warning-500: var(--warning-500);
+  --color-warning-600: var(--warning-600);
+  --color-warning-700: var(--warning-700);
+  --color-warning-800: var(--warning-800);
+  --color-warning-900: var(--warning-900);
+  --color-warning-950: var(--warning-950);
 
   --color-destructive-50: var(--destructive-50);
   --color-destructive-100: var(--destructive-100);
