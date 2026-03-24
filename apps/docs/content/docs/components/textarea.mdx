@@ -1,0 +1,154 @@
+---
+title: Textarea
+description: A multi-line text input for longer-form content.
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://ora-ui.com/r/textarea.json"
+```
+
+## Usage
+
+```tsx
+import { Textarea } from '@/components/ui/textarea';
+
+<Textarea placeholder="Write something..." />;
+```
+
+## Examples
+
+### Subtle
+
+The default variant. Has a border and a subtle background fill.
+
+<Textarea placeholder="Write something..." />
+
+```tsx
+import { Textarea } from '@/components/ui/textarea';
+
+export default function TextareaSubtle() {
+  return <Textarea placeholder="Write something..." />;
+}
+```
+
+### Outline
+
+Border only, no background.
+
+<Textarea variant="outline" placeholder="Write something..." />
+
+```tsx
+import { Textarea } from '@/components/ui/textarea';
+
+export default function TextareaOutline() {
+  return <Textarea variant="outline" placeholder="Write something..." />;
+}
+```
+
+### Soft
+
+Background fill only, no border.
+
+<Textarea variant="soft" placeholder="Write something..." />
+
+```tsx
+import { Textarea } from '@/components/ui/textarea';
+
+export default function TextareaSoft() {
+  return <Textarea variant="soft" placeholder="Write something..." />;
+}
+```
+
+### Manual Resize
+
+Set `autoResize={false}` to disable auto-grow and let the user resize the textarea manually via the drag handle. Note that `field-sizing: content` requires a [modern browser](https://caniuse.com/mdn-css_properties_field-sizing) — `autoResize` defaults to `true` but falls back gracefully where the property is unsupported.
+
+<Textarea autoResize={false} placeholder="Drag to resize..." />
+
+```tsx
+import { Textarea } from '@/components/ui/textarea';
+
+export default function TextareaManualResize() {
+  return <Textarea autoResize={false} placeholder="Drag to resize..." />;
+}
+```
+
+### Disabled
+
+<Textarea placeholder="Cannot edit this" disabled />
+
+```tsx
+import { Textarea } from '@/components/ui/textarea';
+
+export default function TextareaDisabled() {
+  return <Textarea placeholder="Cannot edit this" disabled />;
+}
+```
+
+### Invalid
+
+Use `aria-invalid` to indicate a validation error.
+
+<Textarea aria-invalid placeholder="Something went wrong..." />
+
+```tsx
+import { Textarea } from '@/components/ui/textarea';
+
+export default function TextareaInvalid() {
+  return <Textarea aria-invalid placeholder="Something went wrong..." />;
+}
+```
+
+### With Label
+
+<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="bio">Bio</Label>
+  <Textarea id="bio" placeholder="Tell us about yourself." />
+</div>
+
+```tsx
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+
+export default function TextareaWithLabel() {
+  return (
+    <div className="grid w-full max-w-sm gap-1.5">
+      <Label htmlFor="bio">Bio</Label>
+      <Textarea id="bio" placeholder="Tell us about yourself." />
+    </div>
+  );
+}
+```
+
+### With Button
+
+<div className="flex w-full max-w-sm flex-col gap-2">
+  <Textarea placeholder="Leave a comment..." />
+  <Button className="self-end">Submit</Button>
+</div>
+
+```tsx
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+
+export default function TextareaWithButton() {
+  return (
+    <div className="flex w-full max-w-sm flex-col gap-2">
+      <Textarea placeholder="Leave a comment..." />
+      <Button className="self-end">Submit</Button>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type                              | Default    |
+| ------------ | --------------------------------- | ---------- |
+| `variant`    | `"subtle" \| "outline" \| "soft"` | `"subtle"` |
+| `autoResize` | `boolean`                         | `true`     |
+| `className`  | `string`                          | —          |
+
+All other props are forwarded to the underlying `<textarea>` element.
