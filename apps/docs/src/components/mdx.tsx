@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
 import { Separator } from '@/components/ui/separator';
 import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from '@/components/ui/button-group';
+import { Input } from '@/components/ui/input';
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -33,6 +34,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ButtonGroupText,
     Kbd,
     KbdGroup,
+    Input,
     Separator,
     PlusCircleIcon,
     PlusIcon,
