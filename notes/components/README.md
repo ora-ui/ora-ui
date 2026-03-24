@@ -10,4 +10,5 @@ This is not a formal spec. It's a living log to capture context that doesn't bel
 | --------------------------------- | ----------- |
 | [Button Group](./button-group.md) | In progress |
 | [Button](./button.md)             | In progress |
+| [Kbd](./kbd.md)                   | Complete    |
 | [Separator](./separator.md)       | Complete    |
