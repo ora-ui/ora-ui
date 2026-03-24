@@ -1,52 +1,113 @@
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
-import { cva, type VariantProps } from "class-variance-authority"
+import { mergeProps } from '@base-ui/react/merge-props';
+import { useRender } from '@base-ui/react/use-render';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
+
+type Theme = 'gray' | 'accent' | 'destructive' | 'warning' | 'success';
+
+const themeColorMap: Record<Theme, string> = {
+  gray: 'gray',
+  accent: 'accent',
+  destructive: 'destructive',
+  warning: 'warning',
+  success: 'success',
+};
+
+const getThemeStyles = (theme: Theme): React.CSSProperties => {
+  const colorVar = themeColorMap[theme];
+  return {
+    '--badge-theme-50': `var(--${colorVar}-50)`,
+    '--badge-theme-100': `var(--${colorVar}-100)`,
+    '--badge-theme-200': `var(--${colorVar}-200)`,
+    '--badge-theme-300': `var(--${colorVar}-300)`,
+    '--badge-theme-400': `var(--${colorVar}-400)`,
+    '--badge-theme-500': `var(--${colorVar}-500)`,
+    '--badge-theme-600': `var(--${colorVar}-600)`,
+    '--badge-theme-700': `var(--${colorVar}-700)`,
+    '--badge-theme-800': `var(--${colorVar}-800)`,
+    '--badge-theme-900': `var(--${colorVar}-900)`,
+    '--badge-theme-950': `var(--${colorVar}-950)`,
+  } as React.CSSProperties;
+};
 
 const badgeVariants = cva(
-  "group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3!",
+  'group/badge inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border border-transparent font-medium whitespace-nowrap focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&>svg]:pointer-events-none [&>svg]:size-3!',
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground [a]:hover:bg-primary/80",
-        secondary:
-          "bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80",
-        destructive:
-          "bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20",
-        outline:
-          "border-border bg-input/30 text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground",
-        ghost:
-          "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
-        link: "text-primary underline-offset-4 hover:underline",
+        solid: 'bg-(--badge-theme-700) text-white',
+        soft: 'bg-(--badge-theme-200)/80 text-(--badge-theme-900)',
+        outline: 'border-(--badge-theme-400) text-(--badge-theme-800)',
+        surface: 'border-(--badge-theme-400) bg-(--badge-theme-200)/40 text-(--badge-theme-800)',
+      },
+      size: {
+        default: 'max-h-6 px-1.5 py-0.5 text-xs',
+        icon: 'size-5 p-0 text-xs',
+      },
+      theme: {
+        gray: '',
+        accent: '',
+        destructive: '',
+        warning: '',
+        success: '',
       },
     },
+    compoundVariants: [
+      {
+        variant: 'solid',
+        theme: 'gray',
+        class: 'bg-(--badge-theme-950) text-(--badge-theme-50)',
+      },
+      {
+        variant: 'outline',
+        theme: 'gray',
+        class: 'text-(--badge-theme-950)',
+      },
+      {
+        variant: 'surface',
+        theme: 'gray',
+        class: 'text-(--badge-theme-950)',
+      },
+      {
+        variant: 'soft',
+        theme: 'gray',
+        class: 'text-(--badge-theme-950)',
+      },
+    ],
     defaultVariants: {
-      variant: "default",
+      variant: 'soft',
+      size: 'default',
+      theme: 'gray',
     },
   }
-)
+);
 
 function Badge({
   className,
-  variant = "default",
+  variant = 'soft',
+  size = 'default',
+  theme = 'gray',
   render,
+  style,
   ...props
-}: useRender.ComponentProps<"span"> & VariantProps<typeof badgeVariants>) {
+}: useRender.ComponentProps<'span'> &
+  VariantProps<typeof badgeVariants> & { style?: React.CSSProperties }) {
   return useRender({
-    defaultTagName: "span",
-    props: mergeProps<"span">(
+    defaultTagName: 'span',
+    props: mergeProps<'span'>(
       {
-        className: cn(badgeVariants({ variant }), className),
+        className: cn(badgeVariants({ variant, size, theme }), className),
+        style: { ...getThemeStyles(theme as Theme), ...style },
       },
       props
     ),
     render,
     state: {
-      slot: "badge",
+      slot: 'badge',
       variant,
     },
-  })
+  });
 }
 
-export { Badge, badgeVariants }
+export { Badge, badgeVariants };

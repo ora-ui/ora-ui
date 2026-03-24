@@ -11,8 +11,13 @@ import {
   PencilSquareIcon,
   ShareIcon,
   BookmarkIcon,
+  CheckIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  EyeIcon,
 } from '@heroicons/react/16/solid';
 import type { MDXComponents } from 'mdx/types';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
 import { Separator } from '@/components/ui/separator';
@@ -21,6 +26,7 @@ import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from '@/components
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
     ...defaultMdxComponents,
+    Badge,
     Button,
     ButtonGroup,
     ButtonGroupSeparator,
@@ -39,6 +45,10 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     PencilSquareIcon,
     ShareIcon,
     BookmarkIcon,
+    CheckIcon,
+    CheckCircleIcon,
+    ClockIcon,
+    EyeIcon,
     ...components,
   };
 }
