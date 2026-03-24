@@ -1,18 +1,43 @@
-import * as React from "react"
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 
-function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
+const textareaVariants = cva(
+  'w-full min-h-16 rounded-md px-3 py-3 text-base text-primary transition-colors outline-none placeholder:text-muted-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+  {
+    variants: {
+      variant: {
+        subtle: 'border border-input bg-ui/50 focus-visible:border-ring',
+        outline: 'border border-input shadow-2xs focus-visible:border-ring',
+        soft: 'bg-ui/75',
+      },
+      autoResize: {
+        true: 'field-sizing-content resize-none',
+        false: 'resize-y',
+      },
+    },
+    defaultVariants: {
+      variant: 'subtle',
+      autoResize: true,
+    },
+  }
+);
+
+function Textarea({
+  className,
+  variant,
+  autoResize,
+  ...props
+}: React.ComponentProps<'textarea'> & VariantProps<typeof textareaVariants>) {
   return (
     <textarea
       data-slot="textarea"
-      className={cn(
-        "flex field-sizing-content min-h-16 w-full resize-none rounded-xl border border-input bg-input/30 px-3 py-3 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-        className
-      )}
+      data-variant={variant}
+      className={cn(textareaVariants({ variant, autoResize, className }))}
       {...props}
     />
-  )
+  );
 }
 
-export { Textarea }
+export { Textarea, textareaVariants };

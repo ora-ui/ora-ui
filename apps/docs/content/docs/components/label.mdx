@@ -1,0 +1,87 @@
+---
+title: Label
+description: An accessible label for form controls.
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://ora-ui.com/r/label.json"
+```
+
+## Usage
+
+```tsx
+import { Label } from '@/components/ui/label';
+
+<Label htmlFor="name">Name</Label>;
+```
+
+## Examples
+
+### Default
+
+<Label htmlFor="demo">Full name</Label>
+
+```tsx
+import { Label } from '@/components/ui/label';
+
+export default function LabelDefault() {
+  return <Label htmlFor="demo">Full name</Label>;
+}
+```
+
+### With Input
+
+Pair with [Input](/docs/components/input) using a matching `htmlFor` / `id` to create an accessible field.
+
+<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="email-demo">Email address</Label>
+  <Input id="email-demo" type="email" placeholder="you@example.com" />
+</div>
+
+```tsx
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+export default function LabelWithInput() {
+  return (
+    <div className="grid w-full max-w-sm gap-1.5">
+      <Label htmlFor="email">Email address</Label>
+      <Input id="email" type="email" placeholder="you@example.com" />
+    </div>
+  );
+}
+```
+
+### Disabled
+
+The label dims automatically when its associated control is disabled via the `peer-disabled` selector.
+
+<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="disabled-demo">Username</Label>
+  <Input id="disabled-demo" placeholder="Enter username" disabled />
+</div>
+
+```tsx
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+export default function LabelDisabled() {
+  return (
+    <div className="grid w-full max-w-sm gap-1.5">
+      <Label htmlFor="username">Username</Label>
+      <Input id="username" placeholder="Enter username" disabled />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `htmlFor`   | `string` | —       |
+| `className` | `string` | —       |
+
+All other props are forwarded to the underlying `<label>` element.

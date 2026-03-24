@@ -1,0 +1,123 @@
+---
+title: Input
+description: A text input field for capturing user-entered values.
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://ora-ui.com/r/input.json"
+```
+
+## Usage
+
+```tsx
+import { Input } from '@/components/ui/input';
+
+<Input placeholder="Enter a value" />;
+```
+
+## Examples
+
+### Subtle
+
+The default variant. Has a border and a subtle background fill.
+
+<Input placeholder="Email address" />
+
+```tsx
+import { Input } from '@/components/ui/input';
+
+export default function InputSubtle() {
+  return <Input placeholder="Email address" />;
+}
+```
+
+### Outline
+
+Border only, no background. Use when the input sits on a filled surface.
+
+<Input variant="outline" placeholder="Email address" />
+
+```tsx
+import { Input } from '@/components/ui/input';
+
+export default function InputOutline() {
+  return <Input variant="outline" placeholder="Email address" />;
+}
+```
+
+### Soft
+
+Background fill only, no border. Use for low-emphasis inputs in dense UIs.
+
+<Input variant="soft" placeholder="Email address" />
+
+```tsx
+import { Input } from '@/components/ui/input';
+
+export default function InputSoft() {
+  return <Input variant="soft" placeholder="Email address" />;
+}
+```
+
+### Disabled
+
+<Input placeholder="Cannot edit this" disabled />
+
+```tsx
+import { Input } from '@/components/ui/input';
+
+export default function InputDisabled() {
+  return <Input placeholder="Cannot edit this" disabled />;
+}
+```
+
+### File
+
+<Input type="file" />
+
+```tsx
+import { Input } from '@/components/ui/input';
+
+export default function InputFile() {
+  return <Input type="file" />;
+}
+```
+
+### With Label
+
+Pair with the [Label](/docs/components/label) component to create an accessible labeled input.
+
+<div className="grid w-full max-w-sm gap-1.5">
+  <label className="text-sm font-medium leading-none" htmlFor="email">
+    Email
+  </label>
+  <Input id="email" type="email" placeholder="you@example.com" />
+</div>
+
+```tsx
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+export default function InputWithLabel() {
+  return (
+    <div className="grid w-full max-w-sm gap-1.5">
+      <Label htmlFor="email">Email</Label>
+      <Input id="email" type="email" placeholder="you@example.com" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop          | Type                              | Default    |
+| ------------- | --------------------------------- | ---------- |
+| `variant`     | `"subtle" \| "outline" \| "soft"` | `"subtle"` |
+| `type`        | `string`                          | `"text"`   |
+| `placeholder` | `string`                          | —          |
+| `disabled`    | `boolean`                         | `false`    |
+| `className`   | `string`                          | —          |
+
+All other props are forwarded to the underlying [Base UI Input](https://base-ui.com/components/input) primitive.
