@@ -25,6 +25,7 @@ import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from '@/components
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Toggle } from '@/components/ui/toggle';
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -39,6 +40,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Input,
     Label,
     Textarea,
+    Toggle,
     Separator,
     PlusCircleIcon,
     PlusIcon,

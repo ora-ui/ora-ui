@@ -1,0 +1,110 @@
+---
+title: Toggle
+description: A two-state button that can be toggled on or off.
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://ora-ui.com/r/toggle.json"
+```
+
+## Usage
+
+```tsx
+import { Toggle } from '@/components/ui/toggle';
+
+<Toggle aria-label="Bookmark">
+  <BookmarkIcon />
+</Toggle>;
+```
+
+## Examples
+
+### Default
+
+<Toggle aria-label="Bookmark">
+  <BookmarkIcon />
+</Toggle>
+
+```tsx
+import { BookmarkIcon } from '@heroicons/react/16/solid';
+import { Toggle } from '@/components/ui/toggle';
+
+export default function ToggleDefault() {
+  return (
+    <Toggle aria-label="Bookmark">
+      <BookmarkIcon />
+    </Toggle>
+  );
+}
+```
+
+### Outline
+
+<Toggle variant="outline" aria-label="Bookmark">
+  <BookmarkIcon />
+</Toggle>
+
+```tsx
+import { BookmarkIcon } from '@heroicons/react/16/solid';
+import { Toggle } from '@/components/ui/toggle';
+
+export default function ToggleOutline() {
+  return (
+    <Toggle variant="outline" aria-label="Bookmark">
+      <BookmarkIcon />
+    </Toggle>
+  );
+}
+```
+
+### With Text
+
+<Toggle aria-label="Toggle preview">
+  <EyeIcon />
+  Preview
+</Toggle>
+
+```tsx
+import { EyeIcon } from '@heroicons/react/16/solid';
+import { Toggle } from '@/components/ui/toggle';
+
+export default function ToggleWithText() {
+  return (
+    <Toggle aria-label="Toggle preview">
+      <EyeIcon />
+      Preview
+    </Toggle>
+  );
+}
+```
+
+### Disabled
+
+<Toggle disabled aria-label="Bookmark">
+  <BookmarkIcon />
+</Toggle>
+
+```tsx
+import { BookmarkIcon } from '@heroicons/react/16/solid';
+import { Toggle } from '@/components/ui/toggle';
+
+export default function ToggleDisabled() {
+  return (
+    <Toggle disabled aria-label="Bookmark">
+      <BookmarkIcon />
+    </Toggle>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type                   | Default  |
+| ----------- | ---------------------- | -------- |
+| `variant`   | `"soft" \| "outline"`  | `"soft"` |
+| `size`      | `"sm" \| "md" \| "lg"` | `"md"`   |
+| `className` | `string`               | —        |
+
+All other props are forwarded to the underlying [Base UI Toggle](https://base-ui.com/components/toggle) primitive.
