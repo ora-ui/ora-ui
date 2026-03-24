@@ -1,0 +1,97 @@
+---
+title: Separator
+description: Visually or semantically separates content.
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://ora-ui.com/r/separator.json"
+```
+
+## Usage
+
+```tsx
+import { Separator } from '@/components/ui/separator';
+
+<Separator />;
+```
+
+## Horizontal
+
+The default orientation is `horizontal`, rendering a full-width dividing line.
+
+<div>
+  <div className="space-y-1">
+    <h4 className="text-sm font-medium leading-none">Ora UI</h4>
+    <p className="text-sm text-muted-foreground">An open-source component library.</p>
+  </div>
+  <Separator className="my-4" />
+  <div className="flex h-5 items-center gap-4 text-sm">
+    <span>Components</span>
+    <Separator orientation="vertical" />
+    <span>Primitives</span>
+    <Separator orientation="vertical" />
+    <span>Tokens</span>
+  </div>
+</div>
+
+```tsx
+import { Separator } from '@/components/ui/separator';
+
+export default function SeparatorDemo() {
+  return (
+    <div>
+      <div className="space-y-1">
+        <h4 className="text-sm font-medium leading-none">Ora UI</h4>
+        <p className="text-sm text-muted-foreground">An open-source component library.</p>
+      </div>
+      <Separator className="my-4" />
+      <div className="flex h-5 items-center gap-4 text-sm">
+        <span>Components</span>
+        <Separator orientation="vertical" />
+        <span>Primitives</span>
+        <Separator orientation="vertical" />
+        <span>Tokens</span>
+      </div>
+    </div>
+  );
+}
+```
+
+## Vertical
+
+Use `orientation="vertical"` to render a vertical divider. The separator will stretch to fill the height of its container.
+
+<div className="flex h-5 items-center gap-4 text-sm">
+  <span>Blog</span>
+  <Separator orientation="vertical" />
+  <span>Docs</span>
+  <Separator orientation="vertical" />
+  <span>Source</span>
+</div>
+
+```tsx
+import { Separator } from '@/components/ui/separator';
+
+export default function SeparatorVertical() {
+  return (
+    <div className="flex h-5 items-center gap-4 text-sm">
+      <span>Blog</span>
+      <Separator orientation="vertical" />
+      <span>Docs</span>
+      <Separator orientation="vertical" />
+      <span>Source</span>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop          | Type                         | Default        |
+| ------------- | ---------------------------- | -------------- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
+| `className`   | `string`                     | —              |
+
+All other props are forwarded to the underlying [Base UI Separator](https://base-ui.com/components/separator) primitive.

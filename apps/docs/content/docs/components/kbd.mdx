@@ -1,0 +1,87 @@
+---
+title: Kbd
+description: Displays keyboard input such as shortcuts, key combinations, or command prompts.
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://ora-ui.com/r/kbd.json"
+```
+
+## Usage
+
+```tsx
+import { Kbd, KbdGroup } from '@/components/ui/kbd';
+
+<Kbd>⌘K</Kbd>;
+```
+
+## Variants
+
+The `variant` prop controls the visual style of the key.
+
+<KbdGroup>
+  <Kbd variant="surface">Surface</Kbd>
+  <Kbd variant="soft">Soft</Kbd>
+  <Kbd variant="ghost">Ghost</Kbd>
+</KbdGroup>
+
+```tsx
+import { Kbd, KbdGroup } from '@/components/ui/kbd';
+
+export default function KbdVariants() {
+  return (
+    <KbdGroup>
+      <Kbd variant="surface">Surface</Kbd>
+      <Kbd variant="soft">Soft</Kbd>
+      <Kbd variant="ghost">Ghost</Kbd>
+    </KbdGroup>
+  );
+}
+```
+
+## Examples
+
+### Key Combination
+
+Use `KbdGroup` to display multi-key shortcuts as a cohesive unit.
+
+<KbdGroup>
+  <Kbd>⌘</Kbd>
+  <Kbd>Shift</Kbd>
+  <Kbd>P</Kbd>
+</KbdGroup>
+
+```tsx
+import { Kbd, KbdGroup } from '@/components/ui/kbd';
+
+export default function KbdCombination() {
+  return (
+    <KbdGroup>
+      <Kbd>⌘</Kbd>
+      <Kbd>Shift</Kbd>
+      <Kbd>P</Kbd>
+    </KbdGroup>
+  );
+}
+```
+
+## Props
+
+### Kbd
+
+| Prop        | Type                             | Default  |
+| ----------- | -------------------------------- | -------- |
+| `variant`   | `"ghost" \| "soft" \| "surface"` | `"soft"` |
+| `className` | `string`                         | —        |
+
+All other props are forwarded to the underlying `<kbd>` element.
+
+### KbdGroup
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` | —       |
+
+All other props are forwarded to the underlying `<div>` element.

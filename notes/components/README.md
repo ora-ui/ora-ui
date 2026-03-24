@@ -8,5 +8,8 @@ This is not a formal spec. It's a living log to capture context that doesn't bel
 
 | Component                         | Status      |
 | --------------------------------- | ----------- |
+| [Badge](./badge.md)               | In progress |
 | [Button Group](./button-group.md) | In progress |
 | [Button](./button.md)             | In progress |
+| [Kbd](./kbd.md)                   | Complete    |
+| [Separator](./separator.md)       | Complete    |
