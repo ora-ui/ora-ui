@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/16/solid';
 import type { MDXComponents } from 'mdx/types';
 import { Button } from '@/components/ui/button';
+import { Kbd, KbdGroup } from '@/components/ui/kbd';
 import { Separator } from '@/components/ui/separator';
 import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from '@/components/ui/button-group';
 
@@ -24,6 +25,8 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ButtonGroup,
     ButtonGroupSeparator,
     ButtonGroupText,
+    Kbd,
+    KbdGroup,
     Separator,
     PlusCircleIcon,
     PlusIcon,
