@@ -40,24 +40,24 @@ There is intentional crossover at the edges — the distinction is a guide, not 
 
 ### UI
 
-| Token         | Tailwind              | Role                                                                                                                                      |
-| ------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `ui`          | `bg-ui`               | Interactive element background — button `surface` and `soft` variants                                                                     |
-| `ui-hover`    | `bg-ui-hover`         | Hover state for interactive elements                                                                                                      |
-| `ui-active`   | `bg-ui-active`        | Active/pressed state for interactive elements                                                                                             |
-| `solid`       | `bg-solid`            | High-contrast neutral fill — most contrasted value (e.g. gray-950 on light, gray-50 on dark). Used for solid variant buttons and similar. |
-| `overlay`     | `bg-overlay`          | Floating surfaces — dropdown content, dialog content, popovers. Non-interactive; purely a surface token.                                  |
-| `line-ui`     | `border-line-ui`      | Borders on interactive components — input outlines, button borders (surface/outline variants)                                             |
-| `focus`       | `outline-focus`       | Focus ring color for interactive components                                                                                               |
-| `focus-solid` | `outline-focus-solid` | Focus ring color for solid variant components (inverted — e.g. gray-950 on light)                                                         |
+| Token         | Tailwind              | Role                                                                                                                                                   |
+| ------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ui`          | `bg-ui`               | Interactive element background — button `surface` and `soft` variants                                                                                  |
+| `ui-hover`    | `bg-ui-hover`         | Hover state for interactive elements                                                                                                                   |
+| `ui-active`   | `bg-ui-active`        | Active/pressed state for interactive elements                                                                                                          |
+| `solid`       | `bg-solid`            | High-contrast neutral fill — most contrasted value (e.g. gray-950 on light, gray-50 on dark). Used for solid variant buttons and similar.              |
+| `overlay`     | `bg-overlay`          | Floating surfaces — dropdown content, dialog content, popovers. Non-interactive; purely a surface token.                                               |
+| `line-ui`     | `border-line-ui`      | Borders on interactive components — input outlines, button borders (surface/outline variants)                                                          |
+| `focus`       | `outline-focus`       | Focus ring color for interactive components                                                                                                            |
+| `focus-solid` | `outline-focus-solid` | Focus ring color for solid variant components — same value as `solid`. Visible via ring-offset against the page background, not the component surface. |
 
 ### Text
 
-| Token            | Tailwind         | Role                                                                                        |
-| ---------------- | ---------------- | ------------------------------------------------------------------------------------------- |
-| `text-primary`   | `text-primary`   | Primary text — default body and heading color                                               |
-| `text-secondary` | `text-secondary` | Secondary text — supporting labels, captions, metadata                                      |
-| `text-solid`     | `text-solid`     | Text on solid backgrounds — inverted from `solid` (e.g. gray-50 on light, gray-950 on dark) |
+| Token            | Tailwind         | Role                                                                                                                         |
+| ---------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `text-primary`   | `text-primary`   | Primary text — default body and heading color                                                                                |
+| `text-secondary` | `text-secondary` | Secondary text — supporting labels, captions, metadata                                                                       |
+| `text-solid`     | `text-solid`     | Text on solid backgrounds — always `gray-50`. The gray scale inverts per mode so this stays readable in both light and dark. |
 
 ---
 
@@ -94,7 +94,7 @@ All interactive variants use `bg-ui-hover` and `bg-ui-active` for state changes 
   --color-overlay: ...;
   --color-line-ui: ...;
   --color-focus: ...;
-  --color-focus-solid: ...;
+  --color-focus-solid: ...; /* same as --color-solid */
 
   /* Text */
   --color-text-primary: ...;
