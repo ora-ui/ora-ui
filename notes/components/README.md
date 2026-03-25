@@ -13,6 +13,7 @@ This is not a formal spec. It's a living log to capture context that doesn't bel
 | [Label](./label.md)               | In progress |
 | [Textarea](./textarea.md)         | In progress |
 | [Toggle](./toggle.md)             | In progress |
+| [Toggle Group](./toggle-group.md) | In progress |
 | [Button Group](./button-group.md) | In progress |
 | [Button](./button.md)             | In progress |
 | [Kbd](./kbd.md)                   | Complete    |
