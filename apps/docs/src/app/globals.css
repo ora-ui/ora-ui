@@ -41,44 +41,35 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* semantic */
-  --app: var(--gray-base);
-  --subtle: var(--gray-50);
-  --overlay: oklch(1 0 0);
-  --ui: var(--gray-100);
-  --ui-hover: var(--gray-200);
-  --ui-active: var(--gray-300);
-  --border-subtle: var(--gray-400);
-  --border: var(--gray-500);
-  --fill: var(--gray-700);
-  --fill-hover: var(--gray-800);
-  --text-secondary: var(--gray-900);
-  --text-primary: var(--gray-950);
-
   /* app */
   --header-height: 48px;
 
   /* ora */
 
-  /* layout */
-  --app: var(--gray-base);
-  --subtle: var(--gray-50);
-  --line: var(--gray-300);
+  /* background */
+  --background: var(--gray-base);
+  --background-subtle: var(--gray-50);
+  --background-ui: var(--gray-100);
+  --background-solid: var(--gray-950);
+  --background-overlay: var(--gray-50);
 
-  /* ui */
-  --ui: var(--gray-100);
-  --ui-hover: var(--gray-200);
-  --ui-active: var(--gray-300);
-  --solid: var(--gray-950);
-  --overlay: var(--gray-50);
+  /* interactive states */
+  --hover: var(--gray-200);
+  --active: var(--gray-300);
+
+  /* line */
+  --line: var(--gray-300);
+  --line-subtle: var(--gray-200);
   --line-ui: var(--gray-600);
+
+  /* foreground */
+  --foreground: var(--gray-950);
+  --foreground-subtle: var(--gray-900);
+  --foreground-solid: var(--gray-50);
+
+  /* focus */
   --focus: var(--gray-500);
   --focus-solid: var(--gray-800);
-
-  /* text */
-  --text-primary: var(--gray-950);
-  --text-secondary: var(--gray-900);
-  --text-solid: var(--gray-50);
 }
 
 .dark {
@@ -114,41 +105,32 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 
-  /* semantic */
-  --app: var(--gray-base);
-  --subtle: var(--gray-50);
-  --overlay: var(--gray-50);
-  --ui: var(--gray-100);
-  --ui-hover: var(--gray-200);
-  --ui-active: var(--gray-300);
-  --border-subtle: var(--gray-400);
-  --border: var(--gray-500);
-  --fill: var(--gray-700);
-  --fill-hover: var(--gray-800);
-  --text-secondary: var(--gray-900);
-  --text-primary: var(--gray-950);
-
   /* ora */
 
-  /* layout */
-  --app: var(--gray-base);
-  --subtle: var(--gray-50);
-  --line: var(--gray-300);
+  /* background */
+  --background: var(--gray-base);
+  --background-subtle: var(--gray-50);
+  --background-ui: var(--gray-100);
+  --background-solid: var(--gray-950);
+  --background-overlay: var(--gray-50);
 
-  /* ui */
-  --ui: var(--gray-100);
-  --ui-hover: var(--gray-200);
-  --ui-active: var(--gray-300);
-  --solid: var(--gray-950);
-  --overlay: var(--gray-50);
+  /* interactive states */
+  --hover: var(--gray-200);
+  --active: var(--gray-300);
+
+  /* line */
+  --line: var(--gray-300);
+  --line-subtle: var(--gray-200);
   --line-ui: var(--gray-600);
+
+  /* foreground */
+  --foreground: var(--gray-950);
+  --foreground-subtle: var(--gray-900);
+  --foreground-solid: var(--gray-50);
+
+  /* focus */
   --focus: var(--gray-500);
   --focus-solid: var(--gray-950);
-
-  /* text */
-  --text-primary: var(--gray-950);
-  --text-secondary: var(--gray-900);
-  --text-solid: var(--gray-50);
 }
 
 @theme inline {
@@ -190,26 +172,22 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* semantic */
-  --color-app: var(--app);
-  --color-subtle: var(--subtle);
-  --color-overlay: var(--overlay);
-  --color-ui: var(--ui);
-  --color-ui-hover: var(--ui-hover);
-  --color-ui-active: var(--ui-active);
-  --color-border-subtle: var(--border-subtle);
-  --color-fill: var(--fill);
-  --color-fill-hover: var(--fill-hover);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-primary: var(--text-primary);
-
   /* ora */
+  --color-background: var(--background);
+  --color-background-subtle: var(--background-subtle);
+  --color-background-ui: var(--background-ui);
+  --color-background-solid: var(--background-solid);
+  --color-background-overlay: var(--background-overlay);
+  --color-hover: var(--hover);
+  --color-active: var(--active);
   --color-line: var(--line);
-  --color-solid: var(--solid);
+  --color-line-subtle: var(--line-subtle);
   --color-line-ui: var(--line-ui);
+  --color-foreground: var(--foreground);
+  --color-foreground-subtle: var(--foreground-subtle);
+  --color-foreground-solid: var(--foreground-solid);
   --color-focus: var(--focus);
   --color-focus-solid: var(--focus-solid);
-  --color-text-solid: var(--text-solid);
 }
 
 @layer base {
@@ -217,6 +195,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-app text-foreground;
+    @apply bg-background text-foreground;
   }
 }
