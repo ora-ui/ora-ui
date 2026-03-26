@@ -22,6 +22,7 @@ const getThemeStyles = (theme: Theme): React.CSSProperties => {
     '--ui-active': `var(--${color}-300)`,
     '--line-ui': `var(--${color}-600)`,
     '--focus': `var(--${color}-500)`,
+    '--focus-solid': isColor ? `var(--${color}-800)` : `var(--${color}-950)`,
     '--solid': isColor ? `var(--${color}-700)` : `var(--${color}-950)`,
     '--text-secondary': isColor ? `var(--${color}-800)` : `var(--${color}-900)`,
     '--text-primary': isColor ? `var(--${color}-900)` : `var(--${color}-950)`,
@@ -30,12 +31,12 @@ const getThemeStyles = (theme: Theme): React.CSSProperties => {
 };
 
 const buttonVariants = cva(
-  "group/button inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all select-none bg-clip-padding disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-(--focus) aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "group/button inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all select-none bg-clip-padding disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-focus aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
         solid:
-          'bg-solid hover:bg-solid/90 active:bg-solid/80 text-text-solid focus-visible:outline-offset-2',
+          'bg-solid hover:bg-solid/90 active:bg-solid/80 text-text-solid focus-visible:outline-focus-solid focus-visible:outline-offset-2',
         outline:
           'border border-line-ui hover:bg-ui-hover active:bg-ui-active text-text-secondary hover:text-text-primary',
         surface:
@@ -61,7 +62,7 @@ const buttonVariants = cva(
       {
         variant: 'solid',
         theme: 'gray',
-        class: 'text-gray-50 focus-visible:outline-(--solid)/65',
+        class: 'text-gray-50',
       },
     ],
     defaultVariants: {

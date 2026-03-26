@@ -70,10 +70,10 @@
   --ui-hover: var(--gray-200);
   --ui-active: var(--gray-300);
   --solid: var(--gray-950);
-  --overlay: oklch(1 0 0);
-  --line-ui: var(--gray-400);
+  --overlay: var(--gray-50);
+  --line-ui: var(--gray-600);
   --focus: var(--gray-500);
-  --focus-solid: var(--gray-950);
+  --focus-solid: var(--gray-800);
 
   /* text */
   --text-primary: var(--gray-950);
@@ -141,7 +141,7 @@
   --ui-active: var(--gray-300);
   --solid: var(--gray-950);
   --overlay: var(--gray-50);
-  --line-ui: var(--gray-400);
+  --line-ui: var(--gray-600);
   --focus: var(--gray-500);
   --focus-solid: var(--gray-950);
 
