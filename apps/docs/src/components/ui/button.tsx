@@ -14,36 +14,34 @@ const themeColorMap: Record<Theme, string> = {
 };
 
 const getThemeStyles = (theme: Theme): React.CSSProperties => {
-  const colorVar = themeColorMap[theme];
+  const color = themeColorMap[theme];
+  const isColor = theme !== 'gray';
   return {
-    '--btn-theme-50': `var(--${colorVar}-50)`,
-    '--btn-theme-100': `var(--${colorVar}-100)`,
-    '--btn-theme-200': `var(--${colorVar}-200)`,
-    '--btn-theme-300': `var(--${colorVar}-300)`,
-    '--btn-theme-400': `var(--${colorVar}-400)`,
-    '--btn-theme-500': `var(--${colorVar}-500)`,
-    '--btn-theme-600': `var(--${colorVar}-600)`,
-    '--btn-theme-700': `var(--${colorVar}-700)`,
-    '--btn-theme-800': `var(--${colorVar}-800)`,
-    '--btn-theme-900': `var(--${colorVar}-900)`,
-    '--btn-theme-950': `var(--${colorVar}-950)`,
+    '--ui': `var(--${color}-100)`,
+    '--ui-hover': `var(--${color}-200)`,
+    '--ui-active': `var(--${color}-300)`,
+    '--line-ui': `var(--${color}-600)`,
+    '--focus': `var(--${color}-500)`,
+    '--solid': isColor ? `var(--${color}-700)` : `var(--${color}-950)`,
+    '--text-secondary': isColor ? `var(--${color}-800)` : `var(--${color}-900)`,
+    '--text-primary': isColor ? `var(--${color}-900)` : `var(--${color}-950)`,
+    '--text-solid': 'white',
   } as React.CSSProperties;
 };
 
 const buttonVariants = cva(
-  "group/button inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all select-none bg-clip-padding disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0  focus-visible:outline-2 focus-visible:outline-(--btn-theme-500) aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "group/button inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all select-none bg-clip-padding disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-(--focus) aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
         solid:
-          'bg-(--btn-theme-700) hover:bg-(--btn-theme-700)/90 active:bg-(--btn-theme-700)/80 text-white focus-visible:outline-offset-2',
+          'bg-solid hover:bg-solid/90 active:bg-solid/80 text-text-solid focus-visible:outline-offset-2',
         outline:
-          'border border-(--btn-theme-600) hover:bg-(--btn-theme-400)/40 active:bg-(--btn-theme-400)/60 text-(--btn-theme-800)',
+          'border border-line-ui hover:bg-ui-hover active:bg-ui-active text-text-secondary hover:text-text-primary',
         surface:
-          'border border-(--btn-theme-600) bg-(--btn-theme-400)/25 hover:bg-(--btn-theme-400)/40 active:bg-(--btn-theme-400)/60 text-(--btn-theme-800)',
-        soft: 'bg-(--btn-theme-300)/50  hover:bg-(--btn-theme-400)/50 active:bg-(--btn-theme-400)/65 text-(--btn-theme-900)',
-        ghost:
-          'hover:bg-(--btn-theme-400)/50 active:bg-(--btn-theme-400)/65 text-(--btn-theme-900)',
+          'border border-line-ui bg-ui hover:bg-ui-hover active:bg-ui-active text-text-secondary hover:text-text-primary',
+        soft: 'bg-ui hover:bg-ui-hover active:bg-ui-active text-text-secondary hover:text-text-primary',
+        ghost: 'hover:bg-ui-hover active:bg-ui-active text-text-secondary hover:text-text-primary',
       },
       size: {
         sm: "h-8 rounded-sm gap-1.5 px-3 has-[>svg]:px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3",
@@ -63,28 +61,7 @@ const buttonVariants = cva(
       {
         variant: 'solid',
         theme: 'gray',
-        class:
-          'bg-(--btn-theme-950) hover:bg-(--btn-theme-950)/90 active:bg-(--btn-theme-950)/80 text-(--btn-theme-50) focus-visible:outline-(--btn-theme-950)/65',
-      },
-      {
-        variant: 'outline',
-        theme: 'gray',
-        class: 'text-(--btn-theme-950)',
-      },
-      {
-        variant: 'surface',
-        theme: 'gray',
-        class: 'text-(--btn-theme-950)',
-      },
-      {
-        variant: 'soft',
-        theme: 'gray',
-        class: 'text-(--btn-theme-950)',
-      },
-      {
-        variant: 'ghost',
-        theme: 'gray',
-        class: 'text-(--btn-theme-950)',
+        class: 'text-gray-50 focus-visible:outline-(--solid)/65',
       },
     ],
     defaultVariants: {
