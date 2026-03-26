@@ -17,16 +17,16 @@ const getThemeStyles = (theme: Theme): React.CSSProperties => {
   const color = themeColorMap[theme];
   const isColor = theme !== 'gray';
   return {
-    '--ui': `var(--${color}-100)`,
-    '--ui-hover': `var(--${color}-200)`,
-    '--ui-active': `var(--${color}-300)`,
+    '--background-ui': `var(--${color}-100)`,
+    '--hover': `var(--${color}-200)`,
+    '--active': `var(--${color}-300)`,
     '--line-ui': `var(--${color}-600)`,
     '--focus': `var(--${color}-500)`,
     '--focus-solid': isColor ? `var(--${color}-800)` : `var(--${color}-950)`,
-    '--solid': isColor ? `var(--${color}-700)` : `var(--${color}-950)`,
-    '--text-secondary': isColor ? `var(--${color}-800)` : `var(--${color}-900)`,
-    '--text-primary': isColor ? `var(--${color}-900)` : `var(--${color}-950)`,
-    '--text-solid': 'white',
+    '--background-solid': isColor ? `var(--${color}-700)` : `var(--${color}-950)`,
+    '--foreground-subtle': isColor ? `var(--${color}-800)` : `var(--${color}-900)`,
+    '--foreground': isColor ? `var(--${color}-900)` : `var(--${color}-950)`,
+    '--foreground-solid': 'white',
   } as React.CSSProperties;
 };
 
@@ -36,13 +36,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         solid:
-          'bg-solid hover:bg-solid/90 active:bg-solid/80 text-text-solid focus-visible:outline-focus-solid focus-visible:outline-offset-2',
+          'bg-background-solid hover:bg-background-solid/90 active:bg-background-solid/80 text-foreground-solid focus-visible:outline-focus-solid focus-visible:outline-offset-2',
         outline:
-          'border border-line-ui hover:bg-ui-hover active:bg-ui-active text-text-secondary hover:text-text-primary',
+          'border border-line-ui hover:bg-hover active:bg-active text-foreground-subtle hover:text-foreground',
         surface:
-          'border border-line-ui bg-ui hover:bg-ui-hover active:bg-ui-active text-text-secondary hover:text-text-primary',
-        soft: 'bg-ui hover:bg-ui-hover active:bg-ui-active text-text-secondary hover:text-text-primary',
-        ghost: 'hover:bg-ui-hover active:bg-ui-active text-text-secondary hover:text-text-primary',
+          'border border-line-ui bg-background-ui hover:bg-hover active:bg-active text-foreground-subtle hover:text-foreground',
+        soft: 'bg-background-ui hover:bg-hover active:bg-active text-foreground-subtle hover:text-foreground',
+        ghost: 'hover:bg-hover active:bg-active text-foreground-subtle hover:text-foreground',
       },
       size: {
         sm: "h-8 rounded-sm gap-1.5 px-3 has-[>svg]:px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3",
