@@ -28,32 +28,32 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 Items sit as separate toggles with a gap between them.
 
 <ToggleGroup>
-  <ToggleGroupItem value="edit" aria-label="Edit">
-    <PencilSquareIcon />
+  <ToggleGroupItem value="left" aria-label="Align left">
+    <TextAlignLeftIcon />
   </ToggleGroupItem>
-  <ToggleGroupItem value="preview" aria-label="Preview">
-    <EyeIcon />
+  <ToggleGroupItem value="center" aria-label="Align center">
+    <TextAlignCenterIcon />
   </ToggleGroupItem>
-  <ToggleGroupItem value="bookmark" aria-label="Bookmark">
-    <BookmarkIcon />
+  <ToggleGroupItem value="right" aria-label="Align right">
+    <TextAlignRightIcon />
   </ToggleGroupItem>
 </ToggleGroup>
 
 ```tsx
-import { BookmarkIcon, EyeIcon, PencilSquareIcon } from '@heroicons/react/16/solid';
+import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from '@radix-ui/react-icons';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 export default function ToggleGroupDefault() {
   return (
     <ToggleGroup>
-      <ToggleGroupItem value="edit" aria-label="Edit">
-        <PencilSquareIcon />
+      <ToggleGroupItem value="left" aria-label="Align left">
+        <TextAlignLeftIcon />
       </ToggleGroupItem>
-      <ToggleGroupItem value="preview" aria-label="Preview">
-        <EyeIcon />
+      <ToggleGroupItem value="center" aria-label="Align center">
+        <TextAlignCenterIcon />
       </ToggleGroupItem>
-      <ToggleGroupItem value="bookmark" aria-label="Bookmark">
-        <BookmarkIcon />
+      <ToggleGroupItem value="right" aria-label="Align right">
+        <TextAlignRightIcon />
       </ToggleGroupItem>
     </ToggleGroup>
   );
@@ -65,32 +65,78 @@ export default function ToggleGroupDefault() {
 Use `variant="outline"` with `spacing={0}` to render items as a connected pill with shared borders.
 
 <ToggleGroup variant="outline" spacing={0}>
-  <ToggleGroupItem value="edit" aria-label="Edit">
-    <PencilSquareIcon />
+  <ToggleGroupItem value="left" aria-label="Align left">
+    <TextAlignLeftIcon />
   </ToggleGroupItem>
-  <ToggleGroupItem value="preview" aria-label="Preview">
-    <EyeIcon />
+  <ToggleGroupItem value="center" aria-label="Align center">
+    <TextAlignCenterIcon />
   </ToggleGroupItem>
-  <ToggleGroupItem value="bookmark" aria-label="Bookmark">
-    <BookmarkIcon />
+  <ToggleGroupItem value="right" aria-label="Align right">
+    <TextAlignRightIcon />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="justify" aria-label="Align justify">
+    <TextAlignJustifyIcon />
   </ToggleGroupItem>
 </ToggleGroup>
 
 ```tsx
-import { BookmarkIcon, EyeIcon, PencilSquareIcon } from '@heroicons/react/16/solid';
+import {
+  TextAlignCenterIcon,
+  TextAlignJustifyIcon,
+  TextAlignLeftIcon,
+  TextAlignRightIcon,
+} from '@radix-ui/react-icons';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 export default function ToggleGroupOutline() {
   return (
     <ToggleGroup variant="outline" spacing={0}>
-      <ToggleGroupItem value="edit" aria-label="Edit">
-        <PencilSquareIcon />
+      <ToggleGroupItem value="left" aria-label="Align left">
+        <TextAlignLeftIcon />
       </ToggleGroupItem>
-      <ToggleGroupItem value="preview" aria-label="Preview">
-        <EyeIcon />
+      <ToggleGroupItem value="center" aria-label="Align center">
+        <TextAlignCenterIcon />
       </ToggleGroupItem>
-      <ToggleGroupItem value="bookmark" aria-label="Bookmark">
-        <BookmarkIcon />
+      <ToggleGroupItem value="right" aria-label="Align right">
+        <TextAlignRightIcon />
+      </ToggleGroupItem>
+      <ToggleGroupItem value="justify" aria-label="Align justify">
+        <TextAlignJustifyIcon />
+      </ToggleGroupItem>
+    </ToggleGroup>
+  );
+}
+```
+
+### Solid
+
+<ToggleGroup variant="solid">
+  <ToggleGroupItem value="left" aria-label="Align left">
+    <TextAlignLeftIcon />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="center" aria-label="Align center">
+    <TextAlignCenterIcon />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="right" aria-label="Align right">
+    <TextAlignRightIcon />
+  </ToggleGroupItem>
+</ToggleGroup>
+
+```tsx
+import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from '@radix-ui/react-icons';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+
+export default function ToggleGroupSolid() {
+  return (
+    <ToggleGroup variant="solid">
+      <ToggleGroupItem value="left" aria-label="Align left">
+        <TextAlignLeftIcon />
+      </ToggleGroupItem>
+      <ToggleGroupItem value="center" aria-label="Align center">
+        <TextAlignCenterIcon />
+      </ToggleGroupItem>
+      <ToggleGroupItem value="right" aria-label="Align right">
+        <TextAlignRightIcon />
       </ToggleGroupItem>
     </ToggleGroup>
   );
@@ -102,32 +148,32 @@ export default function ToggleGroupOutline() {
 Use `orientation="vertical"` to stack items.
 
 <ToggleGroup orientation="vertical" variant="outline" spacing={0}>
-  <ToggleGroupItem value="edit" aria-label="Edit">
-    <PencilSquareIcon />
+  <ToggleGroupItem value="bold" aria-label="Bold">
+    <FontBoldIcon />
   </ToggleGroupItem>
-  <ToggleGroupItem value="preview" aria-label="Preview">
-    <EyeIcon />
+  <ToggleGroupItem value="italic" aria-label="Italic">
+    <FontItalicIcon />
   </ToggleGroupItem>
-  <ToggleGroupItem value="bookmark" aria-label="Bookmark">
-    <BookmarkIcon />
+  <ToggleGroupItem value="underline" aria-label="Underline">
+    <UnderlineIcon />
   </ToggleGroupItem>
 </ToggleGroup>
 
 ```tsx
-import { BookmarkIcon, EyeIcon, PencilSquareIcon } from '@heroicons/react/16/solid';
+import { FontBoldIcon, FontItalicIcon, UnderlineIcon } from '@radix-ui/react-icons';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 export default function ToggleGroupVertical() {
   return (
     <ToggleGroup orientation="vertical" variant="outline" spacing={0}>
-      <ToggleGroupItem value="edit" aria-label="Edit">
-        <PencilSquareIcon />
+      <ToggleGroupItem value="bold" aria-label="Bold">
+        <FontBoldIcon />
       </ToggleGroupItem>
-      <ToggleGroupItem value="preview" aria-label="Preview">
-        <EyeIcon />
+      <ToggleGroupItem value="italic" aria-label="Italic">
+        <FontItalicIcon />
       </ToggleGroupItem>
-      <ToggleGroupItem value="bookmark" aria-label="Bookmark">
-        <BookmarkIcon />
+      <ToggleGroupItem value="underline" aria-label="Underline">
+        <UnderlineIcon />
       </ToggleGroupItem>
     </ToggleGroup>
   );
@@ -138,13 +184,13 @@ export default function ToggleGroupVertical() {
 
 ### ToggleGroup
 
-| Prop          | Type                         | Default        |
-| ------------- | ---------------------------- | -------------- |
-| `variant`     | `"soft" \| "outline"`        | `"soft"`       |
-| `size`        | `"sm" \| "md" \| "lg"`       | `"md"`         |
-| `spacing`     | `number`                     | `0`            |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
-| `className`   | `string`                     | —              |
+| Prop          | Type                             | Default        |
+| ------------- | -------------------------------- | -------------- |
+| `variant`     | `"soft" \| "outline" \| "solid"` | `"soft"`       |
+| `size`        | `"sm" \| "md" \| "lg"`           | `"md"`         |
+| `spacing`     | `number`                         | `0`            |
+| `orientation` | `"horizontal" \| "vertical"`     | `"horizontal"` |
+| `className`   | `string`                         | —              |
 
 ### ToggleGroupItem
 
