@@ -10,70 +10,108 @@ A reference for the semantic CSS variable token system used across Ora UI compon
 - **Guessable by convention** — given a context, there should be an obvious token to reach for. Ambiguity is a consistency bug.
 - **Minimal surface area** — only add a token when it removes real ambiguity. Optionality without justification is noise.
 - **Gray by default** — all tokens resolve to gray values. Accent and brand colors are applied at the component level per variant; the token system doesn't encode them.
-- **States on backgrounds, not borders** — interactive state changes are expressed through background tokens. Border color stays static.
+- **Backgrounds are interactive, borders are not** — interactive state changes are expressed through background tokens only. Line/border color stays static. This is a convention, not a guideline.
+- **Max two levels** — token names are capped at one qualifier (e.g. `background-subtle`, `line-ui`). Compound qualifiers like `background-ui-hover` signal a need to revisit the system, not add a token.
 
 ---
 
-## Two Domains
+## Domains
 
-### Layout
+### Background
 
-Page and template-level surfaces — the app shell, section backgrounds, sidebars. Also the home for **non-interactive component surfaces** like cards and panels, which share the same visual layer as layout sections.
+Page and component surfaces. Three tiers cover the range from page canvas to interactive component fill, plus two special-purpose surfaces: `background-solid` for high-contrast fills and `background-overlay` for floating surfaces.
 
-### UI
+### Line
 
-Interactive component backgrounds and their derived states. Covers buttons, inputs, and any element where a background signals interactivity. Also includes elevated floating surfaces (overlays), component-level borders, and focus ring tokens.
+Separators and borders. Three tiers cover the range from subtle layout dividers to component-level borders.
 
-There is intentional crossover at the edges — the distinction is a guide, not a hard rule.
+### Foreground
+
+Text and icon color. Two tiers for primary/secondary hierarchy, plus `foreground-solid` for text on inverted surfaces.
+
+### Interactive States
+
+`hover` and `active` are standalone tokens, not namespaced under a domain. They are background values **by convention** — applied as `bg-hover` and `bg-active` only. Never use them for border or text color.
+
+`active` also covers pressed and selected states.
 
 ---
 
 ## Tokens
 
-### Layout
+### Background
 
-| Token    | Tailwind      | Role                                                          |
-| -------- | ------------- | ------------------------------------------------------------- |
-| `app`    | `bg-app`      | Page canvas — least contrasted, the base everything sits on   |
-| `subtle` | `bg-subtle`   | One step above app — layout sections, cards, panels, sidebars |
-| `line`   | `border-line` | Separators and borders on non-interactive elements            |
+| Token                | Tailwind                | Role                                                              |
+| -------------------- | ----------------------- | ----------------------------------------------------------------- |
+| `background`         | `bg-background`         | Page canvas — least contrasted, the base everything sits on       |
+| `background-subtle`  | `bg-background-subtle`  | One step above base — layout sections, cards, panels, sidebars    |
+| `background-ui`      | `bg-background-ui`      | Interactive component fill — button `surface` and `soft` variants |
+| `background-solid`   | `bg-background-solid`   | High-contrast neutral fill — `solid` variant buttons and similar  |
+| `background-overlay` | `bg-background-overlay` | Floating surfaces — dropdowns, dialogs, popovers                  |
 
-### UI
+### Interactive States
 
-| Token         | Tailwind              | Role                                                                                                                                                   |
-| ------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ui`          | `bg-ui`               | Interactive element background — button `surface` and `soft` variants                                                                                  |
-| `ui-hover`    | `bg-ui-hover`         | Hover state for interactive elements                                                                                                                   |
-| `ui-active`   | `bg-ui-active`        | Active/pressed state for interactive elements                                                                                                          |
-| `solid`       | `bg-solid`            | High-contrast neutral fill — most contrasted value (e.g. gray-950 on light, gray-50 on dark). Used for solid variant buttons and similar.              |
-| `overlay`     | `bg-overlay`          | Floating surfaces — dropdown content, dialog content, popovers. Non-interactive; purely a surface token.                                               |
-| `line-ui`     | `border-line-ui`      | Borders on interactive components — input outlines, button borders (surface/outline variants)                                                          |
-| `focus`       | `outline-focus`       | Focus ring color for interactive components                                                                                                            |
-| `focus-solid` | `outline-focus-solid` | Focus ring color for solid variant components — same value as `solid`. Visible via ring-offset against the page background, not the component surface. |
+| Token    | Tailwind    | Role                                                        |
+| -------- | ----------- | ----------------------------------------------------------- |
+| `hover`  | `bg-hover`  | Hover state for interactive elements                        |
+| `active` | `bg-active` | Active, pressed, or selected state for interactive elements |
 
-### Text
+### Line
 
-| Token            | Tailwind         | Role                                                                                                                         |
-| ---------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `text-primary`   | `text-primary`   | Primary text — default body and heading color                                                                                |
-| `text-secondary` | `text-secondary` | Secondary text — supporting labels, captions, metadata                                                                       |
-| `text-solid`     | `text-solid`     | Text on solid backgrounds — always `gray-50`. The gray scale inverts per mode so this stays readable in both light and dark. |
+| Token         | Tailwind             | Role                                                               |
+| ------------- | -------------------- | ------------------------------------------------------------------ |
+| `line`        | `border-line`        | Separators and borders on non-interactive elements                 |
+| `line-subtle` | `border-line-subtle` | Lighter separator — for dividers that need less visual weight      |
+| `line-ui`     | `border-line-ui`     | Borders on interactive components — input outlines, button borders |
+
+### Foreground
+
+| Token               | Tailwind                 | Role                                                                 |
+| ------------------- | ------------------------ | -------------------------------------------------------------------- |
+| `foreground`        | `text-foreground`        | Primary text — default body and heading color                        |
+| `foreground-subtle` | `text-foreground-subtle` | Secondary text — supporting labels, captions, metadata               |
+| `foreground-solid`  | `text-foreground-solid`  | Text on solid backgrounds — always the inverse of `background-solid` |
+
+### Focus
+
+| Token         | Tailwind              | Role                                          |
+| ------------- | --------------------- | --------------------------------------------- |
+| `focus`       | `outline-focus`       | Focus ring color for interactive components   |
+| `focus-solid` | `outline-focus-solid` | Focus ring color for solid-variant components |
+
+---
+
+## Conventions
+
+### Interactive state tokens are background-only
+
+`hover` and `active` are always applied as `bg-hover` and `bg-active`. When an interactive component needs a different text color on hover, use a foreground token directly in the variant style — e.g. `hover:text-foreground`. This keeps interactive behaviour predictable across components: state changes live in one property.
+
+### Text color shifts on hover are inline
+
+When a component shifts text color on hover (e.g. `foreground-subtle` → `foreground` on a ghost button), this is expressed directly in the variant style — not via a token. This is expected and not considered repetition worth abstracting.
+
+### Borders don't change on interaction
+
+Line tokens are static. If a component has an interactive border treatment, that's a design exception worth calling out explicitly — not something the token system should encode.
+
+### Two-level maximum
+
+Token names have at most one qualifier. If you find yourself reaching for something like `background-ui-hover`, the token hierarchy needs adjustment — not a deeper token.
 
 ---
 
 ## Button Variant Reference
 
-A concrete example of how tokens map to a single component:
+| Variant   | Background            | Border           | Text                     | Focus                 |
+| --------- | --------------------- | ---------------- | ------------------------ | --------------------- |
+| `solid`   | `bg-background-solid` | —                | `text-foreground-solid`  | `outline-focus-solid` |
+| `surface` | `bg-background-ui`    | `border-line-ui` | `text-foreground-subtle` | `outline-focus`       |
+| `soft`    | `bg-background-ui`    | —                | `text-foreground-subtle` | `outline-focus`       |
+| `outline` | —                     | `border-line-ui` | `text-foreground-subtle` | `outline-focus`       |
+| `ghost`   | —                     | —                | `text-foreground-subtle` | `outline-focus`       |
 
-| Variant   | Background | Border           | Text           | Focus                 |
-| --------- | ---------- | ---------------- | -------------- | --------------------- |
-| `solid`   | `bg-solid` | —                | `text-solid`   | `outline-focus-solid` |
-| `surface` | `bg-ui`    | `border-line-ui` | `text-primary` | `outline-focus`       |
-| `soft`    | `bg-ui`    | —                | `text-primary` | `outline-focus`       |
-| `outline` | —          | `border-line-ui` | `text-primary` | `outline-focus`       |
-| `ghost`   | —          | —                | `text-primary` | `outline-focus`       |
-
-All interactive variants use `bg-ui-hover` and `bg-ui-active` for state changes (where applicable).
+All interactive variants use `bg-hover` and `bg-active` for state changes (where applicable).
 
 ---
 
@@ -81,33 +119,37 @@ All interactive variants use `bg-ui-hover` and `bg-ui-active` for state changes 
 
 ```css
 :root {
-  /* Layout */
-  --color-app: ...;
-  --color-subtle: ...;
-  --color-line: ...;
+  /* Background */
+  --background: ...;
+  --background-subtle: ...;
+  --background-ui: ...;
+  --background-solid: ...;
+  --background-overlay: ...;
 
-  /* UI */
-  --color-ui: ...;
-  --color-ui-hover: ...;
-  --color-ui-active: ...;
-  --color-solid: ...;
-  --color-overlay: ...;
-  --color-line-ui: ...;
-  --color-focus: ...;
-  --color-focus-solid: ...; /* same as --color-solid */
+  /* Interactive states */
+  --hover: ...;
+  --active: ...;
 
-  /* Text */
-  --color-text-primary: ...;
-  --color-text-secondary: ...;
-  --color-text-solid: ...;
+  /* Line */
+  --line: ...;
+  --line-subtle: ...;
+  --line-ui: ...;
+
+  /* Foreground */
+  --foreground: ...;
+  --foreground-subtle: ...;
+  --foreground-solid: ...;
+
+  /* Focus */
+  --focus: ...;
+  --focus-solid: ...;
 }
 ```
 
-In Tailwind v4, these map via `@theme` so utilities like `bg-ui`, `border-line`, and `text-primary` resolve directly to the CSS variables.
+In Tailwind v4, these map via `@theme` so utilities like `bg-background-ui`, `border-line`, and `text-foreground` resolve directly to the CSS variables.
 
 ---
 
 ## Open Questions
 
-- **`text-muted`** — a third text tier for disabled/placeholder text. Deferred; may be handled with opacity (`text-secondary/50`) rather than a dedicated token. To revisit once more components are built.
-- **`line` naming** — provisional. Validate in practice; revisit if it doesn't feel intuitive.
+- **`line-subtle` stability** — added to resolve the toggle-group border gap. Treat as provisional until validated across more components.
