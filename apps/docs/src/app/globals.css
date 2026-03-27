@@ -60,7 +60,7 @@
   /* line */
   --line: var(--gray-300);
   --line-subtle: var(--gray-200);
-  --line-ui: var(--gray-600);
+  --line-ui: var(--gray-500);
 
   /* foreground */
   --foreground: var(--gray-950);
@@ -104,33 +104,6 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-
-  /* ora */
-
-  /* background */
-  --background: var(--gray-base);
-  --background-subtle: var(--gray-50);
-  --background-ui: var(--gray-100);
-  --background-solid: var(--gray-950);
-  --background-overlay: var(--gray-50);
-
-  /* interactive states */
-  --hover: var(--gray-200);
-  --active: var(--gray-300);
-
-  /* line */
-  --line: var(--gray-300);
-  --line-subtle: var(--gray-200);
-  --line-ui: var(--gray-600);
-
-  /* foreground */
-  --foreground: var(--gray-950);
-  --foreground-subtle: var(--gray-900);
-  --foreground-solid: var(--gray-50);
-
-  /* focus */
-  --focus: var(--gray-500);
-  --focus-solid: var(--gray-950);
 }
 
 @theme inline {
