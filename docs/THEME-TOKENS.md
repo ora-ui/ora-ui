@@ -153,3 +153,5 @@ In Tailwind v4, these map via `@theme` so utilities like `bg-background-ui`, `bo
 ## Open Questions
 
 - **`line-subtle` stability** — added to resolve the toggle-group border gap. Treat as provisional until validated across more components.
+- **`hover` lightness** — the gap between `hover` and `active` may be too wide. Consider pulling `hover` down slightly in lightness (making it a touch darker/more contrasted) while leaving `active` unchanged. Goal is a more perceptible step between the two states without touching the active value.
+- **`line-ui` value** — gray-600 reads as too bright for component borders. Candidates are gray-400 or gray-500. Needs evaluation across inputs and buttons before landing on a value.
