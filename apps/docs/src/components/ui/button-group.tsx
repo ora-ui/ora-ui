@@ -49,7 +49,7 @@ function ButtonGroupText({
   return (
     <Comp
       className={cn(
-        "bg-ui-active flex items-center gap-2 rounded-md border border-line-ui px-3 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+        "bg-active flex items-center gap-2 rounded-md border border-line-ui px-3 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
@@ -67,7 +67,7 @@ function ButtonGroupSeparator({
       data-slot="button-group-separator"
       orientation={orientation}
       className={cn(
-        'relative my-0! ml-px self-stretch bg-border-subtle [[data-variant=solid]+&]:bg-gray-950/85 [&:has(+[data-variant=solid])]:bg-gray-800 data-[orientation=vertical]:h-auto',
+        'relative my-0! ml-px self-stretch bg-line-subtle [[data-variant=solid]+&]:bg-gray-950/85 [&:has(+[data-variant=solid])]:bg-gray-800 data-[orientation=vertical]:h-auto',
         className
       )}
       {...props}
