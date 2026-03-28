@@ -1,5 +1,5 @@
 ---
-name: add-component
+name: add-shadcn-component
 description: Installs a shadcn component into the Ora UI docs project and scaffolds its documentation. Use when the user wants to add a new component, says "add the X component", or wants to create docs for a new component.
 ---
 
