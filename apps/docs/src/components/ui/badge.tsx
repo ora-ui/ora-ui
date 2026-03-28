@@ -22,7 +22,7 @@ const getThemeStyles = (theme: Theme): React.CSSProperties => {
     '--background-ui': `var(--${color}-200)`,
     '--line-ui': `var(--${color}-400)`,
     '--foreground': isGray ? `var(--${color}-950)` : `var(--${color}-900)`,
-    '--foreground-solid': isGray ? `var(--${color}-50)` : 'white',
+    '--foreground-solid': theme === 'warning' ? 'black' : isGray ? `var(--${color}-50)` : 'white',
   } as React.CSSProperties;
 };
 
