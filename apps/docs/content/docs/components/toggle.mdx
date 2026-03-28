@@ -14,8 +14,8 @@ npx shadcn@latest add "https://ora-ui.com/r/toggle.json"
 ```tsx
 import { Toggle } from '@/components/ui/toggle';
 
-<Toggle aria-label="Bookmark">
-  <BookmarkIcon />
+<Toggle aria-label="Bold">
+  <FontBoldIcon />
 </Toggle>;
 ```
 
@@ -23,18 +23,18 @@ import { Toggle } from '@/components/ui/toggle';
 
 ### Default
 
-<Toggle aria-label="Bookmark">
-  <BookmarkIcon />
+<Toggle aria-label="Bold">
+  <FontBoldIcon />
 </Toggle>
 
 ```tsx
-import { BookmarkIcon } from '@heroicons/react/16/solid';
+import { FontBoldIcon } from '@radix-ui/react-icons';
 import { Toggle } from '@/components/ui/toggle';
 
 export default function ToggleDefault() {
   return (
-    <Toggle aria-label="Bookmark">
-      <BookmarkIcon />
+    <Toggle aria-label="Bold">
+      <FontBoldIcon />
     </Toggle>
   );
 }
@@ -42,18 +42,37 @@ export default function ToggleDefault() {
 
 ### Outline
 
-<Toggle variant="outline" aria-label="Bookmark">
-  <BookmarkIcon />
+<Toggle variant="outline" aria-label="Bold">
+  <FontBoldIcon />
 </Toggle>
 
 ```tsx
-import { BookmarkIcon } from '@heroicons/react/16/solid';
+import { FontBoldIcon } from '@radix-ui/react-icons';
 import { Toggle } from '@/components/ui/toggle';
 
 export default function ToggleOutline() {
   return (
-    <Toggle variant="outline" aria-label="Bookmark">
-      <BookmarkIcon />
+    <Toggle variant="outline" aria-label="Bold">
+      <FontBoldIcon />
+    </Toggle>
+  );
+}
+```
+
+### Solid
+
+<Toggle variant="solid" aria-label="Bold">
+  <FontBoldIcon />
+</Toggle>
+
+```tsx
+import { FontBoldIcon } from '@radix-ui/react-icons';
+import { Toggle } from '@/components/ui/toggle';
+
+export default function ToggleSolid() {
+  return (
+    <Toggle variant="solid" aria-label="Bold">
+      <FontBoldIcon />
     </Toggle>
   );
 }
@@ -61,20 +80,20 @@ export default function ToggleOutline() {
 
 ### With Text
 
-<Toggle aria-label="Toggle preview">
-  <EyeIcon />
-  Preview
+<Toggle aria-label="Toggle bold">
+  <FontBoldIcon />
+  Bold
 </Toggle>
 
 ```tsx
-import { EyeIcon } from '@heroicons/react/16/solid';
+import { FontBoldIcon } from '@radix-ui/react-icons';
 import { Toggle } from '@/components/ui/toggle';
 
 export default function ToggleWithText() {
   return (
-    <Toggle aria-label="Toggle preview">
-      <EyeIcon />
-      Preview
+    <Toggle aria-label="Toggle bold">
+      <FontBoldIcon />
+      Bold
     </Toggle>
   );
 }
@@ -82,18 +101,18 @@ export default function ToggleWithText() {
 
 ### Disabled
 
-<Toggle disabled aria-label="Bookmark">
-  <BookmarkIcon />
+<Toggle disabled aria-label="Bold">
+  <FontBoldIcon />
 </Toggle>
 
 ```tsx
-import { BookmarkIcon } from '@heroicons/react/16/solid';
+import { FontBoldIcon } from '@radix-ui/react-icons';
 import { Toggle } from '@/components/ui/toggle';
 
 export default function ToggleDisabled() {
   return (
-    <Toggle disabled aria-label="Bookmark">
-      <BookmarkIcon />
+    <Toggle disabled aria-label="Bold">
+      <FontBoldIcon />
     </Toggle>
   );
 }
@@ -101,10 +120,10 @@ export default function ToggleDisabled() {
 
 ## Props
 
-| Prop        | Type                   | Default  |
-| ----------- | ---------------------- | -------- |
-| `variant`   | `"soft" \| "outline"`  | `"soft"` |
-| `size`      | `"sm" \| "md" \| "lg"` | `"md"`   |
-| `className` | `string`               | —        |
+| Prop        | Type                             | Default  |
+| ----------- | -------------------------------- | -------- |
+| `variant`   | `"soft" \| "outline" \| "solid"` | `"soft"` |
+| `size`      | `"sm" \| "md" \| "lg"`           | `"md"`   |
+| `className` | `string`                         | —        |
 
 All other props are forwarded to the underlying [Base UI Toggle](https://base-ui.com/components/toggle) primitive.

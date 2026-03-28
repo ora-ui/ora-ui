@@ -16,6 +16,16 @@ import {
   ClockIcon,
   EyeIcon,
 } from '@heroicons/react/16/solid';
+import {
+  FontBoldIcon,
+  FontItalicIcon,
+  UnderlineIcon,
+  StrikethroughIcon,
+  TextAlignLeftIcon,
+  TextAlignCenterIcon,
+  TextAlignRightIcon,
+  TextAlignJustifyIcon,
+} from '@radix-ui/react-icons';
 import type { MDXComponents } from 'mdx/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -92,6 +102,14 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     CheckCircleIcon,
     ClockIcon,
     EyeIcon,
+    FontBoldIcon,
+    FontItalicIcon,
+    UnderlineIcon,
+    StrikethroughIcon,
+    TextAlignLeftIcon,
+    TextAlignCenterIcon,
+    TextAlignRightIcon,
+    TextAlignJustifyIcon,
     ...components,
   };
 }
