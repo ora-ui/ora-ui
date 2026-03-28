@@ -1,5 +1,3 @@
-A react component library.
+A styled react component library, built on top of Base UI.
 
-You are migrating the project from: Aura UI (Stitches + Radix) → to: Ora UI (Tailwind + shadcn patterns)
-
-For more info on migration plan, see /plans/MIGRATE.md
+For theming conventions, see docs/THEME-TOKENS.md
