@@ -51,7 +51,7 @@
   --background-subtle: var(--gray-50);
   --background-ui: var(--gray-100);
   --background-solid: var(--gray-950);
-  --background-overlay: var(--gray-50);
+  --background-overlay: var(--gray-100);
 
   /* interactive states */
   --hover: var(--gray-200);
