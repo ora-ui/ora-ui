@@ -15,19 +15,14 @@ const themeColorMap: Record<Theme, string> = {
 };
 
 const getThemeStyles = (theme: Theme): React.CSSProperties => {
-  const colorVar = themeColorMap[theme];
+  const color = themeColorMap[theme];
+  const isGray = theme === 'gray';
   return {
-    '--badge-theme-50': `var(--${colorVar}-50)`,
-    '--badge-theme-100': `var(--${colorVar}-100)`,
-    '--badge-theme-200': `var(--${colorVar}-200)`,
-    '--badge-theme-300': `var(--${colorVar}-300)`,
-    '--badge-theme-400': `var(--${colorVar}-400)`,
-    '--badge-theme-500': `var(--${colorVar}-500)`,
-    '--badge-theme-600': `var(--${colorVar}-600)`,
-    '--badge-theme-700': `var(--${colorVar}-700)`,
-    '--badge-theme-800': `var(--${colorVar}-800)`,
-    '--badge-theme-900': `var(--${colorVar}-900)`,
-    '--badge-theme-950': `var(--${colorVar}-950)`,
+    '--background-solid': isGray ? `var(--${color}-950)` : `var(--${color}-700)`,
+    '--background-ui': `var(--${color}-200)`,
+    '--line-ui': `var(--${color}-400)`,
+    '--foreground': isGray ? `var(--${color}-950)` : `var(--${color}-900)`,
+    '--foreground-solid': isGray ? `var(--${color}-50)` : 'white',
   } as React.CSSProperties;
 };
 
@@ -36,10 +31,10 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        solid: 'bg-(--badge-theme-700) text-white',
-        soft: 'bg-(--badge-theme-200)/80 text-(--badge-theme-900)',
-        outline: 'border-(--badge-theme-400) text-(--badge-theme-800)',
-        surface: 'border-(--badge-theme-400) bg-(--badge-theme-200)/40 text-(--badge-theme-800)',
+        solid: 'bg-background-solid text-foreground-solid',
+        soft: 'bg-background-ui text-foreground',
+        outline: 'border-line-ui text-foreground',
+        surface: 'border-line-ui bg-background-ui/40 text-foreground',
       },
       size: {
         default: 'max-h-6 px-1.5 py-0.5 text-xs',
@@ -53,28 +48,6 @@ const badgeVariants = cva(
         success: '',
       },
     },
-    compoundVariants: [
-      {
-        variant: 'solid',
-        theme: 'gray',
-        class: 'bg-(--badge-theme-950) text-(--badge-theme-50)',
-      },
-      {
-        variant: 'outline',
-        theme: 'gray',
-        class: 'text-(--badge-theme-950)',
-      },
-      {
-        variant: 'surface',
-        theme: 'gray',
-        class: 'text-(--badge-theme-950)',
-      },
-      {
-        variant: 'soft',
-        theme: 'gray',
-        class: 'text-(--badge-theme-950)',
-      },
-    ],
     defaultVariants: {
       variant: 'soft',
       size: 'default',

@@ -7,10 +7,10 @@ const kbdVariants = cva(
   {
     variants: {
       variant: {
-        ghost: 'bg-transparent text-gray-900 shadow-none',
-        soft: 'bg-gray-100 text-gray-900 shadow-none',
+        ghost: 'bg-transparent text-foreground-subtle shadow-none',
+        soft: 'bg-background-ui text-foreground-subtle shadow-none',
         surface:
-          'bg-gray-100 text-gray-900 shadow-[0_0_0_1px_var(--gray-400),0_3px_0_var(--gray-500)]',
+          'bg-background-ui text-foreground-subtle shadow-[0_0_0_1px_var(--line),0_3px_0_var(--line-subtle)]',
       },
     },
     defaultVariants: {
