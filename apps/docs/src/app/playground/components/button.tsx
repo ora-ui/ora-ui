@@ -79,9 +79,9 @@ export function ButtonSection() {
       }
     >
       <div
-        className="grid gap-4"
+        className="grid gap-x-4 gap-y-2"
         style={{
-          gridTemplateColumns: `8rem repeat(${BUTTON_THEMES.length + 2}, 1fr)`,
+          gridTemplateColumns: `auto repeat(${BUTTON_THEMES.length + 2}, 1fr)`,
         }}
       >
         <div />
@@ -95,7 +95,9 @@ export function ButtonSection() {
 
         {BUTTON_VARIANTS.map((v) => (
           <React.Fragment key={v}>
-            <div className="flex items-center text-sm text-foreground-subtle capitalize">{v}</div>
+            <div className="flex items-center pr-5 text-xs text-foreground-subtle capitalize">
+              {v}
+            </div>
             {BUTTON_THEMES.map((t) => (
               <div key={t} className="flex items-center">
                 <Button variant={v} theme={t}>
