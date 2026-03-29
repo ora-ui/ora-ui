@@ -12,6 +12,8 @@ import {
   UnderlineIcon,
   LinkIcon,
   ExclamationTriangleIcon,
+  PlusIcon,
+  MinusIcon,
 } from '@heroicons/react/16/solid';
 
 import { Button } from '@/components/ui/button';
@@ -723,9 +725,12 @@ function ButtonGroupSection() {
         <div className="space-y-2">
           <span className="text-xs text-foreground-subtle">Vertical</span>
           <ButtonGroup orientation="vertical">
-            <Button variant="outline">Top</Button>
-            <Button variant="outline">Middle</Button>
-            <Button variant="outline">Bottom</Button>
+            <Button variant="outline" size="icon" aria-label="Add">
+              <PlusIcon />
+            </Button>
+            <Button variant="outline" size="icon" aria-label="Remove">
+              <MinusIcon />
+            </Button>
           </ButtonGroup>
         </div>
       </div>
