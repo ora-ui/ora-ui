@@ -100,8 +100,8 @@ const TOGGLE_SIZES = ['sm', 'md', 'lg'] as const;
 
 const BACKGROUNDS = [
   { label: 'App', value: 'var(--background)' },
-  { label: 'App Subtle', value: 'var(--background-subtle)' },
-  { label: 'Overlay', value: 'var(--background-overlay)' },
+  { label: 'Surface 1', value: 'var(--surface-1)' },
+  { label: 'Surface 2', value: 'var(--surface-2)' },
 ] as const;
 
 function BackgroundSwitcher({

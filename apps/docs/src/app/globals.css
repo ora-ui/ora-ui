@@ -47,9 +47,9 @@
 
   /* background */
   --background: var(--gray-base);
-  --background-subtle: var(--gray-50);
+  --surface-1: oklch(from var(--gray-50) l c h / 0.5);
+  --surface-2: var(--gray-50);
   --background-solid: var(--gray-950);
-  --background-overlay: var(--gray-50);
 
   /* interactive states */
   --background-ui: var(--gray-a100);
@@ -145,10 +145,10 @@
 
   /* ora */
   --color-background: var(--background);
-  --color-background-subtle: var(--background-subtle);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
   --color-background-ui: var(--background-ui);
   --color-background-solid: var(--background-solid);
-  --color-background-overlay: var(--background-overlay);
   --color-hover: var(--hover);
   --color-active: var(--active);
   --color-line: var(--line);
