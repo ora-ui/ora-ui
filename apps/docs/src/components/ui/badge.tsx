@@ -4,25 +4,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
-type Theme = 'gray' | 'accent' | 'destructive' | 'warning' | 'success';
-
-const themeColorMap: Record<Theme, string> = {
-  gray: 'gray',
-  accent: 'accent',
-  destructive: 'destructive',
-  warning: 'warning',
-  success: 'success',
-};
+type Theme = 'gray' | 'accent' | 'destructive' | 'warning' | 'success' | (string & {});
 
 const getThemeStyles = (theme: Theme): React.CSSProperties => {
-  const color = themeColorMap[theme];
-  const isGray = theme === 'gray';
+  const isColor = theme !== 'gray';
   return {
-    '--background-solid': isGray ? `var(--${color}-950)` : `var(--${color}-700)`,
-    '--background-ui': `var(--${color}-200)`,
-    '--line-ui': `var(--${color}-400)`,
-    '--foreground': isGray ? `var(--${color}-950)` : `var(--${color}-900)`,
-    '--foreground-solid': theme === 'warning' ? 'black' : isGray ? `var(--${color}-50)` : 'white',
+    '--background-solid': isColor ? `var(--${theme}-700)` : `var(--${theme}-950)`,
+    '--background-ui': `var(--${theme}-200)`,
+    '--line-ui': `var(--${theme}-400)`,
+    '--foreground': isColor ? `var(--${theme}-900)` : `var(--${theme}-950)`,
+    ...(isColor ? { '--foreground-solid': `var(--${theme}-foreground-solid)` } : {}),
   } as React.CSSProperties;
 };
 

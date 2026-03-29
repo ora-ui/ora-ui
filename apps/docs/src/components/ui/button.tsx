@@ -5,28 +5,25 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
-type Theme = 'gray' | 'accent' | 'destructive';
+type Theme = 'gray' | 'accent' | 'destructive' | (string & {});
 
-const themeColorMap: Record<Theme, string> = {
-  gray: 'gray',
-  accent: 'accent',
-  destructive: 'destructive',
-};
-
-const getThemeStyles = (theme: Theme): React.CSSProperties => {
-  const color = themeColorMap[theme];
+const getThemeStyles = (
+  theme: Theme,
+  variant: VariantProps<typeof buttonVariants>['variant']
+): React.CSSProperties => {
   const isColor = theme !== 'gray';
+  const themedSoft = variant === 'soft' && isColor;
   return {
-    '--background-ui': `var(--${color}-100)`,
-    '--hover': `var(--${color}-200)`,
-    '--active': `var(--${color}-300)`,
-    '--line-ui': `var(--${color}-600)`,
-    '--focus': `var(--${color}-500)`,
-    '--focus-solid': isColor ? `var(--${color}-800)` : `var(--${color}-950)`,
-    '--background-solid': isColor ? `var(--${color}-700)` : `var(--${color}-950)`,
-    '--foreground-subtle': isColor ? `var(--${color}-800)` : `var(--${color}-900)`,
-    '--foreground': isColor ? `var(--${color}-900)` : `var(--${color}-950)`,
-    '--foreground-solid': 'white',
+    '--background-ui': themedSoft ? `var(--${theme}-a200)` : `var(--${theme}-a100)`,
+    '--hover': themedSoft ? `var(--${theme}-a300)` : `var(--${theme}-a200)`,
+    '--active': themedSoft ? `var(--${theme}-a400)` : `var(--${theme}-a300)`,
+    '--line-ui': `var(--${theme}-600)`,
+    '--focus': `var(--${theme}-500)`,
+    '--focus-solid': isColor ? `var(--${theme}-800)` : `var(--${theme}-950)`,
+    '--background-solid': isColor ? `var(--${theme}-700)` : `var(--${theme}-950)`,
+    '--foreground-subtle': isColor ? `var(--${theme}-800)` : `var(--${theme}-900)`,
+    '--foreground': isColor ? `var(--${theme}-900)` : `var(--${theme}-950)`,
+    ...(isColor ? { '--foreground-solid': `var(--${theme}-foreground-solid)` } : {}),
   } as React.CSSProperties;
 };
 
@@ -38,9 +35,9 @@ const buttonVariants = cva(
         solid:
           'bg-background-solid hover:bg-background-solid/90 active:bg-background-solid/80 text-foreground-solid focus-visible:outline-focus-solid focus-visible:outline-offset-2',
         outline:
-          'border border-line-ui hover:bg-hover active:bg-active text-foreground-subtle hover:text-foreground',
+          'border border-line-ui hover:bg-hover active:bg-active  data-[theme=gray]:hover:bg-hover/50 data-[theme=gray]:active:bg-active/75 text-foreground-subtle hover:text-foreground',
         surface:
-          'border border-line-ui bg-background-ui hover:bg-hover active:bg-active text-foreground-subtle hover:text-foreground',
+          'border border-line-ui/65 bg-background-ui hover:border-line-ui active:bg-active data-[theme=gray]:bg-background-ui/50 data-[theme=gray]:active:bg-active/75 text-foreground-subtle hover:text-foreground',
         soft: 'bg-background-ui hover:bg-hover active:bg-active text-foreground-subtle hover:text-foreground',
         ghost: 'hover:bg-hover active:bg-active text-foreground-subtle hover:text-foreground',
       },
@@ -85,8 +82,9 @@ function Button({
     <ButtonPrimitive
       data-slot="button"
       data-variant={variant}
+      data-theme={theme}
       className={cn(buttonVariants({ variant, size, className, theme }))}
-      style={{ ...getThemeStyles(theme as Theme), ...style }}
+      style={{ ...getThemeStyles(theme as Theme, variant), ...style }}
       {...props}
     />
   );
