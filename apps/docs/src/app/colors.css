@@ -12,6 +12,30 @@
   --gray-900: oklch(0.5025 0.0136 264.44);
   --gray-950: oklch(0.2411 0.0097 248.23);
 
+  --gray-a100: oklch(0.145 0.101 264.052 / 0.059);
+  --gray-a200: oklch(0.134 0.093 264.052 / 0.09);
+  --gray-a300: oklch(0.168 0.083 262.825 / 0.122);
+
+  --accent-a100: oklch(0.641 0.197 252.972 / 0.043);
+  --accent-a200: oklch(0.641 0.182 250.158 / 0.098);
+  --accent-a300: oklch(0.68 0.179 246.975 / 0.165);
+  --accent-a400: oklch(0.656 0.19 250.834 / 0.239);
+
+  --success-a100: oklch(0.592 0.201 142.495 / 0.039);
+  --success-a200: oklch(0.586 0.199 142.495 / 0.086);
+  --success-a300: oklch(0.609 0.206 142.719 / 0.145);
+  --success-a400: oklch(0.575 0.194 142.685 / 0.212);
+
+  --warning-a100: oklch(0.864 0.178 96.823 / 0.086);
+  --warning-a200: oklch(0.901 0.186 98.266 / 0.239);
+  --warning-a300: oklch(0.881 0.181 94.02 / 0.388);
+  --warning-a400: oklch(0.864 0.177 94.419 / 0.533);
+
+  --destructive-a100: oklch(0.636 0.25 30.693 / 0.031);
+  --destructive-a200: oklch(0.624 0.237 31.926 / 0.094);
+  --destructive-a300: oklch(0.648 0.24 32.875 / 0.173);
+  --destructive-a400: oklch(0.643 0.244 32.015 / 0.239);
+
   --success-50: oklch(0.994 0.004 157.2);
   --success-100: oklch(0.981 0.01 155.1);
   --success-200: oklch(0.958 0.022 155.9);
@@ -23,6 +47,7 @@
   --success-800: oklch(0.611 0.127 158.2);
   --success-900: oklch(0.543 0.112 159.5);
   --success-950: oklch(0.322 0.048 164.5);
+  --success-foreground-solid: white;
 
   --warning-50: oklch(0.994 0.003 84.559);
   --warning-100: oklch(0.986 0.024 99.096);
@@ -35,6 +60,7 @@
   --warning-800: oklch(0.831 0.168 80.847);
   --warning-900: oklch(0.571 0.129 63.938);
   --warning-950: oklch(0.352 0.049 54.169);
+  --warning-foreground-solid: black;
 
   --accent-50: oklch(0.993 0.003 247.9);
   --accent-100: oklch(0.982 0.009 242.8);
@@ -47,6 +73,7 @@
   --accent-800: oklch(0.622 0.183 251.7);
   --accent-900: oklch(0.556 0.162 252.2);
   --accent-950: oklch(0.324 0.096 258.8);
+  --accent-foreground-solid: white;
 
   --destructive-50: oklch(0.993 0.003 17.2);
   --destructive-100: oklch(0.984 0.008 27.2);
@@ -59,21 +86,46 @@
   --destructive-800: oklch(0.603 0.195 33.2);
   --destructive-900: oklch(0.566 0.198 32.7);
   --destructive-950: oklch(0.346 0.08 30.4);
+  --destructive-foreground-solid: white;
 }
 
 .dark {
-  --gray-base: oklch(0.05 0.002 271.182);
-  --gray-50: oklch(0.179 0.004 286);
-  --gray-100: oklch(0.213 0.004 264.5);
-  --gray-200: oklch(0.252 0.006 271.2);
-  --gray-300: oklch(0.283 0.007 248.1);
-  --gray-400: oklch(0.312 0.008 255.6);
+  --gray-base: oklch(0.179 0.004 286);
+  --gray-50: oklch(0.213 0.004 264.5);
+  --gray-100: oklch(0.252 0.006 271.2);
+  --gray-200: oklch(0.283 0.007 248.1);
+  --gray-300: oklch(0.312 0.008 255.6);
+  --gray-400: oklch(0.347 0.01 254);
   --gray-500: oklch(0.399 0.012 252.9);
   --gray-600: oklch(0.489 0.016 251.7);
   --gray-700: oklch(0.537 0.015 262.3);
   --gray-800: oklch(0.583 0.015 266.6);
   --gray-900: oklch(0.769 0.01 258.3);
   --gray-950: oklch(0.949 0.003 264.5);
+
+  --gray-a100: oklch(0.931 0.024 250.077 / 0.078);
+  --gray-a200: oklch(0.93 0.031 225.104 / 0.114);
+  --gray-a300: oklch(0.936 0.031 243.702 / 0.145);
+
+  --accent-a100: oklch(0.562 0.235 261.372 / 0.094);
+  --accent-a200: oklch(0.597 0.221 258.03 / 0.227);
+  --accent-a300: oklch(0.593 0.223 258.415 / 0.341);
+  --accent-a400: oklch(0.616 0.207 255.606 / 0.42);
+
+  --success-a100: oklch(0.867 0.213 146.539 / 0.039);
+  --success-a200: oklch(0.892 0.198 147.755 / 0.106);
+  --success-a300: oklch(0.886 0.219 148.012 / 0.173);
+  --success-a400: oklch(0.892 0.203 148.378 / 0.231);
+
+  --warning-a100: oklch(0.773 0.172 66.193 / 0.051);
+  --warning-a200: oklch(0.728 0.18 55.008 / 0.133);
+  --warning-a300: oklch(0.731 0.182 54.528 / 0.196);
+  --warning-a400: oklch(0.746 0.178 58.35 / 0.255);
+
+  --destructive-a100: oklch(0.678 0.212 33.193 / 0.059);
+  --destructive-a200: oklch(0.649 0.237 29.927 / 0.169);
+  --destructive-a300: oklch(0.633 0.248 29.693 / 0.259);
+  --destructive-a400: oklch(0.646 0.238 29.946 / 0.325);
 
   --success-50: oklch(0.187 0.012 167);
   --success-100: oklch(0.212 0.015 165.9);
@@ -138,6 +190,30 @@
   --color-gray-900: var(--gray-900);
   --color-gray-950: var(--gray-950);
 
+  --color-gray-a100: var(--gray-a100);
+  --color-gray-a200: var(--gray-a200);
+  --color-gray-a300: var(--gray-a300);
+
+  --color-accent-a100: var(--accent-a100);
+  --color-accent-a200: var(--accent-a200);
+  --color-accent-a300: var(--accent-a300);
+  --color-accent-a400: var(--accent-a400);
+
+  --color-success-a100: var(--success-a100);
+  --color-success-a200: var(--success-a200);
+  --color-success-a300: var(--success-a300);
+  --color-success-a400: var(--success-a400);
+
+  --color-warning-a100: var(--warning-a100);
+  --color-warning-a200: var(--warning-a200);
+  --color-warning-a300: var(--warning-a300);
+  --color-warning-a400: var(--warning-a400);
+
+  --color-destructive-a100: var(--destructive-a100);
+  --color-destructive-a200: var(--destructive-a200);
+  --color-destructive-a300: var(--destructive-a300);
+  --color-destructive-a400: var(--destructive-a400);
+
   --color-success-50: var(--success-50);
   --color-success-100: var(--success-100);
   --color-success-200: var(--success-200);
@@ -149,6 +225,7 @@
   --color-success-800: var(--success-800);
   --color-success-900: var(--success-900);
   --color-success-950: var(--success-950);
+  --color-success-foreground-solid: var(--success-foreground-solid);
 
   --color-warning-50: var(--warning-50);
   --color-warning-100: var(--warning-100);
@@ -161,6 +238,7 @@
   --color-warning-800: var(--warning-800);
   --color-warning-900: var(--warning-900);
   --color-warning-950: var(--warning-950);
+  --color-warning-foreground-solid: var(--warning-foreground-solid);
 
   --color-accent-50: var(--accent-50);
   --color-accent-100: var(--accent-100);
@@ -173,6 +251,7 @@
   --color-accent-800: var(--accent-800);
   --color-accent-900: var(--accent-900);
   --color-accent-950: var(--accent-950);
+  --color-accent-foreground-solid: var(--accent-foreground-solid);
 
   --color-destructive-50: var(--destructive-50);
   --color-destructive-100: var(--destructive-100);
@@ -185,4 +264,5 @@
   --color-destructive-800: var(--destructive-800);
   --color-destructive-900: var(--destructive-900);
   --color-destructive-950: var(--destructive-950);
+  --color-destructive-foreground-solid: var(--destructive-foreground-solid);
 }
