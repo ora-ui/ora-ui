@@ -58,24 +58,46 @@ function BasicContent({ variant, theme }: ScenarioContentProps) {
   return (
     <DropdownMenuContent variant={variant} theme={theme}>
       <DropdownMenuItem>
-        <PencilSquareIcon />
-        Edit
-        <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
+        New Text File
+        <DropdownMenuShortcut>⌘N</DropdownMenuShortcut>
       </DropdownMenuItem>
       <DropdownMenuItem>
-        <DocumentDuplicateIcon />
-        Duplicate
-        <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+        New File
+        <DropdownMenuShortcut>⌘^⌥N</DropdownMenuShortcut>
+      </DropdownMenuItem>
+      <DropdownMenuItem>
+        New Window
+        <DropdownMenuShortcut>⇧⌘N</DropdownMenuShortcut>
+      </DropdownMenuItem>
+      <DropdownMenuSub>
+        <DropdownMenuSubTrigger>New Window with Profile</DropdownMenuSubTrigger>
+        <DropdownMenuSubContent>
+          <DropdownMenuItem>New Profile...</DropdownMenuItem>
+        </DropdownMenuSubContent>
+      </DropdownMenuSub>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem>
+        Save
+        <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+      </DropdownMenuItem>
+      <DropdownMenuItem>
+        Save as...
+        <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
       </DropdownMenuItem>
       <DropdownMenuItem disabled>
-        <ShareIcon />
-        Share
+        Save All
+        <DropdownMenuShortcut>⌥⌘S</DropdownMenuShortcut>
       </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem variant="destructive">
-        <TrashIcon />
-        Delete
-        <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+      <DropdownMenuItem>Revert File</DropdownMenuItem>
+      <DropdownMenuItem>
+        Close Editor
+        <DropdownMenuShortcut>⌘W</DropdownMenuShortcut>
+      </DropdownMenuItem>
+      <DropdownMenuItem>Close Folder [⌘ K F]</DropdownMenuItem>
+      <DropdownMenuItem>
+        Close Window
+        <DropdownMenuShortcut>⇧⌘W</DropdownMenuShortcut>
       </DropdownMenuItem>
     </DropdownMenuContent>
   );
