@@ -1,3 +1,9 @@
-A styled react component library, built on top of Base UI.
+A styled React component library built on Base UI.
 
-For theming conventions, see docs/THEME-TOKENS.md
+This is a typescript monorepo that uses pnpm as package manager.
+
+When working in this project, read the following in order of relevance to your task:
+
+- [Principles](docs/PRINCIPLES.md) — Core beliefs that drive every decision
+- [Conventions](docs/conventions/INDEX.md) — Patterns, tokens, and how components are built
+- [Component Guide](docs/COMPONENT-GUIDE.md) — Step-by-step direction for building and modifying components
