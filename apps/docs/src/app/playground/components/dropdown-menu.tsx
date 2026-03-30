@@ -2,17 +2,17 @@
 
 import * as React from 'react';
 import {
-  PencilSquareIcon,
-  DocumentDuplicateIcon,
+  NotePencilIcon as PencilSquareIcon,
+  CopySimpleIcon as DocumentDuplicateIcon,
   TrashIcon,
   UserIcon,
-  Cog6ToothIcon,
+  GearIcon as Cog6ToothIcon,
   ShareIcon,
   LinkIcon,
   EnvelopeIcon,
-  DevicePhoneMobileIcon,
-  ChevronDownIcon,
-} from '@heroicons/react/16/solid';
+  DeviceMobileIcon as DevicePhoneMobileIcon,
+  CaretDownIcon as ChevronDownIcon,
+} from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,

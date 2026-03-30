@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { StarIcon, SunIcon } from '@heroicons/react/16/solid';
+import { StarIcon, SunIcon } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
 import { ComponentDisplay } from './component-display';

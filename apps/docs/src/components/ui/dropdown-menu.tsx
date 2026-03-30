@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Menu as MenuPrimitive } from '@base-ui/react/menu';
 
 import { cn } from '@/lib/utils';
-import { CheckIcon, ChevronRightIcon } from '@heroicons/react/16/solid';
+import { CheckIcon, CaretRightIcon as ChevronRightIcon } from '@phosphor-icons/react';
 
 type DropdownVariant = 'soft' | 'solid';
 type DropdownTheme = 'gray' | 'accent';
@@ -137,7 +137,7 @@ function DropdownMenuItem({
       style={
         {
           ...(isDestructive && {
-            '--item-active-text': menuVariant === 'solid' ? 'white' : 'var(--destructive)',
+            '--item-active-text': menuVariant === 'solid' ? 'white' : 'var(--destructive-800)',
           }),
           ...style,
         } as React.CSSProperties
@@ -149,7 +149,7 @@ function DropdownMenuItem({
         'data-inset:pl-7',
         isDestructive && menuVariant === 'solid'
           ? 'data-[variant=destructive]:focus:bg-destructive-700'
-          : 'data-[variant=destructive]:focus:bg-destructive-a300',
+          : 'data-[variant=destructive]:focus:bg-hover',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
         className

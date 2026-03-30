@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useTheme } from 'next-themes';
-import { AdjustmentsHorizontalIcon } from '@heroicons/react/16/solid';
+import { SlidersHorizontalIcon as AdjustmentsHorizontalIcon } from '@phosphor-icons/react';
 
 import { Button } from '@/components/ui/button';
 import {

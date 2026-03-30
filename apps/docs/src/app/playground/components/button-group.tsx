@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { StarIcon } from '@heroicons/react/16/solid';
+import { StarIcon } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
