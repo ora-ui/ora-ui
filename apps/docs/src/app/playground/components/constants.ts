@@ -23,3 +23,13 @@ export const TEXTAREA_VARIANTS = ['subtle', 'outline', 'soft'] as const;
 export const KBD_VARIANTS = ['ghost', 'soft', 'surface'] as const;
 export const TOGGLE_VARIANTS = ['soft', 'outline', 'solid'] as const;
 export const TOGGLE_SIZES = ['sm', 'md', 'lg'] as const;
+
+export const DROPDOWN_VARIANTS = ['soft', 'solid'] as const;
+export const DROPDOWN_THEMES = ['gray', 'accent'] as const;
+export const DROPDOWN_SCENARIOS = [
+  'basic',
+  'with-groups',
+  'with-checkboxes',
+  'with-radio',
+  'with-submenu',
+] as const;

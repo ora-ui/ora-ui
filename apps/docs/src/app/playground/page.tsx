@@ -19,6 +19,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { BadgeSection } from './components/badge';
 import { ButtonSection } from './components/button';
 import { ButtonGroupSection } from './components/button-group';
+import { DropdownMenuSection } from './components/dropdown-menu';
 
 const RADIUS_PRESETS = [
   { label: 'None', value: '0' },
@@ -95,6 +96,7 @@ export default function PlaygroundPage() {
         <BadgeSection />
         <ButtonSection />
         <ButtonGroupSection />
+        <DropdownMenuSection />
       </div>
 
       <Toaster />
