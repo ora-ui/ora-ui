@@ -31,8 +31,8 @@ const getDropdownThemeStyles = (
           ? `var(--${theme}-700)`
           : 'var(--background-solid)'
         : isColor
-          ? `var(--${theme}-a300)`
-          : 'var(--hover)',
+          ? `var(--${theme}-a200)`
+          : `var(--${theme}-a100)`,
     '--item-active-text':
       variant === 'solid'
         ? isColor
@@ -83,7 +83,7 @@ function DropdownMenuContent({
             data-variant={variant}
             data-theme={theme}
             className={cn(
-              'z-50 max-h-(--available-height) w-(--anchor-width) min-w-40 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-background dark:bg-surface-2 p-1 text-foreground shadow-md ring-1 ring-line duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95',
+              'z-50 max-h-(--available-height) min-w-40 max-w-96 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-background dark:bg-surface-2 p-1 text-foreground shadow-md ring-1 ring-line duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95',
               className
             )}
             style={{ ...getDropdownThemeStyles(theme, variant), ...style }}
@@ -116,6 +116,14 @@ function DropdownMenuLabel({
     />
   );
 }
+const menuItemBaseStyles = [
+  'relative flex cursor-default items-center gap-1.5 rounded-md px-3 py-0.5 text-sm outline-hidden select-none',
+  'focus:bg-(--item-active-bg) focus:text-(--item-active-text) focus:**:text-(--item-active-text)',
+  'data-inset:pl-7',
+  'data-disabled:pointer-events-none data-disabled:opacity-50',
+  "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+] as const;
+
 function DropdownMenuItem({
   className,
   inset,
@@ -143,15 +151,12 @@ function DropdownMenuItem({
         } as React.CSSProperties
       }
       className={cn(
-        'group/dropdown-menu-item relative flex cursor-default items-center gap-1.5 rounded-md px-2 py-1.5 pr-3 text-sm outline-hidden select-none',
+        'group/dropdown-menu-item',
+        menuItemBaseStyles,
         'not-data-[variant=destructive]:focus:bg-(--item-active-bg)',
-        'focus:text-(--item-active-text) focus:**:text-(--item-active-text)',
-        'data-inset:pl-7',
         isDestructive && menuVariant === 'solid'
           ? 'data-[variant=destructive]:focus:bg-destructive-700'
-          : 'data-[variant=destructive]:focus:bg-hover',
-        'data-disabled:pointer-events-none data-disabled:opacity-50',
-        "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+          : 'data-[variant=destructive]:focus:bg-gray-a100',
         className
       )}
       {...props}
@@ -174,13 +179,16 @@ function DropdownMenuSubTrigger({
       data-slot="dropdown-menu-sub-trigger"
       data-inset={inset}
       className={cn(
-        "flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-hidden select-none focus:bg-(--item-active-bg) focus:text-(--item-active-text) not-data-[variant=destructive]:focus:**:text-(--item-active-text) data-inset:pl-7 data-popup-open:bg-(--item-active-bg) data-popup-open:text-(--item-active-text) data-open:bg-(--item-active-bg) data-open:text-(--item-active-text) [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        menuItemBaseStyles,
+        'not-data-[variant=destructive]:focus:bg-(--item-active-bg)',
+        'data-popup-open:bg-(--item-active-bg) data-popup-open:text-(--item-active-text)',
+        'data-open:bg-(--item-active-bg) data-open:text-(--item-active-text)',
         className
       )}
       {...props}
     >
       {children}
-      <ChevronRightIcon className="cn-rtl-flip ml-auto" />
+      <ChevronRightIcon className="cn-rtl-flip ml-4" />
     </MenuPrimitive.SubmenuTrigger>
   );
 }
