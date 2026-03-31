@@ -32,7 +32,7 @@ const getDropdownThemeStyles = (
           : 'var(--background-solid)'
         : isColor
           ? `var(--${theme}-a200)`
-          : `var(--${theme}-a100)`,
+          : `var(--${theme}-a200)`,
     '--item-active-text':
       variant === 'solid'
         ? isColor
@@ -83,7 +83,7 @@ function DropdownMenuContent({
             data-variant={variant}
             data-theme={theme}
             className={cn(
-              'z-50 max-h-(--available-height) min-w-40 max-w-96 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-background dark:bg-surface-2 p-1 text-foreground shadow-md ring-1 ring-line duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95',
+              'z-50 max-h-(--available-height) min-w-40 max-w-96 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md bg-background dark:bg-surface-2 p-1 text-foreground shadow-md ring-1 ring-line duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95',
               className
             )}
             style={{ ...getDropdownThemeStyles(theme, variant), ...style }}
@@ -117,7 +117,7 @@ function DropdownMenuLabel({
   );
 }
 const menuItemBaseStyles = [
-  'relative flex cursor-default items-center gap-1.5 rounded-md px-3 py-0.5 text-sm outline-hidden select-none',
+  'relative flex cursor-default items-center gap-1.5 rounded-sm px-3 py-0.5 text-sm outline-hidden select-none',
   'focus:bg-(--item-active-bg) focus:text-(--item-active-text) focus:**:text-(--item-active-text)',
   'data-inset:pl-7',
   'data-disabled:pointer-events-none data-disabled:opacity-50',
@@ -156,7 +156,7 @@ function DropdownMenuItem({
         'not-data-[variant=destructive]:focus:bg-(--item-active-bg)',
         isDestructive && menuVariant === 'solid'
           ? 'data-[variant=destructive]:focus:bg-destructive-700'
-          : 'data-[variant=destructive]:focus:bg-gray-a100',
+          : 'data-[variant=destructive]:focus:bg-gray-a200',
         className
       )}
       {...props}
