@@ -105,11 +105,12 @@
 }
 
 @theme inline {
-  --radius-xs: calc(var(--radius) * 0.4);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) * 1.2);
-  --radius-xl: calc(var(--radius) * 1.6);
+  --radius-dynamic: var(--radius);
+  --radius-xs: min(calc(var(--radius) * 0.4), 4px);
+  --radius-sm: min(calc(var(--radius) * 0.6), 6px);
+  --radius-md: min(var(--radius), 10px);
+  --radius-lg: min(calc(var(--radius) * 1.2), 16px);
+  --radius-xl: min(calc(var(--radius) * 1.6), 24px);
   --radius-full: 9999px;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
