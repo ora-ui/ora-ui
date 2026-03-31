@@ -55,6 +55,12 @@ global set — a button may offer solid/outline/surface/soft/ghost while
 a dropdown only offers solid/soft. This is determined per component
 based on its needs.
 
+Use props for finite, named options (2-3 choices). For open-ended
+visual customisation, let the component's CSS variables handle it —
+the `getThemeStyles` pattern already exposes overridable properties.
+If you find yourself reaching for a fourth or fifth variant value,
+that's a signal the long tail belongs to token overrides, not props.
+
 Export both the component and its variants (e.g., `buttonVariants`) so
 consumers can access variant styles independently.
 

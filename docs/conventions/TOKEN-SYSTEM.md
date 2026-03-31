@@ -164,6 +164,26 @@ className = 'rounded-full';
 
 ---
 
+## Performance Contract
+
+Tokens are designed for **static or infrequent changes** — set a value and
+leave it. Changing a `:root`-scoped token triggers a style recalculation
+across every element that subscribes to it.
+
+- **Do not animate or continuously toggle root-scoped tokens.** Putting
+  `--radius` on a `transition`, `requestAnimationFrame` loop, or
+  `mousemove` handler causes a full-tree recalculation per frame.
+- **Color token reassignment (e.g. mode switching) is fine** — it's a
+  single, infrequent recalculation that browsers handle well.
+- **Radius tokens carry higher cost** than color tokens due to `calc()` /
+  `min()` in the chain. Treat them as static in production.
+
+The dynamic variable chain is a **development-time affordance** — useful for
+exploring how the UI looks at different configurations. For production, set
+your values once and leave them.
+
+---
+
 ## Open Questions
 
 - Exact alpha values for `--hover-ui` and `--active-ui` — currently applied as `/50` and `/75` in components, need to be fixed as tokens.
