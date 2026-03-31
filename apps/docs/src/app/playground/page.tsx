@@ -20,6 +20,7 @@ import { BadgeSection } from './components/badge';
 import { ButtonSection } from './components/button';
 import { ButtonGroupSection } from './components/button-group';
 import { DropdownMenuSection } from './components/dropdown-menu';
+import { TabsSection } from './components/tabs';
 
 const RADIUS_PRESETS = [
   { label: 'None', value: '0' },
@@ -97,6 +98,7 @@ export default function PlaygroundPage() {
         <ButtonSection />
         <ButtonGroupSection />
         <DropdownMenuSection />
+        <TabsSection />
       </div>
 
       <Toaster />

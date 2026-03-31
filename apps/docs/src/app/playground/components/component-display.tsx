@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTab, TabsPanel } from '@/components/ui/tabs';
 import { Toolbar, ToolbarGroup, ToolbarSeparator } from '@/components/ui/toolbar';
 import { Separator } from '@/components/ui/separator';
 import { Label } from '@/components/ui/label';
@@ -44,22 +44,22 @@ export function ComponentDisplay({
         <div className="rounded-lg border border-line-subtle overflow-hidden">
           {preview && (
             <>
-              <div className="px-3 pt-3">
-                <TabsList>
-                  <TabsTrigger value="overview">Overview</TabsTrigger>
-                  <TabsTrigger value="playground">Playground</TabsTrigger>
+              <div className="px-3 py-3 bg-surface-1">
+                <TabsList variant="soft">
+                  <TabsTab value="overview">Overview</TabsTab>
+                  <TabsTab value="playground">Playground</TabsTab>
                 </TabsList>
               </div>
-              <Separator className="mt-3" />
+              <Separator />
             </>
           )}
 
-          <TabsContent value="overview">
+          <TabsPanel value="overview">
             <div className="p-6">{children}</div>
-          </TabsContent>
+          </TabsPanel>
 
           {preview && (
-            <TabsContent value="playground">
+            <TabsPanel value="playground">
               <div
                 className="flex min-h-50 items-center justify-center p-6"
                 style={{ backgroundColor: background }}
@@ -87,7 +87,7 @@ export function ComponentDisplay({
                   </ToolbarGroup>
                 </Toolbar>
               </div>
-            </TabsContent>
+            </TabsPanel>
           )}
         </div>
       </Tabs>
