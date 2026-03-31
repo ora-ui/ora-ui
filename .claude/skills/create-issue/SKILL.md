@@ -12,14 +12,27 @@ description: Creates a GitHub issue with structured context. Use when the user a
    - Where it was found (component, file, or area)
    - Suggested action or expected behavior
 
-2. **Determine labels** — apply the appropriate labels:
+2. **Explore and verify** — investigate the relevant code to confirm the
+   issue and fill in gaps the user may not have fully explained:
+   - Read the relevant files, components, or token definitions.
+   - Confirm the issue exists as described.
+   - Note any additional context discovered (e.g. affected areas the user
+     didn't mention, root cause details, related patterns).
+   - If investigation reveals the issue is already resolved, no longer
+     applicable, or based on an incorrect assumption, **challenge the
+     user's assumption** — explain what you found and ask whether they
+     still want to proceed before creating the issue.
+   - Use findings to enrich the issue body with specifics (file paths,
+     token names, affected components) beyond what the user provided.
+
+3. **Determine labels** — apply the appropriate labels:
    - **Type label** — `bug` or `enhancement`
    - **Component label** — if the issue relates to a specific component,
      use the label `component: {name}` (e.g., `component: dropdown-menu`).
      If the label doesn't exist yet, create it first using
      `gh label create "component: {name}" --color "8B5CF6"`.
 
-3. **Create the issue** — use `gh issue create` with the structure below.
+4. **Create the issue** — use `gh issue create` with the structure below.
 
 ## Issue structure
 
