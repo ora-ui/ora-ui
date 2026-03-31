@@ -42,6 +42,9 @@ yarn-error.log
 # turbo
 .turbo
 
+# local notes/research (not version controlled)
+.local
+
 # fumadocs (auto-generated)
 .source
 
