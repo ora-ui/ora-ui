@@ -87,7 +87,7 @@ Tokens express intent. Use semantic tokens, never raw scale values.
 
 ```tsx
 // Good: semantic token — adapts to light/dark automatically
-className = 'bg-[var(--hover)]';
+className = 'bg-hover';
 
 // Bad: raw scale value — breaks across themes
 className = 'bg-gray-100 dark:bg-gray-800';

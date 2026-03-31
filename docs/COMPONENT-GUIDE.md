@@ -30,6 +30,12 @@ Interview the user to establish:
   component that aren't covered by variants and themes?
 - **Composition** — is this a simple standalone component, or does it
   have sub-components? Does it need React Context for style propagation?
+- **Border radius behavior** — what is the radius nature of this
+  component and its sub-components? Should it subscribe to the dynamic
+  radius (buttons, inputs), use a clamped value from the scale
+  (cards, overlays), or be fixed to full (radio buttons)?
+  For compositional components, each part may have a different answer.
+  See [Token System — Radius](conventions/TOKEN-SYSTEM.md#radius).
 - **UX / DX considerations** — any ergonomic features, edge cases, or
   interaction details the user has in mind?
 
