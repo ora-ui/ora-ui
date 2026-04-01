@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Tabs, TabsList, TabsTab, TabsPanel } from '@/components/ui/tabs';
+import { Tabs, TabsSurface, TabsList, TabsTab, TabsPanel } from '@/components/ui/tabs';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
 import { ComponentDisplay } from './component-display';
 import { SelectControl, CheckboxControl } from './controls';
@@ -23,26 +23,40 @@ const DEMO_TABS = [
   { value: 'disabled', label: 'Disabled', disabled: true },
 ];
 
+function TabItems() {
+  return (
+    <>
+      {DEMO_TABS.map((tab) => (
+        <TabsTab key={tab.value} value={tab.value} disabled={tab.disabled}>
+          {tab.label}
+        </TabsTab>
+      ))}
+    </>
+  );
+}
+
 function DemoTabs({
   variant,
-  contained,
+  surface,
   track,
+  transition,
   orientation,
 }: {
   variant: TabsVariant;
-  contained: boolean;
+  surface?: boolean;
   track?: boolean;
+  transition?: boolean;
   orientation: 'horizontal' | 'vertical';
 }) {
+  const list = (
+    <TabsList variant={variant} track={track} transition={transition}>
+      <TabItems />
+    </TabsList>
+  );
+
   return (
     <Tabs defaultValue="overview" orientation={orientation}>
-      <TabsList variant={variant} contained={contained} track={track}>
-        {DEMO_TABS.map((tab) => (
-          <TabsTab key={tab.value} value={tab.value} disabled={tab.disabled}>
-            {tab.label}
-          </TabsTab>
-        ))}
-      </TabsList>
+      {surface ? <TabsSurface>{list}</TabsSurface> : list}
       <TabsPanel value="overview" className="min-w-28 text-foreground-subtle">
         Overview content
       </TabsPanel>
@@ -58,12 +72,19 @@ function DemoTabs({
 
 export function TabsSection() {
   const [variant, setVariant] = React.useState<TabsVariant>('line');
-  const [contained, setContained] = React.useState(false);
+  const [surface, setSurface] = React.useState(false);
   const [track, setTrack] = React.useState(true);
+  const [transition, setTransition] = React.useState(false);
   const [orientation, setOrientation] = React.useState<'horizontal' | 'vertical'>('horizontal');
 
   const preview = (
-    <DemoTabs variant={variant} contained={contained} track={track} orientation={orientation} />
+    <DemoTabs
+      variant={variant}
+      surface={surface}
+      track={track}
+      transition={transition}
+      orientation={orientation}
+    />
   );
 
   return (
@@ -77,25 +98,14 @@ export function TabsSection() {
             label="Variant"
             value={variant}
             options={VARIANT_OPTIONS}
-            onChange={(v) => {
-              setVariant(v as TabsVariant);
-              if (v === 'line') setContained(false);
-            }}
+            onChange={(v) => setVariant(v as TabsVariant)}
           />
           <ToolbarSeparator />
-          <CheckboxControl
-            label="Contained"
-            checked={contained}
-            disabled={variant === 'line'}
-            onChange={setContained}
-          />
+          <CheckboxControl label="Surface" checked={surface} onChange={setSurface} />
           <ToolbarSeparator />
-          <CheckboxControl
-            label="Track"
-            checked={track}
-            disabled={variant !== 'line'}
-            onChange={setTrack}
-          />
+          <CheckboxControl label="Track" checked={track} onChange={setTrack} />
+          <ToolbarSeparator />
+          <CheckboxControl label="Transition" checked={transition} onChange={setTransition} />
           <ToolbarSeparator />
           <SelectControl
             label="Orientation"
@@ -110,28 +120,28 @@ export function TabsSection() {
         {/* Line variant */}
         <div className="flex flex-col gap-3">
           <p className="text-xs font-medium text-foreground-subtle capitalize">line</p>
-          <DemoTabs variant="line" contained={false} orientation="horizontal" />
+          <DemoTabs variant="line" orientation="horizontal" />
         </div>
 
         {/* Soft variant */}
         <div className="flex flex-col gap-3">
           <p className="text-xs font-medium text-foreground-subtle capitalize">soft</p>
-          <DemoTabs variant="soft" contained={false} orientation="horizontal" />
+          <DemoTabs variant="soft" orientation="horizontal" />
         </div>
 
-        {/* Soft contained */}
+        {/* Soft + surface */}
         <div className="flex flex-col gap-3">
-          <p className="text-xs font-medium text-foreground-subtle">soft contained</p>
-          <DemoTabs variant="soft" contained={true} orientation="horizontal" />
+          <p className="text-xs font-medium text-foreground-subtle">soft + surface</p>
+          <DemoTabs variant="soft" surface orientation="horizontal" />
         </div>
 
         {/* Vertical */}
         <div className="flex flex-col gap-3">
           <p className="text-xs font-medium text-foreground-subtle capitalize">vertical</p>
           <div className="flex gap-8">
-            <DemoTabs variant="line" contained={false} orientation="vertical" />
-            <DemoTabs variant="soft" contained={false} orientation="vertical" />
-            <DemoTabs variant="soft" contained={true} orientation="vertical" />
+            <DemoTabs variant="line" orientation="vertical" />
+            <DemoTabs variant="soft" orientation="vertical" />
+            <DemoTabs variant="soft" surface orientation="vertical" />
           </div>
         </div>
       </div>
