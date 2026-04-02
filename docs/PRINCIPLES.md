@@ -42,9 +42,24 @@ component level when a specific context demands it.
 
 ## Configurability through a styling API
 
-Users should be able to configure components through a clean API —
-variants, themes, and component-specific props — without needing to
-touch internals.
+Users should be able to configure components through a clean API
+without needing to touch internals. This API has three layers:
+
+1. **Props** — finite, named options that change behavior or structural
+   mode (variant, theme, orientation). Use props when there are 2–3
+   discrete choices.
+2. **CSS custom properties** — open-ended visual tuning knobs scoped to
+   a component. These let users adjust values like indicator thickness
+   or gap sizes without modifying the component source. They work
+   regardless of whether the component is copy-pasted or imported from
+   a package.
+3. **`data-slot` attributes** — CSS hooks for targeting a component's
+   internal parts from the outside, covering customisations that props
+   and variables don't anticipate.
+
+Each layer is progressively more flexible and less constrained. Props
+are the happy path, CSS custom properties cover the common long tail,
+and data-slots are the escape hatch.
 
 ## See before you install
 
