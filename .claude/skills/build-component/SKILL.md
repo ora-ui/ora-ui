@@ -65,6 +65,8 @@ rather than asking from scratch.
 - [ ] **Border radius behavior** — dynamic, clamped, or fixed per part?
 - [ ] **Customisation points** — which CSS custom properties to expose?
 - [ ] **UX / DX considerations** — edge cases, ergonomic features?
+- [ ] **Playground showcase** — what should the showcase tab display?
+      This varies per component and is open-ended — ask the user.
 
 For convention reworks, also establish:
 
@@ -110,7 +112,7 @@ the component file documenting CSS custom properties and slots.
 
 ## Phase 4: Playground & checklist
 
-1. Create or update the playground section (overview grid + interactive
+1. Create or update the playground section (showcase + interactive
    playground with controls).
 2. Run through the file checklist:
    - [ ] Component implementation

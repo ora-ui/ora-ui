@@ -98,28 +98,18 @@ The playground serves the "see before you install" principle — users
 should be able to explore the component across a variety of scenarios
 before committing to it.
 
-### What to show
-
-Derive the scenarios to display from two sources:
-
-1. **The Base UI docs** — examples in the primitive's documentation
-   reveal the different states and configurations the component can
-   exist in (e.g., hover, with checkbox items, with radio items)
-2. **The gathered requirements** — the variant landscape, themes, and
-   component-specific props established during the requirements step
-
 ### Structure
 
 Each playground section has two tabs:
 
-- **Overview** — a grid showing the component across all variant/theme
-  combinations at a glance
+- **Showcase** — demonstrates the component's breadth and versatility.
+  The content is open-ended and varies per component — a badge might
+  show a few theme/variant combinations alongside a number badge, while
+  tabs might show different orientations and indicator styles. **Ask
+  the user what they want in the showcase** during requirements
+  gathering; do not assume a default layout.
 - **Playground** — an interactive preview with controls for each
   configurable prop
-
-Balance coverage with cognitive load. Show enough scenarios to give
-users a strong sense of the component's versatility, but don't
-overwhelm with redundant or trivial variations.
 
 See the button or dropdown-menu playground sections as reference
 implementations.
@@ -129,7 +119,7 @@ implementations.
 When a component is complete, ensure the following exist:
 
 - **Component implementation** — the component source file
-- **Playground section** — overview grid and interactive playground
+- **Playground section** — showcase and interactive playground
 - **Constants** — variant/theme arrays added to the shared constants file
 - **Documentation page** — MDX file with frontmatter (title, description),
   installation command, usage example, variant/theme showcases, and a
