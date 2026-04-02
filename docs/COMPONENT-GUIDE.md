@@ -2,6 +2,10 @@
 
 Step-by-step direction for building and modifying Ora components.
 
+> **Skill available:** Use `/build-component` when creating a new
+> component or reworking an existing shadcn import to follow Ora
+> conventions. The skill enforces this workflow interactively.
+
 ## Before you start
 
 Always read the documentation for the primitive you're building on.
@@ -19,7 +23,13 @@ for the current list.
 
 ## Gather requirements
 
-Do not start implementation without understanding the component's needs.
+**This step is mandatory — for new components AND modifications to
+existing ones.** Do not start implementation until the user has
+confirmed the requirements. Reading existing code is not a substitute
+for interviewing the user about what they want.
+
+### New components
+
 Interview the user to establish:
 
 - **Variant landscape** — which variants does this component need?
@@ -45,6 +55,20 @@ Interview the user to establish:
 If the Base UI docs or an existing reference implementation answer some
 of these, confirm your understanding with the user rather than asking
 from scratch.
+
+### Reworking existing shadcn imports
+
+Some components were imported from shadcn and need reworking to follow
+Ora conventions. This is effectively building the component fresh — the
+existing code is a starting point, not a spec. Follow the full new
+component interview above, and additionally establish:
+
+- **What to preserve** — any existing behavior or API worth keeping.
+- **What to change** — what doesn't follow conventions and needs
+  reworking (theming, tokens, variant structure, interface).
+
+Read the existing component file first, then present your understanding
+of its current state alongside the requirements for confirmation.
 
 ## Implementation
 
