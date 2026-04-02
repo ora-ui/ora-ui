@@ -1,29 +1,67 @@
 'use client';
 
+import * as React from 'react';
 import { Checkbox as CheckboxPrimitive } from '@base-ui/react/checkbox';
-
-import { CheckIcon } from '@heroicons/react/16/solid';
+import { CheckIcon, MinusIcon } from '@phosphor-icons/react';
 
 import { cn } from '@/lib/utils';
+import { CheckboxGroupContext } from './checkbox-group';
 
-function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
+type Theme = 'gray' | 'accent' | (string & {});
+
+const getThemeStyles = (theme: Theme): React.CSSProperties => {
+  const isColor = theme !== 'gray';
+  return {
+    '--background-solid': isColor ? `var(--${theme}-700)` : `var(--${theme}-950)`,
+    '--focus': `var(--${theme}-500)`,
+    ...(isColor ? { '--foreground-solid': `var(--${theme}-foreground-solid)` } : {}),
+  } as React.CSSProperties;
+};
+
+type CheckboxTheme = 'gray' | 'accent';
+
+function Checkbox({
+  className,
+  theme = 'gray',
+  indeterminate,
+  style,
+  ...props
+}: Omit<CheckboxPrimitive.Root.Props, 'color'> & {
+  theme?: CheckboxTheme;
+  indeterminate?: boolean;
+}) {
+  const ctx = React.useContext(CheckboxGroupContext);
+  const resolvedTheme = (theme ?? ctx.theme ?? 'accent') as CheckboxTheme;
+
   return (
     <CheckboxPrimitive.Root
       data-slot="checkbox"
+      data-theme={resolvedTheme}
+      indeterminate={indeterminate}
       className={cn(
-        'peer relative flex size-4 shrink-0 items-center justify-center rounded-[6px] border border-input transition-shadow outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary',
+        'group/checkbox relative flex size-4 shrink-0 items-center justify-center rounded-sm border border-line-ui/65 bg-transparent transition-colors outline-none',
+        'hover:bg-hover/50',
+        'data-checked:border-transparent data-checked:bg-background-solid data-checked:text-foreground-solid',
+        'data-checked:hover:bg-background-solid/90',
+        'data-indeterminate:border-transparent data-indeterminate:bg-background-solid data-indeterminate:text-foreground-solid',
+        'data-indeterminate:hover:bg-background-solid/90',
+        'data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
+        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
+        resolvedTheme === 'gray' && 'data-checked:text-gray-50 data-indeterminate:text-gray-50',
         className
       )}
+      style={{ ...getThemeStyles(resolvedTheme), ...style }}
       {...props}
     >
       <CheckboxPrimitive.Indicator
         data-slot="checkbox-indicator"
-        className="grid place-content-center text-current transition-none [&>svg]:size-3.5"
+        className="flex items-center justify-center text-current [&_svg]:size-3"
       >
-        <CheckIcon />
+        {indeterminate ? <MinusIcon /> : <CheckIcon />}
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   );
 }
 
 export { Checkbox };
+export type { CheckboxTheme };
