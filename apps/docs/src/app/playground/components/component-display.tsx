@@ -11,7 +11,7 @@ import { BACKGROUNDS } from './constants';
 interface ComponentDisplayProps {
   name: string;
   slug: string;
-  /** Overview tab: full variants × themes grid */
+  /** Showcase tab: curated real-world examples */
   children: React.ReactNode;
   /** Playground tab: single configured instance */
   preview?: React.ReactNode;
@@ -40,13 +40,13 @@ export function ComponentDisplay({
         </Link>
       </div>
 
-      <Tabs defaultValue="overview">
+      <Tabs defaultValue="showcase">
         <div className="rounded-lg border border-line-subtle overflow-hidden">
           {preview && (
             <>
               <div className="px-3 py-3 bg-surface-1">
                 <TabsList variant="soft">
-                  <TabsTab value="overview">Overview</TabsTab>
+                  <TabsTab value="showcase">Showcase</TabsTab>
                   <TabsTab value="playground">Playground</TabsTab>
                 </TabsList>
               </div>
@@ -54,7 +54,7 @@ export function ComponentDisplay({
             </>
           )}
 
-          <TabsPanel value="overview">
+          <TabsPanel value="showcase">
             <div className="p-6">{children}</div>
           </TabsPanel>
 
