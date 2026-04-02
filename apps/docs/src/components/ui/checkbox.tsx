@@ -14,6 +14,7 @@ const getThemeStyles = (theme: Theme): React.CSSProperties => {
   return {
     '--background-solid': isColor ? `var(--${theme}-700)` : `var(--${theme}-950)`,
     '--focus': `var(--${theme}-500)`,
+    '--focus-solid': isColor ? `var(--${theme}-800)` : `var(--${theme}-950)`,
     ...(isColor ? { '--foreground-solid': `var(--${theme}-foreground-solid)` } : {}),
   } as React.CSSProperties;
 };
@@ -22,7 +23,7 @@ type CheckboxTheme = 'gray' | 'accent';
 
 function Checkbox({
   className,
-  theme = 'gray',
+  theme,
   indeterminate,
   style,
   ...props
@@ -39,14 +40,12 @@ function Checkbox({
       data-theme={resolvedTheme}
       indeterminate={indeterminate}
       className={cn(
-        'group/checkbox relative flex size-4 shrink-0 items-center justify-center rounded-sm border border-line-ui/65 bg-transparent transition-colors outline-none',
-        'hover:bg-hover/50',
+        'group/checkbox relative flex size-4 shrink-0 items-center justify-center rounded-sm border border-line-ui/65 bg-transparent transition-colors',
         'data-checked:border-transparent data-checked:bg-background-solid data-checked:text-foreground-solid',
-        'data-checked:hover:bg-background-solid/90',
         'data-indeterminate:border-transparent data-indeterminate:bg-background-solid data-indeterminate:text-foreground-solid',
-        'data-indeterminate:hover:bg-background-solid/90',
         'data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
+        'data-checked:focus-visible:outline-focus-solid data-indeterminate:focus-visible:outline-focus-solid',
         resolvedTheme === 'gray' && 'data-checked:text-gray-50 data-indeterminate:text-gray-50',
         className
       )}
