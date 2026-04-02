@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { StarIcon } from '@phosphor-icons/react';
+import { CircleIcon, SparkleIcon, StarIcon } from '@phosphor-icons/react';
 import { Badge } from '@/components/ui/badge';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
 import { ComponentDisplay } from './component-display';
@@ -70,33 +70,24 @@ export function BadgeSection() {
         </>
       }
     >
-      <div
-        className="grid gap-x-4 gap-y-2"
-        style={{
-          gridTemplateColumns: `auto repeat(${BADGE_THEMES.length}, 1fr)`,
-        }}
-      >
-        <div />
-        {BADGE_THEMES.map((t) => (
-          <div key={t} className="text-xs font-medium text-foreground-subtle capitalize">
-            {t}
-          </div>
-        ))}
-
-        {BADGE_VARIANTS.map((v) => (
-          <React.Fragment key={v}>
-            <div className="flex items-center pr-5 text-xs text-foreground-subtle capitalize">
-              {v}
-            </div>
-            {BADGE_THEMES.map((t) => (
-              <div key={t} className="flex items-center">
-                <Badge variant={v} theme={t}>
-                  Badge
-                </Badge>
-              </div>
-            ))}
-          </React.Fragment>
-        ))}
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <Badge variant="soft" theme="destructive">
+          <CircleIcon weight="fill" className="size-2" />
+          Live
+        </Badge>
+        <Badge variant="solid" theme="accent">
+          <SparkleIcon weight="fill" />
+          New
+        </Badge>
+        <Badge variant="surface" theme="success">
+          GET
+        </Badge>
+        <Badge variant="surface" theme="warning">
+          POST
+        </Badge>
+        <Badge variant="solid" theme="destructive">
+          8
+        </Badge>
       </div>
     </ComponentDisplay>
   );

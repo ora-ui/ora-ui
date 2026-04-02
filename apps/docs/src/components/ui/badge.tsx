@@ -28,7 +28,7 @@ const badgeVariants = cva(
         surface: 'border-line-ui bg-background-ui/40 text-foreground',
       },
       size: {
-        default: 'max-h-6 px-1.5 py-0.5 text-xs',
+        default: 'min-w-4.5 max-h-6 px-1 text-xs',
         icon: 'size-5 p-0 text-xs',
       },
       theme: {
