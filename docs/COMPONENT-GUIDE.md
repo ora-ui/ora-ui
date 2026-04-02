@@ -2,6 +2,10 @@
 
 Step-by-step direction for building and modifying Ora components.
 
+> **Skill available:** Use `/build-component` when creating a new
+> component or reworking an existing shadcn import to follow Ora
+> conventions. The skill enforces this workflow interactively.
+
 ## Before you start
 
 Always read the documentation for the primitive you're building on.
@@ -19,7 +23,13 @@ for the current list.
 
 ## Gather requirements
 
-Do not start implementation without understanding the component's needs.
+**This step is mandatory — for new components AND modifications to
+existing ones.** Do not start implementation until the user has
+confirmed the requirements. Reading existing code is not a substitute
+for interviewing the user about what they want.
+
+### New components
+
 Interview the user to establish:
 
 - **Variant landscape** — which variants does this component need?
@@ -36,12 +46,29 @@ Interview the user to establish:
   (cards, overlays), or be fixed to full (radio buttons)?
   For compositional components, each part may have a different answer.
   See [Token System — Radius](conventions/TOKEN-SYSTEM.md#radius).
+- **Customisation points** — which visual properties are users most
+  likely to want to adjust? These become CSS custom properties with
+  sensible defaults (see [Conventions — CSS custom properties](conventions/INDEX.md#css-custom-properties)).
 - **UX / DX considerations** — any ergonomic features, edge cases, or
   interaction details the user has in mind?
 
 If the Base UI docs or an existing reference implementation answer some
 of these, confirm your understanding with the user rather than asking
 from scratch.
+
+### Reworking existing shadcn imports
+
+Some components were imported from shadcn and need reworking to follow
+Ora conventions. This is effectively building the component fresh — the
+existing code is a starting point, not a spec. Follow the full new
+component interview above, and additionally establish:
+
+- **What to preserve** — any existing behavior or API worth keeping.
+- **What to change** — what doesn't follow conventions and needs
+  reworking (theming, tokens, variant structure, interface).
+
+Read the existing component file first, then present your understanding
+of its current state alongside the requirements for confirmation.
 
 ## Implementation
 
@@ -51,9 +78,12 @@ Build in this order:
 2. **getThemeStyles** — if the component supports theming, write the
    theme styles function (see [Conventions — Theme styles function](conventions/INDEX.md#theme-styles-function))
 3. **CVA definition** — structural styles, variant classes
-4. **Component function** — wrap the Base UI primitive (or build from
+4. **CSS custom properties** — define component-scoped custom properties
+   for the customisation points identified during requirements gathering
+   (see [Conventions — CSS custom properties](conventions/INDEX.md#css-custom-properties))
+5. **Component function** — wrap the Base UI primitive (or build from
    scratch if no primitive exists), apply styles, data attributes
-5. **Exports** — export the component and its variants
+6. **Exports** — export the component and its variants
 
 For compositional components (multiple sub-components), follow the
 dropdown-menu reference implementation for the pattern of context
@@ -105,4 +135,7 @@ When a component is complete, ensure the following exist:
   installation command, usage example, variant/theme showcases, and a
   props table. The component slug must also be added to the components
   `meta.json` pages array for it to appear in the sidebar.
+- **Interface comment block** — CSS custom properties and slots
+  documented at the top of the component file
+  (see [Conventions — Documenting the interface](conventions/INDEX.md#documenting-the-interface))
 - **Registry JSON** — for installation via the shadcn CLI

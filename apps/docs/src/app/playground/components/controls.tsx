@@ -1,11 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from '@/lib/utils';
 import { ToolbarGroup } from '@/components/ui/toolbar';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface TextControlProps {
   label: string;
@@ -68,18 +68,11 @@ interface CheckboxControlProps {
 export function CheckboxControl({ label, checked, disabled, onChange }: CheckboxControlProps) {
   return (
     <ToolbarGroup className="gap-2">
-      <label
-        className={cn(
-          'flex items-center gap-1.5 text-xs',
-          disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'
-        )}
-      >
-        <input
-          type="checkbox"
+      <label className="flex items-center gap-1.5 text-xs">
+        <Checkbox
           checked={checked}
           disabled={disabled}
-          onChange={(e) => onChange(e.target.checked)}
-          className="accent-foreground"
+          onCheckedChange={(val) => onChange(val as boolean)}
         />
         <span className="text-foreground-subtle">{label}</span>
       </label>

@@ -19,6 +19,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { BadgeSection } from './components/badge';
 import { ButtonSection } from './components/button';
 import { ButtonGroupSection } from './components/button-group';
+import { CheckboxSection, CheckboxGroupSection } from './components/checkbox';
 import { DropdownMenuSection } from './components/dropdown-menu';
 import { TabsSection } from './components/tabs';
 
@@ -97,6 +98,8 @@ export default function PlaygroundPage() {
         <BadgeSection />
         <ButtonSection />
         <ButtonGroupSection />
+        <CheckboxSection />
+        <CheckboxGroupSection />
         <DropdownMenuSection />
         <TabsSection />
       </div>
