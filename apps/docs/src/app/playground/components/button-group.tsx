@@ -1,9 +1,21 @@
 'use client';
 
 import * as React from 'react';
-import { StarIcon } from '@phosphor-icons/react';
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CaretDownIcon,
+  CopyIcon,
+  StarIcon,
+} from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
 import { ComponentDisplay } from './component-display';
 import { SelectControl } from './controls';
@@ -128,32 +140,42 @@ export function ButtonGroupSection() {
         </>
       }
     >
-      <div className="flex items-start gap-8">
-        <div className="space-y-2">
-          <span className="text-xs text-foreground-subtle">Horizontal</span>
+      <div className="flex flex-wrap items-center justify-center">
+        <ButtonGroup>
           <ButtonGroup>
-            <Button variant="outline">Left</Button>
-            <Button variant="outline">Center</Button>
-            <Button variant="outline">Right</Button>
-          </ButtonGroup>
-        </div>
-        <div className="space-y-2">
-          <span className="text-xs text-foreground-subtle">Vertical</span>
-          <ButtonGroup orientation="vertical">
-            <Button variant="outline">Top</Button>
-            <Button variant="outline">Bottom</Button>
-          </ButtonGroup>
-        </div>
-        <div className="space-y-2">
-          <span className="text-xs text-foreground-subtle">Mixed</span>
-          <ButtonGroup>
-            <Button variant="outline">Left</Button>
-            <Button variant="outline">Center</Button>
-            <Button variant="outline" size="icon" aria-label="More">
-              <StarIcon />
+            <Button variant="soft">
+              <CopyIcon />
+              Copy page
             </Button>
+            <ButtonGroupSeparator />
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button variant="soft" size="icon" aria-label="Copy options">
+                    <CaretDownIcon />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>View as markdown</DropdownMenuItem>
+                <DropdownMenuItem>Open in ChatGPT</DropdownMenuItem>
+                <DropdownMenuItem>Open in Claude</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </ButtonGroup>
-        </div>
+          <ButtonGroup>
+            <ButtonGroup>
+              <Button variant="soft" size="icon" aria-label="Previous">
+                <ArrowLeftIcon />
+              </Button>
+            </ButtonGroup>
+            <ButtonGroup>
+              <Button variant="soft" size="icon" aria-label="Next">
+                <ArrowRightIcon />
+              </Button>
+            </ButtonGroup>
+          </ButtonGroup>
+        </ButtonGroup>
       </div>
     </ComponentDisplay>
   );
