@@ -116,34 +116,21 @@ export function TabsSection() {
         </>
       }
     >
-      <div className="flex flex-col gap-8">
-        {/* Line variant */}
-        <div className="flex flex-col gap-3">
-          <p className="text-xs font-medium text-foreground-subtle capitalize">line</p>
-          <DemoTabs variant="line" orientation="horizontal" />
-        </div>
-
-        {/* Soft variant */}
-        <div className="flex flex-col gap-3">
-          <p className="text-xs font-medium text-foreground-subtle capitalize">soft</p>
-          <DemoTabs variant="soft" orientation="horizontal" />
-        </div>
-
-        {/* Soft + surface */}
-        <div className="flex flex-col gap-3">
-          <p className="text-xs font-medium text-foreground-subtle">soft + surface</p>
-          <DemoTabs variant="soft" surface orientation="horizontal" />
-        </div>
-
-        {/* Vertical */}
-        <div className="flex flex-col gap-3">
-          <p className="text-xs font-medium text-foreground-subtle capitalize">vertical</p>
-          <div className="flex gap-8">
-            <DemoTabs variant="line" orientation="vertical" />
-            <DemoTabs variant="soft" orientation="vertical" />
-            <DemoTabs variant="soft" surface orientation="vertical" />
-          </div>
-        </div>
+      <div className="flex flex-wrap items-center justify-center">
+        <Tabs defaultValue="overview">
+          <TabsList>
+            <TabItems />
+          </TabsList>
+          <TabsPanel value="overview" className="min-w-28 text-foreground-subtle">
+            Overview content
+          </TabsPanel>
+          <TabsPanel value="activity" className="min-w-28 text-foreground-subtle">
+            Activity content
+          </TabsPanel>
+          <TabsPanel value="settings" className="min-w-28 text-foreground-subtle">
+            Settings content
+          </TabsPanel>
+        </Tabs>
       </div>
     </ComponentDisplay>
   );

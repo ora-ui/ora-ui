@@ -12,6 +12,8 @@ import {
   EnvelopeIcon,
   DeviceMobileIcon as DevicePhoneMobileIcon,
   CaretDownIcon as ChevronDownIcon,
+  CaretDownIcon,
+  PlusIcon,
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import {
@@ -34,6 +36,7 @@ import { ToolbarSeparator } from '@/components/ui/toolbar';
 import { ComponentDisplay } from './component-display';
 import { SelectControl } from './controls';
 import { DROPDOWN_VARIANTS, DROPDOWN_THEMES, DROPDOWN_SCENARIOS } from './constants';
+import { DownloadSimpleIcon } from '@phosphor-icons/react/dist/ssr';
 
 type DropdownVariant = (typeof DROPDOWN_VARIANTS)[number];
 type DropdownTheme = (typeof DROPDOWN_THEMES)[number];
@@ -294,39 +297,27 @@ export function DropdownMenuSection() {
         </>
       }
     >
-      <div
-        className="grid gap-x-6 gap-y-3"
-        style={{ gridTemplateColumns: `auto repeat(${DROPDOWN_THEMES.length}, auto)` }}
-      >
-        <div />
-        {DROPDOWN_THEMES.map((t) => (
-          <div key={t} className="text-xs font-medium text-foreground-subtle capitalize">
-            {t}
-          </div>
-        ))}
-
-        {DROPDOWN_VARIANTS.map((v) => (
-          <React.Fragment key={v}>
-            <div className="flex items-center pr-5 text-xs text-foreground-subtle capitalize">
-              {v}
-            </div>
-            {DROPDOWN_THEMES.map((t) => (
-              <div key={t} className="flex items-center">
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    render={
-                      <Button variant="outline" size="sm">
-                        Open
-                        <ChevronDownIcon />
-                      </Button>
-                    }
-                  />
-                  <WithGroupsContent variant={v} theme={t} />
-                </DropdownMenu>
-              </div>
-            ))}
-          </React.Fragment>
-        ))}
+      <div className="flex flex-wrap items-center justify-center">
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button variant="soft" aria-label="Copy options">
+                Add file
+                <CaretDownIcon weight="fill" />
+              </Button>
+            }
+          />
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>
+              <PlusIcon />
+              Create new file
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <DownloadSimpleIcon />
+              Upload files
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </ComponentDisplay>
   );

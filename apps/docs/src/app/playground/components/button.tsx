@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { StarIcon, SunIcon } from '@phosphor-icons/react';
+import { ArrowUpIcon, InfoIcon, SparkleIcon, StarIcon } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
 import { ComponentDisplay } from './component-display';
@@ -78,45 +78,24 @@ export function ButtonSection() {
         </>
       }
     >
-      <div
-        className="grid gap-x-4 gap-y-2"
-        style={{
-          gridTemplateColumns: `auto repeat(${BUTTON_THEMES.length + 2}, 1fr)`,
-        }}
-      >
-        <div />
-        {BUTTON_THEMES.map((t) => (
-          <div key={t} className="text-xs font-medium text-foreground-subtle capitalize">
-            {t}
-          </div>
-        ))}
-        <div className="text-xs font-medium text-foreground-subtle">disabled</div>
-        <div className="text-xs font-medium text-foreground-subtle">icon</div>
-
-        {BUTTON_VARIANTS.map((v) => (
-          <React.Fragment key={v}>
-            <div className="flex items-center pr-5 text-xs text-foreground-subtle capitalize">
-              {v}
-            </div>
-            {BUTTON_THEMES.map((t) => (
-              <div key={t} className="flex items-center">
-                <Button variant={v} theme={t}>
-                  {v}
-                </Button>
-              </div>
-            ))}
-            <div className="flex items-center">
-              <Button variant={v} disabled>
-                {v}
-              </Button>
-            </div>
-            <div className="flex items-center">
-              <Button variant={v} size="icon">
-                <SunIcon />
-              </Button>
-            </div>
-          </React.Fragment>
-        ))}
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <Button variant="solid" theme="accent">
+          Get Started
+        </Button>
+        <Button variant="soft">
+          <InfoIcon />
+          Learn more
+        </Button>
+        <Button variant="outline">
+          Ask AI
+          <SparkleIcon />
+        </Button>
+        <Button variant="solid" theme="destructive">
+          Cancel Subscription
+        </Button>
+        <Button variant="solid" size="icon">
+          <ArrowUpIcon />
+        </Button>
       </div>
     </ComponentDisplay>
   );
