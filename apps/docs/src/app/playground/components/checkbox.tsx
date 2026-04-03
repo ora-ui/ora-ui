@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { CheckboxGroup } from '@/components/ui/checkbox-group';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
 import { ComponentDisplay } from './component-display';
-import { SelectControl, CheckboxControl } from './controls';
+import { SelectControl, CheckboxControl, TextControl } from './controls';
 import { CHECKBOX_THEMES } from './constants';
 
 type CheckboxTheme = (typeof CHECKBOX_THEMES)[number];
@@ -15,6 +15,7 @@ const THEME_OPTIONS = CHECKBOX_THEMES.map((t) => ({ label: t, value: t }));
 /* ---------- Checkbox Section ---------- */
 
 export function CheckboxSection() {
+  const [label, setLabel] = React.useState('Checkbox label');
   const [theme, setTheme] = React.useState<CheckboxTheme>('accent');
   const [disabled, setDisabled] = React.useState(false);
   const [indeterminate, setIndeterminate] = React.useState(false);
@@ -22,7 +23,7 @@ export function CheckboxSection() {
   const preview = (
     <label className="flex items-center gap-2">
       <Checkbox theme={theme} disabled={disabled} indeterminate={indeterminate} defaultChecked />
-      <span className="text-sm text-foreground">Accept terms and conditions</span>
+      <span className="text-sm text-foreground">{label}</span>
     </label>
   );
 
@@ -40,6 +41,8 @@ export function CheckboxSection() {
             onChange={(v) => setTheme(v as CheckboxTheme)}
           />
           <ToolbarSeparator />
+          <TextControl label="Label" value={label} onChange={setLabel} />
+          <ToolbarSeparator />
           <CheckboxControl label="Disabled" checked={disabled} onChange={setDisabled} />
           <ToolbarSeparator />
           <CheckboxControl
@@ -50,58 +53,20 @@ export function CheckboxSection() {
         </>
       }
     >
-      <div className="flex flex-col gap-8">
-        {/* Overview grid: theme × states */}
-        <div
-          className="grid items-center gap-x-6 gap-y-3"
-          style={{
-            gridTemplateColumns: `auto repeat(${CHECKBOX_THEMES.length}, 1fr) auto auto`,
-          }}
-        >
-          <div />
-          {CHECKBOX_THEMES.map((t) => (
-            <div key={t} className="text-xs font-medium capitalize text-foreground-subtle">
-              {t}
-            </div>
-          ))}
-          <div className="text-xs font-medium text-foreground-subtle">disabled</div>
-          <div className="text-xs font-medium text-foreground-subtle">indeterminate</div>
-
-          <div className="pr-4 text-xs capitalize text-foreground-subtle">checked</div>
-          {CHECKBOX_THEMES.map((t) => (
-            <div key={t} className="flex items-center">
-              <Checkbox theme={t} defaultChecked />
-            </div>
-          ))}
-          <div className="flex items-center">
-            <Checkbox defaultChecked disabled />
-          </div>
-          <div className="flex items-center">
-            <Checkbox indeterminate />
-          </div>
-        </div>
-
-        {/* States row */}
-        <div className="flex flex-col gap-3">
-          <p className="text-xs font-medium text-foreground-subtle">states</p>
-          <div className="flex items-center gap-6">
-            <label className="flex items-center gap-2">
-              <Checkbox />
-              <span className="text-xs text-foreground-subtle">unchecked</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <Checkbox defaultChecked />
-              <span className="text-xs text-foreground-subtle">checked</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <Checkbox indeterminate />
-              <span className="text-xs text-foreground-subtle">indeterminate</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <Checkbox disabled />
-              <span className="text-xs text-foreground-subtle">disabled</span>
-            </label>
-          </div>
+      <div className="flex justify-center">
+        <div className="flex flex-col items-start gap-3">
+          <label className="flex items-center gap-2">
+            <Checkbox theme="accent" defaultChecked />
+            <span className="text-sm text-foreground">Accept terms and conditions</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <Checkbox theme="gray" defaultChecked />
+            <span className="text-sm text-foreground">Subscribe to newsletter</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <Checkbox />
+            <span className="text-sm text-foreground">Remember this device</span>
+          </label>
         </div>
       </div>
     </ComponentDisplay>
@@ -110,28 +75,28 @@ export function CheckboxSection() {
 
 /* ---------- Checkbox Group Section ---------- */
 
-const FRUIT_OPTIONS = [
-  { value: 'apple', label: 'Apple' },
-  { value: 'banana', label: 'Banana' },
-  { value: 'cherry', label: 'Cherry' },
-  { value: 'mango', label: 'Mango' },
+const NOTIFICATION_OPTIONS = [
+  { value: 'email', label: 'Email updates' },
+  { value: 'push', label: 'Push notifications' },
+  { value: 'sms', label: 'SMS alerts' },
+  { value: 'digest', label: 'Weekly digest' },
 ];
 
 function GroupDemo({ theme }: { theme: CheckboxTheme }) {
-  const [values, setValues] = React.useState(['apple', 'banana']);
+  const [values, setValues] = React.useState(['email', 'push']);
 
-  const allChecked = values.length === FRUIT_OPTIONS.length;
+  const allChecked = values.length === NOTIFICATION_OPTIONS.length;
   const someChecked = values.length > 0 && !allChecked;
 
   function handleParentChange() {
-    setValues(allChecked ? [] : FRUIT_OPTIONS.map((f) => f.value));
+    setValues(allChecked ? [] : NOTIFICATION_OPTIONS.map((n) => n.value));
   }
 
   return (
     <CheckboxGroup
       value={values}
       onValueChange={setValues}
-      allValues={FRUIT_OPTIONS.map((f) => f.value)}
+      allValues={NOTIFICATION_OPTIONS.map((n) => n.value)}
       theme={theme}
     >
       <label className="flex items-center gap-2">
@@ -141,14 +106,14 @@ function GroupDemo({ theme }: { theme: CheckboxTheme }) {
           indeterminate={someChecked}
           onCheckedChange={handleParentChange}
         />
-        <span className="text-sm font-medium text-foreground">Select all</span>
+        <span className="text-sm font-medium text-foreground">All notifications</span>
       </label>
 
       <div className="ml-6 flex flex-col gap-2 border-l border-line-subtle pl-4">
-        {FRUIT_OPTIONS.map((fruit) => (
-          <label key={fruit.value} className="flex items-center gap-2">
-            <Checkbox value={fruit.value} />
-            <span className="text-sm text-foreground">{fruit.label}</span>
+        {NOTIFICATION_OPTIONS.map((option) => (
+          <label key={option.value} className="flex items-center gap-2">
+            <Checkbox value={option.value} />
+            <span className="text-sm text-foreground">{option.label}</span>
           </label>
         ))}
       </div>
@@ -173,13 +138,8 @@ export function CheckboxGroupSection() {
         />
       }
     >
-      <div className="flex flex-wrap gap-12">
-        {CHECKBOX_THEMES.map((t) => (
-          <div key={t} className="flex flex-col gap-3">
-            <p className="text-xs font-medium capitalize text-foreground-subtle">{t}</p>
-            <GroupDemo theme={t} />
-          </div>
-        ))}
+      <div className="flex justify-center">
+        <GroupDemo theme="accent" />
       </div>
     </ComponentDisplay>
   );
