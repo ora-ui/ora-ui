@@ -1,30 +1,68 @@
-Context for working in the playground.
+# Playground v2 Context
 
-The playground serves the "see before you install" principle — users
-explore components across a variety of scenarios before committing.
+The playground is a Storybook-like component explorer with fixed layout, sidebar navigation, and URL-based routing — but lightweight and fast as a Next.js route.
 
 ## Structure
 
-Each component section uses the ComponentDisplay wrapper with two tabs:
+```
+apps/docs/src/app/playground/
+├── layout.tsx                    # Fixed shell with sidebar
+├── page.tsx                      # Index redirect to first component
+├── [component]/
+│   └── page.tsx                  # Dynamic route, loads from registry
+├── components/
+│   ├── playground-sidebar.tsx    # Sidebar with groups + filter
+│   ├── preview-shell.tsx         # Preview area + bottom toolbar
+│   ├── global-controls.tsx       # Theme, radius controls
+│   ├── controls.tsx              # Control primitives (text, select, etc.)
+│   ├── component-display.tsx     # Legacy - kept for reference
+│   └── constants.ts              # Shared constants
+└── registry/
+    ├── index.ts                  # Registry manifest + types
+    └── entries/                  # One file per component
+        ├── button.tsx
+        ├── badge.tsx
+        └── ...
+```
 
-- **Overview** — a grid showing all variant/theme combinations at a glance
-- **Playground** — an interactive preview with controls for each
-  configurable prop
+## Adding a New Component
 
-## What to show
+1. Create a new file in `registry/entries/[component].tsx`
+2. Export a default object with `{ Preview, Variants, defaults }`
+3. Add the entry to the registry in `registry/index.ts`
 
-Derive scenarios from two sources:
+### Registry Entry Structure
 
-1. The Base UI docs for the component — examples reveal the different
-   states and configurations it can exist in
-2. The requirements gathered from the user — variant landscape, themes,
-   and component-specific props
+```tsx
+export const defaults = {
+  variant: 'solid',
+  theme: 'gray',
+  // ... default control values
+};
 
-Balance coverage with cognitive load. Show enough to give users a strong
-sense of the component's versatility without overwhelming with redundant
-or trivial variations.
+function ComponentPreview({ searchParams }: { searchParams: Record<string, string> }) {
+  // Read from searchParams, fallback to defaults
+  // Render PreviewShell with preview, controls, and variants
+}
+
+function ComponentVariants() {
+  // Curated showcase of component configurations
+}
+
+export default {
+  Preview: ComponentPreview,
+  Variants: ComponentVariants,
+  defaults,
+};
+```
+
+## Key Patterns
+
+- **PreviewShell**: Wraps the interactive preview with controls and variants panel
+- **Registry**: Central manifest for lazy-loaded component configurations
+- **URL State**: Query params persist control state (`/playground/button?variant=outline`)
+- **Global Controls**: Theme/radius in sidebar footer, applies across all components
 
 ## Reference
 
-See the button or dropdown-menu playground sections as models for
-structure, controls, and how to use the constants file.
+See `registry/entries/button.tsx` as the model implementation for new components.

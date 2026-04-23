@@ -1,171 +1,292 @@
-# Playground Restructure: Component Explorer with Controls
+# Playground v2: Component Explorer Shell
 
 ## Context
 
-The playground is a single 1056-line file rendering 21 component sections. Each section is a bespoke function with its own state and layout. There's no way to interactively explore component combinations (icon placement, text content, sizes) — you only see whatever was hardcoded.
+The playground currently renders all component sections in a scrollable list. Navigation requires scrolling to find components, and there's no persistent shell for global controls. We're evolving it into a Storybook-like explorer with fixed layout, sidebar navigation, and URL-based routing — but lightweight and fast because it's just a Next.js route, not a separate build process.
 
-We're restructuring it into a modular component explorer where each component lives in its own file and has a controls toolbar for toggling every meaningful combination. This is both a development tool (discover missing variants, test visual quality) and the path to v1.
+**Goal**: Fast visual verification during development. Switch between components instantly, toggle variants, check themes — all without leaving the playground or waiting for rebuilds.
+
+---
+
+## Architecture Decisions
+
+| Decision           | Choice                                     | Rationale                                                        |
+| ------------------ | ------------------------------------------ | ---------------------------------------------------------------- |
+| Base               | Evolve existing `/playground` route        | No separate app overhead, stays integrated with docs             |
+| Discovery          | Registry file with lazy-loaded configs     | Explicit control over grouping/ordering, decoupled from Fumadocs |
+| Layout             | Fixed shell — sidebar left, toolbar bottom | Matches dev tool conventions (VS Code, Storybook)                |
+| Routing            | URL-based (`/playground/[component]`)      | Shareable links, browser history works                           |
+| View mode          | Single preview + expandable variants panel | Interactive preview is primary, grid is secondary                |
+| Global controls    | Sidebar header area                        | Theme, radius — persistent across components                     |
+| Component controls | Bottom toolbar                             | Per-component props — contextual                                 |
+| State persistence  | URL query params                           | Survives refresh, shareable                                      |
+| Sidebar            | shadcn sidebar component                   | Collapsible groups, keyboard nav built-in                        |
+| Search             | Filter input in sidebar                    | Simple, always visible                                           |
+
+---
+
+## v1 Scope
+
+### Must Have
+
+1. **Fixed layout shell**
+   - Sidebar on left (collapsible)
+   - Component preview area (fills remaining space)
+   - Bottom toolbar for component controls
+
+2. **Sidebar navigation**
+   - Uses shadcn sidebar component
+   - Collapsible groups (primitives, blocks, etc.)
+   - Filter input to search components
+   - Expanded/collapsed state persisted to localStorage
+
+3. **URL-based routing**
+   - Route: `/playground/[component]`
+   - Dynamic segment loads component from registry
+   - Query params persist control state (`?variant=outline&theme=accent`)
+
+4. **Component preview**
+   - Single interactive instance as default view
+   - Expandable "All Variants" panel (replaces current Overview tab)
+   - Background switcher (existing functionality)
+
+5. **Global controls**
+   - Theme toggle (light/dark)
+   - Radius presets
+   - Located in sidebar header or top area
+
+6. **Component controls**
+   - Bottom toolbar (existing pattern)
+   - Controls specific to current component's API
+
+7. **Registry system**
+   - Central manifest for component discovery
+   - Lazy-loaded component configs
+   - Supports grouping (primitives, blocks, etc.)
+
+### Deferred
+
+- Plugin system (color blindness sim, focus order overlay)
+- Configurable toolbar position
+- Code viewing
+- Responsive viewport controls
+- Forced state toggles (hover, focus, active)
+- Keyboard shortcuts / command palette
 
 ---
 
 ## File Structure
 
 ```
-app/playground/
-  page.tsx                          (slim shell: imports + renders all sections + FloatingControls)
-  components/
-    constants.ts                    (BACKGROUNDS, variant/theme arrays)
-    component-display.tsx           (shared wrapper: header, display area, separator, controls slot)
-    controls.tsx                    (TextControl, SegmentedControl primitives)
-    badge.tsx
-    button.tsx
-    button-group.tsx
-    accordion.tsx
-    alert-dialog.tsx
-    avatar.tsx
-    checkbox.tsx
-    dialog.tsx
-    dropdown-menu.tsx
-    input.tsx
-    kbd.tsx
-    label.tsx
-    radio-group.tsx
-    separator.tsx
-    sonner.tsx
-    switch.tsx
-    textarea.tsx
-    toggle.tsx
-    toggle-group.tsx
-    toolbar.tsx
-    tooltip.tsx
+apps/docs/src/app/playground/
+├── layout.tsx                    # Fixed shell with sidebar
+├── page.tsx                      # Index redirect or welcome
+├── [component]/
+│   └── page.tsx                  # Dynamic route, loads from registry
+├── components/
+│   ├── sidebar.tsx               # Sidebar with groups + filter
+│   ├── preview-shell.tsx         # Preview area + bottom toolbar
+│   ├── variants-panel.tsx        # Expandable all-variants grid
+│   ├── global-controls.tsx       # Theme, radius controls
+│   ├── controls.tsx              # Existing control primitives
+│   ├── component-display.tsx     # Keep for variants grid rendering
+│   └── constants.ts              # Existing constants
+├── registry/
+│   ├── index.ts                  # Registry manifest + types
+│   └── entries/
+│       ├── button.tsx            # Button playground config
+│       ├── badge.tsx             # Badge playground config
+│       └── ...                   # One per component
+└── CLAUDE.md                     # Context for AI assistance
 ```
 
 ---
 
-## Implementation Steps
+## Registry Design
 
-### Step 1: Shared infrastructure
+### Manifest (`registry/index.ts`)
 
-**1a. `constants.ts`** — Extract shared arrays from page.tsx:
+```ts
+export interface PlaygroundEntry {
+  /** Display name in sidebar */
+  name: string;
+  /** URL slug */
+  slug: string;
+  /** Lazy-loaded component */
+  load: () => Promise<{ default: PlaygroundComponent }>;
+}
 
-- `BACKGROUNDS` (App / Surface 1 / Surface 2)
-- All variant/theme/size arrays (`BUTTON_VARIANTS`, `BADGE_THEMES`, etc.)
+export interface PlaygroundComponent {
+  /** The interactive preview with controls */
+  Preview: React.ComponentType<{ searchParams: Record<string, string> }>;
+  /** The all-variants grid */
+  Variants: React.ComponentType;
+  /** Default control values (for URL state) */
+  defaults: Record<string, string>;
+}
 
-**1b. `component-display.tsx`** — Shared wrapper replacing `ComponentSection`.
-
+export const registry: Record<string, PlaygroundEntry[]> = {
+  primitives: [
+    { name: 'Button', slug: 'button', load: () => import('./entries/button') },
+    { name: 'Badge', slug: 'badge', load: () => import('./entries/badge') },
+    // ...
+  ],
+  blocks: [
+    // Future: auth-form, settings-panel, etc.
+  ],
+};
 ```
-+----------------------------------------------------+
-| Name     View docs ->       [Background ▾] dropdown |
-+----------------------------------------------------+
-|                                                      |
-|   ... component variants (children) ...              |
-|                                                      |
-|------------------------------------------------------|
-| [Label] [control]  |  [Label] [control]  | ...      |  <- controls toolbar
-+----------------------------------------------------+
-```
 
-Props:
+### Entry Example (`registry/entries/button.tsx`)
 
 ```tsx
-interface ComponentDisplayProps {
-  name: string;
-  slug: string;
-  children: React.ReactNode;
-  controls?: React.ReactNode; // fills the toolbar slot
+import { Button } from '@/components/ui/button';
+import { BUTTON_VARIANTS, BUTTON_THEMES } from '../../components/constants';
+
+export const defaults = {
+  variant: 'solid',
+  theme: 'gray',
+  label: 'Button',
+};
+
+export function Preview({ searchParams }: { searchParams: Record<string, string> }) {
+  const variant = searchParams.variant ?? defaults.variant;
+  const theme = searchParams.theme ?? defaults.theme;
+  const label = searchParams.label ?? defaults.label;
+
+  return (
+    <PreviewShell
+      preview={
+        <Button variant={variant} theme={theme}>
+          {label}
+        </Button>
+      }
+      controls={/* variant, theme, label controls */}
+    />
+  );
+}
+
+export function Variants() {
+  return <div className="grid ...">{/* Existing variant × theme grid */}</div>;
 }
 ```
 
-Key decisions:
+---
 
-- Background state lives inside `ComponentDisplay` (every section needs it, no reason to push it out)
-- Background switcher becomes a `DropdownMenu` with `DropdownMenuCheckboxItem` entries, `align="end"`
-- Controls toolbar uses the `Toolbar` component for keyboard nav; only renders when `controls` is provided
-- Separator divides display area from controls inside the same bordered card
+## URL State
 
-**1c. `controls.tsx`** — Small composable control primitives:
+Use `nuqs` or native `useSearchParams` for URL persistence:
 
-- **`TextControl`** — `<ToolbarGroup>` with `<Label>` + `<Input variant="soft" className="h-7 w-28 text-xs">`
-- **`SegmentedControl`** — `<ToolbarGroup>` with `<Label>` + `<ToggleGroup variant="outline" size="sm" spacing={0}>`
+```
+/playground/button?variant=outline&theme=accent&label=Click%20me
+```
 
-These are not a generic knobs abstraction. Each component file composes its own controls JSX from these primitives.
-
-### Step 2: Proof of concept — Badge and Button
-
-Migrate these two first because they're the most controls-rich and will validate the full system.
-
-**`badge.tsx`** — State: `text` (string), `iconMode` (none / with-icon / icon-only)
-
-- Controls: TextControl for label, SegmentedControl for icon mode
-- Renders the variant x theme grid, respecting current state
-
-**`button.tsx`** — State: `text` (string), `iconMode` (none / leading / trailing / icon-only), `size` (sm / md / lg)
-
-- Controls: TextControl, SegmentedControl for icon mode, SegmentedControl for size
-- When icon-only, size options switch to icon / icon-sm / icon-lg
-- Renders the variant x theme grid
-
-### Step 3: Migrate remaining sections
-
-Each component file exports a single function (e.g., `BadgeSection`) that returns `<ComponentDisplay>` with its own state, rendering, and controls.
-
-**Batch 1 — variant grids (benefit from controls):**
-toggle, toggle-group, input, textarea, kbd
-
-**Batch 2 — size/state variants:**
-avatar, switch, checkbox, radio-group
-
-**Batch 3 — example/compound components (no controls needed initially):**
-accordion, dialog, alert-dialog, dropdown-menu, tooltip, toolbar, button-group, separator, label, sonner
-
-Batch 3 components simply omit the `controls` prop — no toolbar renders. They can gain controls later without changing the wrapper.
-
-### Step 4: Slim down page.tsx
-
-Reduce to:
-
-- Imports from `./components/*`
-- Page layout shell (title, description, max-w-4xl container)
-- Render all sections in order
-- `FloatingControls` (theme toggle + radius presets) stays here
-- `Toaster` stays here
+When navigating between components, each component reads its own defaults. The URL reflects the current component's state.
 
 ---
 
-## Key Design Decisions
+## Layout Shell
 
-1. **Controls are ReactNode, not config** — each component composes its own JSX from shared primitives. No meta-framework for describing knobs.
-2. **Background state in the wrapper** — eliminates boilerplate from all 21 files.
-3. **ToggleGroup for segmented controls** — compact, keyboard-navigable, already exists.
-4. **Incremental migration** — old `ComponentSection` and new `ComponentDisplay` coexist. Swap sections one at a time.
+```
++------------------+----------------------------------------+
+|  [Ora UI]        |                                        |
+|  [Filter...]     |                                        |
+|------------------|                                        |
+|  Primitives  ▾   |          Component Preview             |
+|    Button        |                                        |
+|    Badge         |                                        |
+|    Input         |                                        |
+|    ...           |                                        |
+|  Blocks  ▾       |                                        |
+|    (empty)       |                                        |
+|                  |----------------------------------------|
+|                  | [variant] [theme] [label]   [▼ All]   |
+|  [Theme] [Radius]+----------------------------------------+
+```
 
-## Watch Out For
-
-- **Toolbar keyboard nav vs Input** — the `@base-ui/react/toolbar` may capture arrow keys meant for the text input. Test during step 2; if it conflicts, stop propagation on the input's keydown for arrow keys.
-- **ToggleGroup empty value** — guard against empty arrays in `onValueChange` (user deselects current value).
-- **DropdownMenu alignment** — use `align="end"` on the background switcher to avoid right-edge overflow.
+- Sidebar: shadcn sidebar with collapsible groups
+- Preview: centered component instance
+- Bottom toolbar: component controls + "All Variants" expand button
+- Global controls: theme/radius in sidebar footer
 
 ---
 
-## Critical Files
+## Migration Strategy
 
-- `apps/docs/src/app/playground/page.tsx` — current monolith to break up
-- `apps/docs/src/components/ui/toolbar.tsx` — used for controls toolbar
-- `apps/docs/src/components/ui/toggle-group.tsx` — used for segmented controls
-- `apps/docs/src/components/ui/toggle.tsx` — toggleVariants imported by toggle-group
-- `apps/docs/src/components/ui/dropdown-menu.tsx` — used for background switcher
-- `apps/docs/src/components/ui/input.tsx` — used for text controls
-- `apps/docs/src/components/ui/label.tsx` — used for control labels
-- `apps/docs/src/components/ui/separator.tsx` — divider between display and controls
+### Phase 1: Shell + Registry Infrastructure
+
+1. Install/build shadcn sidebar
+2. Create layout shell with sidebar structure
+3. Set up registry with types
+4. Create dynamic `[component]/page.tsx` route
+5. Migrate one component (button) to new registry format
+
+### Phase 2: Migrate Components
+
+1. Convert existing playground sections to registry entries
+2. Keep existing `ComponentDisplay` for variants grid
+3. Wire up URL state persistence
+
+### Phase 3: Polish
+
+1. Filter input in sidebar
+2. localStorage for collapsed groups
+3. Expandable variants panel
+4. Global controls in sidebar
+
+---
+
+## Key Dependencies
+
+- `@shadcn/ui` sidebar component (or build custom)
+- `nuqs` for URL state (optional, can use native)
+- Existing components: Toolbar, ToggleGroup, Input, DropdownMenu
+
+---
+
+## Implementation Notes
+
+### What Was Built (v1 Complete)
+
+✅ Fixed layout shell with sidebar navigation
+✅ Registry system with lazy-loaded entries
+✅ URL-based routing (`/playground/[component]`)
+✅ Component preview with expandable variants panel
+✅ Global controls (theme, radius) in sidebar footer
+✅ Component-specific controls in bottom toolbar
+✅ Filter input for component search
+✅ 6 components migrated (button, badge, button-group, checkbox, dropdown-menu, tabs)
+✅ Suspense boundary with promise caching for dynamic imports
+
+### Deferred to v2
+
+- URL state persistence for component controls (`?variant=outline&theme=accent`)
+  - Controls currently use local useState, state doesn't persist to URL
+  - Trade-off: simpler implementation, but loses shareable links
+- Background selection persistence (localStorage or URL)
+- Sidebar collapsed state persistence
+
+### Technical Decisions
+
+**ComponentLoader Pattern**
+Next.js server components can't use dynamic imports natively. Solution: Client-side ComponentLoader with:
+
+- React's `use()` hook to unwrap promises
+- Promise cache (Map) to avoid "uncached promise" warnings
+- Suspense boundary for loading states
+- Result: Clean 30-line component, no useEffect/useState complexity
+
+**No Static Site Generation**
+Playground is dev-only, runs in development mode with Next.js dev server. `generateStaticParams()` present but not used in production builds.
 
 ## Verification
 
-1. Run `pnpm dev` and navigate to `/playground`
-2. Confirm Badge and Button sections render with controls toolbar
-3. Test text input updates all variant instances
-4. Test icon mode toggles show correct icon placement
-5. Test size selector on button
-6. Test background switcher dropdown on each section
-7. Confirm sections without controls render cleanly (no empty toolbar)
-8. Confirm FloatingControls (theme/radius) still work globally
-9. Run `pnpm typecheck` to verify no type errors
+1. Navigate to `/playground` — redirects to first component (button)
+2. Click component in sidebar — URL updates to `/playground/[slug]`
+3. Toggle controls — updates preview in real-time (state local, not in URL)
+4. Filter input — narrows visible components
+5. Toggle theme — applies globally across all components
+6. Change radius — updates all components with new border radius
+7. Expand "All Variants" — shows curated component showcase
+8. Navigate between components — lazy loads each entry on demand
+9. `pnpm typecheck` passes
