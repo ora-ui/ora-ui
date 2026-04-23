@@ -25,39 +25,90 @@ them. A dropdown menu may need all of them. Which patterns apply depends
 on the component's needs — its structure, its variant landscape, and
 whether it supports theming.
 
-### Theme styles function
+### Theming via semantic tokens and data-theme
 
-`getThemeStyles()` handles color-related CSS variables. Its purpose is
-to enable theming ergonomically — rather than defining a matrix of CVA
-conditions per theme, we set CSS variables on the component's style prop.
+Components use semantic tokens (--ui, --fill, --hover, --active, etc.) that automatically adapt to the current theme. Theme switching happens at the CSS level through `[data-theme]` selectors, not through runtime JavaScript.
 
-Only components that support theming need this.
+**The pattern:**
+
+1. **Component uses semantic tokens** in Tailwind classes:
 
 ```tsx
-// Good: CSS variables adapt to any theme value
-const getThemeStyles = (theme: Theme): React.CSSProperties =>
-  ({
-    '--background-ui': `var(--${theme}-a100)`,
-    '--hover': `var(--${theme}-a200)`,
-  }) as React.CSSProperties;
-
-// Bad: hardcoded theme conditions in className strings
-const cls = theme === 'accent' ? 'bg-accent-100' : 'bg-gray-100';
+const buttonVariants = cva('text-ui-label bg-ui hover:bg-hover active:bg-active border-line-ui');
 ```
+
+2. **Component sets data-theme attribute** (not style prop):
+
+```tsx
+<ButtonPrimitive
+  data-theme={theme !== 'gray' ? theme : undefined}
+  className={cn(buttonVariants({ variant, size }))}
+/>
+```
+
+3. **CSS remaps tokens for each theme**:
+
+```css
+/* Default (gray) theme - no attribute needed */
+:root {
+  --ui: oklch(0 0 0 / 0.059);
+  --fill: oklch(0.14 0 0);
+  --hover: oklch(0 0 0 / 0.091);
+  /* ... */
+}
+
+/* Accent theme */
+[data-theme='accent'] {
+  --ui: var(--accent-ui);
+  --fill: var(--accent-fill);
+  --hover: var(--accent-hover);
+  /* ... */
+}
+```
+
+**Why this approach:**
+
+- No runtime style calculation overhead
+- Themes are composable at CSS level
+- Works with component-scoped gradients (data-slot + data-variant)
+- Theme tokens defined once in globals.css, automatically apply everywhere
+- Easier to add new themes without touching component code
+
+**Previous approach (deprecated):**
+The old `getThemeStyles()` function computed CSS variables at runtime and
+passed them via the style prop. This worked but added JavaScript overhead
+and made theming harder to reason about. Existing components still using
+this pattern should be migrated to semantic tokens + data-theme.
 
 ### CVA variant definition
 
-CVA handles structural styles — layout, sizing, border-radius, spacing.
-Color is handled by getThemeStyles, not CVA.
+CVA handles variant styles using semantic tokens — layout, sizing,
+spacing, and colors via token classes (bg-ui, text-primary, border-line-ui).
 
-Each component defines its own variant and theme landscape. There is no
-global set — a button may offer solid/outline/surface/soft/ghost while
-a dropdown only offers solid/soft. This is determined per component
-based on its needs.
+Each component defines its own variant landscape. There is no global set —
+a button may offer solid/outline/surface/soft/ghost while a dropdown only
+offers solid/soft. This is determined per component based on its needs.
+
+```tsx
+const buttonVariants = cva('text-ui-label rounded-dynamic focus-visible:outline-focus', {
+  variants: {
+    variant: {
+      solid: 'bg-fill text-on-fill hover:bg-fill/90 active:bg-fill/80',
+      outline: 'border border-line-ui bg-transparent hover:bg-hover/30',
+      soft: 'bg-ui hover:bg-hover active:bg-active',
+      ghost: 'hover:bg-hover active:bg-active',
+    },
+    size: {
+      sm: 'h-8 px-3 text-xs',
+      md: 'h-7.5 px-3',
+      lg: 'h-10 px-6',
+    },
+  },
+});
+```
 
 Use props for finite, named options (2-3 choices). For open-ended
-visual customisation, let the component's CSS variables handle it —
-the `getThemeStyles` pattern already exposes overridable properties.
+visual customisation, let CSS custom properties handle it.
 If you find yourself reaching for a fourth or fifth variant value,
 that's a signal the long tail belongs to token overrides, not props.
 
@@ -107,13 +158,13 @@ Use component-scoped CSS custom properties for open-ended visual
 customisation — values a user is likely to want to tweak but that don't
 warrant a named prop.
 
-`getThemeStyles()` already uses this pattern for color. The same
-approach extends to structural customisation points:
+Semantic tokens (`--ui`, `--fill`, `--hover`, etc.) already provide theme
+customisation. Component-specific properties handle structural overrides:
 
 ```tsx
 // Indicator thickness — overridable via style prop or ancestor CSS
 className={cn(
-  'h-(--indicator-size, 0.125rem)',  // 2px default
+  'h-[var(--indicator-size,0.125rem)]',  // 2px default
   ...
 )}
 ```
@@ -128,6 +179,7 @@ stylesheet — no source changes needed in either distribution model.
 - Namespace to the component: `--indicator-size`, not `--size`
 - Keep the set small — expose the customisation points users are most
   likely to reach for, not every internal value
+- For theming needs, use semantic tokens instead of component-scoped variables
 
 ### `data-slot` attributes
 
