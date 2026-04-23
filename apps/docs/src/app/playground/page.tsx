@@ -1,111 +1,20 @@
-'use client';
-
-import * as React from 'react';
-import { useTheme } from 'next-themes';
-import { SlidersHorizontalIcon as AdjustmentsHorizontalIcon } from '@phosphor-icons/react';
-
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-  DropdownMenuGroup,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-} from '@/components/ui/dropdown-menu';
-import { Toaster } from '@/components/ui/sonner';
-import { BadgeSection } from './components/badge';
-import { ButtonSection } from './components/button';
-import { ButtonGroupSection } from './components/button-group';
-import { CheckboxSection, CheckboxGroupSection } from './components/checkbox';
-import { DropdownMenuSection } from './components/dropdown-menu';
-import { TabsSection } from './components/tabs';
-
-const RADIUS_PRESETS = [
-  { label: 'None', value: '0' },
-  { label: 'Small', value: '0.25rem' },
-  { label: 'Medium', value: '0.375rem' },
-  { label: 'Large', value: '0.625rem' },
-  { label: 'Full', value: '9999px' },
-] as const;
-
-/* ---------- Floating Controls ---------- */
-
-function FloatingControls() {
-  const { theme, setTheme } = useTheme();
-  const [radius, setRadius] = React.useState('0.375rem');
-
-  React.useEffect(() => {
-    document.documentElement.style.setProperty('--radius', radius);
-    return () => {
-      document.documentElement.style.removeProperty('--radius');
-    };
-  }, [radius]);
-
-  return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button variant="outline" size="icon" aria-label="Settings">
-              <AdjustmentsHorizontalIcon />
-            </Button>
-          }
-        />
-        <DropdownMenuContent align="end" side="top">
-          <DropdownMenuGroup>
-            <DropdownMenuLabel>Theme</DropdownMenuLabel>
-            <DropdownMenuRadioGroup
-              value={theme === 'dark' ? 'dark' : 'light'}
-              onValueChange={setTheme}
-            >
-              <DropdownMenuRadioItem value="light">Light</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="dark">Dark</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuLabel>Radius</DropdownMenuLabel>
-            <DropdownMenuRadioGroup value={radius} onValueChange={setRadius}>
-              {RADIUS_PRESETS.map((preset) => (
-                <DropdownMenuRadioItem key={preset.value} value={preset.value}>
-                  {preset.label}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  );
-}
-
-/* ---------- Page ---------- */
+import { redirect } from 'next/navigation';
+import { getAllEntries } from './registry';
 
 export default function PlaygroundPage() {
+  const entries = getAllEntries();
+  const firstEntry = entries[0];
+
+  if (firstEntry) {
+    redirect(`/playground/${firstEntry.slug}`);
+  }
+
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-4xl space-y-16 px-6 py-12">
-        <div>
-          <h1 className="text-3xl font-bold">Playground</h1>
-          <p className="mt-2 text-foreground-subtle">
-            Overview of all component variants, sizes, and themes.
-          </p>
-        </div>
-
-        <BadgeSection />
-        <ButtonSection />
-        <ButtonGroupSection />
-        <CheckboxSection />
-        <CheckboxGroupSection />
-        <DropdownMenuSection />
-        <TabsSection />
+    <div className="flex flex-1 items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-xl font-semibold text-foreground">Playground</h1>
+        <p className="mt-2 text-sm text-foreground-subtle">No components registered yet.</p>
       </div>
-
-      <Toaster />
-      <FloatingControls />
     </div>
   );
 }
