@@ -31,10 +31,11 @@
   --muted: oklch(0.556 0 0);
   --disabled: oklch(0.7 0 0);
   --on-fill: oklch(0.985 0 0);
+  --ui-label: var(--primary);
 
   /* accent palette */
   --accent-ui: oklch(0.601 0.203 246.9 / 0.11);
-  --accent-fill: oklch(0.546 0.245 262.881);
+  --accent-fill: oklch(0.649 0.193 251.8);
   --accent-hover: oklch(0.641 0.197 252.972 / 0.17);
   --accent-active: oklch(0.641 0.197 252.972 / 0.22);
   --accent-focus: oklch(0.735 0.121 243);
@@ -69,7 +70,7 @@
 
 .dark {
   /* backgrounds */
-  --background: oklch(0.083 0 0);
+  --background: oklch(0.178 0 0);
   --surface: oklch(0.148 0 0);
   --overlay: oklch(0.202 0 0);
   --ui: oklch(1 0 0 / 0.071);

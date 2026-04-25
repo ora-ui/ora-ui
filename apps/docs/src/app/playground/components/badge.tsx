@@ -79,10 +79,10 @@ export function BadgeSection() {
           <SparkleIcon weight="fill" />
           New
         </Badge>
-        <Badge variant="surface" theme="success">
+        <Badge variant="surface" theme="gray">
           GET
         </Badge>
-        <Badge variant="surface" theme="warning">
+        <Badge variant="surface" theme="accent">
           POST
         </Badge>
         <Badge variant="solid" theme="destructive">
