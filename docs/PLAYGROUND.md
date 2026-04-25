@@ -1,4 +1,4 @@
-# Playground v2 Context
+# Playground
 
 The playground is a Storybook-like component explorer with fixed layout, sidebar navigation, and URL-based routing — but lightweight and fast as a Next.js route.
 
@@ -30,9 +30,9 @@ apps/docs/src/app/playground/
 
 ## IMPORTANT: Where to Add/Update Playground Components
 
-**✅ CORRECT**: Add new playground components to `registry/entries/[component].tsx`
+**✅ CORRECT**: Add new playground components to `apps/docs/src/app/playground/registry/entries/[component].tsx`
 
-**❌ DEPRECATED**: The old component files in `components/` directory (button.tsx, badge.tsx, checkbox.tsx, etc.) are legacy and should NOT be updated. They are kept for reference only.
+**❌ DEPRECATED**: The old component files in `apps/docs/src/app/playground/components/` directory (button.tsx, badge.tsx, checkbox.tsx, etc.) are legacy and should NOT be updated. They are kept for reference only.
 
 When working with playground components:
 
@@ -40,12 +40,12 @@ When working with playground components:
 - Update the registry manifest in `registry/index.ts`
 - Never modify the old component files in `components/` (except constants.ts and control primitives)
 
-## Adding a New Component
+## Adding a New Component to the Playground
 
-1. Create a new file in `registry/entries/[component].tsx`
+1. Create a new file in `apps/docs/src/app/playground/registry/entries/[component].tsx`
 2. Export a default object with `{ Preview, Variants, defaults }`
-3. Add the entry to the registry in `registry/index.ts`
-4. Update `constants.ts` if new variant/theme/size constants are needed
+3. Add the entry to the registry in `apps/docs/src/app/playground/registry/index.ts`
+4. Update `apps/docs/src/app/playground/components/constants.ts` if new variant/theme/size constants are needed
 
 ### Registry Entry Structure
 
@@ -81,13 +81,14 @@ export default {
 
 ## Reference
 
-See `registry/entries/button.tsx` or `registry/entries/checkbox.tsx` as model implementations for new components.
+See `apps/docs/src/app/playground/registry/entries/button.tsx` or `apps/docs/src/app/playground/registry/entries/checkbox.tsx` as model implementations for new components.
 
 ## Component Implementation Guidelines
 
+The playground entries in `registry/entries/` should only handle the preview interface, controls, and variants showcase. The actual component implementation lives in `apps/docs/src/components/ui/`.
+
 When implementing the actual UI components (not playground entries), follow the patterns in:
 
-- [Component Conventions](../../../../docs/conventions/INDEX.md) — Theming, CVA, variants
-- [Token System](../../../../docs/conventions/TOKEN-SYSTEM.md) — Semantic tokens and usage
-
-The playground entries in `registry/entries/` should only handle the preview interface, controls, and variants showcase. The actual component implementation lives in `components/ui/`.
+- [Component Conventions](conventions/INDEX.md) — Theming, CVA, variants
+- [Token System](conventions/TOKEN-SYSTEM.md) — Semantic tokens and usage
+- [Component Guide](COMPONENT-GUIDE.md) — Step-by-step direction for building components

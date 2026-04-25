@@ -54,4 +54,4 @@ export default {
 };
 ```
 
-See `../CLAUDE.md` for full documentation.
+See `/docs/PLAYGROUND.md` for full documentation.

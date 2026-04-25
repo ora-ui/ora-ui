@@ -8,3 +8,4 @@ When working in this project, read the following in order of relevance to your t
 - [Principles](docs/PRINCIPLES.md) — Core beliefs that drive every decision
 - [Conventions](docs/conventions/INDEX.md) — Patterns, tokens, and how components are built
 - [Component Guide](docs/COMPONENT-GUIDE.md) — Step-by-step direction for building and modifying components
+- [Playground](docs/PLAYGROUND.md) — Adding and updating playground component entries
