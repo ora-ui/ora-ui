@@ -15,21 +15,37 @@ apps/docs/src/app/playground/
 │   ├── preview-shell.tsx         # Preview area + bottom toolbar
 │   ├── global-controls.tsx       # Theme, radius controls
 │   ├── controls.tsx              # Control primitives (text, select, etc.)
-│   ├── component-display.tsx     # Legacy - kept for reference
+│   ├── component-display.tsx     # DEPRECATED - do not use
+│   ├── *.tsx                     # DEPRECATED - legacy component files
 │   └── constants.ts              # Shared constants
 └── registry/
     ├── index.ts                  # Registry manifest + types
-    └── entries/                  # One file per component
+    └── entries/                  # ✅ ADD NEW COMPONENTS HERE
         ├── button.tsx
         ├── badge.tsx
+        ├── checkbox.tsx
+        ├── checkbox-group.tsx
         └── ...
 ```
+
+## IMPORTANT: Where to Add/Update Playground Components
+
+**✅ CORRECT**: Add new playground components to `registry/entries/[component].tsx`
+
+**❌ DEPRECATED**: The old component files in `components/` directory (button.tsx, badge.tsx, checkbox.tsx, etc.) are legacy and should NOT be updated. They are kept for reference only.
+
+When working with playground components:
+
+- Always work in `registry/entries/`
+- Update the registry manifest in `registry/index.ts`
+- Never modify the old component files in `components/` (except constants.ts and control primitives)
 
 ## Adding a New Component
 
 1. Create a new file in `registry/entries/[component].tsx`
 2. Export a default object with `{ Preview, Variants, defaults }`
 3. Add the entry to the registry in `registry/index.ts`
+4. Update `constants.ts` if new variant/theme/size constants are needed
 
 ### Registry Entry Structure
 
@@ -65,4 +81,13 @@ export default {
 
 ## Reference
 
-See `registry/entries/button.tsx` as the model implementation for new components.
+See `registry/entries/button.tsx` or `registry/entries/checkbox.tsx` as model implementations for new components.
+
+## Component Implementation Guidelines
+
+When implementing the actual UI components (not playground entries), follow the patterns in:
+
+- [Component Conventions](../../../../docs/conventions/INDEX.md) — Theming, CVA, variants
+- [Token System](../../../../docs/conventions/TOKEN-SYSTEM.md) — Semantic tokens and usage
+
+The playground entries in `registry/entries/` should only handle the preview interface, controls, and variants showcase. The actual component implementation lives in `components/ui/`.
