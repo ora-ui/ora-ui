@@ -148,19 +148,35 @@
   --ui-label: var(--destructive-secondary);
 }
 
-/* Variant gradient styles - Button specific (with interactions) */
-[data-slot='button'] {
+/* Variant gradient styles - Interactive components (button, checkbox) */
+[data-slot='button'],
+[data-slot='checkbox'] {
   &[data-variant='soft'],
-  &[data-variant='surface'],
-  &[data-variant='outline'],
-  &[data-variant='ghost'] {
+  &[data-variant='surface'] {
     background-color: transparent;
     background-image: linear-gradient(
       to top,
       color-mix(in oklch, var(--ui) 100%, transparent),
       color-mix(in oklch, var(--ui) 50%, transparent)
     );
+  }
 
+  &[data-variant='solid'] {
+    background-color: transparent;
+    background-image: linear-gradient(
+      to top,
+      color-mix(in oklch, var(--fill) 100%, transparent),
+      color-mix(in oklch, var(--fill) 82%, transparent)
+    );
+  }
+}
+
+/* Button-specific interactive states */
+[data-slot='button'] {
+  &[data-variant='soft'],
+  &[data-variant='surface'],
+  &[data-variant='outline'],
+  &[data-variant='ghost'] {
     &:hover {
       background-image: linear-gradient(
         to top,
@@ -201,13 +217,6 @@
   }
 
   &[data-variant='solid'] {
-    background-color: transparent;
-    background-image: linear-gradient(
-      to top,
-      color-mix(in oklch, var(--fill) 100%, transparent),
-      color-mix(in oklch, var(--fill) 82%, transparent)
-    );
-
     &:hover {
       background-image: linear-gradient(
         to top,
@@ -223,6 +232,25 @@
         color-mix(in oklch, var(--fill) 71%, transparent)
       );
     }
+  }
+}
+
+/* Checkbox-specific state changes */
+[data-slot='checkbox'] {
+  &[data-variant='surface'] {
+    &[data-checked],
+    &[data-indeterminate] {
+      background-image: linear-gradient(
+        to top,
+        color-mix(in oklch, var(--active) 100%, transparent),
+        color-mix(in oklch, var(--active) 50%, transparent)
+      );
+    }
+  }
+
+  /* Solid variant only shows gradient when checked */
+  &[data-variant='solid']:not([data-checked]):not([data-indeterminate]) {
+    background-image: none;
   }
 }
 
@@ -244,18 +272,33 @@
 }
 
 .dark {
-  [data-slot='button'] {
+  [data-slot='button'],
+  [data-slot='checkbox'] {
     &[data-variant='soft'],
-    &[data-variant='surface'],
-    &[data-variant='outline'],
-    &[data-variant='ghost'] {
+    &[data-variant='surface'] {
       background-color: transparent;
       background-image: linear-gradient(
         to bottom,
         color-mix(in oklch, var(--ui) 100%, transparent),
         color-mix(in oklch, var(--ui) 83%, transparent)
       );
+    }
 
+    &[data-variant='solid'] {
+      background-color: transparent;
+      background-image: linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--fill) 100%, transparent),
+        color-mix(in oklch, var(--fill) 87%, transparent)
+      );
+    }
+  }
+
+  [data-slot='button'] {
+    &[data-variant='soft'],
+    &[data-variant='surface'],
+    &[data-variant='outline'],
+    &[data-variant='ghost'] {
       &:hover {
         background-image: linear-gradient(
           to bottom,
@@ -296,13 +339,6 @@
     }
 
     &[data-variant='solid'] {
-      background-color: transparent;
-      background-image: linear-gradient(
-        to bottom,
-        color-mix(in oklch, var(--fill) 100%, transparent),
-        color-mix(in oklch, var(--fill) 87%, transparent)
-      );
-
       &:hover {
         background-image: linear-gradient(
           to bottom,
@@ -318,6 +354,23 @@
           color-mix(in oklch, var(--fill) 77%, transparent)
         );
       }
+    }
+  }
+
+  [data-slot='checkbox'] {
+    &[data-variant='surface'] {
+      &[data-checked],
+      &[data-indeterminate] {
+        background-image: linear-gradient(
+          to bottom,
+          color-mix(in oklch, var(--active) 100%, transparent),
+          color-mix(in oklch, var(--active) 73%, transparent)
+        );
+      }
+    }
+
+    &[data-variant='solid']:not([data-checked]):not([data-indeterminate]) {
+      background-image: none;
     }
   }
 

@@ -5,20 +5,26 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
 import { PreviewShell } from '../../components/preview-shell';
 import { SelectControl, CheckboxControl, TextControl } from '../../components/controls';
-import { CHECKBOX_THEMES } from '../../components/constants';
+import { CHECKBOX_VARIANTS, CHECKBOX_THEMES } from '../../components/constants';
 
+type CheckboxVariant = (typeof CHECKBOX_VARIANTS)[number];
 type CheckboxTheme = (typeof CHECKBOX_THEMES)[number];
 
+const VARIANT_OPTIONS = CHECKBOX_VARIANTS.map((v) => ({ label: v, value: v }));
 const THEME_OPTIONS = CHECKBOX_THEMES.map((t) => ({ label: t, value: t }));
 
 export const defaults = {
-  theme: 'accent',
+  variant: 'solid',
+  theme: 'gray',
   label: 'Checkbox label',
   disabled: 'false',
   indeterminate: 'false',
 };
 
 function CheckboxPreview({ searchParams }: { searchParams: Record<string, string> }) {
+  const [variant, setVariant] = React.useState<CheckboxVariant>(
+    (searchParams.variant as CheckboxVariant) ?? (defaults.variant as CheckboxVariant)
+  );
   const [theme, setTheme] = React.useState<CheckboxTheme>(
     (searchParams.theme as CheckboxTheme) ?? (defaults.theme as CheckboxTheme)
   );
@@ -28,7 +34,13 @@ function CheckboxPreview({ searchParams }: { searchParams: Record<string, string
 
   const preview = (
     <label className="flex items-center gap-2">
-      <Checkbox theme={theme} disabled={disabled} indeterminate={indeterminate} defaultChecked />
+      <Checkbox
+        variant={variant}
+        theme={theme}
+        disabled={disabled}
+        indeterminate={indeterminate}
+        defaultChecked
+      />
       <span className="text-sm text-foreground">{label}</span>
     </label>
   );
@@ -38,6 +50,13 @@ function CheckboxPreview({ searchParams }: { searchParams: Record<string, string
       preview={preview}
       controls={
         <>
+          <SelectControl
+            label="Variant"
+            value={variant}
+            options={VARIANT_OPTIONS}
+            onChange={(v) => setVariant(v as CheckboxVariant)}
+          />
+          <ToolbarSeparator />
           <SelectControl
             label="Theme"
             value={theme}
@@ -64,19 +83,29 @@ function CheckboxPreview({ searchParams }: { searchParams: Record<string, string
 function CheckboxVariants() {
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col items-start gap-3">
-        <label className="flex items-center gap-2">
-          <Checkbox theme="accent" defaultChecked />
-          <span className="text-sm text-foreground">Accept terms and conditions</span>
-        </label>
-        <label className="flex items-center gap-2">
-          <Checkbox theme="gray" defaultChecked />
-          <span className="text-sm text-foreground">Subscribe to newsletter</span>
-        </label>
-        <label className="flex items-center gap-2">
-          <Checkbox />
-          <span className="text-sm text-foreground">Remember this device</span>
-        </label>
+      <div className="flex flex-col items-start gap-4">
+        <div className="flex flex-col gap-2">
+          <span className="text-xs font-medium text-secondary">Solid variant</span>
+          <label className="flex items-center gap-2">
+            <Checkbox variant="solid" theme="gray" defaultChecked />
+            <span className="text-sm text-foreground">Gray theme</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <Checkbox variant="solid" theme="accent" defaultChecked />
+            <span className="text-sm text-foreground">Accent theme</span>
+          </label>
+        </div>
+        <div className="flex flex-col gap-2">
+          <span className="text-xs font-medium text-secondary">Surface variant</span>
+          <label className="flex items-center gap-2">
+            <Checkbox variant="surface" theme="gray" defaultChecked />
+            <span className="text-sm text-foreground">Gray theme</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <Checkbox variant="surface" theme="accent" defaultChecked />
+            <span className="text-sm text-foreground">Accent theme</span>
+          </label>
+        </div>
       </div>
     </div>
   );

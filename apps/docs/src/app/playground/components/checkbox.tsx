@@ -6,23 +6,32 @@ import { CheckboxGroup } from '@/components/ui/checkbox-group';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
 import { ComponentDisplay } from './component-display';
 import { SelectControl, CheckboxControl, TextControl } from './controls';
-import { CHECKBOX_THEMES } from './constants';
+import { CHECKBOX_VARIANTS, CHECKBOX_THEMES } from './constants';
 
+type CheckboxVariant = (typeof CHECKBOX_VARIANTS)[number];
 type CheckboxTheme = (typeof CHECKBOX_THEMES)[number];
 
+const VARIANT_OPTIONS = CHECKBOX_VARIANTS.map((v) => ({ label: v, value: v }));
 const THEME_OPTIONS = CHECKBOX_THEMES.map((t) => ({ label: t, value: t }));
 
 /* ---------- Checkbox Section ---------- */
 
 export function CheckboxSection() {
   const [label, setLabel] = React.useState('Checkbox label');
-  const [theme, setTheme] = React.useState<CheckboxTheme>('accent');
+  const [variant, setVariant] = React.useState<CheckboxVariant>('solid');
+  const [theme, setTheme] = React.useState<CheckboxTheme>('gray');
   const [disabled, setDisabled] = React.useState(false);
   const [indeterminate, setIndeterminate] = React.useState(false);
 
   const preview = (
     <label className="flex items-center gap-2">
-      <Checkbox theme={theme} disabled={disabled} indeterminate={indeterminate} defaultChecked />
+      <Checkbox
+        variant={variant}
+        theme={theme}
+        disabled={disabled}
+        indeterminate={indeterminate}
+        defaultChecked
+      />
       <span className="text-sm text-foreground">{label}</span>
     </label>
   );
@@ -34,6 +43,13 @@ export function CheckboxSection() {
       preview={preview}
       controls={
         <>
+          <SelectControl
+            label="Variant"
+            value={variant}
+            options={VARIANT_OPTIONS}
+            onChange={(v) => setVariant(v as CheckboxVariant)}
+          />
+          <ToolbarSeparator />
           <SelectControl
             label="Theme"
             value={theme}
@@ -54,19 +70,29 @@ export function CheckboxSection() {
       }
     >
       <div className="flex justify-center">
-        <div className="flex flex-col items-start gap-3">
-          <label className="flex items-center gap-2">
-            <Checkbox theme="accent" defaultChecked />
-            <span className="text-sm text-foreground">Accept terms and conditions</span>
-          </label>
-          <label className="flex items-center gap-2">
-            <Checkbox theme="gray" defaultChecked />
-            <span className="text-sm text-foreground">Subscribe to newsletter</span>
-          </label>
-          <label className="flex items-center gap-2">
-            <Checkbox />
-            <span className="text-sm text-foreground">Remember this device</span>
-          </label>
+        <div className="flex flex-col items-start gap-4">
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-medium text-secondary">Solid variant</span>
+            <label className="flex items-center gap-2">
+              <Checkbox variant="solid" theme="gray" defaultChecked />
+              <span className="text-sm text-foreground">Gray theme</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <Checkbox variant="solid" theme="accent" defaultChecked />
+              <span className="text-sm text-foreground">Accent theme</span>
+            </label>
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-medium text-secondary">Surface variant</span>
+            <label className="flex items-center gap-2">
+              <Checkbox variant="surface" theme="gray" defaultChecked />
+              <span className="text-sm text-foreground">Gray theme</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <Checkbox variant="surface" theme="accent" defaultChecked />
+              <span className="text-sm text-foreground">Accent theme</span>
+            </label>
+          </div>
         </div>
       </div>
     </ComponentDisplay>
@@ -122,7 +148,7 @@ function GroupDemo({ theme }: { theme: CheckboxTheme }) {
 }
 
 export function CheckboxGroupSection() {
-  const [theme, setTheme] = React.useState<CheckboxTheme>('accent');
+  const [theme, setTheme] = React.useState<CheckboxTheme>('gray');
 
   return (
     <ComponentDisplay
@@ -139,7 +165,7 @@ export function CheckboxGroupSection() {
       }
     >
       <div className="flex justify-center">
-        <GroupDemo theme="accent" />
+        <GroupDemo theme="gray" />
       </div>
     </ComponentDisplay>
   );

@@ -45,6 +45,11 @@ export const registry: Record<string, PlaygroundEntry[]> = {
       load: () => import('./entries/checkbox'),
     },
     {
+      name: 'Checkbox Group',
+      slug: 'checkbox-group',
+      load: () => import('./entries/checkbox-group'),
+    },
+    {
       name: 'Dropdown Menu',
       slug: 'dropdown-menu',
       load: () => import('./entries/dropdown-menu'),

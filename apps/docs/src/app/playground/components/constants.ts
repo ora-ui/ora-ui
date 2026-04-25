@@ -26,6 +26,7 @@ export const TOGGLE_SIZES = ['sm', 'md', 'lg'] as const;
 
 export const TABS_VARIANTS = ['line', 'soft'] as const;
 
+export const CHECKBOX_VARIANTS = ['solid', 'surface'] as const;
 export const CHECKBOX_THEMES = ['gray', 'accent'] as const;
 
 export const DROPDOWN_VARIANTS = ['soft', 'solid'] as const;
