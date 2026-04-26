@@ -71,7 +71,7 @@ function DemoTabs({
 }
 
 export function TabsSection() {
-  const [variant, setVariant] = React.useState<TabsVariant>('line');
+  const [variant, setVariant] = React.useState<TabsVariant>('solid');
   const [surface, setSurface] = React.useState(false);
   const [track, setTrack] = React.useState(true);
   const [transition, setTransition] = React.useState(false);

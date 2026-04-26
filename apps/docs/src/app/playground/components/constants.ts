@@ -24,7 +24,7 @@ export const KBD_VARIANTS = ['ghost', 'soft', 'surface'] as const;
 export const TOGGLE_VARIANTS = ['soft', 'outline', 'solid'] as const;
 export const TOGGLE_SIZES = ['sm', 'md', 'lg'] as const;
 
-export const TABS_VARIANTS = ['line', 'soft'] as const;
+export const TABS_VARIANTS = ['solid', 'soft'] as const;
 
 export const CHECKBOX_VARIANTS = ['solid', 'surface'] as const;
 export const CHECKBOX_THEMES = ['gray', 'accent'] as const;

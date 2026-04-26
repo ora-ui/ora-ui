@@ -24,7 +24,7 @@ const DEMO_TABS = [
 ];
 
 export const defaults = {
-  variant: 'line',
+  variant: 'solid',
   surface: 'false',
   track: 'true',
   transition: 'false',
@@ -65,13 +65,13 @@ function DemoTabs({
   return (
     <Tabs defaultValue="overview" orientation={orientation}>
       {surface ? <TabsSurface>{list}</TabsSurface> : list}
-      <TabsPanel value="overview" className="min-w-28 text-foreground-subtle">
+      <TabsPanel value="overview" className="min-w-28 text-secondary">
         Overview content
       </TabsPanel>
-      <TabsPanel value="activity" className="min-w-28 text-foreground-subtle">
+      <TabsPanel value="activity" className="min-w-28 text-secondary">
         Activity content
       </TabsPanel>
-      <TabsPanel value="settings" className="min-w-28 text-foreground-subtle">
+      <TabsPanel value="settings" className="min-w-28 text-secondary">
         Settings content
       </TabsPanel>
     </Tabs>
@@ -83,7 +83,6 @@ function TabsPreview({ searchParams }: { searchParams: Record<string, string> })
     (searchParams.variant as TabsVariant) ?? (defaults.variant as TabsVariant)
   );
   const [surface, setSurface] = React.useState(searchParams.surface === 'true');
-  const [track, setTrack] = React.useState(searchParams.track !== 'false');
   const [transition, setTransition] = React.useState(searchParams.transition === 'true');
   const [orientation, setOrientation] = React.useState<'horizontal' | 'vertical'>(
     (searchParams.orientation as 'horizontal' | 'vertical') ??
@@ -94,7 +93,6 @@ function TabsPreview({ searchParams }: { searchParams: Record<string, string> })
     <DemoTabs
       variant={variant}
       surface={surface}
-      track={track}
       transition={transition}
       orientation={orientation}
     />
@@ -114,8 +112,6 @@ function TabsPreview({ searchParams }: { searchParams: Record<string, string> })
           <ToolbarSeparator />
           <CheckboxControl label="Surface" checked={surface} onChange={setSurface} />
           <ToolbarSeparator />
-          <CheckboxControl label="Track" checked={track} onChange={setTrack} />
-          <ToolbarSeparator />
           <CheckboxControl label="Transition" checked={transition} onChange={setTransition} />
           <ToolbarSeparator />
           <SelectControl
@@ -133,21 +129,41 @@ function TabsPreview({ searchParams }: { searchParams: Record<string, string> })
 
 function TabsVariants() {
   return (
-    <div className="flex flex-wrap items-center justify-center">
-      <Tabs defaultValue="overview">
-        <TabsList>
-          <TabItems />
-        </TabsList>
-        <TabsPanel value="overview" className="min-w-28 text-foreground-subtle">
-          Overview content
-        </TabsPanel>
-        <TabsPanel value="activity" className="min-w-28 text-foreground-subtle">
-          Activity content
-        </TabsPanel>
-        <TabsPanel value="settings" className="min-w-28 text-foreground-subtle">
-          Settings content
-        </TabsPanel>
-      </Tabs>
+    <div className="flex flex-col items-center justify-center gap-8">
+      <div className="flex flex-col gap-2">
+        <span className="text-xs font-medium text-secondary">Solid variant</span>
+        <Tabs defaultValue="overview">
+          <TabsList variant="solid">
+            <TabItems />
+          </TabsList>
+          <TabsPanel value="overview" className="min-w-28 text-secondary">
+            Overview content
+          </TabsPanel>
+          <TabsPanel value="activity" className="min-w-28 text-secondary">
+            Activity content
+          </TabsPanel>
+          <TabsPanel value="settings" className="min-w-28 text-secondary">
+            Settings content
+          </TabsPanel>
+        </Tabs>
+      </div>
+      <div className="flex flex-col gap-2">
+        <span className="text-xs font-medium text-secondary">Soft variant</span>
+        <Tabs defaultValue="overview">
+          <TabsList variant="soft">
+            <TabItems />
+          </TabsList>
+          <TabsPanel value="overview" className="min-w-28 text-secondary">
+            Overview content
+          </TabsPanel>
+          <TabsPanel value="activity" className="min-w-28 text-secondary">
+            Activity content
+          </TabsPanel>
+          <TabsPanel value="settings" className="min-w-28 text-secondary">
+            Settings content
+          </TabsPanel>
+        </Tabs>
+      </div>
     </div>
   );
 }

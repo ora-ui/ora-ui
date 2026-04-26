@@ -327,6 +327,45 @@
   --menu-item-radius: min(max(calc(var(--radius-md) - 4px), 2px), 6px);
 }
 
+[data-slot='tabs-indicator'] {
+  background-color: transparent;
+  &[data-variant='soft'] {
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--hover) 100%, transparent),
+      color-mix(in oklch, var(--hover) 76%, transparent)
+    );
+  }
+
+  &[data-variant='solid'] {
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--fill) 100%, transparent),
+      color-mix(in oklch, var(--fill) 87%, transparent)
+    );
+  }
+}
+
+.dark {
+  [data-slot='tabs-indicator'] {
+    &[data-variant='soft'] {
+      background-image: linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--hover) 100%, transparent),
+        color-mix(in oklch, var(--hover) 76%, transparent)
+      );
+    }
+
+    &[data-variant='solid'] {
+      background-image: linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--fill) 100%, transparent),
+        color-mix(in oklch, var(--fill) 87%, transparent)
+      );
+    }
+  }
+}
+
 .dark {
   /* Dropdown menu - dark mode tokens */
   [data-slot='dropdown-menu-item'],
