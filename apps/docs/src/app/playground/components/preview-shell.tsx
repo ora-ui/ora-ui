@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { SquaresFourIcon } from '@phosphor-icons/react';
+import { cn } from '@/lib/utils';
 import { BACKGROUNDS } from './constants';
 
 interface PreviewShellProps {
@@ -20,15 +21,30 @@ interface PreviewShellProps {
 export function PreviewShell({ preview, controls, variants }: PreviewShellProps) {
   const [background, setBackground] = React.useState<string>(BACKGROUNDS[0].value);
   const [showVariants, setShowVariants] = React.useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const previewRef = React.useRef<HTMLDivElement>(null);
+  const [paddingTop, setPaddingTop] = React.useState<number | undefined>(undefined);
+
+  React.useLayoutEffect(() => {
+    if (!containerRef.current || !previewRef.current) return;
+    const containerHeight = containerRef.current.offsetHeight;
+    const previewHeight = previewRef.current.offsetHeight;
+    setPaddingTop(Math.max(0, (containerHeight - previewHeight) / 2));
+  }, []);
 
   return (
     <div className="flex flex-1 flex-col">
       {/* Preview area */}
       <div
-        className="flex flex-1 items-center justify-center p-8"
-        style={{ backgroundColor: background }}
+        ref={containerRef}
+        className="flex flex-1 justify-center p-8"
+        style={{
+          backgroundColor: background,
+          alignItems: paddingTop === undefined ? 'center' : 'flex-start',
+          paddingTop: paddingTop !== undefined ? paddingTop : undefined,
+        }}
       >
-        {preview}
+        <div ref={previewRef}>{preview}</div>
       </div>
 
       {/* Variants panel */}

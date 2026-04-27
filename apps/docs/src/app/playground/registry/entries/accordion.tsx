@@ -42,7 +42,7 @@ function AccordionPreview({ searchParams }: { searchParams: Record<string, strin
   const [disabled, setDisabled] = React.useState(searchParams.disabled === 'true');
 
   const preview = (
-    <Accordion multiple={multiple} disabled={disabled} defaultValue={['what']} className="w-80">
+    <Accordion multiple={multiple} disabled={disabled} defaultValue={['what']} className="w-96">
       {DEMO_ITEMS.map((item) => (
         <AccordionItem key={item.value} value={item.value}>
           <AccordionTrigger>{item.trigger}</AccordionTrigger>
