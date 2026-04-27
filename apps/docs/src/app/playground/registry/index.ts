@@ -30,6 +30,11 @@ export const registry: Record<string, PlaygroundEntry[]> = {
       load: () => import('./entries/accordion'),
     },
     {
+      name: 'Alert Dialog',
+      slug: 'alert-dialog',
+      load: () => import('./entries/alert-dialog'),
+    },
+    {
       name: 'Button',
       slug: 'button',
       load: () => import('./entries/button'),
