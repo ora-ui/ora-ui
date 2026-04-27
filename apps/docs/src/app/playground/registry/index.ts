@@ -60,6 +60,16 @@ export const registry: Record<string, PlaygroundEntry[]> = {
       load: () => import('./entries/dropdown-menu'),
     },
     {
+      name: 'Input',
+      slug: 'input',
+      load: () => import('./entries/input'),
+    },
+    {
+      name: 'Input Group',
+      slug: 'input-group',
+      load: () => import('./entries/input-group'),
+    },
+    {
       name: 'Tabs',
       slug: 'tabs',
       load: () => import('./entries/tabs'),
