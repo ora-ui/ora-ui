@@ -25,6 +25,11 @@ export interface PlaygroundComponent {
 export const registry: Record<string, PlaygroundEntry[]> = {
   primitives: [
     {
+      name: 'Accordion',
+      slug: 'accordion',
+      load: () => import('./entries/accordion'),
+    },
+    {
       name: 'Button',
       slug: 'button',
       load: () => import('./entries/button'),
