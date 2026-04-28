@@ -40,6 +40,11 @@ export const registry: Record<string, PlaygroundEntry[]> = {
       load: () => import('./entries/avatar'),
     },
     {
+      name: 'Avatar Group',
+      slug: 'avatar-group',
+      load: () => import('./entries/avatar-group'),
+    },
+    {
       name: 'Button',
       slug: 'button',
       load: () => import('./entries/button'),
