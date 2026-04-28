@@ -1,9 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '@/components/ui/avatar';
 import { PreviewShell } from '../../components/preview-shell';
-import { SelectControl, TextControl } from '../../components/controls';
+import { SelectControl, TextControl, CheckboxControl } from '../../components/controls';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
 import { cn } from '@/lib/utils';
 
@@ -40,6 +40,7 @@ export const defaults = {
   size: 'size-16',
   fallback: 'AB',
   imageType: 'photo',
+  showBadge: 'false',
 };
 
 function AvatarPreview({ searchParams }: { searchParams: Record<string, string> }) {
@@ -50,6 +51,7 @@ function AvatarPreview({ searchParams }: { searchParams: Record<string, string> 
   const [size, setSize] = React.useState(searchParams.size ?? defaults.size);
   const [fallback, setFallback] = React.useState(searchParams.fallback ?? defaults.fallback);
   const [imageType, setImageType] = React.useState(searchParams.imageType ?? defaults.imageType);
+  const [showBadge, setShowBadge] = React.useState(searchParams.showBadge === 'true');
 
   const imageUrl =
     imageType === 'photo'
@@ -66,6 +68,7 @@ function AvatarPreview({ searchParams }: { searchParams: Record<string, string> 
     >
       {imageUrl && <AvatarImage src={imageUrl} alt="Avatar" />}
       <AvatarFallback>{fallback}</AvatarFallback>
+      {showBadge && <AvatarBadge />}
     </Avatar>
   );
 
@@ -98,6 +101,8 @@ function AvatarPreview({ searchParams }: { searchParams: Record<string, string> 
           />
           <ToolbarSeparator />
           <TextControl label="Fallback" value={fallback} onChange={setFallback} />
+          <ToolbarSeparator />
+          <CheckboxControl label="Show Badge" checked={showBadge} onChange={setShowBadge} />
         </>
       }
       variants={<AvatarVariants />}
