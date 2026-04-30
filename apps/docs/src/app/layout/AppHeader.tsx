@@ -5,15 +5,7 @@ import { Logo } from '../assets/Logo';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
-
-function MenuIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <rect x="1" y="4" width="14" height="1.5" rx="0.75" fill="currentColor" />
-      <rect x="1" y="10" width="14" height="1.5" rx="0.75" fill="currentColor" />
-    </svg>
-  );
-}
+import { MobileNav } from '@/app/docs/components/mobile-nav';
 
 function SearchIcon() {
   return (
@@ -48,7 +40,7 @@ export function HeaderDesktopActions() {
         <Kbd>⌘K</Kbd>
       </a>
       <a
-        href="https://github.com/gregogun/ora-ui"
+        href="https://github.com/ora-ui/ora-ui"
         target="_blank"
         rel="noopener noreferrer"
         className={cn(
@@ -69,13 +61,7 @@ export function HeaderDesktopActions() {
 export function HeaderMobileActions() {
   return (
     <div className="flex lg:hidden items-center gap-1 pr-4">
-      <button
-        type="button"
-        className="flex items-center justify-center rounded-md p-2 text-secondary hover:text-primary transition-colors"
-        aria-label="Open navigation menu"
-      >
-        <MenuIcon />
-      </button>
+      <MobileNav />
     </div>
   );
 }
