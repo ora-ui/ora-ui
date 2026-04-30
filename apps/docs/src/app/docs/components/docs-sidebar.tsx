@@ -20,7 +20,7 @@ export function DocsSidebar({ tree }: DocsSidebarProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="DocsSideNav">
+    <nav className="DocsSideNav mr-10">
       <SidebarContent>
         {tree.children.map((item) => {
           if (item.type === 'folder') {
