@@ -1,6 +1,9 @@
 'use client';
 
+import * as React from 'react';
 import Link from 'next/link';
+import { SearchDialog } from './SearchDialog';
+
 import { Logo } from '../assets/Logo';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
@@ -24,21 +27,23 @@ function GitHubIcon() {
   );
 }
 
-export function HeaderDesktopActions() {
+interface HeaderActionsProps {
+  onSearchOpen: () => void;
+}
+
+export function HeaderDesktopActions({ onSearchOpen }: HeaderActionsProps) {
   return (
     <div className="hidden lg:flex items-center gap-2 pr-6">
-      <a
-        className={cn(
-          buttonVariants({
-            variant: 'surface',
-          })
-        )}
+      <button
+        type="button"
+        onClick={onSearchOpen}
+        className={cn(buttonVariants({ variant: 'surface' }))}
         aria-label="Search"
       >
         <SearchIcon />
         Search
         <Kbd>⌘K</Kbd>
-      </a>
+      </button>
       <a
         href="https://github.com/ora-ui/ora-ui"
         target="_blank"
@@ -58,22 +63,44 @@ export function HeaderDesktopActions() {
   );
 }
 
-export function HeaderMobileActions() {
+export function HeaderMobileActions({ onSearchOpen }: HeaderActionsProps) {
   return (
     <div className="flex lg:hidden items-center gap-1 pr-4">
+      <button
+        type="button"
+        onClick={onSearchOpen}
+        className="flex items-center justify-center rounded-md p-2 text-secondary hover:text-primary transition-colors"
+        aria-label="Search"
+      >
+        <SearchIcon />
+      </button>
       <MobileNav />
     </div>
   );
 }
 
 export function AppHeader() {
+  const [searchOpen, setSearchOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <header className="absolute left-0 top-0 flex justify-between h-(--header-height) items-center w-full pl-6 sm:pl-10 lg:pl-8 bg-(--color-background)">
       <Link href="/">
         <Logo />
       </Link>
-      <HeaderDesktopActions />
-      <HeaderMobileActions />
+      <HeaderDesktopActions onSearchOpen={() => setSearchOpen(true)} />
+      <HeaderMobileActions onSearchOpen={() => setSearchOpen(true)} />
+      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
     </header>
   );
 }
