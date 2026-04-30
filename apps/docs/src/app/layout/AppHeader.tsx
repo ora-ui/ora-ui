@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { SearchDialog } from './SearchDialog';
 
 import { Logo } from '../assets/Logo';
@@ -29,21 +30,24 @@ function GitHubIcon() {
 
 interface HeaderActionsProps {
   onSearchOpen: () => void;
+  showSearch: boolean;
 }
 
-export function HeaderDesktopActions({ onSearchOpen }: HeaderActionsProps) {
+export function HeaderDesktopActions({ onSearchOpen, showSearch }: HeaderActionsProps) {
   return (
     <div className="hidden lg:flex items-center gap-2 pr-6">
-      <button
-        type="button"
-        onClick={onSearchOpen}
-        className={cn(buttonVariants({ variant: 'surface' }))}
-        aria-label="Search"
-      >
-        <SearchIcon />
-        Search
-        <Kbd>⌘K</Kbd>
-      </button>
+      {showSearch && (
+        <button
+          type="button"
+          onClick={onSearchOpen}
+          className={cn(buttonVariants({ variant: 'surface' }))}
+          aria-label="Search"
+        >
+          <SearchIcon />
+          Search
+          <Kbd>⌘K</Kbd>
+        </button>
+      )}
       <a
         href="https://github.com/ora-ui/ora-ui"
         target="_blank"
@@ -63,17 +67,19 @@ export function HeaderDesktopActions({ onSearchOpen }: HeaderActionsProps) {
   );
 }
 
-export function HeaderMobileActions({ onSearchOpen }: HeaderActionsProps) {
+export function HeaderMobileActions({ onSearchOpen, showSearch }: HeaderActionsProps) {
   return (
     <div className="flex lg:hidden items-center gap-1 pr-4">
-      <button
-        type="button"
-        onClick={onSearchOpen}
-        className="flex items-center justify-center rounded-md p-2 text-secondary hover:text-primary transition-colors"
-        aria-label="Search"
-      >
-        <SearchIcon />
-      </button>
+      {showSearch && (
+        <button
+          type="button"
+          onClick={onSearchOpen}
+          className="flex items-center justify-center rounded-md p-2 text-secondary hover:text-primary transition-colors"
+          aria-label="Search"
+        >
+          <SearchIcon />
+        </button>
+      )}
       <MobileNav />
     </div>
   );
@@ -81,8 +87,11 @@ export function HeaderMobileActions({ onSearchOpen }: HeaderActionsProps) {
 
 export function AppHeader() {
   const [searchOpen, setSearchOpen] = React.useState(false);
+  const pathname = usePathname();
+  const showSearch = pathname.startsWith('/docs');
 
   React.useEffect(() => {
+    if (!showSearch) return;
     function handleKeyDown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
@@ -91,16 +100,16 @@ export function AppHeader() {
     }
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [showSearch]);
 
   return (
-    <header className="absolute left-0 top-0 flex justify-between h-(--header-height) items-center w-full pl-6 sm:pl-10 lg:pl-8 bg-(--color-background)">
+    <header className="absolute left-0 top-0 flex justify-between h-(--header-height) items-center w-full pl-6 sm:pl-10 lg:pl-8">
       <Link href="/">
         <Logo />
       </Link>
-      <HeaderDesktopActions onSearchOpen={() => setSearchOpen(true)} />
-      <HeaderMobileActions onSearchOpen={() => setSearchOpen(true)} />
-      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
+      <HeaderDesktopActions onSearchOpen={() => setSearchOpen(true)} showSearch={showSearch} />
+      <HeaderMobileActions onSearchOpen={() => setSearchOpen(true)} showSearch={showSearch} />
+      {showSearch && <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />}
     </header>
   );
 }
