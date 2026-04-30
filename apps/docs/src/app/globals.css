@@ -1,8 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
-@import 'fumadocs-ui/css/shadcn.css';
-@import 'fumadocs-ui/css/preset.css';
 @import './colors.css';
 
 @custom-variant dark (&:is(.dark *));
@@ -66,6 +64,8 @@
 
   /* app */
   --header-height: 48px;
+  --breakpoint-max-layout-width: 89rem;
+  --root-layout-padding: 3rem;
 }
 
 .dark {

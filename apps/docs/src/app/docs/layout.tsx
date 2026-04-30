@@ -1,12 +1,12 @@
-import { source } from "@/lib/source";
-import { baseOptions } from "@/lib/layout.shared";
-import { DocsLayout } from "fumadocs-ui/layouts/docs";
-import type { ReactNode } from "react";
+import { source } from '@/lib/source';
+import type { ReactNode } from 'react';
+import { DocsSidebar } from '@/app/docs/components/docs-sidebar';
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function DocsLayout({ children }: { children: ReactNode }) {
   return (
-    <DocsLayout tree={source.getPageTree()} {...baseOptions()}>
-      {children}
-    </DocsLayout>
+    <div className="ContentLayoutRoot">
+      <DocsSidebar tree={source.pageTree} />
+      <main className="ContentLayoutMain">{children}</main>
+    </div>
   );
 }
