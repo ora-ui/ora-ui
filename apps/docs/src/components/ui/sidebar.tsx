@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { Collapsible as CollapsiblePrimitive } from '@base-ui/react/collapsible';
+import { Slot } from '@radix-ui/react-slot';
 import { ChevronRightIcon } from '@heroicons/react/16/solid';
 
 import { cn } from '@/lib/utils';
@@ -54,7 +55,7 @@ function Sidebar({ className, children, ...props }: SidebarProps) {
       data-slot="sidebar"
       data-collapsed={collapsed}
       className={cn(
-        'flex h-full w-64 shrink-0 flex-col border-r border-line-subtle bg-background transition-[width] duration-200',
+        'flex h-full w-64 shrink-0 flex-col border-r border-line-subtle bg-background',
         collapsed && 'w-0 overflow-hidden',
         className
       )}
@@ -146,7 +147,7 @@ function SidebarGroupLabel({ className, children, ...props }: SidebarGroupLabelP
     <CollapsiblePrimitive.Trigger
       data-slot="sidebar-group-label"
       className={cn(
-        'group/sidebar-group-label flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs font-medium text-foreground-subtle hover:bg-hover transition-colors',
+        'group/sidebar-group-label flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs font-medium text-secondary hover:bg-hover transition-colors',
         className
       )}
       {...props}
@@ -171,27 +172,25 @@ function SidebarGroupContent({ className, ...props }: React.HTMLAttributes<HTMLD
 
 /* ---------- SidebarItem ---------- */
 
-interface SidebarItemProps extends React.HTMLAttributes<HTMLAnchorElement> {
-  href: string;
+interface SidebarItemProps extends React.ComponentPropsWithoutRef<'a'> {
+  asChild?: boolean;
   active?: boolean;
-  children: React.ReactNode;
 }
 
-function SidebarItem({ className, href, active, children, ...props }: SidebarItemProps) {
+function SidebarItem({ className, asChild = false, active, ...props }: SidebarItemProps) {
+  const Comp = asChild ? Slot : 'a';
+
   return (
-    <a
+    <Comp
       data-slot="sidebar-item"
       data-active={active}
-      href={href}
       className={cn(
-        'flex items-center gap-2 rounded-md px-2 py-1.5 pl-7 text-sm text-foreground-subtle hover:bg-hover hover:text-foreground transition-colors',
-        active && 'bg-hover text-foreground font-medium',
+        'flex items-center gap-2 rounded-md px-2 py-1.5 pl-7 text-sm text-secondary hover:bg-hover hover:text-primary transition-colors',
+        active && 'bg-hover text-primary font-medium',
         className
       )}
       {...props}
-    >
-      {children}
-    </a>
+    />
   );
 }
 
