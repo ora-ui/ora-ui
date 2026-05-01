@@ -196,6 +196,7 @@
 
   &[data-variant='ghost'],
   &[data-variant='outline'] {
+    background-color: transparent;
     background-image: none;
   }
 
