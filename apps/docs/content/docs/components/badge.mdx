@@ -85,6 +85,9 @@ export default function BadgeTheme() {
 
 Icons can be placed inline alongside a label.
 
+{/* prettier-ignore-start */}
+{/* Icon + text must be inline — MDX wraps multiline text children in <p> tags */}
+
 <div className="flex flex-wrap gap-2">
   <Badge variant="soft" theme="warning">
     <ClockIcon />
@@ -99,6 +102,7 @@ Icons can be placed inline alongside a label.
     Completed
   </Badge>
 </div>
+{/* prettier-ignore-end */}
 
 ```tsx
 import { CheckCircleIcon, ClockIcon, EyeIcon } from '@heroicons/react/16/solid';
