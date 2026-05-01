@@ -580,6 +580,38 @@
   --color-destructive: var(--destructive); */;
 }
 
+/* Shiki dual-theme: map code block backgrounds to Ora surface token */
+:root {
+  --shiki-light-bg: var(--surface);
+  --shiki-dark-bg: var(--surface);
+}
+
+/* Syntax token colors: light mode uses --shiki-light, dark uses --shiki-dark */
+pre.shiki code span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style, normal);
+  font-weight: var(--shiki-light-font-weight, inherit);
+  text-decoration: var(--shiki-light-text-decoration, none);
+}
+
+.dark pre.shiki code span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style, normal);
+  font-weight: var(--shiki-dark-font-weight, inherit);
+  text-decoration: var(--shiki-dark-text-decoration, none);
+}
+
+/* Apply horizontal padding to code element so all lines indent consistently */
+pre.shiki code {
+  display: block;
+  padding-inline: 0.75rem;
+}
+
+/* Hide Shiki's trailing empty line */
+pre.shiki code .line:last-child:empty {
+  display: none;
+}
+
 @layer base {
   /* * {
     @apply border-border outline-ring/50;

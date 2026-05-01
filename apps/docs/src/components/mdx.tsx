@@ -28,6 +28,7 @@ import {
 } from '@radix-ui/react-icons';
 import type { MDXComponents } from 'mdx/types';
 import { cn } from '@/lib/utils';
+import { CodeBlock } from '@/app/docs/components/code-block';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
@@ -124,6 +125,21 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     li: ({ className, ...props }: React.ComponentProps<'li'>) => (
       <li className={cn('mt-2', className)} {...props} />
     ),
+    pre: (props) => <CodeBlock {...props} />,
+    code: ({ className, ...props }: React.ComponentProps<'code'>) => {
+      if (className?.includes('language-')) {
+        return <code className={cn('font-mono', className)} {...props} />;
+      }
+      return (
+        <code
+          className={cn(
+            'rounded-xs px-1.5 py-0.5 font-mono text-[0.8rem] wrap-break-word',
+            className
+          )}
+          {...props}
+        />
+      );
+    },
     blockquote: ({ className, ...props }: React.ComponentProps<'blockquote'>) => (
       <blockquote
         className={cn('mt-6 border-l-2 border-line pl-6 italic text-secondary', className)}
