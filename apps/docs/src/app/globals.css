@@ -160,6 +160,14 @@
   --ui-label: var(--destructive-secondary);
 }
 
+[data-theme='warning'] {
+  --ui: var(--warning-ui);
+  --line-ui: var(--warning-line-ui);
+  --secondary: var(--warning-secondary);
+  --primary: var(--warning-primary);
+  --ui-label: var(--warning-secondary);
+}
+
 /* Variant gradient styles - Interactive components (button, checkbox) */
 [data-slot='button'],
 [data-slot='checkbox'] {
@@ -546,6 +554,8 @@
 }
 
 @theme inline {
+  --font-mono: var(--font-geist-mono);
+
   --radius-dynamic: var(--radius);
   --radius-xs: min(calc(var(--radius) * 0.4), 4px);
   --radius-sm: min(calc(var(--radius) * 0.6), 6px);

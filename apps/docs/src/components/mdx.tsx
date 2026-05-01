@@ -27,8 +27,12 @@ import {
   TextAlignJustifyIcon,
 } from '@radix-ui/react-icons';
 import type { MDXComponents } from 'mdx/types';
+import NextImage from 'next/image';
 import { cn } from '@/lib/utils';
 import { CodeBlock } from '@/app/docs/components/code-block';
+import { Steps, Step } from '@/app/docs/components/steps';
+import { Callout } from '@/app/docs/components/callout';
+import { Tabs, TabsList, TabsTab, TabsPanel, TabsSurface } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
@@ -125,6 +129,18 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     li: ({ className, ...props }: React.ComponentProps<'li'>) => (
       <li className={cn('mt-2', className)} {...props} />
     ),
+    img: ({ className, alt, src, width, height, ...props }: React.ComponentProps<'img'>) => (
+      <span className="my-6 block overflow-hidden rounded-md">
+        <NextImage
+          className={cn('w-full', className)}
+          alt={alt ?? ''}
+          src={src as string}
+          width={typeof width === 'number' ? width : 1200}
+          height={typeof height === 'number' ? height : 630}
+          {...props}
+        />
+      </span>
+    ),
     pre: (props) => <CodeBlock {...props} />,
     code: ({ className, ...props }: React.ComponentProps<'code'>) => {
       if (className?.includes('language-')) {
@@ -175,6 +191,10 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
         {...props}
       />
     ),
+    // Docs components
+    Steps,
+    Step,
+    Callout,
     // Ora UI components
     Badge,
     Button,
@@ -190,6 +210,11 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ToggleGroup,
     ToggleGroupItem,
     Separator,
+    Tabs,
+    TabsList,
+    TabsTab,
+    TabsPanel,
+    TabsSurface,
     DropdownMenu,
     DropdownMenuPortal,
     DropdownMenuTrigger,
