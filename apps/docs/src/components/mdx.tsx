@@ -67,27 +67,44 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ),
     h2: ({ className, ...props }: React.ComponentProps<'h2'>) => (
       <h2
-        className={cn('text-2xl font-semibold tracking-tight text-primary mt-10 mb-4', className)}
+        className={cn(
+          'mt-10 mb-4 scroll-m-20 text-2xl font-semibold tracking-tight text-primary',
+          '[&+h3]:mt-4 [&+p]:mt-3',
+          className
+        )}
         {...props}
       />
     ),
     h3: ({ className, ...props }: React.ComponentProps<'h3'>) => (
       <h3
-        className={cn('text-xl font-medium tracking-tight text-primary mt-8 mb-3', className)}
+        className={cn(
+          'mt-8 mb-3 scroll-m-20 text-xl font-medium tracking-tight text-primary',
+          '[&+p]:mt-2',
+          className
+        )}
         {...props}
       />
     ),
     h4: ({ className, ...props }: React.ComponentProps<'h4'>) => (
-      <h4 className={cn('text-lg font-medium text-primary mt-6 mb-2', className)} {...props} />
+      <h4
+        className={cn('mt-6 mb-2 scroll-m-20 text-lg font-medium text-primary', className)}
+        {...props}
+      />
     ),
     h5: ({ className, ...props }: React.ComponentProps<'h5'>) => (
-      <h5 className={cn('text-base font-medium text-primary mt-4 mb-2', className)} {...props} />
+      <h5
+        className={cn('mt-4 mb-2 scroll-m-20 text-base font-medium text-primary', className)}
+        {...props}
+      />
     ),
     h6: ({ className, ...props }: React.ComponentProps<'h6'>) => (
-      <h6 className={cn('text-base font-medium text-primary mt-4 mb-2', className)} {...props} />
+      <h6
+        className={cn('mt-4 mb-2 scroll-m-20 text-base font-medium text-primary', className)}
+        {...props}
+      />
     ),
     p: ({ className, ...props }: React.ComponentProps<'p'>) => (
-      <p className={cn('leading-7 [&:not(:first-child)]:mt-6', className)} {...props} />
+      <p className={cn('leading-relaxed not-first:mt-6', className)} {...props} />
     ),
     strong: ({ className, ...props }: React.ComponentProps<'strong'>) => (
       <strong className={cn('font-semibold', className)} {...props} />
