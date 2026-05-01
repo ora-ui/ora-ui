@@ -89,11 +89,11 @@
   display: grid;
   align-items: start;
   padding-top: var(--header-height);
-  padding-inline: 1.5rem;
+  padding-inline: 1rem;
   grid-template-columns: 1fr;
 
   @media (min-width: 40rem) {
-    padding-inline: 2.5rem;
+    padding-inline: 1.5rem;
   }
 
   @media (min-width: 64rem) {
