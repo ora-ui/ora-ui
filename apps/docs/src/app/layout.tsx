@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
 import './globals.css';
 import './layout.css';
 import { cn } from '@/lib/utils';
@@ -25,15 +26,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn(geist.variable, geistMono.variable)} suppressHydrationWarning>
       <body className="flex min-h-screen flex-col font-sans antialiased">
-        <div className="RootLayout">
-          <div className="RootLayoutContainer">
-            <div className="RootLayoutContent">
-              <AppHeader />
-              <main>{children}</main>
+        <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
+          <div className="RootLayout">
+            <div className="RootLayoutContainer">
+              <div className="RootLayoutContent">
+                <AppHeader />
+                <main>{children}</main>
+              </div>
+              <span className="AppFooter"></span>
             </div>
-            <span className="AppFooter"></span>
           </div>
-        </div>
+        </ThemeProvider>
       </body>
     </html>
   );

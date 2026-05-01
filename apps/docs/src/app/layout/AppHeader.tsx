@@ -9,7 +9,9 @@ import { Logo } from '../assets/Logo';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
+import { Separator } from '@/components/ui/separator';
 import { MobileNav } from '@/app/docs/components/mobile-nav';
+import { ModeSwitcher } from './ModeSwitcher';
 
 function SearchIcon() {
   return (
@@ -40,7 +42,7 @@ export function HeaderDesktopActions({ onSearchOpen, showSearch }: HeaderActions
         <button
           type="button"
           onClick={onSearchOpen}
-          className={cn(buttonVariants({ variant: 'surface' }))}
+          className={cn(buttonVariants({ variant: 'surface', className: 'mr-3' }))}
           aria-label="Search"
         >
           <SearchIcon />
@@ -63,6 +65,8 @@ export function HeaderDesktopActions({ onSearchOpen, showSearch }: HeaderActions
       >
         <GitHubIcon />
       </a>
+      <Separator orientation="vertical" className="h-4" />
+      <ModeSwitcher />
     </div>
   );
 }
@@ -81,6 +85,7 @@ export function HeaderMobileActions({ onSearchOpen, showSearch }: HeaderActionsP
         </button>
       )}
       <MobileNav />
+      <ModeSwitcher />
     </div>
   );
 }
@@ -103,7 +108,7 @@ export function AppHeader() {
   }, [showSearch]);
 
   return (
-    <header className="absolute left-0 top-0 flex justify-between h-(--header-height) items-center w-full pl-6 sm:pl-10 lg:pl-8">
+    <header className="absolute left-0 top-0 flex justify-between h-(--header-height) items-center w-full pl-4 lg:pl-10">
       <Link href="/">
         <Logo />
       </Link>
