@@ -1,9 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Collapsible as CollapsiblePrimitive } from '@base-ui/react/collapsible';
 import { Slot } from '@radix-ui/react-slot';
-import { ChevronRightIcon } from '@heroicons/react/16/solid';
 
 import { cn } from '@/lib/utils';
 
@@ -84,7 +82,7 @@ function SidebarContent({ className, ...props }: React.HTMLAttributes<HTMLDivEle
   return (
     <div
       data-slot="sidebar-content"
-      className={cn('flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-2', className)}
+      className={cn('flex flex-1 flex-col gap-1 overflow-y-auto px-7 py-5', className)}
       {...props}
     />
   );
@@ -107,54 +105,33 @@ function SidebarFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElem
 
 /* ---------- SidebarGroup ---------- */
 
-interface SidebarGroupContextValue {
-  open: boolean;
-}
-
-const SidebarGroupContext = React.createContext<SidebarGroupContextValue>({ open: true });
-
-interface SidebarGroupProps {
+interface SidebarGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  defaultOpen?: boolean;
-  className?: string;
 }
 
-function SidebarGroup({ children, defaultOpen = true, className }: SidebarGroupProps) {
-  const [open, setOpen] = React.useState(defaultOpen);
-
+function SidebarGroup({ children, className, ...props }: SidebarGroupProps) {
   return (
-    <SidebarGroupContext.Provider value={{ open }}>
-      <CollapsiblePrimitive.Root
-        data-slot="sidebar-group"
-        open={open}
-        onOpenChange={setOpen}
-        className={cn('flex flex-col', className)}
-      >
-        {children}
-      </CollapsiblePrimitive.Root>
-    </SidebarGroupContext.Provider>
+    <div data-slot="sidebar-group" className={cn('flex flex-col', className)} {...props}>
+      {children}
+    </div>
   );
 }
 
 /* ---------- SidebarGroupLabel ---------- */
 
-interface SidebarGroupLabelProps extends React.HTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-}
-
-function SidebarGroupLabel({ className, children, ...props }: SidebarGroupLabelProps) {
+function SidebarGroupLabel({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <CollapsiblePrimitive.Trigger
+    <div
       data-slot="sidebar-group-label"
-      className={cn(
-        'group/sidebar-group-label flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs font-medium text-secondary hover:bg-hover transition-colors',
-        className
-      )}
+      className={cn('py-1.5 text-sm  text-muted', className)}
       {...props}
     >
-      <ChevronRightIcon className="size-3.5 shrink-0 transition-transform duration-200 group-data-[open]/sidebar-group-label:rotate-90" />
-      <span>{children}</span>
-    </CollapsiblePrimitive.Trigger>
+      {children}
+    </div>
   );
 }
 
@@ -162,9 +139,9 @@ function SidebarGroupLabel({ className, children, ...props }: SidebarGroupLabelP
 
 function SidebarGroupContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <CollapsiblePrimitive.Panel
+    <div
       data-slot="sidebar-group-content"
-      className={cn('flex flex-col gap-0.5 overflow-hidden py-1', className)}
+      className={cn('flex flex-col gap-0.5 py-1', className)}
       {...props}
     />
   );
@@ -185,8 +162,8 @@ function SidebarItem({ className, asChild = false, active, ...props }: SidebarIt
       data-slot="sidebar-item"
       data-active={active}
       className={cn(
-        'flex items-center gap-2 rounded-md px-2 py-1.5 pl-7 text-sm text-secondary hover:bg-hover hover:text-primary transition-colors',
-        active && 'bg-hover text-primary font-medium',
+        'flex items-center gap-2 rounded-md px-2 py-1.5 pl-4 text-sm text-primary not-data-active:hover:bg-hover/60',
+        active && 'bg-active/60',
         className
       )}
       {...props}

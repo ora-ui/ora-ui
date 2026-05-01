@@ -63,7 +63,7 @@ export function PlaygroundSidebar() {
           if (entries.length === 0) return null;
 
           return (
-            <SidebarGroup key={group} defaultOpen>
+            <SidebarGroup key={group}>
               <SidebarGroupLabel>{capitalize(group)}</SidebarGroupLabel>
               <SidebarGroupContent>
                 {entries.map((entry) => {
