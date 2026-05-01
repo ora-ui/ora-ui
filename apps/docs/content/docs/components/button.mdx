@@ -117,8 +117,7 @@ export default function ButtonTheme() {
 
 Icons can be placed alongside button text. The button handles icon sizing automatically.
 
-{/* prettier-ignore-start */}
-{/* Icon + text must be inline — MDX wraps multiline text children in <p> tags */}
+{/* prettier-ignore — icon + text must be inline; MDX wraps multiline children in <p> tags */}
 
 <div className="flex gap-2">
   <Button>
@@ -130,7 +129,6 @@ Icons can be placed alongside button text. The button handles icon sizing automa
     Upload
   </Button>
 </div>
-{/* prettier-ignore-end */}
 
 ```tsx
 import { CloudArrowUpIcon, PlusCircleIcon } from '@heroicons/react/16/solid';

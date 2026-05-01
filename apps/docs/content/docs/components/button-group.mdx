@@ -100,8 +100,7 @@ export default function ButtonGroupVertical() {
 
 Buttons in a group support icons the same way standalone buttons do.
 
-{/* prettier-ignore-start */}
-{/* Icon + text must be inline — MDX wraps multiline text children in <p> tags */}
+{/* prettier-ignore — icon + text must be inline; MDX wraps multiline children in <p> tags */}
 
 <ButtonGroup>
   <Button variant="surface">
@@ -113,7 +112,6 @@ Buttons in a group support icons the same way standalone buttons do.
     <ChevronRightIcon />
   </Button>
 </ButtonGroup>
-{/* prettier-ignore-end */}
 
 ```tsx
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/16/solid';
@@ -184,8 +182,7 @@ export default function ButtonGroupIconButtons() {
 
 Use `ButtonGroupSeparator` to divide buttons. Recommended for `solid` and `soft` variants — not needed for `outline`, which relies on its border for separation.
 
-{/* prettier-ignore-start */}
-{/* Icon + text must be inline — MDX wraps multiline text children in <p> tags */}
+{/* prettier-ignore — icon + text must be inline; MDX wraps multiline children in <p> tags */}
 
 <ButtonGroup>
   <ButtonGroup>
@@ -211,7 +208,6 @@ Use `ButtonGroupSeparator` to divide buttons. Recommended for `solid` and `soft`
     </Button>
   </ButtonGroup>
 </ButtonGroup>
-{/* prettier-ignore-end */}
 
 ```tsx
 import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/16/solid';
