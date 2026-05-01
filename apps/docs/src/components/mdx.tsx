@@ -110,7 +110,14 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       />
     ),
     p: ({ className, ...props }: React.ComponentProps<'p'>) => (
-      <p className={cn('leading-relaxed not-first:mt-3', className)} {...props} />
+      <p
+        className={cn(
+          'leading-relaxed not-first:mt-3',
+          '[&>code]:rounded-xs [&>code]:bg-ui [&>code]:px-1 [&>code]:py-0.5',
+          className
+        )}
+        {...props}
+      />
     ),
     strong: ({ className, ...props }: React.ComponentProps<'strong'>) => (
       <strong className={cn('font-semibold', className)} {...props} />
@@ -148,13 +155,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
         return <code className={cn('font-mono', className)} {...props} />;
       }
       return (
-        <code
-          className={cn(
-            'rounded-xs px-1.5 py-0.5 font-mono text-[0.8rem] wrap-break-word',
-            className
-          )}
-          {...props}
-        />
+        <code className={cn('font-mono text-[0.8rem] wrap-break-word', className)} {...props} />
       );
     },
     blockquote: ({ className, ...props }: React.ComponentProps<'blockquote'>) => (
