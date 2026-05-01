@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SearchDialog } from './SearchDialog';
 
@@ -9,6 +9,7 @@ import { Logo } from '../assets/Logo';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
+import { Link } from '@/components/ui/link';
 import { Separator } from '@/components/ui/separator';
 import { MobileNav } from '@/app/docs/components/mobile-nav';
 import { ModeSwitcher } from './ModeSwitcher';
@@ -109,10 +110,16 @@ export function AppHeader() {
 
   return (
     <header className="absolute left-0 top-0 flex justify-between h-(--header-height) items-center w-full pl-4 lg:pl-10">
-      <Link href="/">
+      <NextLink href="/">
         <Logo />
-      </Link>
-      <HeaderDesktopActions onSearchOpen={() => setSearchOpen(true)} showSearch={showSearch} />
+      </NextLink>
+      <div className="hidden lg:flex items-center gap-8">
+        <nav className="flex items-center gap-6 text-sm">
+          <Link render={<NextLink href="/docs" />}>Documentation</Link>
+          {/* <Link render={<NextLink href="/docs/components" />}>Components</Link> */}
+        </nav>
+        <HeaderDesktopActions onSearchOpen={() => setSearchOpen(true)} showSearch={showSearch} />
+      </div>
       <HeaderMobileActions onSearchOpen={() => setSearchOpen(true)} showSearch={showSearch} />
       {showSearch && <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />}
     </header>
