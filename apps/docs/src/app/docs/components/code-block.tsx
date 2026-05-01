@@ -26,10 +26,13 @@ export function CodeBlock({ className, style, children, ...props }: React.Compon
   }
 
   return (
-    <div className="group relative my-6">
+    <div className="group relative mt-3 mb-5">
       <pre
         ref={ref}
-        className={cn('overflow-x-auto rounded-md border border-line py-4 text-sm', className)}
+        className={cn(
+          'overflow-x-auto rounded-md border border-line bg-surface py-4 text-sm',
+          className
+        )}
         style={style}
         {...props}
       >

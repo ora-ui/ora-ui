@@ -21,12 +21,7 @@ import { Badge } from '@/components/ui/badge';
 
 The `variant` prop controls the visual style of the badge.
 
-<div className="flex flex-wrap gap-2">
-  <Badge variant="solid">Solid</Badge>
-  <Badge variant="outline">Outline</Badge>
-  <Badge variant="surface">Surface</Badge>
-  <Badge variant="soft">Soft</Badge>
-</div>
+<ComponentPreview name="badge-variants">
 
 ```tsx
 import { Badge } from '@/components/ui/badge';
@@ -43,21 +38,13 @@ export default function BadgeVariants() {
 }
 ```
 
+</ComponentPreview>
+
 ## Theme
 
 The `theme` prop applies a color scheme across all variants.
 
-<div className="flex flex-wrap gap-2">
-  <Badge variant="solid" theme="gray">
-    Gray
-  </Badge>
-  <Badge variant="solid" theme="accent">
-    Accent
-  </Badge>
-  <Badge variant="solid" theme="destructive">
-    Destructive
-  </Badge>
-</div>
+<ComponentPreview name="badge-theme">
 
 ```tsx
 import { Badge } from '@/components/ui/badge';
@@ -79,28 +66,15 @@ export default function BadgeTheme() {
 }
 ```
 
+</ComponentPreview>
+
 ## Examples
 
 ### With Icon
 
 Icons can be placed inline alongside a label.
 
-{/* prettier-ignore — icon + text must be inline; MDX wraps multiline children in <p> tags */}
-
-<div className="flex flex-wrap gap-2">
-  <Badge variant="soft" theme="warning">
-    <ClockIcon />
-    In Progress
-  </Badge>
-  <Badge variant="soft" theme="accent">
-    <EyeIcon />
-    In Review
-  </Badge>
-  <Badge variant="soft" theme="success">
-    <CheckCircleIcon />
-    Completed
-  </Badge>
-</div>
+<ComponentPreview name="badge-with-icon">
 
 ```tsx
 import { CheckCircleIcon, ClockIcon, EyeIcon } from '@heroicons/react/16/solid';
@@ -126,21 +100,13 @@ export default function BadgeWithIcon() {
 }
 ```
 
+</ComponentPreview>
+
 ### Icon Only
 
 Use `size="icon"` for compact status indicators where space is limited.
 
-<div className="flex flex-wrap gap-2">
-  <Badge size="icon" variant="soft" theme="warning">
-    <ClockIcon />
-  </Badge>
-  <Badge size="icon" variant="soft" theme="accent">
-    <EyeIcon />
-  </Badge>
-  <Badge size="icon" variant="soft" theme="success">
-    <CheckCircleIcon />
-  </Badge>
-</div>
+<ComponentPreview name="badge-icon-only">
 
 ```tsx
 import { CheckCircleIcon, ClockIcon, EyeIcon } from '@heroicons/react/16/solid';
@@ -163,11 +129,13 @@ export default function BadgeIconOnly() {
 }
 ```
 
+</ComponentPreview>
+
 ### As a Link
 
 Pass `render={<a />}` to render the badge as an anchor element.
 
-<Badge render={<a href="#" />}>New feature</Badge>
+<ComponentPreview name="badge-as-link">
 
 ```tsx
 import { Badge } from '@/components/ui/badge';
@@ -176,6 +144,8 @@ export default function BadgeAsLink() {
   return <Badge render={<a href="/changelog" />}>New feature</Badge>;
 }
 ```
+
+</ComponentPreview>
 
 ## Props
 

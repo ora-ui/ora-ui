@@ -53,13 +53,7 @@ import { Button } from '@/components/ui/button';
 
 The `variant` prop controls the visual style of the button.
 
-<div className="flex gap-2">
-  <Button variant="solid">Solid</Button>
-  <Button variant="outline">Outline</Button>
-  <Button variant="surface">Surface</Button>
-  <Button variant="soft">Soft</Button>
-  <Button variant="ghost">Ghost</Button>
-</div>
+<ComponentPreview name="button-variants">
 
 ```tsx
 import { Button } from '@/components/ui/button';
@@ -77,21 +71,13 @@ export default function ButtonVariants() {
 }
 ```
 
+</ComponentPreview>
+
 ## Theme
 
 The `theme` prop applies a color scheme across all variants.
 
-<div className="flex gap-2">
-  <Button variant="solid" theme="gray">
-    Gray
-  </Button>
-  <Button variant="solid" theme="accent">
-    Accent
-  </Button>
-  <Button variant="solid" theme="destructive">
-    Destructive
-  </Button>
-</div>
+<ComponentPreview name="button-theme">
 
 ```tsx
 import { Button } from '@/components/ui/button';
@@ -113,22 +99,13 @@ export default function ButtonTheme() {
 }
 ```
 
+</ComponentPreview>
+
 ## With Icon
 
 Icons can be placed alongside button text. The button handles icon sizing automatically.
 
-{/* prettier-ignore — icon + text must be inline; MDX wraps multiline children in <p> tags */}
-
-<div className="flex gap-2">
-  <Button>
-    <PlusCircleIcon />
-    Create New
-  </Button>
-  <Button variant="soft">
-    <CloudArrowUpIcon />
-    Upload
-  </Button>
-</div>
+<ComponentPreview name="button-with-icon">
 
 ```tsx
 import { CloudArrowUpIcon, PlusCircleIcon } from '@heroicons/react/16/solid';
@@ -150,6 +127,8 @@ export default function ButtonWithIcon() {
 }
 ```
 
+</ComponentPreview>
+
 ## Icon Button
 
 Use `size="icon"` for icon-only buttons.
@@ -159,9 +138,7 @@ Use `size="icon"` for icon-only buttons.
   way to describe the button's purpose.
 </Callout>
 
-<Button size="icon" aria-label="Add">
-  <PlusCircleIcon />
-</Button>
+<ComponentPreview name="button-icon-button">
 
 ```tsx
 import { PlusCircleIcon } from '@heroicons/react/16/solid';
@@ -175,6 +152,8 @@ export default function ButtonIconButton() {
   );
 }
 ```
+
+</ComponentPreview>
 
 ## Props
 

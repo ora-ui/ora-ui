@@ -28,6 +28,8 @@ const badgeVariants = cva(
         gray: '',
         accent: '',
         destructive: '',
+        warning: '',
+        success: '',
       },
     },
     defaultVariants: {
