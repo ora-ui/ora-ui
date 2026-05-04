@@ -14,21 +14,20 @@ const promiseCache = new Map<string, Promise<{ default: PlaygroundComponent }>>(
 export function ComponentLoader({ slug, searchParams }: ComponentLoaderProps) {
   const entry = getEntryBySlug(slug);
 
-  if (!entry) {
-    return null;
-  }
-
-  // Cache the promise per slug to keep it stable across renders
   const loadPromise = useMemo(() => {
+    if (!entry) return null;
     if (!promiseCache.has(slug)) {
       promiseCache.set(slug, entry.load());
     }
     return promiseCache.get(slug)!;
   }, [slug, entry]);
 
-  // React's use() hook unwraps the cached promise
-  const module = use(loadPromise);
-  const { Preview, defaults } = module.default;
+  if (!entry || !loadPromise) {
+    return null;
+  }
+
+  const loaded = use(loadPromise);
+  const { Preview, defaults } = loaded.default;
   const mergedParams = { ...defaults, ...searchParams };
 
   return <Preview searchParams={mergedParams} />;
