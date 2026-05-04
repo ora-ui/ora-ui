@@ -1,3 +1,4 @@
 {
-  "*": "prettier --ignore-unknown --write"
+  "*": "prettier --ignore-unknown --write",
+  "apps/docs/**/*.{ts,tsx,js,jsx}": "pnpm --filter docs exec eslint --max-warnings=0 --no-warn-ignored"
 }

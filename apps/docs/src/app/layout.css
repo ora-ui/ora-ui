@@ -1,0 +1,122 @@
+.RootLayout {
+  position: relative;
+  z-index: 0;
+  --gridline-dot-size: 3px;
+  --gridline-gap: 1px;
+
+  @media (min-width: 64rem) {
+    padding-inline: var(--root-layout-padding);
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      height: 1px;
+      right: 0;
+      left: 0;
+      margin-top: -1px;
+      background-image: repeating-linear-gradient(
+        to right,
+        var(--color-line) 0,
+        var(--color-line) var(--gridline-dot-size),
+        transparent var(--gridline-dot-size),
+        transparent calc(var(--gridline-dot-size) + var(--gridline-gap))
+      );
+      background-size: calc(var(--gridline-dot-size) + var(--gridline-gap)) 1px;
+    }
+
+    &:before {
+      top: var(--header-height);
+    }
+
+    &:after {
+      bottom: var(--header-height);
+      margin-bottom: -1px;
+      z-index: 1;
+    }
+  }
+}
+
+.RootLayoutContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-inline: auto;
+  min-height: 100dvh;
+  max-width: calc(var(--breakpoint-max-layout-width) - var(--root-layout-padding) * 2);
+
+  @media (min-width: 64rem) {
+    padding-block: var(--header-height);
+    padding-bottom: 0;
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        var(--color-line) 0,
+        var(--color-line) var(--gridline-dot-size),
+        transparent var(--gridline-dot-size),
+        transparent calc(var(--gridline-dot-size) + var(--gridline-gap))
+      );
+      background-size: 1px calc(var(--gridline-dot-size) + var(--gridline-gap));
+    }
+
+    &:before {
+      left: 0;
+    }
+
+    &:after {
+      right: 0;
+    }
+  }
+}
+
+.RootLayoutContent {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  /* background-color: var(--color-content); */
+}
+
+.ContentLayoutRoot {
+  --sidebar-width: 17.5rem;
+
+  display: grid;
+  align-items: start;
+  padding-top: var(--header-height);
+  padding-inline: 1rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 40rem) {
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    padding-top: 0;
+    padding-inline: 0;
+    grid-template-columns: var(--sidebar-width) 1fr;
+  }
+}
+
+.ContentLayoutMain {
+  min-width: 0;
+  width: 100%;
+  padding-bottom: var(--header-height);
+}
+
+.AppFooter {
+  @media (min-width: 64rem) {
+    width: 100%;
+    height: var(--header-height);
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}

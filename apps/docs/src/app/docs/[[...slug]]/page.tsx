@@ -1,14 +1,8 @@
-import { source } from "@/lib/source";
-import {
-  DocsPage,
-  DocsBody,
-  DocsTitle,
-  DocsDescription,
-} from "fumadocs-ui/layouts/docs/page";
-import { getMDXComponents } from "@/components/mdx";
-import { createRelativeLink } from "fumadocs-ui/mdx";
-import { notFound } from "next/navigation";
-import type { Metadata } from "next";
+import { source } from '@/lib/source';
+import { getMDXComponents } from '@/components/mdx';
+import { TableOfContents } from '@/components/ui/table-of-contents';
+import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 
 type PageProps = {
   params: Promise<{ slug?: string[] }>;
@@ -22,17 +16,22 @@ export default async function Page(props: PageProps) {
   const MDX = page.data.body;
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
-      <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
-      <DocsBody>
-        <MDX
-          components={getMDXComponents({
-            a: createRelativeLink(source, page),
-          })}
-        />
-      </DocsBody>
-    </DocsPage>
+    <div className="flex">
+      <div className="flex w-full max-w-3xl flex-col gap-6 py-8 sm:px-6">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-3xl font-semibold tracking-tight">{page.data.title}</h1>
+          {page.data.description && (
+            <p className="text-base text-secondary">{page.data.description}</p>
+          )}
+        </div>
+        <div className="w-full flex-1">
+          <MDX components={getMDXComponents()} />
+        </div>
+      </div>
+      <div className="hidden xl:block">
+        <TableOfContents toc={page.data.toc} />
+      </div>
+    </div>
   );
 }
 

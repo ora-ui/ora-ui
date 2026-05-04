@@ -12,6 +12,9 @@ import {
   EnvelopeIcon,
   DeviceMobileIcon as DevicePhoneMobileIcon,
   CaretDownIcon as ChevronDownIcon,
+  CaretDownIcon,
+  PlusIcon,
+  DownloadSimpleIcon,
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,9 +34,9 @@ import {
   DropdownMenuSubContent,
 } from '@/components/ui/dropdown-menu';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
-import { ComponentDisplay } from './component-display';
-import { SelectControl } from './controls';
-import { DROPDOWN_VARIANTS, DROPDOWN_THEMES, DROPDOWN_SCENARIOS } from './constants';
+import { PreviewShell } from '../../components/preview-shell';
+import { SelectControl } from '../../components/controls';
+import { DROPDOWN_VARIANTS, DROPDOWN_THEMES, DROPDOWN_SCENARIOS } from '../../components/constants';
 
 type DropdownVariant = (typeof DROPDOWN_VARIANTS)[number];
 type DropdownTheme = (typeof DROPDOWN_THEMES)[number];
@@ -48,6 +51,12 @@ const SCENARIO_OPTIONS = [
   { label: 'With Radio', value: 'with-radio' },
   { label: 'With Sub-menu', value: 'with-submenu' },
 ];
+
+export const defaults = {
+  variant: 'soft',
+  theme: 'gray',
+  scenario: 'basic',
+};
 
 interface ScenarioContentProps {
   variant: DropdownVariant;
@@ -245,10 +254,16 @@ function ScenarioContent({
   }
 }
 
-export function DropdownMenuSection() {
-  const [variant, setVariant] = React.useState<DropdownVariant>('soft');
-  const [theme, setTheme] = React.useState<DropdownTheme>('gray');
-  const [scenario, setScenario] = React.useState<DropdownScenario>('basic');
+function DropdownMenuPreview({ searchParams }: { searchParams: Record<string, string> }) {
+  const [variant, setVariant] = React.useState<DropdownVariant>(
+    (searchParams.variant as DropdownVariant) ?? (defaults.variant as DropdownVariant)
+  );
+  const [theme, setTheme] = React.useState<DropdownTheme>(
+    (searchParams.theme as DropdownTheme) ?? (defaults.theme as DropdownTheme)
+  );
+  const [scenario, setScenario] = React.useState<DropdownScenario>(
+    (searchParams.scenario as DropdownScenario) ?? (defaults.scenario as DropdownScenario)
+  );
 
   const preview = (
     <DropdownMenu>
@@ -265,9 +280,7 @@ export function DropdownMenuSection() {
   );
 
   return (
-    <ComponentDisplay
-      name="Dropdown Menu"
-      slug="dropdown-menu"
+    <PreviewShell
       preview={preview}
       controls={
         <>
@@ -293,41 +306,40 @@ export function DropdownMenuSection() {
           />
         </>
       }
-    >
-      <div
-        className="grid gap-x-6 gap-y-3"
-        style={{ gridTemplateColumns: `auto repeat(${DROPDOWN_THEMES.length}, auto)` }}
-      >
-        <div />
-        {DROPDOWN_THEMES.map((t) => (
-          <div key={t} className="text-xs font-medium text-foreground-subtle capitalize">
-            {t}
-          </div>
-        ))}
-
-        {DROPDOWN_VARIANTS.map((v) => (
-          <React.Fragment key={v}>
-            <div className="flex items-center pr-5 text-xs text-foreground-subtle capitalize">
-              {v}
-            </div>
-            {DROPDOWN_THEMES.map((t) => (
-              <div key={t} className="flex items-center">
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    render={
-                      <Button variant="outline" size="sm">
-                        Open
-                        <ChevronDownIcon />
-                      </Button>
-                    }
-                  />
-                  <WithGroupsContent variant={v} theme={t} />
-                </DropdownMenu>
-              </div>
-            ))}
-          </React.Fragment>
-        ))}
-      </div>
-    </ComponentDisplay>
+      variants={<DropdownMenuVariants />}
+    />
   );
 }
+
+function DropdownMenuVariants() {
+  return (
+    <div className="flex flex-wrap items-center justify-center">
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button variant="soft" aria-label="Copy options">
+              Add file
+              <CaretDownIcon weight="fill" />
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem>
+            <PlusIcon />
+            Create new file
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <DownloadSimpleIcon />
+            Upload files
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+}
+
+export default {
+  Preview: DropdownMenuPreview,
+  Variants: DropdownMenuVariants,
+  defaults,
+};

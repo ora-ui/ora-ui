@@ -1,13 +1,25 @@
 'use client';
 
 import * as React from 'react';
-import { StarIcon } from '@phosphor-icons/react';
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CaretDownIcon,
+  CopyIcon,
+  StarIcon,
+} from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
-import { ComponentDisplay } from './component-display';
-import { SelectControl } from './controls';
-import { BUTTON_VARIANTS } from './constants';
+import { PreviewShell } from '../../components/preview-shell';
+import { SelectControl } from '../../components/controls';
+import { BUTTON_VARIANTS } from '../../components/constants';
 
 type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
 type Orientation = 'horizontal' | 'vertical';
@@ -30,6 +42,13 @@ const CONTENT_OPTIONS = [
   { label: 'Icon', value: 'icon' },
   { label: 'Mixed', value: 'mixed' },
 ];
+
+export const defaults = {
+  variant: 'outline',
+  orientation: 'horizontal',
+  items: '3',
+  content: 'text',
+};
 
 function withSeparators(
   buttons: React.ReactNode[],
@@ -82,11 +101,17 @@ function renderItems(
   return withSeparators(buttons, variant, orientation);
 }
 
-export function ButtonGroupSection() {
-  const [orientation, setOrientation] = React.useState<Orientation>('horizontal');
-  const [variant, setVariant] = React.useState<ButtonVariant>('outline');
-  const [items, setItems] = React.useState('3');
-  const [content, setContent] = React.useState<Content>('text');
+function ButtonGroupPreview({ searchParams }: { searchParams: Record<string, string> }) {
+  const [orientation, setOrientation] = React.useState<Orientation>(
+    (searchParams.orientation as Orientation) ?? (defaults.orientation as Orientation)
+  );
+  const [variant, setVariant] = React.useState<ButtonVariant>(
+    (searchParams.variant as ButtonVariant) ?? (defaults.variant as ButtonVariant)
+  );
+  const [items, setItems] = React.useState(searchParams.items ?? defaults.items);
+  const [content, setContent] = React.useState<Content>(
+    (searchParams.content as Content) ?? (defaults.content as Content)
+  );
 
   const itemCount = parseInt(items, 10);
 
@@ -97,9 +122,7 @@ export function ButtonGroupSection() {
   );
 
   return (
-    <ComponentDisplay
-      name="Button Group"
-      slug="button-group"
+    <PreviewShell
       preview={preview}
       controls={
         <>
@@ -127,34 +150,55 @@ export function ButtonGroupSection() {
           />
         </>
       }
-    >
-      <div className="flex items-start gap-8">
-        <div className="space-y-2">
-          <span className="text-xs text-foreground-subtle">Horizontal</span>
-          <ButtonGroup>
-            <Button variant="outline">Left</Button>
-            <Button variant="outline">Center</Button>
-            <Button variant="outline">Right</Button>
-          </ButtonGroup>
-        </div>
-        <div className="space-y-2">
-          <span className="text-xs text-foreground-subtle">Vertical</span>
-          <ButtonGroup orientation="vertical">
-            <Button variant="outline">Top</Button>
-            <Button variant="outline">Bottom</Button>
-          </ButtonGroup>
-        </div>
-        <div className="space-y-2">
-          <span className="text-xs text-foreground-subtle">Mixed</span>
-          <ButtonGroup>
-            <Button variant="outline">Left</Button>
-            <Button variant="outline">Center</Button>
-            <Button variant="outline" size="icon" aria-label="More">
-              <StarIcon />
-            </Button>
-          </ButtonGroup>
-        </div>
-      </div>
-    </ComponentDisplay>
+      variants={<ButtonGroupVariants />}
+    />
   );
 }
+
+function ButtonGroupVariants() {
+  return (
+    <div className="flex flex-wrap items-center justify-center">
+      <ButtonGroup>
+        <ButtonGroup>
+          <Button variant="soft">
+            <CopyIcon />
+            Copy page
+          </Button>
+          <ButtonGroupSeparator />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="soft" size="icon" aria-label="Copy options">
+                  <CaretDownIcon />
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>View as markdown</DropdownMenuItem>
+              <DropdownMenuItem>Open in ChatGPT</DropdownMenuItem>
+              <DropdownMenuItem>Open in Claude</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </ButtonGroup>
+        <ButtonGroup>
+          <ButtonGroup>
+            <Button variant="soft" size="icon" aria-label="Previous">
+              <ArrowLeftIcon />
+            </Button>
+          </ButtonGroup>
+          <ButtonGroup>
+            <Button variant="soft" size="icon" aria-label="Next">
+              <ArrowRightIcon />
+            </Button>
+          </ButtonGroup>
+        </ButtonGroup>
+      </ButtonGroup>
+    </div>
+  );
+}
+
+export default {
+  Preview: ButtonGroupPreview,
+  Variants: ButtonGroupVariants,
+  defaults,
+};

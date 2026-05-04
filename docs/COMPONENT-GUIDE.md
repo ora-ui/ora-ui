@@ -75,14 +75,22 @@ of its current state alongside the requirements for confirmation.
 Build in this order:
 
 1. **Types** — define the variant, theme, and prop types
-2. **getThemeStyles** — if the component supports theming, write the
-   theme styles function (see [Conventions — Theme styles function](conventions/INDEX.md#theme-styles-function))
-3. **CVA definition** — structural styles, variant classes
-4. **CSS custom properties** — define component-scoped custom properties
+2. **CVA definition** — structural styles using semantic tokens
+   (see [Conventions — CVA variant definition](conventions/INDEX.md#cva-variant-definition))
+   - Use semantic token classes: `bg-ui`, `text-primary`, `border-line-ui`
+   - Variants define visual hierarchy: solid, outline, surface, soft, ghost
+   - Each variant uses appropriate semantic tokens for its background/text/border
+3. **CSS custom properties** — define component-scoped custom properties
    for the customisation points identified during requirements gathering
    (see [Conventions — CSS custom properties](conventions/INDEX.md#css-custom-properties))
-5. **Component function** — wrap the Base UI primitive (or build from
+4. **Component function** — wrap the Base UI primitive (or build from
    scratch if no primitive exists), apply styles, data attributes
+   - Set `data-slot` for CSS targeting
+   - Set `data-variant` to reflect current variant
+   - Set `data-theme` only when theme is not 'gray' (gray is default)
+5. **Theming** — if component supports theming beyond gray, ensure theme
+   palettes are defined in globals.css with `[data-theme]` selectors
+   (see [Conventions — Theming via semantic tokens](conventions/INDEX.md#theming-via-semantic-tokens-and-data-theme))
 6. **Exports** — export the component and its variants
 
 For compositional components (multiple sub-components), follow the
@@ -98,28 +106,18 @@ The playground serves the "see before you install" principle — users
 should be able to explore the component across a variety of scenarios
 before committing to it.
 
-### What to show
-
-Derive the scenarios to display from two sources:
-
-1. **The Base UI docs** — examples in the primitive's documentation
-   reveal the different states and configurations the component can
-   exist in (e.g., hover, with checkbox items, with radio items)
-2. **The gathered requirements** — the variant landscape, themes, and
-   component-specific props established during the requirements step
-
 ### Structure
 
 Each playground section has two tabs:
 
-- **Overview** — a grid showing the component across all variant/theme
-  combinations at a glance
+- **Showcase** — demonstrates the component's breadth and versatility.
+  The content is open-ended and varies per component — a badge might
+  show a few theme/variant combinations alongside a number badge, while
+  tabs might show different orientations and indicator styles. **Ask
+  the user what they want in the showcase** during requirements
+  gathering; do not assume a default layout.
 - **Playground** — an interactive preview with controls for each
   configurable prop
-
-Balance coverage with cognitive load. Show enough scenarios to give
-users a strong sense of the component's versatility, but don't
-overwhelm with redundant or trivial variations.
 
 See the button or dropdown-menu playground sections as reference
 implementations.
@@ -129,7 +127,7 @@ implementations.
 When a component is complete, ensure the following exist:
 
 - **Component implementation** — the component source file
-- **Playground section** — overview grid and interactive playground
+- **Playground section** — showcase and interactive playground
 - **Constants** — variant/theme arrays added to the shared constants file
 - **Documentation page** — MDX file with frontmatter (title, description),
   installation command, usage example, variant/theme showcases, and a

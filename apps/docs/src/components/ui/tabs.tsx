@@ -5,7 +5,9 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-type TabsVariant = 'line' | 'soft';
+type TabsVariant = 'soft' | 'solid';
+
+const TabsContext = React.createContext<{ variant: TabsVariant }>({ variant: 'soft' });
 
 function Tabs({ className, ...props }: TabsPrimitive.Root.Props) {
   return (
@@ -32,7 +34,7 @@ function TabsSurface({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 
 function TabsList({
   className,
-  variant = 'line',
+  variant = 'soft',
   track = true,
   transition = false,
   children,
@@ -45,70 +47,55 @@ function TabsList({
   const isSoft = variant === 'soft';
 
   return (
-    <TabsPrimitive.List
-      data-slot="tabs-list"
-      data-variant={variant}
-      className={cn(
-        'relative flex w-fit items-center',
-        'data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-start',
-        variant === 'line' && [
-          'gap-1',
-          track && 'data-[orientation=horizontal]:shadow-[inset_0_-1px_0_var(--line)]',
-          track && 'data-[orientation=vertical]:shadow-[inset_-1px_0_0_var(--line)]',
-        ],
-        isSoft && 'gap-0.5',
-        className
-      )}
-      {...props}
-    >
-      {children}
-      <TabsPrimitive.Indicator
-        data-slot="tabs-indicator"
+    <TabsContext.Provider value={{ variant }}>
+      <TabsPrimitive.List
+        data-slot="tabs-list"
+        data-variant={variant}
         className={cn(
-          'pointer-events-none absolute',
-          transition &&
-            'motion-safe:transition-[translate,width,height] motion-safe:duration-200 motion-safe:ease-in-out',
-          isSoft && [
-            // Anchor to bottom-left; translate to exact tab position for both orientations
-            'bottom-0 left-0 z-0 rounded-sm',
-            'h-(--active-tab-height) w-(--active-tab-width)',
-            'translate-x-(--active-tab-left) -translate-y-(--active-tab-bottom)',
-            'bg-hover',
-          ],
-          variant === 'line' && [
-            'z-10 bg-foreground',
-            // Horizontal: 2px line at the active tab's bottom edge
-            'data-[orientation=horizontal]:bottom-0',
-            'data-[orientation=horizontal]:left-0',
-            'data-[orientation=horizontal]:h-0.5',
-            'data-[orientation=horizontal]:w-(--active-tab-width)',
-            'data-[orientation=horizontal]:translate-x-(--active-tab-left)',
-            'data-[orientation=horizontal]:-translate-y-(--active-tab-bottom)',
-            // Vertical: 2px line at the active tab's right edge
-            'data-[orientation=vertical]:top-0',
-            'data-[orientation=vertical]:right-0',
-            'data-[orientation=vertical]:w-0.5',
-            'data-[orientation=vertical]:h-(--active-tab-height)',
-            'data-[orientation=vertical]:translate-y-(--active-tab-top)',
-          ]
+          'relative flex w-fit items-center',
+          'data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-start',
+          isSoft && 'gap-0.5',
+          className
         )}
-      />
-    </TabsPrimitive.List>
+        {...props}
+      >
+        {children}
+        <TabsPrimitive.Indicator
+          data-slot="tabs-indicator"
+          data-variant={variant}
+          className={cn(
+            'pointer-events-none absolute',
+            transition &&
+              'motion-safe:transition-[translate,width,height] motion-safe:duration-200 motion-safe:ease-in-out',
+            [
+              // Anchor to bottom-left; translate to exact tab position for both orientations
+              'bottom-0 left-0 z-0 rounded-sm',
+              'h-(--active-tab-height) w-(--active-tab-width)',
+              'translate-x-(--active-tab-left) -translate-y-(--active-tab-bottom)',
+              isSoft ? 'bg-active' : 'bg-fill',
+            ]
+          )}
+        />
+      </TabsPrimitive.List>
+    </TabsContext.Provider>
   );
 }
 
 function TabsTab({ className, ...props }: TabsPrimitive.Tab.Props) {
+  const { variant } = React.useContext(TabsContext);
+  const isSoft = variant === 'soft';
   return (
     <TabsPrimitive.Tab
       data-slot="tabs-tab"
+      data-variant={variant}
       className={cn(
         'relative z-10 inline-flex cursor-default select-none items-center justify-center rounded-sm',
         'data-[orientation=vertical]:w-full data-[orientation=vertical]:justify-start',
-        'whitespace-nowrap px-3 py-1.5 text-sm font-medium in-data-[variant=line]:pb-2.5',
-        'text-foreground-subtle transition-colors',
-        'hover:text-foreground data-active:text-foreground',
+        'whitespace-nowrap px-2 py-1 text-sm font-medium',
+        'text-secondary hover:not-data-active:text-primary data-active:transition-colors',
+        isSoft ? 'data-active:text-primary' : 'data-active:text-on-fill',
         'focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-2',
-        'data-disabled:pointer-events-none data-disabled:opacity-50',
+        'data-disabled:pointer-events-none data-disabled:text-disabled',
         className
       )}
       {...props}

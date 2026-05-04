@@ -4,6 +4,9 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     optimizePackageImports: ['@phosphor-icons/react'],
+    turbopack: {
+      root: import.meta.dirname,
+    },
   },
 };
 

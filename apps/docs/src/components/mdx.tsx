@@ -1,4 +1,4 @@
-import defaultMdxComponents from 'fumadocs-ui/mdx';
+import * as React from 'react';
 import {
   CloudArrowUpIcon,
   PlusCircleIcon,
@@ -27,6 +27,13 @@ import {
   TextAlignJustifyIcon,
 } from '@radix-ui/react-icons';
 import type { MDXComponents } from 'mdx/types';
+import NextImage from 'next/image';
+import { cn } from '@/lib/utils';
+import { CodeBlock } from '@/app/docs/components/code-block';
+import { Steps, Step } from '@/app/docs/components/steps';
+import { Callout } from '@/app/docs/components/callout';
+import { ComponentPreview } from '@/components/component-preview';
+import { Tabs, TabsList, TabsTab, TabsPanel, TabsSurface } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
@@ -57,7 +64,141 @@ import {
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
-    ...defaultMdxComponents,
+    // HTML element overrides
+    h1: ({ className, ...props }: React.ComponentProps<'h1'>) => (
+      <h1
+        className={cn('text-3xl font-semibold tracking-tight text-primary', className)}
+        {...props}
+      />
+    ),
+    h2: ({ className, ...props }: React.ComponentProps<'h2'>) => (
+      <h2
+        className={cn(
+          'mt-10 scroll-m-20 text-2xl font-semibold tracking-tight text-primary',
+          '[&+h3]:mt-4 [&+p]:mt-3',
+          className
+        )}
+        {...props}
+      />
+    ),
+    h3: ({ className, ...props }: React.ComponentProps<'h3'>) => (
+      <h3
+        className={cn(
+          'mt-8 scroll-m-20 text-xl font-medium tracking-tight text-primary',
+          '[&+p]:mt-2',
+          className
+        )}
+        {...props}
+      />
+    ),
+    h4: ({ className, ...props }: React.ComponentProps<'h4'>) => (
+      <h4
+        className={cn('mt-6 scroll-m-20 text-lg font-medium text-primary', className)}
+        {...props}
+      />
+    ),
+    h5: ({ className, ...props }: React.ComponentProps<'h5'>) => (
+      <h5
+        className={cn('mt-4 scroll-m-20 text-base font-medium text-primary', className)}
+        {...props}
+      />
+    ),
+    h6: ({ className, ...props }: React.ComponentProps<'h6'>) => (
+      <h6
+        className={cn('mt-4 scroll-m-20 text-base font-medium text-primary', className)}
+        {...props}
+      />
+    ),
+    p: ({ className, ...props }: React.ComponentProps<'p'>) => (
+      <p
+        className={cn(
+          'leading-relaxed not-first:mt-3',
+          '[&>code]:rounded-xs [&>code]:bg-ui [&>code]:px-1 [&>code]:py-0.5',
+          className
+        )}
+        {...props}
+      />
+    ),
+    strong: ({ className, ...props }: React.ComponentProps<'strong'>) => (
+      <strong className={cn('font-semibold', className)} {...props} />
+    ),
+    a: ({ className, ...props }: React.ComponentProps<'a'>) => (
+      <a
+        className={cn('font-medium underline underline-offset-4 hover:text-secondary', className)}
+        {...props}
+      />
+    ),
+    ul: ({ className, ...props }: React.ComponentProps<'ul'>) => (
+      <ul className={cn('my-6 ml-6 list-disc', className)} {...props} />
+    ),
+    ol: ({ className, ...props }: React.ComponentProps<'ol'>) => (
+      <ol className={cn('my-6 ml-6 list-decimal', className)} {...props} />
+    ),
+    li: ({ className, ...props }: React.ComponentProps<'li'>) => (
+      <li className={cn('mt-2', className)} {...props} />
+    ),
+    img: ({ className, alt, src, width, height, ...props }: React.ComponentProps<'img'>) => (
+      <span className="my-6 block overflow-hidden rounded-md">
+        <NextImage
+          className={cn('w-full', className)}
+          alt={alt ?? ''}
+          src={src as string}
+          width={typeof width === 'number' ? width : 1200}
+          height={typeof height === 'number' ? height : 630}
+          {...props}
+        />
+      </span>
+    ),
+    pre: (props) => <CodeBlock {...props} />,
+    code: ({ className, ...props }: React.ComponentProps<'code'>) => {
+      if (className?.includes('language-')) {
+        return <code className={cn('font-mono', className)} {...props} />;
+      }
+      return (
+        <code className={cn('font-mono text-[0.8rem] wrap-break-word', className)} {...props} />
+      );
+    },
+    blockquote: ({ className, ...props }: React.ComponentProps<'blockquote'>) => (
+      <blockquote
+        className={cn('mt-6 border-l-2 border-line pl-6 italic text-secondary', className)}
+        {...props}
+      />
+    ),
+    hr: ({ className, ...props }: React.ComponentProps<'hr'>) => (
+      <hr className={cn('my-8 border-line', className)} {...props} />
+    ),
+    table: ({ className, ...props }: React.ComponentProps<'table'>) => (
+      <div className="my-6 w-full overflow-y-auto rounded-xl border border-line">
+        <table className={cn('relative w-full overflow-hidden text-sm', className)} {...props} />
+      </div>
+    ),
+    tr: ({ className, ...props }: React.ComponentProps<'tr'>) => (
+      <tr className={cn('m-0 border-b border-line p-0', className)} {...props} />
+    ),
+    th: ({ className, ...props }: React.ComponentProps<'th'>) => (
+      <th
+        className={cn(
+          'px-4 py-2 text-left font-semibold [&[align=center]]:text-center [&[align=right]]:text-right',
+          className
+        )}
+        {...props}
+      />
+    ),
+    td: ({ className, ...props }: React.ComponentProps<'td'>) => (
+      <td
+        className={cn(
+          'px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right',
+          className
+        )}
+        {...props}
+      />
+    ),
+    // Docs components
+    Steps,
+    Step,
+    Callout,
+    ComponentPreview,
+    // Ora UI components
     Badge,
     Button,
     ButtonGroup,
@@ -72,6 +213,11 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ToggleGroup,
     ToggleGroupItem,
     Separator,
+    Tabs,
+    TabsList,
+    TabsTab,
+    TabsPanel,
+    TabsSurface,
     DropdownMenu,
     DropdownMenuPortal,
     DropdownMenuTrigger,

@@ -4,31 +4,24 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
-type Theme = 'gray' | 'accent' | 'destructive' | 'warning' | 'success' | (string & {});
+type Theme = 'gray' | 'accent' | 'destructive' | (string & {});
 
-const getThemeStyles = (theme: Theme): React.CSSProperties => {
-  const isColor = theme !== 'gray';
-  return {
-    '--background-solid': isColor ? `var(--${theme}-700)` : `var(--${theme}-950)`,
-    '--background-ui': `var(--${theme}-200)`,
-    '--line-ui': `var(--${theme}-400)`,
-    '--foreground': isColor ? `var(--${theme}-900)` : `var(--${theme}-950)`,
-    ...(isColor ? { '--foreground-solid': `var(--${theme}-foreground-solid)` } : {}),
-  } as React.CSSProperties;
-};
-
+/**
+ * Slots: badge
+ */
 const badgeVariants = cva(
-  'group/badge inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-[max(min(var(--radius),6px),calc(var(--radius)-100px))] border border-transparent font-medium whitespace-nowrap focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&>svg]:pointer-events-none [&>svg]:size-3!',
+  "group/badge inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-[min(var(--radius),max(8px,calc(var(--radius)-10px)))] border border-transparent whitespace-nowrap font-medium text-ui-label focus-visible:outline-2 focus-visible:outline-focus [&>svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3",
   {
     variants: {
       variant: {
-        solid: 'bg-background-solid text-foreground-solid',
-        soft: 'bg-background-ui text-foreground',
-        outline: 'border-line-ui text-foreground',
-        surface: 'border-line-ui bg-background-ui/40 text-foreground',
+        solid:
+          'bg-fill text-on-fill focus-visible:outline-focus-fill focus-visible:outline-offset-2',
+        soft: 'bg-ui',
+        outline: 'border-line-ui bg-transparent',
+        surface: 'border-line-ui bg-ui/40',
       },
       size: {
-        default: 'max-h-6 px-1.5 py-0.5 text-xs',
+        default: 'min-w-4.5 h-5 px-1.5 text-xs',
         icon: 'size-5 p-0 text-xs',
       },
       theme: {
@@ -53,16 +46,18 @@ function Badge({
   size = 'default',
   theme = 'gray',
   render,
-  style,
   ...props
-}: useRender.ComponentProps<'span'> &
-  VariantProps<typeof badgeVariants> & { style?: React.CSSProperties }) {
+}: useRender.ComponentProps<'span'> & VariantProps<typeof badgeVariants>) {
   return useRender({
     defaultTagName: 'span',
     props: mergeProps<'span'>(
       {
         className: cn(badgeVariants({ variant, size, theme }), className),
-        style: { ...getThemeStyles(theme as Theme), ...style },
+        ...({
+          'data-slot': 'badge',
+          'data-variant': variant,
+          'data-theme': theme !== 'gray' ? theme : undefined,
+        } as React.HTMLAttributes<HTMLSpanElement>),
       },
       props
     ),

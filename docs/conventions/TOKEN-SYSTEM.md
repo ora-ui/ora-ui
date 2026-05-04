@@ -19,19 +19,21 @@ Reference for the Ora token architecture. Update as the system evolves.
 
 ```css
 --background   /* page/app floor */
---surface-1    /* panels, sidebars */
---surface-2    /* cards, inset sections */
+--surface      /* panels, sidebars, elevated containers */
+--overlay      /* modals, popovers, floating elements */
+--ui           /* component backgrounds (alpha-based for layering) */
 ```
 
-Surfaces give consumers a way to establish visual hierarchy above the page background. Two levels defined upfront — a third added if a concrete need arises.
+Surfaces establish visual hierarchy. `--ui` is alpha-based so it adapts to any background surface.
 
 **Current values:**
 
 ```css
 :root {
-  --background: var(--gray-base);
-  --surface-1: var(--gray-50);
-  --surface-2: var(--gray-100);
+  --background: oklch(0.985 0 0);
+  --surface: oklch(0.97 0 0);
+  --overlay: oklch(0.985 0 0);
+  --ui: oklch(0 0 0 / 0.059);
 }
 ```
 
@@ -39,38 +41,61 @@ Surfaces give consumers a way to establish visual hierarchy above the page backg
 
 ### Interactive States
 
-#### Ghost / default
+Interactive state tokens use alpha values so they work on any background.
 
 ```css
---hover: var(--gray-a200) --active: var(--gray-a300);
+--ui           /* component resting background */
+--hover        /* hover state background */
+--active       /* active/pressed state background */
+--fill         /* solid filled backgrounds (buttons, badges) */
 ```
 
-#### Outline / surface variants
-
-Components with visible chrome at rest use softer states — the border/background already signals interactability.
+**Current values:**
 
 ```css
---hover-ui:  /* ~50% of --hover  — to be defined as fixed alpha */ --active-ui:
-  /* ~75% of --active — to be defined as fixed alpha */
-  --line-ui: /* border at 65% weight for outline/surface resting state */;
+:root {
+  --ui: oklch(0 0 0 / 0.059);
+  --hover: oklch(0 0 0 / 0.091);
+  --active: oklch(0 0 0 / 0.123);
+  --fill: oklch(0.14 0 0);
+}
 ```
 
-#### Colored variants
+**Component-scoped gradients:**
 
-Each color (`accent`, `success`, `warning`, `destructive`) has `a100`, `a200`, `a300` alpha steps in `colors.css`.
+Variants can have gradients applied via CSS using `[data-slot]` and `[data-variant]` selectors. These layer on top of the semantic token backgrounds:
 
-- `a100` → component resting background
-- `a200` → hover
-- `a300` → active
+```css
+[data-slot='button'][data-variant='soft'] {
+  background-color: transparent;
+  background-image: linear-gradient(
+    to top,
+    color-mix(in oklch, var(--ui) 100%, transparent),
+    color-mix(in oklch, var(--ui) 50%, transparent)
+  );
+}
+```
+
+Inputs use the same tokens but without interaction gradients (static background only).
 
 ---
 
 ### Lines
 
 ```css
---line-subtle   /* decorative separators */
---line          /* standard dividers */
---line-ui       /* interactive component borders */
+--line          /* standard dividers, solid */
+--line-subtle   /* decorative separators, lighter */
+--line-ui       /* interactive component borders (alpha-based) */
+```
+
+**Current values:**
+
+```css
+:root {
+  --line: oklch(0.925 0 0);
+  --line-subtle: oklch(0.945 0 0);
+  --line-ui: oklch(0 0 0 / 0.112);
+}
 ```
 
 ---
@@ -78,12 +103,27 @@ Each color (`accent`, `success`, `warning`, `destructive`) has `a100`, `a200`, `
 ### Foreground
 
 ```css
---foreground          /* primary text */
---foreground-subtle   /* secondary/muted text */
---foreground-solid    /* text on solid/filled backgrounds */
+--primary      /* primary text */
+--secondary    /* secondary/muted text */
+--muted        /* tertiary/disabled text */
+--disabled     /* disabled state text */
+--on-fill      /* text on solid/filled backgrounds */
+--ui-label     /* component label text (theme-aware) */
 ```
 
-Foreground tokens are solid, not alpha — text contrast must be guaranteed.
+Foreground tokens are solid (not alpha) to guarantee contrast. `--ui-label` adapts per theme via `[data-theme]` selectors.
+
+**Current values:**
+
+```css
+:root {
+  --primary: oklch(0.07 0 0);
+  --secondary: oklch(0.45 0 0);
+  --muted: oklch(0.556 0 0);
+  --disabled: oklch(0.7 0 0);
+  --on-fill: oklch(0.985 0 0);
+}
+```
 
 ---
 
@@ -91,8 +131,50 @@ Foreground tokens are solid, not alpha — text contrast must be guaranteed.
 
 ```css
 --focus         /* focus ring on standard backgrounds */
---focus-solid   /* focus ring on solid/filled backgrounds */
+--focus-fill    /* focus ring on solid/filled backgrounds */
 ```
+
+**Current values:**
+
+```css
+:root {
+  --focus: oklch(0.85 0 0);
+  --focus-fill: oklch(0.35 0 0);
+}
+```
+
+---
+
+### Theme Palettes
+
+Each theme (accent, destructive) defines a full palette of semantic tokens:
+
+```css
+/* Accent palette */
+--accent-ui           /* component backgrounds */
+--accent-fill         /* solid fills */
+--accent-hover        /* hover state */
+--accent-active       /* active state */
+--accent-focus        /* focus ring */
+--accent-focus-fill   /* focus ring on fills */
+--accent-line-ui      /* borders */
+--accent-secondary    /* secondary text */
+--accent-primary      /* primary text */
+--accent-on-fill      /* text on fills */
+```
+
+When `data-theme="accent"` is set, the base tokens (`--ui`, `--fill`, etc.) are remapped to the accent variants:
+
+```css
+[data-theme='accent'] {
+  --ui: var(--accent-ui);
+  --fill: var(--accent-fill);
+  --hover: var(--accent-hover);
+  /* ... */
+}
+```
+
+This allows components to use semantic tokens everywhere while automatically adapting to the current theme.
 
 ---
 
@@ -186,5 +268,5 @@ your values once and leave them.
 
 ## Open Questions
 
-- Exact alpha values for `--hover-ui` and `--active-ui` — currently applied as `/50` and `/75` in components, need to be fixed as tokens.
-- Whether a third surface level is needed — deferred until a concrete use case arises.
+- Whether additional surface levels are needed — deferred until concrete use cases arise.
+- Whether to add more theme palettes (success, warning, info) or keep minimal set.

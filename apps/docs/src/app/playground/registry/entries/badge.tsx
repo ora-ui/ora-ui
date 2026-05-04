@@ -1,12 +1,12 @@
 'use client';
 
 import * as React from 'react';
-import { StarIcon } from '@phosphor-icons/react';
+import { CircleIcon, SparkleIcon, StarIcon } from '@phosphor-icons/react';
 import { Badge } from '@/components/ui/badge';
 import { ToolbarSeparator } from '@/components/ui/toolbar';
-import { ComponentDisplay } from './component-display';
-import { TextControl, SelectControl } from './controls';
-import { BADGE_VARIANTS, BADGE_THEMES } from './constants';
+import { PreviewShell } from '../../components/preview-shell';
+import { TextControl, SelectControl } from '../../components/controls';
+import { BADGE_VARIANTS, BADGE_THEMES } from '../../components/constants';
 
 type BadgeVariant = (typeof BADGE_VARIANTS)[number];
 type BadgeTheme = (typeof BADGE_THEMES)[number];
@@ -20,11 +20,24 @@ const ICON_OPTIONS = [
   { label: 'Icon only', value: 'icon-only' },
 ];
 
-export function BadgeSection() {
-  const [text, setText] = React.useState('Badge');
-  const [icon, setIcon] = React.useState<IconVariant>('none');
-  const [variant, setVariant] = React.useState<BadgeVariant>('soft');
-  const [theme, setTheme] = React.useState<BadgeTheme>('gray');
+export const defaults = {
+  variant: 'soft',
+  theme: 'gray',
+  label: 'Badge',
+  icon: 'none',
+};
+
+function BadgePreview({ searchParams }: { searchParams: Record<string, string> }) {
+  const [variant, setVariant] = React.useState<BadgeVariant>(
+    (searchParams.variant as BadgeVariant) ?? (defaults.variant as BadgeVariant)
+  );
+  const [theme, setTheme] = React.useState<BadgeTheme>(
+    (searchParams.theme as BadgeTheme) ?? (defaults.theme as BadgeTheme)
+  );
+  const [text, setText] = React.useState(searchParams.label ?? defaults.label);
+  const [icon, setIcon] = React.useState<IconVariant>(
+    (searchParams.icon as IconVariant) ?? (defaults.icon as IconVariant)
+  );
 
   const preview =
     icon === 'icon-only' ? (
@@ -39,9 +52,7 @@ export function BadgeSection() {
     );
 
   return (
-    <ComponentDisplay
-      name="Badge"
-      slug="badge"
+    <PreviewShell
       preview={preview}
       controls={
         <>
@@ -69,35 +80,37 @@ export function BadgeSection() {
           />
         </>
       }
-    >
-      <div
-        className="grid gap-x-4 gap-y-2"
-        style={{
-          gridTemplateColumns: `auto repeat(${BADGE_THEMES.length}, 1fr)`,
-        }}
-      >
-        <div />
-        {BADGE_THEMES.map((t) => (
-          <div key={t} className="text-xs font-medium text-foreground-subtle capitalize">
-            {t}
-          </div>
-        ))}
-
-        {BADGE_VARIANTS.map((v) => (
-          <React.Fragment key={v}>
-            <div className="flex items-center pr-5 text-xs text-foreground-subtle capitalize">
-              {v}
-            </div>
-            {BADGE_THEMES.map((t) => (
-              <div key={t} className="flex items-center">
-                <Badge variant={v} theme={t}>
-                  Badge
-                </Badge>
-              </div>
-            ))}
-          </React.Fragment>
-        ))}
-      </div>
-    </ComponentDisplay>
+      variants={<BadgeVariants />}
+    />
   );
 }
+
+function BadgeVariants() {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-3">
+      <Badge variant="soft" theme="destructive">
+        <CircleIcon weight="fill" className="size-2" />
+        Live
+      </Badge>
+      <Badge variant="solid" theme="accent">
+        <SparkleIcon weight="fill" />
+        New
+      </Badge>
+      <Badge variant="surface" theme="gray">
+        GET
+      </Badge>
+      <Badge variant="surface" theme="accent">
+        POST
+      </Badge>
+      <Badge variant="solid" theme="destructive">
+        8
+      </Badge>
+    </div>
+  );
+}
+
+export default {
+  Preview: BadgePreview,
+  Variants: BadgeVariants,
+  defaults,
+};
