@@ -16,16 +16,18 @@ export async function ComponentSource({ name }: ComponentSourceProps) {
 
   const lineCount = src.split('\n').length;
 
-  console.log('line count: ', lineCount);
-
   const highlighted = await highlight(src, {
     lang: 'tsx',
     themes: { light: 'github-light-default', dark: 'github-dark' },
   });
 
   return (
-    <CodeCollapsibleWrapper lineCount={lineCount}>
-      <CodeBlock>{highlighted}</CodeBlock>
-    </CodeCollapsibleWrapper>
+    <div className="mb-5 overflow-hidden rounded-md border border-line">
+      <CodeCollapsibleWrapper lineCount={lineCount}>
+        <div className="[&>div]:my-0 [&>div>pre]:rounded-none [&>div>pre]:border-0">
+          <CodeBlock>{highlighted}</CodeBlock>
+        </div>
+      </CodeCollapsibleWrapper>
+    </div>
   );
 }

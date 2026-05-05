@@ -61,8 +61,8 @@ export function CodeCollapsibleWrapper({
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-surface to-transparent" />
         )}
       </div>
-      <div ref={triggerRef} className="sticky bottom-0 z-10">
-        <Collapsible.Trigger className="w-full h-9 cursor-pointer border-t border-line bg-surface text-sm text-muted transition-colors hover:text-primary">
+      <div ref={triggerRef} className={cn('bottom-0 z-10', open && 'sticky')}>
+        <Collapsible.Trigger className="w-full h-9 cursor-pointer rounded-b-lg border-t border-line bg-surface text-sm text-muted transition-colors hover:text-primary">
           {open ? 'Show less' : 'Show more'}
         </Collapsible.Trigger>
       </div>

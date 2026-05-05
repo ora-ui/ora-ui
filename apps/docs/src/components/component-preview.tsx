@@ -23,7 +23,7 @@ export async function ComponentPreview({ name }: ComponentPreviewProps) {
   const Preview = entry?.component;
 
   return (
-    <div className="mt-3 mb-7 overflow-hidden rounded-lg border border-line">
+    <div className="mt-3 mb-7 rounded-lg border border-line">
       <div className="flex min-h-50 items-center justify-center p-6">
         {Preview ? (
           <Preview />
