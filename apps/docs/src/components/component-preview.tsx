@@ -1,6 +1,7 @@
 import { highlight } from 'fumadocs-core/highlight';
 import { registry } from '@/previews/registry';
 import { CodeBlock } from '@/app/docs/components/code-block';
+import { CodeCollapsibleWrapper } from '@/app/docs/components/code-collapsible-wrapper';
 
 interface ComponentPreviewProps {
   name: string;
@@ -9,8 +10,11 @@ interface ComponentPreviewProps {
 export async function ComponentPreview({ name }: ComponentPreviewProps) {
   const entry = registry[name];
 
-  const highlighted = entry?.source
-    ? await highlight(entry.source, {
+  const source = entry?.source ?? null;
+  const lineCount = source ? source.split('\n').length : 0;
+
+  const highlighted = source
+    ? await highlight(source, {
         lang: 'tsx',
         themes: { light: 'github-light-default', dark: 'github-dark' },
       })
@@ -28,8 +32,12 @@ export async function ComponentPreview({ name }: ComponentPreviewProps) {
         )}
       </div>
       {highlighted && (
-        <div className="border-t border-line [&>div]:my-0 [&>div>pre]:rounded-none [&>div>pre]:border-0">
-          <CodeBlock>{highlighted}</CodeBlock>
+        <div className="border-t border-line">
+          <CodeCollapsibleWrapper lineCount={lineCount}>
+            <div className="[&>div]:my-0 [&>div>pre]:rounded-none [&>div>pre]:border-0">
+              <CodeBlock>{highlighted}</CodeBlock>
+            </div>
+          </CodeCollapsibleWrapper>
         </div>
       )}
     </div>

@@ -12,5 +12,6 @@ export default {
   button: readSource('button.tsx'),
   badge: readSource('badge.tsx'),
   'button-group': readSource('button-group.tsx'),
+  'dropdown-menu': readSource('dropdown-menu.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;
