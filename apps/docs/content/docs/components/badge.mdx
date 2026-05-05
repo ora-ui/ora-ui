@@ -3,11 +3,43 @@ title: Badge
 description: A small status indicator for labelling and categorising content.
 ---
 
+<ComponentPreview name="badge-hero" />
+
 ## Installation
 
-```bash
-npx shadcn@latest add "https://ora-ui.com/r/badge.json"
-```
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    ```bash
+    npx shadcn@latest add "https://ora-ui.com/r/badge.json"
+    ```
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      ```bash
+      npm install @base-ui/react class-variance-authority
+      ```
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="badge" />
+
+      <Step>Update the import path</Step>
+
+      ```tsx
+      import { cn } from '@/lib/utils';
+      ```
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
 
 ## Usage
 
@@ -29,21 +61,19 @@ The `theme` prop applies a color scheme across all variants.
 
 <ComponentPreview name="badge-theme" />
 
-## Examples
-
-### With Icon
+## With icon
 
 Icons can be placed inline alongside a label.
 
 <ComponentPreview name="badge-with-icon" />
 
-### Icon Only
+## Icon only
 
 Use `size="icon"` for compact status indicators where space is limited.
 
 <ComponentPreview name="badge-icon-only" />
 
-### As a Link
+## As a link
 
 Pass `render={<a />}` to render the badge as an anchor element.
 

@@ -3,11 +3,43 @@ title: Button Group
 description: Groups related buttons together with shared borders and consistent styling.
 ---
 
+<ComponentPreview name="button-group-hero" />
+
 ## Installation
 
-```bash
-npx shadcn@latest add "https://ora-ui.com/r/button-group.json"
-```
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    ```bash
+    npx shadcn@latest add "https://ora-ui.com/r/button-group.json"
+    ```
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      ```bash
+      npm install @radix-ui/react-slot class-variance-authority
+      ```
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="button-group" />
+
+      <Step>Update the import path</Step>
+
+      ```tsx
+      import { cn } from '@/lib/utils';
+      ```
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
 
 ## Usage
 
@@ -22,39 +54,37 @@ import { Button } from '@/components/ui/button';
 </ButtonGroup>;
 ```
 
-## Examples
-
-### Default
+## Default
 
 A horizontal group of buttons sharing a continuous border.
 
 <ComponentPreview name="button-group-default" />
 
-### Vertical
+## Vertical
 
 Use `orientation="vertical"` to stack buttons.
 
 <ComponentPreview name="button-group-vertical" />
 
-### With Icons
+## With icons
 
 Buttons in a group support icons the same way standalone buttons do.
 
 <ComponentPreview name="button-group-with-icons" />
 
-### Icon Buttons
+## Icon buttons
 
 Groups of icon-only buttons for compact action bars.
 
 <ComponentPreview name="button-group-icon-buttons" />
 
-### With Separator
+## With separator
 
 Use `ButtonGroupSeparator` to divide buttons. Recommended for `solid` and `soft` variants — not needed for `outline`, which relies on its border for separation.
 
 <ComponentPreview name="button-group-with-separator" />
 
-### With Text
+## With text
 
 Use `ButtonGroupText` to attach a non-interactive label to the group.
 

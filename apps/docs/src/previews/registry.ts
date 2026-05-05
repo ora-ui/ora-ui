@@ -4,16 +4,19 @@ import path from 'path';
 
 // @scaffold:imports
 import DropdownMenuBasic from './dropdown-menu/dropdown-menu-basic';
+import ButtonHero from './button/button-hero';
 import ButtonVariants from './button/button-variants';
 import ButtonTheme from './button/button-theme';
 import ButtonWithIcon from './button/button-with-icon';
 import ButtonIconButton from './button/button-icon-button';
+import ButtonGroupHero from './button-group/button-group-hero';
 import ButtonGroupDefault from './button-group/button-group-default';
 import ButtonGroupVertical from './button-group/button-group-vertical';
 import ButtonGroupWithIcons from './button-group/button-group-with-icons';
 import ButtonGroupIconButtons from './button-group/button-group-icon-buttons';
 import ButtonGroupWithSeparator from './button-group/button-group-with-separator';
 import ButtonGroupWithText from './button-group/button-group-with-text';
+import BadgeHero from './badge/badge-hero';
 import BadgeVariants from './badge/badge-variants';
 import BadgeTheme from './badge/badge-theme';
 import BadgeWithIcon from './badge/badge-with-icon';
@@ -32,6 +35,10 @@ export const registry: Record<string, { component: React.ComponentType; source: 
     component: DropdownMenuBasic,
     source: readSource('dropdown-menu/dropdown-menu-basic.tsx'),
   },
+  'button-hero': {
+    component: ButtonHero,
+    source: readSource('button/button-hero.tsx'),
+  },
   'button-variants': {
     component: ButtonVariants,
     source: readSource('button/button-variants.tsx'),
@@ -44,6 +51,10 @@ export const registry: Record<string, { component: React.ComponentType; source: 
   'button-icon-button': {
     component: ButtonIconButton,
     source: readSource('button/button-icon-button.tsx'),
+  },
+  'button-group-hero': {
+    component: ButtonGroupHero,
+    source: readSource('button-group/button-group-hero.tsx'),
   },
   'button-group-default': {
     component: ButtonGroupDefault,
@@ -69,6 +80,7 @@ export const registry: Record<string, { component: React.ComponentType; source: 
     component: ButtonGroupWithText,
     source: readSource('button-group/button-group-with-text.tsx'),
   },
+  'badge-hero': { component: BadgeHero, source: readSource('badge/badge-hero.tsx') },
   'badge-variants': { component: BadgeVariants, source: readSource('badge/badge-variants.tsx') },
   'badge-theme': { component: BadgeTheme, source: readSource('badge/badge-theme.tsx') },
   'badge-with-icon': { component: BadgeWithIcon, source: readSource('badge/badge-with-icon.tsx') },
