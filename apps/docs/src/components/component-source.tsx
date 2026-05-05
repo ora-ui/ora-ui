@@ -2,6 +2,10 @@ import { highlight } from 'fumadocs-core/highlight';
 import sources from '@/components/ui/sources';
 import { CodeBlock } from '@/app/docs/components/code-block';
 import { CodeCollapsibleWrapper } from '@/app/docs/components/code-collapsible-wrapper';
+import {
+  CodeBlockCommandBar,
+  CodeBlockCopyButton,
+} from '@/app/docs/components/code-block-command-bar';
 
 interface ComponentSourceProps {
   name: string;
@@ -23,10 +27,17 @@ export async function ComponentSource({ name }: ComponentSourceProps) {
 
   return (
     <div className="mb-5 rounded-md border border-line">
-      <CodeCollapsibleWrapper lineCount={lineCount} triggerClassName="rounded-b-md">
-        <div className="[&>div]:my-0 [&>div>pre]:rounded-none [&>div>pre]:border-0">
-          <CodeBlock>{highlighted}</CodeBlock>
-        </div>
+      <CodeCollapsibleWrapper
+        lineCount={lineCount}
+        triggerClassName="rounded-b-md"
+        commandBar={
+          <CodeBlockCommandBar className="justify-between rounded-t-md">
+            <span className="px-1 text-sm text-muted">{`components/ui/${name}.tsx`}</span>
+            <CodeBlockCopyButton code={src} />
+          </CodeBlockCommandBar>
+        }
+      >
+        <CodeBlock>{highlighted}</CodeBlock>
       </CodeCollapsibleWrapper>
     </div>
   );

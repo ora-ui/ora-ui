@@ -29,7 +29,11 @@ import {
 import type { MDXComponents } from 'mdx/types';
 import NextImage from 'next/image';
 import { cn } from '@/lib/utils';
-import { CodeBlock } from '@/app/docs/components/code-block';
+import { CodeBlock, CodeBlockRoot } from '@/app/docs/components/code-block';
+import {
+  CodeBlockCommandBar,
+  CodeBlockCopyButton,
+} from '@/app/docs/components/code-block-command-bar';
 import { Steps, Step } from '@/app/docs/components/steps';
 import { Callout } from '@/app/docs/components/callout';
 import { ComponentPreview } from '@/components/component-preview';
@@ -62,6 +66,15 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
 } from '@/components/ui/dropdown-menu';
+
+function extractTextContent(node: React.ReactNode): string {
+  if (typeof node === 'string') return node;
+  if (typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(extractTextContent).join('');
+  if (React.isValidElement(node))
+    return extractTextContent((node.props as { children?: React.ReactNode }).children);
+  return '';
+}
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -150,7 +163,17 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
         />
       </span>
     ),
-    pre: (props) => <CodeBlock {...props} />,
+    pre: (props) => {
+      const code = extractTextContent(props.children);
+      return (
+        <CodeBlockRoot>
+          <CodeBlockCommandBar>
+            <CodeBlockCopyButton code={code} />
+          </CodeBlockCommandBar>
+          <CodeBlock {...props} />
+        </CodeBlockRoot>
+      );
+    },
     code: ({ className, ...props }: React.ComponentProps<'code'>) => {
       if (className?.includes('language-')) {
         return <code className={cn('font-mono', className)} {...props} />;

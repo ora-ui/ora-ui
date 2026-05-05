@@ -49,9 +49,7 @@ export async function ComponentPreview({ name }: ComponentPreviewProps) {
               </CodeBlockCommandBar>
             }
           >
-            <div className="[&>div]:my-0 [&>div>pre]:rounded-none [&>div>pre]:border-0">
-              <CodeBlock>{highlighted}</CodeBlock>
-            </div>
+            <CodeBlock>{highlighted}</CodeBlock>
           </CodeCollapsibleWrapper>
         </div>
       )}
