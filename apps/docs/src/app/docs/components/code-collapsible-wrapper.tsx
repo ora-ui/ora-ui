@@ -52,7 +52,7 @@ export function CodeCollapsibleWrapper({
           style={{
             maxHeight: open ? `${expandedHeight}px` : 'calc(10lh + 1rem)',
             overflow: 'hidden',
-            transition: 'max-height 0.3s ease-out',
+            transition: expandedHeight <= 800 ? 'max-height 0.3s ease-out' : undefined,
           }}
         >
           {children}
