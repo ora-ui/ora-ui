@@ -33,6 +33,7 @@ import { CodeBlock } from '@/app/docs/components/code-block';
 import { Steps, Step } from '@/app/docs/components/steps';
 import { Callout } from '@/app/docs/components/callout';
 import { ComponentPreview } from '@/components/component-preview';
+import { ComponentSource } from '@/components/component-source';
 import { Tabs, TabsList, TabsTab, TabsPanel, TabsSurface } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -198,6 +199,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Step,
     Callout,
     ComponentPreview,
+    ComponentSource,
     // Ora UI components
     Badge,
     Button,

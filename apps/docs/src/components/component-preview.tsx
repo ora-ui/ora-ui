@@ -1,12 +1,22 @@
+import { highlight } from 'fumadocs-core/highlight';
 import { registry } from '@/previews/registry';
+import { CodeBlock } from '@/app/docs/components/code-block';
 
 interface ComponentPreviewProps {
   name: string;
-  children?: React.ReactNode;
 }
 
-export function ComponentPreview({ name, children }: ComponentPreviewProps) {
-  const Preview = registry[name];
+export async function ComponentPreview({ name }: ComponentPreviewProps) {
+  const entry = registry[name];
+
+  const highlighted = entry?.source
+    ? await highlight(entry.source, {
+        lang: 'tsx',
+        themes: { light: 'github-light-default', dark: 'github-dark' },
+      })
+    : null;
+
+  const Preview = entry?.component;
 
   return (
     <div className="mt-3 mb-7 overflow-hidden rounded-lg border border-line">
@@ -17,9 +27,9 @@ export function ComponentPreview({ name, children }: ComponentPreviewProps) {
           <p className="text-sm text-secondary">Preview not found: {name}</p>
         )}
       </div>
-      {children && (
+      {highlighted && (
         <div className="border-t border-line [&>div]:my-0 [&>div>pre]:rounded-none [&>div>pre]:border-0">
-          {children}
+          <CodeBlock>{highlighted}</CodeBlock>
         </div>
       )}
     </div>
