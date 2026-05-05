@@ -22,8 +22,8 @@ export async function ComponentSource({ name }: ComponentSourceProps) {
   });
 
   return (
-    <div className="mb-5 overflow-hidden rounded-md border border-line">
-      <CodeCollapsibleWrapper lineCount={lineCount}>
+    <div className="mb-5 rounded-md border border-line">
+      <CodeCollapsibleWrapper lineCount={lineCount} triggerClassName="rounded-b-md">
         <div className="[&>div]:my-0 [&>div>pre]:rounded-none [&>div>pre]:border-0">
           <CodeBlock>{highlighted}</CodeBlock>
         </div>

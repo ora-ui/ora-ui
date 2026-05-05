@@ -10,6 +10,7 @@ interface CodeCollapsibleWrapperProps {
   threshold?: number;
   children: React.ReactNode;
   className?: string;
+  triggerClassName?: string;
 }
 
 export function CodeCollapsibleWrapper({
@@ -17,6 +18,7 @@ export function CodeCollapsibleWrapper({
   threshold = 15,
   children,
   className,
+  triggerClassName,
 }: CodeCollapsibleWrapperProps) {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLDivElement>(null);
@@ -62,7 +64,12 @@ export function CodeCollapsibleWrapper({
         )}
       </div>
       <div ref={triggerRef} className={cn('bottom-0 z-10', open && 'sticky')}>
-        <Collapsible.Trigger className="w-full h-9 cursor-pointer rounded-b-lg border-t border-line bg-surface text-sm text-muted transition-colors hover:text-primary">
+        <Collapsible.Trigger
+          className={cn(
+            'w-full h-9 cursor-pointer rounded-b-lg border-t border-line bg-surface text-sm text-muted transition-colors hover:text-primary',
+            triggerClassName
+          )}
+        >
           {open ? 'Show less' : 'Show more'}
         </Collapsible.Trigger>
       </div>
