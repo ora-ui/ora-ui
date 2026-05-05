@@ -30,10 +30,7 @@ import type { MDXComponents } from 'mdx/types';
 import NextImage from 'next/image';
 import { cn } from '@/lib/utils';
 import { CodeBlock, CodeBlockRoot } from '@/app/docs/components/code-block';
-import {
-  CodeBlockCommandBar,
-  CodeBlockCopyButton,
-} from '@/app/docs/components/code-block-command-bar';
+import { CodeBlockCopyButton } from '@/app/docs/components/code-block-command-bar';
 import { Steps, Step } from '@/app/docs/components/steps';
 import { Callout } from '@/app/docs/components/callout';
 import { ComponentPreview } from '@/components/component-preview';
@@ -167,9 +164,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       const code = extractTextContent(props.children);
       return (
         <CodeBlockRoot>
-          <CodeBlockCommandBar>
-            <CodeBlockCopyButton code={code} />
-          </CodeBlockCommandBar>
+          <CodeBlockCopyButton code={code} floating />
           <CodeBlock {...props} />
         </CodeBlockRoot>
       );

@@ -36,7 +36,7 @@ export function CodeBlockExpandButton() {
   );
 }
 
-export function CodeBlockCopyButton({ code }: { code: string }) {
+export function CodeBlockCopyButton({ code, floating }: { code: string; floating?: boolean }) {
   const [copied, setCopied] = React.useState(false);
 
   async function handleCopy() {
@@ -53,6 +53,20 @@ export function CodeBlockCopyButton({ code }: { code: string }) {
     }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  }
+
+  if (floating) {
+    return (
+      <Button
+        aria-label="Copy code"
+        variant="ghost"
+        size="icon-sm"
+        className="absolute top-2 right-2 text-muted hover:text-primary"
+        onClick={handleCopy}
+      >
+        {copied ? <CheckIcon /> : <CopySimpleIcon />}
+      </Button>
+    );
   }
 
   return (
