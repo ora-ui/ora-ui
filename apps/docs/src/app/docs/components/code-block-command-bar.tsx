@@ -26,7 +26,9 @@ export function CodeBlockCommandBar({
 }
 
 export function CodeBlockExpandButton() {
-  const { open, onOpenChange } = useCodeCollapsible();
+  const ctx = useCodeCollapsible();
+  if (!ctx) return null;
+  const { open, onOpenChange } = ctx;
   return (
     <Button variant="ghost" onClick={() => onOpenChange(!open)}>
       {open ? 'Collapse' : 'Expand'}

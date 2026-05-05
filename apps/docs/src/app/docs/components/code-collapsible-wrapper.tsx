@@ -13,9 +13,7 @@ interface CodeCollapsibleContextValue {
 const CodeCollapsibleContext = React.createContext<CodeCollapsibleContextValue | null>(null);
 
 export function useCodeCollapsible() {
-  const ctx = React.useContext(CodeCollapsibleContext);
-  if (!ctx) throw new Error('useCodeCollapsible must be used inside CodeCollapsibleWrapper');
-  return ctx;
+  return React.useContext(CodeCollapsibleContext);
 }
 
 interface CodeCollapsibleWrapperProps {
@@ -47,7 +45,12 @@ export function CodeCollapsibleWrapper({
   }, []);
 
   if (lineCount < threshold) {
-    return <>{children}</>;
+    return (
+      <>
+        {commandBar}
+        <div className="overflow-hidden rounded-b-lg">{children}</div>
+      </>
+    );
   }
 
   function handleOpenChange(next: boolean) {
