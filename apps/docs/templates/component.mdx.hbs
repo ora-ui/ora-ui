@@ -1,0 +1,68 @@
+---
+title: {{pascalCase name}}
+description: {{description}}
+---
+
+<ComponentPreview name="{{name}}-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    ```bash
+    npx shadcn@latest add "https://ora-ui.com/r/{{name}}.json"
+    ```
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      ```bash
+      npm install @base-ui/react class-variance-authority
+      ```
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="{{name}}" />
+
+      <Step>Update the import path</Step>
+
+      ```tsx
+      import { cn } from '@/lib/utils';
+      ```
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+{/* TODO: customise import and usage snippet */}
+
+```tsx
+import { {{pascalCase name}} } from '@/components/ui/{{name}}';
+
+<{{pascalCase name}}>{{pascalCase name}}</{{pascalCase name}}>;
+```
+
+{{#each variants}}
+## {{sentenceCase this}}
+
+{/* TODO: add description for the {{this}} variant */}
+
+<ComponentPreview name="{{@root.name}}-{{this}}" />
+
+{{/each}}
+## Props
+
+{/* TODO: document props from the component source */}
+
+| Prop | Type | Default |
+| ---- | ---- | ------- |
+| | | |

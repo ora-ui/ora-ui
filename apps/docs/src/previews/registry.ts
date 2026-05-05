@@ -29,8 +29,8 @@ function readSource(subpath: string): string {
   return fs.readFileSync(path.join(previewsDir, subpath), 'utf-8');
 }
 
-// @scaffold:entries
 export const registry: Record<string, { component: React.ComponentType; source: string }> = {
+  // @scaffold:entries
   'dropdown-menu-basic': {
     component: DropdownMenuBasic,
     source: readSource('dropdown-menu/dropdown-menu-basic.tsx'),
