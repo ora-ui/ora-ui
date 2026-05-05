@@ -5,10 +5,24 @@ import * as ReactDOM from 'react-dom';
 import { Collapsible } from '@base-ui/react/collapsible';
 import { cn } from '@/lib/utils';
 
+interface CodeCollapsibleContextValue {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+const CodeCollapsibleContext = React.createContext<CodeCollapsibleContextValue | null>(null);
+
+export function useCodeCollapsible() {
+  const ctx = React.useContext(CodeCollapsibleContext);
+  if (!ctx) throw new Error('useCodeCollapsible must be used inside CodeCollapsibleWrapper');
+  return ctx;
+}
+
 interface CodeCollapsibleWrapperProps {
   lineCount: number;
   threshold?: number;
   children: React.ReactNode;
+  commandBar?: React.ReactNode;
   className?: string;
   triggerClassName?: string;
 }
@@ -17,6 +31,7 @@ export function CodeCollapsibleWrapper({
   lineCount,
   threshold = 15,
   children,
+  commandBar,
   className,
   triggerClassName,
 }: CodeCollapsibleWrapperProps) {
@@ -47,32 +62,35 @@ export function CodeCollapsibleWrapper({
   }
 
   return (
-    <Collapsible.Root open={open} onOpenChange={handleOpenChange} className={cn(className)}>
-      <div className="relative">
-        <div
-          ref={contentRef}
-          style={{
-            maxHeight: open ? `${expandedHeight}px` : 'calc(10lh + 1rem)',
-            overflow: 'hidden',
-            transition: expandedHeight <= 800 ? 'max-height 0.3s ease-out' : undefined,
-          }}
-        >
-          {children}
-        </div>
-        {!open && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-surface to-transparent" />
-        )}
-      </div>
-      <div ref={triggerRef} className={cn('bottom-0 z-10', open && 'sticky')}>
-        <Collapsible.Trigger
-          className={cn(
-            'w-full h-9 cursor-pointer rounded-b-lg border-t border-line bg-surface text-sm text-muted transition-colors hover:text-primary',
-            triggerClassName
+    <CodeCollapsibleContext.Provider value={{ open, onOpenChange: handleOpenChange }}>
+      <Collapsible.Root open={open} onOpenChange={handleOpenChange} className={cn(className)}>
+        {commandBar}
+        <div className="relative">
+          <div
+            ref={contentRef}
+            style={{
+              maxHeight: open ? `${expandedHeight}px` : 'calc(10lh + 1rem)',
+              overflow: 'hidden',
+              transition: expandedHeight <= 800 ? 'max-height 0.3s ease-out' : undefined,
+            }}
+          >
+            {children}
+          </div>
+          {!open && (
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-surface to-transparent" />
           )}
-        >
-          {open ? 'Show less' : 'Show more'}
-        </Collapsible.Trigger>
-      </div>
-    </Collapsible.Root>
+        </div>
+        <div ref={triggerRef} className={cn('bottom-0 z-10', open && 'sticky')}>
+          <Collapsible.Trigger
+            className={cn(
+              'w-full h-9 cursor-pointer rounded-b-lg border-t border-line bg-surface text-sm text-muted transition-colors hover:text-primary',
+              triggerClassName
+            )}
+          >
+            {open ? 'Show less' : 'Show more'}
+          </Collapsible.Trigger>
+        </div>
+      </Collapsible.Root>
+    </CodeCollapsibleContext.Provider>
   );
 }

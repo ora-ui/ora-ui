@@ -2,6 +2,12 @@ import { highlight } from 'fumadocs-core/highlight';
 import { registry } from '@/previews/registry';
 import { CodeBlock } from '@/app/docs/components/code-block';
 import { CodeCollapsibleWrapper } from '@/app/docs/components/code-collapsible-wrapper';
+import {
+  CodeBlockCommandBar,
+  CodeBlockExpandButton,
+  CodeBlockCopyButton,
+} from '@/app/docs/components/code-block-command-bar';
+import { Separator } from '@/components/ui/separator';
 
 interface ComponentPreviewProps {
   name: string;
@@ -33,7 +39,16 @@ export async function ComponentPreview({ name }: ComponentPreviewProps) {
       </div>
       {highlighted && (
         <div className="border-t border-line">
-          <CodeCollapsibleWrapper lineCount={lineCount}>
+          <CodeCollapsibleWrapper
+            lineCount={lineCount}
+            commandBar={
+              <CodeBlockCommandBar>
+                <CodeBlockExpandButton />
+                <Separator orientation="vertical" />
+                <CodeBlockCopyButton code={source!} />
+              </CodeBlockCommandBar>
+            }
+          >
             <div className="[&>div]:my-0 [&>div>pre]:rounded-none [&>div>pre]:border-0">
               <CodeBlock>{highlighted}</CodeBlock>
             </div>
