@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 // @scaffold:imports
+import DropdownMenuBasic from './dropdown-menu/dropdown-menu-basic';
 import ButtonVariants from './button/button-variants';
 import ButtonTheme from './button/button-theme';
 import ButtonWithIcon from './button/button-with-icon';
@@ -27,6 +28,10 @@ function readSource(subpath: string): string {
 
 // @scaffold:entries
 export const registry: Record<string, { component: React.ComponentType; source: string }> = {
+  'dropdown-menu-basic': {
+    component: DropdownMenuBasic,
+    source: readSource('dropdown-menu/dropdown-menu-basic.tsx'),
+  },
   'button-variants': {
     component: ButtonVariants,
     source: readSource('button/button-variants.tsx'),
