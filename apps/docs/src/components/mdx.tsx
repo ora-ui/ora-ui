@@ -86,7 +86,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     h2: ({ className, ...props }: React.ComponentProps<'h2'>) => (
       <h2
         className={cn(
-          'mt-10 scroll-m-20 text-2xl font-semibold tracking-tight text-primary',
+          'mt-10 mb-2 scroll-m-20 text-2xl font-semibold tracking-tight text-primary',
           '[&+h3]:mt-4 [&+p]:mt-3',
           className
         )}
@@ -125,7 +125,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       <p
         className={cn(
           'leading-relaxed not-first:mt-3',
-          '[&>code]:rounded-xs [&>code]:bg-ui [&>code]:px-1 [&>code]:py-0.5',
+          '[&>code]:rounded-xs [&>code]:border [&>code]:border-dotted [&>code]:border-line [&>code]:bg-ui [&>code]:px-1 [&>code]:py-0.5',
           className
         )}
         {...props}
