@@ -35,6 +35,9 @@ import CheckboxGroupThemeDefault, {
 } from './checkbox-group/checkbox-group-theme';
 import CheckboxGroupParent from './checkbox-group/checkbox-group-parent';
 import CheckboxGroupNested from './checkbox-group/checkbox-group-nested';
+import DialogHero from './dialog/dialog-hero';
+import DialogDefault from './dialog/dialog-default';
+import DialogScrollable from './dialog/dialog-scrollable';
 
 // @scaffold:imports
 import DropdownMenuBasic from './dropdown-menu/dropdown-menu-basic';
@@ -189,6 +192,18 @@ export const registry: Record<string, RegistryEntry> = {
   'checkbox-group-nested': {
     component: CheckboxGroupNested,
     source: readSource('checkbox-group/checkbox-group-nested.tsx'),
+  },
+  'dialog-hero': {
+    component: DialogHero,
+    source: readSource('dialog/dialog-hero.tsx'),
+  },
+  'dialog-default': {
+    component: DialogDefault,
+    source: readSource('dialog/dialog-default.tsx'),
+  },
+  'dialog-scrollable': {
+    component: DialogScrollable,
+    source: readSource('dialog/dialog-scrollable.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-basic': {

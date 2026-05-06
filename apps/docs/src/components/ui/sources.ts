@@ -18,5 +18,6 @@ export default {
   avatar: readSource('avatar.tsx'),
   checkbox: readSource('checkbox.tsx'),
   'checkbox-group': readSource('checkbox-group.tsx'),
+  dialog: readSource('dialog.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;
