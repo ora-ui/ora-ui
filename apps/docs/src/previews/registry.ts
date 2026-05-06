@@ -4,6 +4,9 @@ import path from 'path';
 import AccordionHero from './accordion/accordion-hero';
 import AccordionDefault from './accordion/accordion-default';
 import AccordionMultiple from './accordion/accordion-multiple';
+import AlertDialogHero from './alert-dialog/alert-dialog-hero';
+import AlertDialogDefault from './alert-dialog/alert-dialog-default';
+import AlertDialogWithIcon from './alert-dialog/alert-dialog-with-icon';
 
 // @scaffold:imports
 import DropdownMenuBasic from './dropdown-menu/dropdown-menu-basic';
@@ -77,6 +80,18 @@ export const registry: Record<string, RegistryEntry> = {
   'accordion-multiple': {
     component: AccordionMultiple,
     source: readSource('accordion/accordion-multiple.tsx'),
+  },
+  'alert-dialog-hero': {
+    component: AlertDialogHero,
+    source: readSource('alert-dialog/alert-dialog-hero.tsx'),
+  },
+  'alert-dialog-default': {
+    component: AlertDialogDefault,
+    source: readSource('alert-dialog/alert-dialog-default.tsx'),
+  },
+  'alert-dialog-with-icon': {
+    component: AlertDialogWithIcon,
+    source: readSource('alert-dialog/alert-dialog-with-icon.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-basic': {

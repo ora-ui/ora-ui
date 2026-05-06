@@ -1,0 +1,99 @@
+---
+title: AlertDialog
+description: A modal dialog that interrupts the user with important content and expects a response.
+links:
+  doc: https://base-ui.com/react/components/alert-dialog
+  api: https://base-ui.com/react/components/alert-dialog#api-reference
+---
+
+<ComponentPreview name="alert-dialog-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/alert-dialog.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/alert-dialog.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/alert-dialog.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/alert-dialog.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="alert-dialog" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+
+<AlertDialog>
+  <AlertDialogTrigger render={<button>Open</button>} />
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+      <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <AlertDialogAction>Continue</AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>;
+```
+
+## Examples
+
+### Default
+
+A basic confirmation dialog with a title, description, and action buttons.
+
+<ComponentPreview name="alert-dialog-default" />
+
+### With Icon
+
+Use `AlertDialogMedia` to add a contextual icon in the header alongside the title and description.
+
+<ComponentPreview name="alert-dialog-with-icon" />
+
+## API Reference
+
+For more information, see the Base UI [AlertDialog API Reference](https://base-ui.com/react/components/alert-dialog#api-reference).

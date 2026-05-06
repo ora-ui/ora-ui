@@ -14,5 +14,6 @@ export default {
   'button-group': readSource('button-group.tsx'),
   'dropdown-menu': readSource('dropdown-menu.tsx'),
   accordion: readSource('accordion.tsx'),
+  'alert-dialog': readSource('alert-dialog.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;
