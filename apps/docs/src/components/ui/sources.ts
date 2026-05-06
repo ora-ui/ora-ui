@@ -13,5 +13,6 @@ export default {
   badge: readSource('badge.tsx'),
   'button-group': readSource('button-group.tsx'),
   'dropdown-menu': readSource('dropdown-menu.tsx'),
+  accordion: readSource('accordion.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;

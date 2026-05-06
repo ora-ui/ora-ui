@@ -10,7 +10,7 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
 1. **Verify** — check `apps/docs/src/components/ui/<name>.tsx` exists. If not, suggest `build-component` instead.
 
 2. **Check for existing docs** — check if `content/docs/components/<name>.mdx` exists.
-   - **Exists → update path**: read the existing MDX and restructure it to follow current conventions (add `## Examples` wrapper, demote example headings from `##` to `###`, replace any inline code blocks with `<ComponentPreview>`, ensure Props ends with Base UI link). Skip to step 6.
+   - **Exists → update path**: read the existing MDX and restructure it to follow current conventions (add `## Examples` wrapper, demote example headings from `##` to `###`, replace any inline code blocks with `<ComponentPreview>`, ensure `## API Reference` follows the API Reference convention). Skip to step 6.
    - **Does not exist → new path**: continue to step 3.
 
 3. **Read the component** — read the source to understand its prop surface and sub-components.
@@ -32,7 +32,7 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
 7. **Fill MDX TODOs** — in `content/docs/components/<name>.mdx`:
    - Replace the usage snippet (import + minimal JSX)
    - Add a one-line description above each `<ComponentPreview>`
-   - Fill the Props table from the component's TypeScript props
+   - Fill the `## API Reference` section — see API Reference convention below
 
 8. **Typecheck**:
 
@@ -44,13 +44,13 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
 
 ## Conventions
 
-See [REFERENCE.md](REFERENCE.md) for the full reference. Key rules:
+Full conventions are in [docs/conventions/COMPONENT-DOCS.md](../../../../docs/conventions/COMPONENT-DOCS.md). Quick reference:
 
-- Hero preview sits **above** Installation with no `## Hero` heading
-- Page order: Hero → Installation → Usage → Examples (`### per example`) → Props
-- `<ComponentPreview>` never contains inline code children
+- Page order: Hero → Installation → Usage → Examples (`### per example`) → API Reference
+- Hero sits above Installation with no heading; `<ComponentPreview>` never has inline code children
 - Manual install step 2 uses `<ComponentSource name="..." />`, never pasted source
-- Props table ends with a link to the Base UI primitive (if applicable)
+- **Compound primitive** (thin Base UI wrapper, no own props): replace API Reference section with a single link to the Base UI API Reference
+- **Own props** (CVA variants, custom logic): full table per sub-component, ending with a forwarding note
 
 ## What NOT to do
 

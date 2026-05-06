@@ -228,3 +228,9 @@ modifier (e.g., `text-foreground/50`) rather than inventing a new token.
 
 For the full token architecture, domains, and available tokens, see
 [TOKEN-SYSTEM.md](TOKEN-SYSTEM.md).
+
+---
+
+## Component documentation
+
+Conventions for docs pages — page structure, frontmatter, API Reference patterns, and `ComponentPreview` rules — are in [COMPONENT-DOCS.md](COMPONENT-DOCS.md).

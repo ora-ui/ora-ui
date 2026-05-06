@@ -1,6 +1,9 @@
 import type React from 'react';
 import fs from 'fs';
 import path from 'path';
+import AccordionHero from './accordion/accordion-hero';
+import AccordionDefault from './accordion/accordion-default';
+import AccordionMultiple from './accordion/accordion-multiple';
 
 // @scaffold:imports
 import DropdownMenuBasic from './dropdown-menu/dropdown-menu-basic';
@@ -49,6 +52,18 @@ interface RegistryEntry {
 }
 
 export const registry: Record<string, RegistryEntry> = {
+  'accordion-hero': {
+    component: AccordionHero,
+    source: readSource('accordion/accordion-hero.tsx'),
+  },
+  'accordion-default': {
+    component: AccordionDefault,
+    source: readSource('accordion/accordion-default.tsx'),
+  },
+  'accordion-multiple': {
+    component: AccordionMultiple,
+    source: readSource('accordion/accordion-multiple.tsx'),
+  },
   // @scaffold:entries
   'dropdown-menu-basic': {
     component: DropdownMenuBasic,

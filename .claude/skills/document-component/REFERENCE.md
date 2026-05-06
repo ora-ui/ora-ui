@@ -27,7 +27,12 @@ import { Component } from '@/components/ui/<name>';
 One-line description.
 <ComponentPreview name="<name>-<variant>" />
 
-## Props
+## API Reference
+
+Compound primitive (thin wrapper, no own props):
+For more information, see the Base UI [X API Reference](https://base-ui.com/react/components/x#api-reference).
+
+Component with own props (CVA variants, custom logic, etc.):
 | Prop | Type | Default |
 | ---- | ---- | ------- |
 | ...  | ...  | ...     |
