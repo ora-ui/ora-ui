@@ -23,6 +23,18 @@ import CheckboxThemeDefault, {
   Accent as CheckboxThemeAccent,
 } from './checkbox/checkbox-theme';
 import CheckboxIndeterminate from './checkbox/checkbox-indeterminate';
+import CheckboxGroupHero from './checkbox-group/checkbox-group-hero';
+import CheckboxGroupDefault from './checkbox-group/checkbox-group-default';
+import CheckboxGroupVariantDefault, {
+  Solid as CheckboxGroupVariantSolid,
+  Surface as CheckboxGroupVariantSurface,
+} from './checkbox-group/checkbox-group-variant';
+import CheckboxGroupThemeDefault, {
+  Gray as CheckboxGroupThemeGray,
+  Accent as CheckboxGroupThemeAccent,
+} from './checkbox-group/checkbox-group-theme';
+import CheckboxGroupParent from './checkbox-group/checkbox-group-parent';
+import CheckboxGroupNested from './checkbox-group/checkbox-group-nested';
 
 // @scaffold:imports
 import DropdownMenuBasic from './dropdown-menu/dropdown-menu-basic';
@@ -151,6 +163,32 @@ export const registry: Record<string, RegistryEntry> = {
   'checkbox-indeterminate': {
     component: CheckboxIndeterminate,
     source: readSource('checkbox/checkbox-indeterminate.tsx'),
+  },
+  'checkbox-group-hero': {
+    component: CheckboxGroupHero,
+    source: readSource('checkbox-group/checkbox-group-hero.tsx'),
+  },
+  'checkbox-group-default': {
+    component: CheckboxGroupDefault,
+    source: readSource('checkbox-group/checkbox-group-default.tsx'),
+  },
+  'checkbox-group-variant': {
+    component: CheckboxGroupVariantDefault,
+    variants: { solid: CheckboxGroupVariantSolid, surface: CheckboxGroupVariantSurface },
+    source: readSource('checkbox-group/checkbox-group-variant.tsx'),
+  },
+  'checkbox-group-theme': {
+    component: CheckboxGroupThemeDefault,
+    variants: { gray: CheckboxGroupThemeGray, accent: CheckboxGroupThemeAccent },
+    source: readSource('checkbox-group/checkbox-group-theme.tsx'),
+  },
+  'checkbox-group-parent': {
+    component: CheckboxGroupParent,
+    source: readSource('checkbox-group/checkbox-group-parent.tsx'),
+  },
+  'checkbox-group-nested': {
+    component: CheckboxGroupNested,
+    source: readSource('checkbox-group/checkbox-group-nested.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-basic': {

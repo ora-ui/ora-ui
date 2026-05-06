@@ -1,0 +1,112 @@
+---
+title: Checkbox Group
+description: A group of checkboxes that can be controlled together.
+links:
+  doc: https://base-ui.com/react/components/checkbox-group
+  api: https://base-ui.com/react/components/checkbox-group#api-reference
+---
+
+<ComponentPreview name="checkbox-group-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/checkbox-group.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/checkbox-group.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/checkbox-group.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/checkbox-group.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="checkbox-group" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import { Checkbox } from '@/components/ui/checkbox';
+import { CheckboxGroup } from '@/components/ui/checkbox-group';
+
+<CheckboxGroup defaultValue={['jazz']}>
+  <label className="flex items-center gap-2">
+    <Checkbox value="jazz" />
+    <span>Jazz</span>
+  </label>
+  <label className="flex items-center gap-2">
+    <Checkbox value="electronic" />
+    <span>Electronic</span>
+  </label>
+</CheckboxGroup>;
+```
+
+## Examples
+
+### Default
+
+A labeled group of checkboxes with a default selection.
+
+<ComponentPreview name="checkbox-group-default" />
+
+### Variant
+
+Two visual styles are available: `solid` fills the checkbox on check, `surface` uses a border treatment. Set `variant` on `CheckboxGroup` to apply it to all checkboxes in the group.
+
+<ComponentPreview name="checkbox-group-variant" select={['solid', 'surface']} />
+
+### Theme
+
+Use the `theme` prop to apply a color theme to the group. `gray` is the default; `accent` uses the brand color.
+
+<ComponentPreview name="checkbox-group-theme" select={['gray', 'accent']} />
+
+### Parent checkbox
+
+Use a parent `Checkbox` with the `parent` prop alongside `allValues` to create a "select all" control that reflects indeterminate state when only some items are checked.
+
+<ComponentPreview name="checkbox-group-parent" />
+
+### Nested parent checkbox
+
+Combine a top-level parent with nested category parents to build multi-level selection trees.
+
+<ComponentPreview name="checkbox-group-nested" />
+
+## API Reference
+
+### CheckboxGroup
+
+| Prop      | Type                   | Default   |
+| --------- | ---------------------- | --------- |
+| `variant` | `"solid" \| "surface"` | `"solid"` |
+| `theme`   | `"gray" \| "accent"`   | `"gray"`  |
+
+All other props are forwarded to the underlying [Base UI CheckboxGroup](https://base-ui.com/react/components/checkbox-group#api-reference) primitive.

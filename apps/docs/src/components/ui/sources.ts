@@ -17,5 +17,6 @@ export default {
   'alert-dialog': readSource('alert-dialog.tsx'),
   avatar: readSource('avatar.tsx'),
   checkbox: readSource('checkbox.tsx'),
+  'checkbox-group': readSource('checkbox-group.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;
