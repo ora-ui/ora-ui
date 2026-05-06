@@ -1,0 +1,89 @@
+---
+title: Avatar
+description: An image element with a fallback for representing the user.
+---
+
+<ComponentPreview name="avatar-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/avatar.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/avatar.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/avatar.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/avatar.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="avatar" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+
+<Avatar>
+  <AvatarImage src="..." alt="User avatar" />
+  <AvatarFallback>AB</AvatarFallback>
+</Avatar>;
+```
+
+## Examples
+
+### Default
+
+Renders an avatar with an image and a text fallback shown while the image loads or if it fails.
+
+<ComponentPreview name="avatar-default" />
+
+### Size
+
+Three sizes are available: `sm`, `default`, and `lg`.
+
+<ComponentPreview name="avatar-size" select={['default', 'sm', 'lg']} />
+
+### With Badge
+
+Use `AvatarBadge` to overlay a status indicator on the avatar.
+
+<ComponentPreview name="avatar-with-badge" />
+
+### Group
+
+Use `AvatarGroup` to stack multiple avatars with a negative offset. Add `AvatarGroupCount` to display an overflow count.
+
+<ComponentPreview name="avatar-group" />
+
+## API Reference
+
+For more information, see the Base UI [Avatar API Reference](https://base-ui.com/react/components/avatar#api-reference).

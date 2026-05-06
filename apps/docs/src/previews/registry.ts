@@ -7,6 +7,11 @@ import AccordionMultiple from './accordion/accordion-multiple';
 import AlertDialogHero from './alert-dialog/alert-dialog-hero';
 import AlertDialogDefault from './alert-dialog/alert-dialog-default';
 import AlertDialogWithIcon from './alert-dialog/alert-dialog-with-icon';
+import AvatarHero from './avatar/avatar-hero';
+import AvatarDefault from './avatar/avatar-default';
+import AvatarSizeDefault, { Sm as AvatarSizeSm, Lg as AvatarSizeLg } from './avatar/avatar-size';
+import AvatarWithBadge from './avatar/avatar-with-badge';
+import AvatarGroup from './avatar/avatar-group';
 
 // @scaffold:imports
 import DropdownMenuBasic from './dropdown-menu/dropdown-menu-basic';
@@ -92,6 +97,27 @@ export const registry: Record<string, RegistryEntry> = {
   'alert-dialog-with-icon': {
     component: AlertDialogWithIcon,
     source: readSource('alert-dialog/alert-dialog-with-icon.tsx'),
+  },
+  'avatar-hero': {
+    component: AvatarHero,
+    source: readSource('avatar/avatar-hero.tsx'),
+  },
+  'avatar-default': {
+    component: AvatarDefault,
+    source: readSource('avatar/avatar-default.tsx'),
+  },
+  'avatar-size': {
+    component: AvatarSizeDefault,
+    variants: { default: AvatarSizeDefault, sm: AvatarSizeSm, lg: AvatarSizeLg },
+    source: readSource('avatar/avatar-size.tsx'),
+  },
+  'avatar-with-badge': {
+    component: AvatarWithBadge,
+    source: readSource('avatar/avatar-with-badge.tsx'),
+  },
+  'avatar-group': {
+    component: AvatarGroup,
+    source: readSource('avatar/avatar-group.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-basic': {
