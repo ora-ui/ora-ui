@@ -39,9 +39,12 @@ export function CodeCollapsibleWrapper({
   const [expandedHeight, setExpandedHeight] = React.useState(0);
 
   React.useEffect(() => {
-    if (contentRef.current) {
-      setExpandedHeight(contentRef.current.scrollHeight);
-    }
+    if (!contentRef.current) return;
+    const observer = new ResizeObserver(() => {
+      if (contentRef.current) setExpandedHeight(contentRef.current.scrollHeight);
+    });
+    observer.observe(contentRef.current);
+    return () => observer.disconnect();
   }, []);
 
   if (lineCount < threshold) {

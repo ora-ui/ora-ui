@@ -54,7 +54,7 @@ export function ComponentPreviewClient({
           : (preview ?? <p className="text-sm text-secondary">Preview not found: {name}</p>)}
       </div>
       {variants && activeVariant?.highlighted && (
-        <div key={activeValue} className="border-t border-line">
+        <div className="border-t border-line">
           <CodeCollapsibleWrapper
             lineCount={activeVariant.lineCount}
             commandBar={
