@@ -61,19 +61,28 @@ import { Badge } from '@/components/ui/badge';
 
 The `variant` prop controls the visual style of the badge.
 
-<ComponentPreview name="badge-variants" />
+<ComponentPreview name="badge-variants" select={['solid', 'outline', 'surface', 'soft']} />
 
 ### Theme
 
 The `theme` prop applies a color scheme across all variants.
 
-<ComponentPreview name="badge-theme" />
+<ComponentPreview
+  name="badge-theme"
+  select={['gray', 'accent', 'destructive', 'warning', 'success']}
+/>
 
 ### With icon
 
 Icons can be placed inline alongside a label.
 
-<ComponentPreview name="badge-with-icon" />
+<ComponentPreview
+  name="badge-with-icon"
+  select={[
+    { label: 'Leading', value: 'leading' },
+    { label: 'Trailing', value: 'trailing' },
+  ]}
+/>
 
 ### Icon only
 

@@ -1,17 +1,23 @@
 import { Badge } from '@/components/ui/badge';
 
-export default function BadgeTheme() {
-  return (
-    <div className="flex flex-wrap gap-2">
-      <Badge variant="solid" theme="gray">
-        Gray
-      </Badge>
-      <Badge variant="solid" theme="accent">
-        Accent
-      </Badge>
-      <Badge variant="solid" theme="destructive">
-        Destructive
-      </Badge>
-    </div>
-  );
+export function Gray() {
+  return <Badge theme="gray">Badge</Badge>;
 }
+
+export function Accent() {
+  return <Badge theme="accent">Badge</Badge>;
+}
+
+export function Destructive() {
+  return <Badge theme="destructive">Badge</Badge>;
+}
+
+export function Warning() {
+  return <Badge theme="warning">Badge</Badge>;
+}
+
+export function Success() {
+  return <Badge theme="success">Badge</Badge>;
+}
+
+export default Gray;

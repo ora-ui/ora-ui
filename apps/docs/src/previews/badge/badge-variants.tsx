@@ -1,12 +1,19 @@
 import { Badge } from '@/components/ui/badge';
 
-export default function BadgeVariants() {
-  return (
-    <div className="flex flex-wrap gap-2">
-      <Badge variant="solid">Solid</Badge>
-      <Badge variant="outline">Outline</Badge>
-      <Badge variant="surface">Surface</Badge>
-      <Badge variant="soft">Soft</Badge>
-    </div>
-  );
+export function Solid() {
+  return <Badge variant="solid">Badge</Badge>;
 }
+
+export function Outline() {
+  return <Badge variant="outline">Badge</Badge>;
+}
+
+export function Surface() {
+  return <Badge variant="surface">Badge</Badge>;
+}
+
+export function Soft() {
+  return <Badge variant="soft">Badge</Badge>;
+}
+
+export default Solid;

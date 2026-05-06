@@ -33,9 +33,23 @@ import ButtonGroupIconButtons from './button-group/button-group-icon-buttons';
 import ButtonGroupWithSeparator from './button-group/button-group-with-separator';
 import ButtonGroupWithText from './button-group/button-group-with-text';
 import BadgeHero from './badge/badge-hero';
-import BadgeVariants from './badge/badge-variants';
-import BadgeTheme from './badge/badge-theme';
-import BadgeWithIcon from './badge/badge-with-icon';
+import BadgeVariantsDefault, {
+  Solid as BadgeVariantsSolid,
+  Outline as BadgeVariantsOutline,
+  Surface as BadgeVariantsSurface,
+  Soft as BadgeVariantsSoft,
+} from './badge/badge-variants';
+import BadgeThemeDefault, {
+  Gray as BadgeThemeGray,
+  Accent as BadgeThemeAccent,
+  Destructive as BadgeThemeDestructive,
+  Warning as BadgeThemeWarning,
+  Success as BadgeThemeSuccess,
+} from './badge/badge-theme';
+import BadgeWithIconDefault, {
+  Leading as BadgeWithIconLeading,
+  Trailing as BadgeWithIconTrailing,
+} from './badge/badge-with-icon';
 import BadgeIconOnly from './badge/badge-icon-only';
 import BadgeAsLink from './badge/badge-as-link';
 
@@ -134,9 +148,35 @@ export const registry: Record<string, RegistryEntry> = {
     source: readSource('button-group/button-group-with-text.tsx'),
   },
   'badge-hero': { component: BadgeHero, source: readSource('badge/badge-hero.tsx') },
-  'badge-variants': { component: BadgeVariants, source: readSource('badge/badge-variants.tsx') },
-  'badge-theme': { component: BadgeTheme, source: readSource('badge/badge-theme.tsx') },
-  'badge-with-icon': { component: BadgeWithIcon, source: readSource('badge/badge-with-icon.tsx') },
+  'badge-variants': {
+    component: BadgeVariantsDefault,
+    variants: {
+      solid: BadgeVariantsSolid,
+      outline: BadgeVariantsOutline,
+      surface: BadgeVariantsSurface,
+      soft: BadgeVariantsSoft,
+    },
+    source: readSource('badge/badge-variants.tsx'),
+  },
+  'badge-theme': {
+    component: BadgeThemeDefault,
+    variants: {
+      gray: BadgeThemeGray,
+      accent: BadgeThemeAccent,
+      destructive: BadgeThemeDestructive,
+      warning: BadgeThemeWarning,
+      success: BadgeThemeSuccess,
+    },
+    source: readSource('badge/badge-theme.tsx'),
+  },
+  'badge-with-icon': {
+    component: BadgeWithIconDefault,
+    variants: {
+      leading: BadgeWithIconLeading,
+      trailing: BadgeWithIconTrailing,
+    },
+    source: readSource('badge/badge-with-icon.tsx'),
+  },
   'badge-icon-only': { component: BadgeIconOnly, source: readSource('badge/badge-icon-only.tsx') },
   'badge-as-link': { component: BadgeAsLink, source: readSource('badge/badge-as-link.tsx') },
 };
