@@ -47,9 +47,11 @@ Review the code changes on branch `{{BRANCH}}` and improve code clarity, consist
 If you find improvements to make:
 
 1. Make the changes directly on this branch
-2. Run tests and type checking to ensure nothing is broken
-3. Commit describing the refinements
+2. Run `pnpm typecheck && pnpm lint` to ensure nothing is broken
+3. Commit describing the refinements (prefix the message with `sandcastle:`)
 
 If the code is already clean and well-structured, do nothing.
 
 Once complete, output <promise>COMPLETE</promise>.
+
+If you cannot review safely (broken gates you can't fix, change scope unclear), output a `<blocked-reason>...</blocked-reason>` block followed by `<promise>BLOCKED</promise>`.
