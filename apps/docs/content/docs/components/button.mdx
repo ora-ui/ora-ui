@@ -15,27 +15,33 @@ description: Triggers an action or event, such as submitting a form or opening a
     </TabsList>
   </TabsSurface>
   <TabsPanel value="cli">
-    ```bash
-    npx shadcn@latest add "https://ora-ui.com/r/button.json"
-    ```
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add button' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add button' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add button' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add button' },
+      ]}
+    />
   </TabsPanel>
   <TabsPanel value="manual">
     <Steps>
       <Step>Install dependencies</Step>
 
-      ```bash
-      npm install @base-ui/react class-variance-authority
-      ```
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
 
       <Step>Copy the component</Step>
 
       <ComponentSource name="button" />
 
-      <Step>Update the import path</Step>
-
-      ```tsx
-      import { cn } from '@/lib/utils';
-      ```
+      <Step>Update the import paths if necessary to match your project setup.</Step>
     </Steps>
 
   </TabsPanel>

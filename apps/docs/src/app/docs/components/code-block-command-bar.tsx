@@ -16,7 +16,7 @@ export function CodeBlockCommandBar({
   return (
     <div
       className={cn(
-        'flex items-center justify-end gap-1 border-b border-line bg-surface px-2 py-1',
+        'flex items-center justify-end gap-1 border-b border-line bg-surface p-1',
         className
       )}
     >

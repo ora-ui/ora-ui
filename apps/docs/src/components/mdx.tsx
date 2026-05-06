@@ -32,6 +32,7 @@ import { cn } from '@/lib/utils';
 import { CodeBlock, CodeBlockRoot } from '@/app/docs/components/code-block';
 import { CodeBlockCopyButton } from '@/app/docs/components/code-block-command-bar';
 import { Steps, Step } from '@/app/docs/components/steps';
+import { CodeBlockTabs } from '@/app/docs/components/code-block-tabs';
 import { Callout } from '@/app/docs/components/callout';
 import { ComponentPreview } from '@/components/component-preview';
 import { ComponentSource } from '@/components/component-source';
@@ -213,6 +214,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       />
     ),
     // Docs components
+    CodeBlockTabs,
     Steps,
     Step,
     Callout,
