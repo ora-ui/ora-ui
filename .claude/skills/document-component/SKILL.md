@@ -28,7 +28,24 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
 
    Generates preview files, registry entries, `sources.ts` entry, and the MDX page. See [REFERENCE.md](REFERENCE.md) for the full file list.
 
-6. **Fill preview TODOs** — for each `src/previews/<name>/<name>-<example>.tsx`, replace the TODO with real JSX derived from the component source.
+6. **Fill preview TODOs** — for each `src/previews/<name>/<name>-<example>.tsx`, replace the TODO with real JSX derived from the component source. Follow the instance count convention (see Conventions below).
+
+   **If any preview uses the `select` pattern** (new or update path): also update `src/previews/registry.ts` — change the default import to named+default imports, and add a `variants` map to the registry entry. The `select` prop on `<ComponentPreview>` is non-functional without this.
+
+   ```ts
+   // imports
+   import BadgeVariantsDefault, {
+     Solid as BadgeVariantsSolid,
+     Soft as BadgeVariantsSoft,
+   } from './badge/badge-variants';
+
+   // registry entry
+   'badge-variants': {
+     component: BadgeVariantsDefault,
+     variants: { solid: BadgeVariantsSolid, soft: BadgeVariantsSoft },
+     source: readSource('badge/badge-variants.tsx'),
+   },
+   ```
 
 7. **Fill MDX TODOs** — in `content/docs/components/<name>.mdx`:
    - Replace the usage snippet (import + minimal JSX)
@@ -52,6 +69,7 @@ Full conventions are in [docs/conventions/COMPONENT-DOCS.md](../../../../docs/co
 - Manual install step 2 uses `<ComponentSource name="..." />`, never pasted source
 - **Compound primitive** (thin Base UI wrapper, no own props): replace API Reference section with a single link to the Base UI API Reference
 - **Own props** (CVA variants, custom logic): full table per sub-component, ending with a forwarding note
+- **Preview instance count**: the hero preview may render multiple component instances or include additional markup (e.g. a badge composed with a label, or several representative states side by side). Every other preview — including each export in a select — renders a single component instance. Don't show a row of three badges to demonstrate the `soft` variant; show one.
 
 ## What NOT to do
 
