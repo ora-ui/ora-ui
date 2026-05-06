@@ -40,7 +40,16 @@ import DialogDefault from './dialog/dialog-default';
 import DialogScrollable from './dialog/dialog-scrollable';
 
 // @scaffold:imports
+import DropdownMenuHero from './dropdown-menu/dropdown-menu-hero';
 import DropdownMenuBasic from './dropdown-menu/dropdown-menu-basic';
+import DropdownMenuVariantDefault, {
+  Soft as DropdownMenuVariantSoft,
+  Solid as DropdownMenuVariantSolid,
+} from './dropdown-menu/dropdown-menu-variant';
+import DropdownMenuThemeDefault, {
+  Gray as DropdownMenuThemeGray,
+  Accent as DropdownMenuThemeAccent,
+} from './dropdown-menu/dropdown-menu-theme';
 import ButtonHero from './button/button-hero';
 import ButtonVariantsDefault, {
   Solid as ButtonVariantsSolid,
@@ -206,9 +215,23 @@ export const registry: Record<string, RegistryEntry> = {
     source: readSource('dialog/dialog-scrollable.tsx'),
   },
   // @scaffold:entries
+  'dropdown-menu-hero': {
+    component: DropdownMenuHero,
+    source: readSource('dropdown-menu/dropdown-menu-hero.tsx'),
+  },
   'dropdown-menu-basic': {
     component: DropdownMenuBasic,
     source: readSource('dropdown-menu/dropdown-menu-basic.tsx'),
+  },
+  'dropdown-menu-variant': {
+    component: DropdownMenuVariantDefault,
+    variants: { soft: DropdownMenuVariantSoft, solid: DropdownMenuVariantSolid },
+    source: readSource('dropdown-menu/dropdown-menu-variant.tsx'),
+  },
+  'dropdown-menu-theme': {
+    component: DropdownMenuThemeDefault,
+    variants: { gray: DropdownMenuThemeGray, accent: DropdownMenuThemeAccent },
+    source: readSource('dropdown-menu/dropdown-menu-theme.tsx'),
   },
   'button-hero': {
     component: ButtonHero,

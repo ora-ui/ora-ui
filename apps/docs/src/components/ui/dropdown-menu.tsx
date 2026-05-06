@@ -122,7 +122,7 @@ function DropdownMenuItem({
         menuItemBaseStyles,
         menuVariant === 'solid'
           ? 'focus:bg-fill focus:text-on-fill focus:**:text-on-fill'
-          : 'focus:bg-active focus:text-(--menu-item-text) focus:**:text-(--menu-item-text)',
+          : 'focus:bg-hover  focus:text-(--menu-item-text) focus:**:text-(--menu-item-text)',
         className
       )}
       {...props}
@@ -156,7 +156,7 @@ function DropdownMenuSubTrigger({
       {...props}
     >
       {children}
-      <ChevronRightIcon className="cn-rtl-flip ml-4" />
+      <ChevronRightIcon className="cn-rtl-flip ml-auto" />
     </MenuPrimitive.SubmenuTrigger>
   );
 }
@@ -199,7 +199,7 @@ function DropdownMenuCheckboxItem({
       data-slot="dropdown-menu-checkbox-item"
       data-inset={inset}
       className={cn(
-        'relative flex cursor-default items-center gap-1.5 rounded-[var(--menu-item-radius)] py-1 pr-8 pl-1.5 text-sm text-(--menu-item-text) outline-hidden select-none data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+        'relative flex cursor-default items-center gap-1.5 rounded-(--menu-item-radius) py-1 pr-8 pl-1.5 text-sm text-(--menu-item-text) outline-hidden select-none data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
         menuVariant === 'solid'
           ? 'focus:bg-fill focus:text-on-fill focus:**:text-on-fill'
           : 'focus:bg-active focus:text-(--menu-item-text) focus:**:text-(--menu-item-text)',
@@ -238,7 +238,7 @@ function DropdownMenuRadioItem({
       data-slot="dropdown-menu-radio-item"
       data-inset={inset}
       className={cn(
-        'relative flex cursor-default items-center gap-1.5 rounded-[var(--menu-item-radius)] py-1 pr-8 pl-1.5 text-sm text-(--menu-item-text) outline-hidden select-none data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+        'relative flex cursor-default items-center gap-1.5 rounded-(--menu-item-radius) py-1 pr-8 pl-1.5 text-sm text-(--menu-item-text) outline-hidden select-none data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
         menuVariant === 'solid'
           ? 'focus:bg-fill focus:text-on-fill focus:**:text-on-fill'
           : 'focus:bg-active focus:text-(--menu-item-text) focus:**:text-(--menu-item-text)',

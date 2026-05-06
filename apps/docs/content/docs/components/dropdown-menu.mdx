@@ -1,15 +1,114 @@
 ---
-title: Dropdown Menu
+title: Dropdown menu
 description: Displays a menu to the user — such as a set of actions or functions — triggered by a button.
 links:
   doc: https://base-ui.com/react/components/menu
   api: https://base-ui.com/react/components/menu#api-reference
 ---
 
+<ComponentPreview name="dropdown-menu-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/dropdown-menu.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/dropdown-menu.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/dropdown-menu.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/dropdown-menu.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="dropdown-menu" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+<DropdownMenu>
+  <DropdownMenuTrigger render={<button>Open</button>} />
+  <DropdownMenuContent>
+    <DropdownMenuGroup>
+      <DropdownMenuLabel>Section</DropdownMenuLabel>
+      <DropdownMenuItem>Item</DropdownMenuItem>
+    </DropdownMenuGroup>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem>Another item</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>;
+```
+
 ## Examples
 
-### Basic
+### Default
 
-A basic dropdown menu with labels and separators.
+A dropdown menu with groups, labels, separators, a submenu, and keyboard shortcuts.
 
 <ComponentPreview name="dropdown-menu-basic" />
+
+### Variant
+
+The `variant` prop on `DropdownMenuContent` controls how focused items are highlighted.
+
+<ComponentPreview name="dropdown-menu-variant" select={['soft', 'solid']} />
+
+### Theme
+
+The `theme` prop applies a color scheme to the focused item highlight across all variants.
+
+<ComponentPreview name="dropdown-menu-theme" select={['gray', 'accent']} />
+
+## API Reference
+
+### DropdownMenuContent
+
+| Prop      | Type                 | Default  |
+| --------- | -------------------- | -------- |
+| `variant` | `"soft" \| "solid"`  | `"soft"` |
+| `theme`   | `"gray" \| "accent"` | `"gray"` |
+
+### DropdownMenuItem
+
+| Prop      | Type                         | Default     |
+| --------- | ---------------------------- | ----------- |
+| `variant` | `"default" \| "destructive"` | `"default"` |
+
+For all other sub-components, see the Base UI [Menu API Reference](https://base-ui.com/react/components/menu#api-reference).
