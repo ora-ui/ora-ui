@@ -16,5 +16,6 @@ export default {
   accordion: readSource('accordion.tsx'),
   'alert-dialog': readSource('alert-dialog.tsx'),
   avatar: readSource('avatar.tsx'),
+  checkbox: readSource('checkbox.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;

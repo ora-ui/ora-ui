@@ -12,6 +12,17 @@ import AvatarDefault from './avatar/avatar-default';
 import AvatarSizeDefault, { Sm as AvatarSizeSm, Lg as AvatarSizeLg } from './avatar/avatar-size';
 import AvatarWithBadge from './avatar/avatar-with-badge';
 import AvatarGroup from './avatar/avatar-group';
+import CheckboxHero from './checkbox/checkbox-hero';
+import CheckboxDefault from './checkbox/checkbox-default';
+import CheckboxVariantDefault, {
+  Solid as CheckboxVariantSolid,
+  Surface as CheckboxVariantSurface,
+} from './checkbox/checkbox-variant';
+import CheckboxThemeDefault, {
+  Gray as CheckboxThemeGray,
+  Accent as CheckboxThemeAccent,
+} from './checkbox/checkbox-theme';
+import CheckboxIndeterminate from './checkbox/checkbox-indeterminate';
 
 // @scaffold:imports
 import DropdownMenuBasic from './dropdown-menu/dropdown-menu-basic';
@@ -118,6 +129,28 @@ export const registry: Record<string, RegistryEntry> = {
   'avatar-group': {
     component: AvatarGroup,
     source: readSource('avatar/avatar-group.tsx'),
+  },
+  'checkbox-hero': {
+    component: CheckboxHero,
+    source: readSource('checkbox/checkbox-hero.tsx'),
+  },
+  'checkbox-default': {
+    component: CheckboxDefault,
+    source: readSource('checkbox/checkbox-default.tsx'),
+  },
+  'checkbox-variant': {
+    component: CheckboxVariantDefault,
+    variants: { solid: CheckboxVariantSolid, surface: CheckboxVariantSurface },
+    source: readSource('checkbox/checkbox-variant.tsx'),
+  },
+  'checkbox-theme': {
+    component: CheckboxThemeDefault,
+    variants: { gray: CheckboxThemeGray, accent: CheckboxThemeAccent },
+    source: readSource('checkbox/checkbox-theme.tsx'),
+  },
+  'checkbox-indeterminate': {
+    component: CheckboxIndeterminate,
+    source: readSource('checkbox/checkbox-indeterminate.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-basic': {
