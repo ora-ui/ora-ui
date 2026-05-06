@@ -5,9 +5,22 @@ import path from 'path';
 // @scaffold:imports
 import DropdownMenuBasic from './dropdown-menu/dropdown-menu-basic';
 import ButtonHero from './button/button-hero';
-import ButtonVariants from './button/button-variants';
-import ButtonTheme from './button/button-theme';
-import ButtonWithIcon from './button/button-with-icon';
+import ButtonVariantsDefault, {
+  Solid as ButtonVariantsSolid,
+  Outline as ButtonVariantsOutline,
+  Surface as ButtonVariantsSurface,
+  Soft as ButtonVariantsSoft,
+  Ghost as ButtonVariantsGhost,
+} from './button/button-variants';
+import ButtonThemeDefault, {
+  Gray as ButtonThemeGray,
+  Accent as ButtonThemeAccent,
+  Destructive as ButtonThemeDestructive,
+} from './button/button-theme';
+import ButtonWithIconDefault, {
+  Leading as ButtonWithIconLeading,
+  Trailing as ButtonWithIconTrailing,
+} from './button/button-with-icon';
 import ButtonIconButton from './button/button-icon-button';
 import ButtonGroupHero from './button-group/button-group-hero';
 import ButtonGroupDefault from './button-group/button-group-default';
@@ -29,7 +42,13 @@ function readSource(subpath: string): string {
   return fs.readFileSync(path.join(previewsDir, subpath), 'utf-8');
 }
 
-export const registry: Record<string, { component: React.ComponentType; source: string }> = {
+interface RegistryEntry {
+  component: React.ComponentType;
+  variants?: Record<string, React.ComponentType>;
+  source: string;
+}
+
+export const registry: Record<string, RegistryEntry> = {
   // @scaffold:entries
   'dropdown-menu-basic': {
     component: DropdownMenuBasic,
@@ -40,12 +59,31 @@ export const registry: Record<string, { component: React.ComponentType; source: 
     source: readSource('button/button-hero.tsx'),
   },
   'button-variants': {
-    component: ButtonVariants,
+    component: ButtonVariantsDefault,
+    variants: {
+      solid: ButtonVariantsSolid,
+      outline: ButtonVariantsOutline,
+      surface: ButtonVariantsSurface,
+      soft: ButtonVariantsSoft,
+      ghost: ButtonVariantsGhost,
+    },
     source: readSource('button/button-variants.tsx'),
   },
-  'button-theme': { component: ButtonTheme, source: readSource('button/button-theme.tsx') },
+  'button-theme': {
+    component: ButtonThemeDefault,
+    variants: {
+      gray: ButtonThemeGray,
+      accent: ButtonThemeAccent,
+      destructive: ButtonThemeDestructive,
+    },
+    source: readSource('button/button-theme.tsx'),
+  },
   'button-with-icon': {
-    component: ButtonWithIcon,
+    component: ButtonWithIconDefault,
+    variants: {
+      leading: ButtonWithIconLeading,
+      trailing: ButtonWithIconTrailing,
+    },
     source: readSource('button/button-with-icon.tsx'),
   },
   'button-icon-button': {

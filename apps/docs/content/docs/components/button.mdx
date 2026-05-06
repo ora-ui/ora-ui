@@ -61,19 +61,28 @@ import { Button } from '@/components/ui/button';
 
 The `variant` prop controls the visual style of the button.
 
-<ComponentPreview name="button-variants" />
+<ComponentPreview
+  name="button-variants"
+  select={['solid', 'outline', 'surface', 'soft', 'ghost']}
+/>
 
 ### Theme
 
 The `theme` prop applies a color scheme across all variants.
 
-<ComponentPreview name="button-theme" />
+<ComponentPreview name="button-theme" select={['gray', 'accent', 'destructive']} />
 
 ### With icon
 
 Icons can be placed alongside button text. The button handles icon sizing automatically.
 
-<ComponentPreview name="button-with-icon" />
+<ComponentPreview
+  name="button-with-icon"
+  select={[
+    { label: 'Leading', value: 'leading' },
+    { label: 'Trailing', value: 'trailing' },
+  ]}
+/>
 
 ### Icon button
 

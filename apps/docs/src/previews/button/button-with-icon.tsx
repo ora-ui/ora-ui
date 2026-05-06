@@ -1,17 +1,22 @@
-import { CloudArrowUpIcon, PlusCircleIcon } from '@heroicons/react/16/solid';
+import { PlusCircleIcon } from '@heroicons/react/16/solid';
 import { Button } from '@/components/ui/button';
 
-export default function ButtonWithIcon() {
+export function Leading() {
   return (
-    <div className="flex gap-2">
-      <Button>
-        <PlusCircleIcon />
-        Create New
-      </Button>
-      <Button variant="soft">
-        <CloudArrowUpIcon />
-        Upload
-      </Button>
-    </div>
+    <Button>
+      <PlusCircleIcon />
+      Create New
+    </Button>
   );
 }
+
+export function Trailing() {
+  return (
+    <Button>
+      Create New
+      <PlusCircleIcon />
+    </Button>
+  );
+}
+
+export default Leading;

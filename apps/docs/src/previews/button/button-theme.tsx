@@ -1,17 +1,15 @@
 import { Button } from '@/components/ui/button';
 
-export default function ButtonTheme() {
-  return (
-    <div className="flex gap-2">
-      <Button variant="solid" theme="gray">
-        Gray
-      </Button>
-      <Button variant="solid" theme="accent">
-        Accent
-      </Button>
-      <Button variant="solid" theme="destructive">
-        Destructive
-      </Button>
-    </div>
-  );
+export function Gray() {
+  return <Button theme="gray">Cancel</Button>;
 }
+
+export function Accent() {
+  return <Button theme="accent">Cancel</Button>;
+}
+
+export function Destructive() {
+  return <Button theme="destructive">Cancel</Button>;
+}
+
+export default Gray;
