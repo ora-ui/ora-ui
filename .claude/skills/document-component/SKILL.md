@@ -10,7 +10,7 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
 1. **Verify** — check `apps/docs/src/components/ui/<name>.tsx` exists. If not, suggest `build-component` instead.
 
 2. **Check for existing docs** — check if `content/docs/components/<name>.mdx` exists.
-   - **Exists → update path**: read the existing MDX and restructure it to follow current conventions (add `## Examples` wrapper, demote example headings from `##` to `###`, replace any inline code blocks with `<ComponentPreview>`, ensure `## API Reference` follows the API Reference convention). Skip to step 6.
+   - **Exists → update path**: read the existing MDX and restructure it to follow current conventions (add `## Examples` wrapper, demote example headings from `##` to `###`, replace any inline code blocks with `<ComponentPreview>`, ensure `## API Reference` follows the API Reference convention). Then ask the user which examples (if any) should use the `select` pattern for interactive variant switching before touching any preview files. Skip to step 6.
    - **Does not exist → new path**: continue to step 3.
 
 3. **Read the component** — read the source to understand its prop surface and sub-components.
@@ -18,6 +18,7 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
 4. **Gather inputs** (ask if not provided):
    - One-line description for the MDX frontmatter
    - Examples to showcase (e.g. `default,multiple`). Each example becomes a separate preview file and `### Example` section. Name them by the scenario they demonstrate, not by visual style.
+   - **Which examples should be interactive?** Ask the user which examples (if any) should use the `select` pattern to switch between visual variants. Don't infer this — prompt explicitly. Singular examples (e.g. icon-only) and polymorphic examples (e.g. as-a-link) typically don't need it; visual style variant groups typically do. See the Interactive previews convention in [COMPONENT-DOCS.md](../../../../docs/conventions/COMPONENT-DOCS.md).
 
 5. **Scaffold** — run non-interactively, passing example names as the variants argument:
 

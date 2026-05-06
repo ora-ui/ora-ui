@@ -15,27 +15,33 @@ description: A small status indicator for labelling and categorising content.
     </TabsList>
   </TabsSurface>
   <TabsPanel value="cli">
-    ```bash
-    npx shadcn@latest add "https://ora-ui.com/r/badge.json"
-    ```
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/badge.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/badge.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/badge.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/badge.json"' },
+      ]}
+    />
   </TabsPanel>
   <TabsPanel value="manual">
     <Steps>
       <Step>Install dependencies</Step>
 
-      ```bash
-      npm install @base-ui/react class-variance-authority
-      ```
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react class-variance-authority' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react class-variance-authority' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react class-variance-authority' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react class-variance-authority' },
+        ]}
+      />
 
       <Step>Copy the component</Step>
 
       <ComponentSource name="badge" />
 
-      <Step>Update the import path</Step>
-
-      ```tsx
-      import { cn } from '@/lib/utils';
-      ```
+      <Step>Update the import paths if necessary to match your project setup.</Step>
     </Steps>
 
   </TabsPanel>
@@ -49,37 +55,39 @@ import { Badge } from '@/components/ui/badge';
 <Badge>Badge</Badge>;
 ```
 
-## Variants
+## Examples
+
+### Variants
 
 The `variant` prop controls the visual style of the badge.
 
 <ComponentPreview name="badge-variants" />
 
-## Theme
+### Theme
 
 The `theme` prop applies a color scheme across all variants.
 
 <ComponentPreview name="badge-theme" />
 
-## With icon
+### With icon
 
 Icons can be placed inline alongside a label.
 
 <ComponentPreview name="badge-with-icon" />
 
-## Icon only
+### Icon only
 
 Use `size="icon"` for compact status indicators where space is limited.
 
 <ComponentPreview name="badge-icon-only" />
 
-## As a link
+### As a link
 
 Pass `render={<a />}` to render the badge as an anchor element.
 
 <ComponentPreview name="badge-as-link" />
 
-## Props
+## API Reference
 
 ### Badge
 

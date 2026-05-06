@@ -114,6 +114,18 @@ All other props are forwarded to the underlying [Base UI Toggle](https://base-ui
 - For distinct behavioral scenarios, each scenario is a separate preview file (`accordion-default.tsx`, `accordion-multiple.tsx`)
 - For visual variants that share the same content (solid / outline / ghost), use the multi-export + `select` pattern — see the scaffolder reference in the `document-component` skill
 
+### Interactive previews (select pattern)
+
+Use `select` when an example shows multiple visual variants of the same scenario and the viewer benefits from switching between them without leaving the page — e.g. `solid / outline / soft / ghost` under a single "Variants" heading.
+
+**Don't** use `select` for:
+
+- Singular examples that stand alone — e.g. `icon-only`, `loading`
+- Polymorphic examples that change the rendered element — e.g. `as-a-link`
+- Behavioral examples that differ in structure or markup, not just visual style
+
+There is no deterministic rule. When documenting a component, ask the user which examples (if any) should be interactive before writing any preview files.
+
 ---
 
 ## What NOT to do
