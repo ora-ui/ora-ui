@@ -9,4 +9,3 @@ When working in this project, read the following in order of relevance to your t
 - [Conventions](docs/conventions/INDEX.md) — Patterns, tokens, and how components are built
 - [Component Guide](docs/COMPONENT-GUIDE.md) — Step-by-step direction for building and modifying components
 - [Playground](docs/PLAYGROUND.md) — Adding and updating playground component entries
-- [Sandcastle](/.sandcastle/CLAUDE.md) — Agent setup, branch conventions, and rules for sandcastle runs
