@@ -20,5 +20,6 @@ export default {
   'checkbox-group': readSource('checkbox-group.tsx'),
   dialog: readSource('dialog.tsx'),
   form: readSource('form.tsx'),
+  input: readSource('input.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;

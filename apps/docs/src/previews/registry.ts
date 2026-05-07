@@ -40,6 +40,11 @@ import DialogDefault from './dialog/dialog-default';
 import DialogScrollable from './dialog/dialog-scrollable';
 import FormHero from './form/form-hero';
 import FormProduct from './form/form-product';
+import InputHero from './input/input-hero';
+import InputVariantDefault, {
+  Outline as InputVariantOutline,
+  Soft as InputVariantSoft,
+} from './input/input-variant';
 
 // @scaffold:imports
 import DropdownMenuHero from './dropdown-menu/dropdown-menu-hero';
@@ -223,6 +228,19 @@ export const registry: Record<string, RegistryEntry> = {
   'form-product': {
     component: FormProduct,
     source: readSource('form/form-product.tsx'),
+  },
+  'input-hero': {
+    component: InputHero,
+    source: readSource('input/input-hero.tsx'),
+  },
+  'input-variant': {
+    component: InputVariantDefault,
+    variants: {
+      surface: InputVariantDefault,
+      outline: InputVariantOutline,
+      soft: InputVariantSoft,
+    },
+    source: readSource('input/input-variant.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-hero': {
