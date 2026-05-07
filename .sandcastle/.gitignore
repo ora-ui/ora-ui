@@ -1,0 +1,4 @@
+.env
+logs/
+worktrees/
+.pnpm-store/
