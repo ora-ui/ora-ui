@@ -6,7 +6,7 @@
 
 ## Recent agent commits (last 10)
 
-!`git log --oneline --grep="^sandcastle:" -10`
+!`git log --oneline --grep="^sandcastle-" -10`
 
 # Task
 
@@ -40,9 +40,15 @@ If the highest-priority issue looks too ambitious for an autonomous run (multi-c
    Fix failures before proceeding. Do not commit a red build.
 
 6. **Commit** — single git commit. The message MUST:
-   - Start with `sandcastle:` prefix (lowercase) followed by a conventional type, e.g. `sandcastle: fix(button): correct focus ring color`
+   - Start with `sandcastle-` prefix (lowercase) followed by a conventional type, e.g. `sandcastle-fix(button): correct focus ring color`
    - Reference the issue number in the body (`Closes #N`)
-7. **Close** — close the issue with `gh issue close <ID> --comment "Completed by Sandcastle"`.
+7. **Summarise** — output a summary block for the pull request **before** closing the issue:
+   ```
+   <pr-summary>
+   Short description of what was changed and why (2–5 sentences).
+   </pr-summary>
+   ```
+8. **Close** — close the issue with `gh issue close <ID> --comment "Completed by Sandcastle"`.
 
 ## Rules
 
