@@ -112,10 +112,11 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   // -------------------------------------------------------------------------
   // Phase 3: Push & open draft PR for human review
   // -------------------------------------------------------------------------
-  execSync(`git push origin ${branch}`, { stdio: 'inherit' });
+  const env = { ...process.env };
+  execSync(`git push origin ${branch}`, { stdio: 'inherit', env });
   execSync(
     `gh pr create --head ${branch} --base ${baseBranch} --draft --title "sandcastle: ${branch}" --body "Automated implementation by Sandcastle. Please review before merging."`,
-    { stdio: 'inherit' }
+    { stdio: 'inherit', env }
   );
 
   console.log(`\nDraft PR opened for branch: ${branch}`);
