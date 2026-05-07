@@ -20,12 +20,14 @@ const { values: args } = parseArgs({
   options: {
     issue: { type: 'string', short: 'i' },
     branch: { type: 'string', short: 'b' },
+    base: { type: 'string' },
   },
   strict: false,
 });
 
 const targetIssue = args.issue ? parseInt(args.issue as string, 10) : null;
 const targetBranch = args.branch as string | undefined;
+const baseBranch = (args.base as string | undefined) ?? 'develop';
 
 // When targeting a specific issue, run exactly one iteration.
 const MAX_ITERATIONS = targetIssue ? 1 : 10;
@@ -69,7 +71,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     hooks,
     copyToWorktree,
     sandbox: docker(),
-    branchStrategy: { type: 'branch', branch: implementBranch },
+    branchStrategy: { type: 'branch', branch: implementBranch, baseBranch },
     name: 'implementer',
     maxIterations: 15,
     agent: sandcastle.pi('claude-sonnet-4-6'),
@@ -109,7 +111,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   // -------------------------------------------------------------------------
   execSync(`git push origin ${branch}`, { stdio: 'inherit' });
   execSync(
-    `gh pr create --head ${branch} --base main --draft --title "sandcastle: ${branch}" --body "Automated implementation by Sandcastle. Please review before merging."`,
+    `gh pr create --head ${branch} --base ${baseBranch} --draft --title "sandcastle: ${branch}" --body "Automated implementation by Sandcastle. Please review before merging."`,
     { stdio: 'inherit' }
   );
 
