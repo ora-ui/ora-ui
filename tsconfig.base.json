@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
-    "paths": {
-      // Emotion typedefs point to an empty file, which unsets all declarations
-      "@emotion/core": ["../../types/emotion.d.ts"]
-    },
-    "target": "es5",
+    "target": "es6",
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "declaration": true,
@@ -14,7 +10,6 @@
     "strict": true,
     "isolatedModules": true,
     "noFallthroughCasesInSwitch": true,
-    "suppressImplicitAnyIndexErrors": true,
     "noImplicitAny": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
@@ -23,9 +18,9 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "downlevelIteration": true,
     "declarationMap": true,
     "noEmit": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "types": ["node"]
   }
 }
