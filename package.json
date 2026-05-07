@@ -15,7 +15,7 @@
     "sandcastle:clean": "git worktree list --porcelain | grep -E 'worktree .+\\.sandcastle' | sed 's/worktree //' | xargs -I{} git worktree remove --force {} 2>/dev/null; git worktree prune; git branch | grep -E 'agent/|sandcastle/implementer/' | xargs git branch -D"
   },
   "devDependencies": {
-    "@ai-hero/sandcastle": "file:../../ai/sandcastle",
+    "@ai-hero/sandcastle": "^0.5.8",
     "@changesets/cli": "^2.30.0",
     "@types/node": "^20",
     "husky": "^9.1.7",
