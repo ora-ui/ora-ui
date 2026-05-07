@@ -59,7 +59,9 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     const timestamp = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '');
     implementBranch = `agent/implementer-${timestamp}`;
     issueDirective =
-      'Work on the highest-priority open issue that is not blocked (see priority order below).';
+      'Work on the highest-priority open issue that is not blocked (see priority order below). ' +
+      'You MUST only pick an issue from the "Open issues" list above — every issue in that list carries the `agent-ready` label. ' +
+      'Do NOT work on any issue that does not appear in that list, regardless of its number or content.';
   }
 
   // -------------------------------------------------------------------------
