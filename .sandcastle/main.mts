@@ -29,7 +29,7 @@ const { values: args } = parseArgs({
 const targetIssue = args.issue ? parseInt(args.issue as string, 10) : null;
 const targetBranch = args.branch as string | undefined;
 const baseBranch = (args.base as string | undefined) ?? 'develop';
-const skipReview = (args['no-review'] as boolean | undefined) ?? false;
+const skipReview = Boolean(args['no-review']);
 
 // When targeting a specific issue, run exactly one iteration.
 const MAX_ITERATIONS = targetIssue ? 1 : 10;
@@ -127,11 +127,10 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     prSummaryMatch?.[1]?.trim() ??
     'Automated implementation by Sandcastle. Please review before merging.';
 
-  const env = { ...process.env };
-  execSync(`git push origin ${branch}`, { stdio: 'inherit', env });
+  execSync(`git push origin ${branch}`, { stdio: 'inherit' });
   execSync(
     `gh pr create --head ${branch} --base ${baseBranch} --draft --title "sandcastle: ${branch}" --body ${JSON.stringify(prBody)}`,
-    { stdio: 'inherit', env }
+    { stdio: 'inherit' }
   );
 
   console.log(`\nDraft PR opened for branch: ${branch}`);
