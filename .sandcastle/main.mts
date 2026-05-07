@@ -61,7 +61,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     sandbox: docker(),
     branchStrategy: { type: 'merge-to-head' },
     name: 'implementer',
-    maxIterations: 100,
+    maxIterations: 15,
     agent: sandcastle.pi('claude-sonnet-4-6'),
     promptFile: './.sandcastle/implement-prompt.md',
   });
