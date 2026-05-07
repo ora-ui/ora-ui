@@ -1,13 +1,43 @@
 ---
 title: Kbd
 description: Displays keyboard input such as shortcuts, key combinations, or command prompts.
+links:
+  doc: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/kbd
+  api: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/kbd
 ---
+
+<ComponentPreview name="kbd-hero" />
 
 ## Installation
 
-```bash
-npx shadcn@latest add "https://ora-ui.com/r/kbd.json"
-```
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/kbd.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/kbd.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/kbd.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/kbd.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="kbd" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
 
 ## Usage
 
@@ -17,57 +47,21 @@ import { Kbd, KbdGroup } from '@/components/ui/kbd';
 <Kbd>⌘K</Kbd>;
 ```
 
-## Variants
-
-The `variant` prop controls the visual style of the key.
-
-<KbdGroup>
-  <Kbd variant="surface">Surface</Kbd>
-  <Kbd variant="soft">Soft</Kbd>
-  <Kbd variant="ghost">Ghost</Kbd>
-</KbdGroup>
-
-```tsx
-import { Kbd, KbdGroup } from '@/components/ui/kbd';
-
-export default function KbdVariants() {
-  return (
-    <KbdGroup>
-      <Kbd variant="surface">Surface</Kbd>
-      <Kbd variant="soft">Soft</Kbd>
-      <Kbd variant="ghost">Ghost</Kbd>
-    </KbdGroup>
-  );
-}
-```
-
 ## Examples
 
 ### Key Combination
 
 Use `KbdGroup` to display multi-key shortcuts as a cohesive unit.
 
-<KbdGroup>
-  <Kbd>⌘</Kbd>
-  <Kbd>Shift</Kbd>
-  <Kbd>P</Kbd>
-</KbdGroup>
+<ComponentPreview name="kbd-combination" />
 
-```tsx
-import { Kbd, KbdGroup } from '@/components/ui/kbd';
+### Variant
 
-export default function KbdCombination() {
-  return (
-    <KbdGroup>
-      <Kbd>⌘</Kbd>
-      <Kbd>Shift</Kbd>
-      <Kbd>P</Kbd>
-    </KbdGroup>
-  );
-}
-```
+The `variant` prop controls the visual style of the key.
 
-## Props
+<ComponentPreview name="kbd-variant" select={['soft', 'surface', 'ghost']} />
+
+## API Reference
 
 ### Kbd
 

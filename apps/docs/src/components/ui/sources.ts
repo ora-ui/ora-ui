@@ -21,5 +21,6 @@ export default {
   dialog: readSource('dialog.tsx'),
   form: readSource('form.tsx'),
   input: readSource('input.tsx'),
+  kbd: readSource('kbd.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;

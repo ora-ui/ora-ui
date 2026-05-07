@@ -45,6 +45,12 @@ import InputVariantDefault, {
   Outline as InputVariantOutline,
   Soft as InputVariantSoft,
 } from './input/input-variant';
+import KbdHero from './kbd/kbd-hero';
+import KbdCombination from './kbd/kbd-combination';
+import KbdVariantDefault, {
+  Ghost as KbdVariantGhost,
+  Surface as KbdVariantSurface,
+} from './kbd/kbd-variant';
 
 // @scaffold:imports
 import DropdownMenuHero from './dropdown-menu/dropdown-menu-hero';
@@ -241,6 +247,19 @@ export const registry: Record<string, RegistryEntry> = {
       soft: InputVariantSoft,
     },
     source: readSource('input/input-variant.tsx'),
+  },
+  'kbd-hero': {
+    component: KbdHero,
+    source: readSource('kbd/kbd-hero.tsx'),
+  },
+  'kbd-combination': {
+    component: KbdCombination,
+    source: readSource('kbd/kbd-combination.tsx'),
+  },
+  'kbd-variant': {
+    component: KbdVariantDefault,
+    variants: { soft: KbdVariantDefault, surface: KbdVariantSurface, ghost: KbdVariantGhost },
+    source: readSource('kbd/kbd-variant.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-hero': {
