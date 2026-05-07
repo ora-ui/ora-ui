@@ -1,0 +1,95 @@
+---
+title: Form
+description: Accessible form primitives for labelling, grouping, and validating inputs.
+links:
+  doc: https://base-ui.com/react/components/field
+  api: https://base-ui.com/react/components/field#api-reference
+---
+
+<ComponentPreview name="form-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/form.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/form.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/form.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/form.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="form" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  Form,
+  Field,
+  FieldLabel,
+  FieldControl,
+  FieldDescription,
+  FieldValidity,
+  FieldError,
+  Fieldset,
+  FieldsetLegend,
+} from '@/components/ui/form';
+
+<Form>
+  <Fieldset>
+    <FieldsetLegend>Account</FieldsetLegend>
+    <Field name="email">
+      <FieldLabel>Email</FieldLabel>
+      <FieldControl />
+      <FieldDescription>We'll never share your email.</FieldDescription>
+      <FieldError />
+    </Field>
+  </Fieldset>
+</Form>;
+```
+
+## Examples
+
+### Product form
+
+A settings-style form combining text inputs, checkboxes, and radio buttons across multiple field groups.
+
+<ComponentPreview name="form-product" />
+
+## API Reference
+
+This component wraps three separate Base UI primitives. For the full prop reference, see:
+
+- [Field](https://base-ui.com/react/components/field#api-reference) — `Field`, `FieldLabel`, `FieldControl`, `FieldDescription`, `FieldValidity`, `FieldError`
+- [Fieldset](https://base-ui.com/react/components/fieldset#api-reference) — `Fieldset`, `FieldsetLegend`
+- [Form](https://base-ui.com/react/components/form#api-reference) — `Form`

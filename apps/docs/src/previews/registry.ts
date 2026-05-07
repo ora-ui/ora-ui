@@ -38,6 +38,8 @@ import CheckboxGroupNested from './checkbox-group/checkbox-group-nested';
 import DialogHero from './dialog/dialog-hero';
 import DialogDefault from './dialog/dialog-default';
 import DialogScrollable from './dialog/dialog-scrollable';
+import FormHero from './form/form-hero';
+import FormProduct from './form/form-product';
 
 // @scaffold:imports
 import DropdownMenuHero from './dropdown-menu/dropdown-menu-hero';
@@ -213,6 +215,14 @@ export const registry: Record<string, RegistryEntry> = {
   'dialog-scrollable': {
     component: DialogScrollable,
     source: readSource('dialog/dialog-scrollable.tsx'),
+  },
+  'form-hero': {
+    component: FormHero,
+    source: readSource('form/form-hero.tsx'),
+  },
+  'form-product': {
+    component: FormProduct,
+    source: readSource('form/form-product.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-hero': {
