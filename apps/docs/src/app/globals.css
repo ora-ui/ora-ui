@@ -10,6 +10,8 @@
 
   /* backgrounds */
   --background: oklch(0.985 0 0);
+  --surface-1: oklch(0.987 0.001 286);
+  --surface-2: oklch(0.975 0.001 286);
   --surface: oklch(0.97 0 0);
   --overlay: oklch(0.985 0 0);
   --ui: oklch(0 0 0 / 0.059);
@@ -83,6 +85,8 @@
 .dark {
   /* backgrounds */
   --background: oklch(0.105 0 0);
+  --surface-1: oklch(0.196 0.004 275);
+  --surface-2: oklch(0.225 0.004 275);
   --surface: oklch(0.148 0 0);
   --overlay: oklch(0.202 0 0);
   --ui: oklch(1 0 0 / 0.071);
@@ -585,6 +589,8 @@
   --radius-full: 9999px;
 
   --color-background: var(--background);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
   --color-surface: var(--surface);
   --color-overlay: var(--overlay);
   --color-ui: var(--ui);
