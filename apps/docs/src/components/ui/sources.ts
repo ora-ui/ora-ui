@@ -27,5 +27,6 @@ export default {
   textarea: readSource('textarea.tsx'),
   toggle: readSource('toggle.tsx'),
   'toggle-group': readSource('toggle-group.tsx'),
+  switch: readSource('switch.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;
