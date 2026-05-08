@@ -7,6 +7,7 @@
 //   pnpm sandcastle
 
 import * as sandcastle from '@ai-hero/sandcastle';
+import type { AgentProvider } from '@ai-hero/sandcastle';
 import { docker } from '@ai-hero/sandcastle/sandboxes/docker';
 import { execSync } from 'child_process';
 import { parseArgs } from 'node:util';
@@ -33,6 +34,45 @@ const skipReview = Boolean(args['no-review']);
 
 // When targeting a specific issue, run exactly one iteration.
 const MAX_ITERATIONS = targetIssue ? 1 : 10;
+
+// ---------------------------------------------------------------------------
+// Agent resolution
+//
+// Configure via .sandcastle/.env:
+//   SANDCASTLE_IMPL_AGENT=pi:anthropic/claude-sonnet-4-6
+//   SANDCASTLE_REVIEW_AGENT=pi:anthropic/claude-sonnet-4-6
+//
+// Supported providers: pi, claude-code, codex, opencode
+// ---------------------------------------------------------------------------
+
+const resolveAgent = (envVar: string, fallback: string): AgentProvider => {
+  const value = process.env[envVar] ?? fallback;
+  const colonIdx = value.indexOf(':');
+  const provider = colonIdx === -1 ? value : value.slice(0, colonIdx);
+  const model = colonIdx === -1 ? '' : value.slice(colonIdx + 1);
+
+  switch (provider) {
+    case 'pi':
+      return sandcastle.pi(model, {
+        env: { OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY! },
+      });
+    case 'claude-code':
+      return sandcastle.claudeCode(model, {
+        env: { ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY! },
+      });
+    case 'codex':
+      return sandcastle.codex(model, {
+        env: { OPENAI_API_KEY: process.env.OPENAI_API_KEY! },
+      });
+    case 'opencode':
+      return sandcastle.opencode(model);
+    default:
+      throw new Error(`Unknown agent provider "${provider}" in ${envVar}. Valid options: pi, claude-code, codex, opencode`);
+  }
+};
+
+const implAgent = resolveAgent('SANDCASTLE_IMPL_AGENT', 'pi:anthropic/claude-sonnet-4-6');
+const reviewAgent = resolveAgent('SANDCASTLE_REVIEW_AGENT', 'pi:anthropic/claude-sonnet-4-6');
 
 // ---------------------------------------------------------------------------
 // Configuration
@@ -79,9 +119,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     branchStrategy: { type: 'branch', branch: implementBranch, baseBranch },
     name: 'implementer',
     maxIterations: 15,
-    agent: sandcastle.pi('anthropic/claude-sonnet-4-6', {
-      env: { OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY! },
-    }),
+    agent: implAgent,
     promptFile: './.sandcastle/implement-prompt.md',
     promptArgs: { ISSUE_DIRECTIVE: issueDirective },
   });
@@ -109,9 +147,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       branchStrategy: { type: 'branch', branch },
       name: 'reviewer',
       maxIterations: 5,
-      agent: sandcastle.pi('anthropic/claude-sonnet-4-6', {
-        env: { OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY! },
-      }),
+      agent: reviewAgent,
       promptFile: './.sandcastle/review-prompt.md',
       promptArgs: { BRANCH: branch, SOURCE_BRANCH: baseBranch },
     });
