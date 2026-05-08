@@ -109,7 +109,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       maxIterations: 5,
       agent: sandcastle.pi('claude-sonnet-4-6'),
       promptFile: './.sandcastle/review-prompt.md',
-      promptArgs: { BRANCH: branch },
+      promptArgs: { BRANCH: branch, SOURCE_BRANCH: baseBranch },
     });
 
     console.log('\nReview complete.');
