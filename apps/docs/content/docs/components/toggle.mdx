@@ -1,129 +1,77 @@
 ---
 title: Toggle
 description: A two-state button that can be toggled on or off.
+links:
+  doc: https://base-ui.com/react/components/toggle
+  api: https://base-ui.com/react/components/toggle#api-reference
 ---
+
+<ComponentPreview name="toggle-hero" />
 
 ## Installation
 
-```bash
-npx shadcn@latest add "https://ora-ui.com/r/toggle.json"
-```
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/toggle.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/toggle.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/toggle.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/toggle.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="toggle" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
 
 ## Usage
 
 ```tsx
 import { Toggle } from '@/components/ui/toggle';
 
-<Toggle aria-label="Bold">
-  <FontBoldIcon />
+<Toggle aria-label="Toggle bold">
+  <BoldIcon />
 </Toggle>;
 ```
 
 ## Examples
 
-### Default
+### Variant
 
-<Toggle aria-label="Bold">
-  <FontBoldIcon />
-</Toggle>
+The `variant` prop controls the visual style of the toggle.
 
-```tsx
-import { FontBoldIcon } from '@radix-ui/react-icons';
-import { Toggle } from '@/components/ui/toggle';
+<ComponentPreview name="toggle-variant" select={['soft', 'outline', 'solid']} />
 
-export default function ToggleDefault() {
-  return (
-    <Toggle aria-label="Bold">
-      <FontBoldIcon />
-    </Toggle>
-  );
-}
-```
+## API Reference
 
-### Outline
+| Prop      | Type                             | Default  |
+| --------- | -------------------------------- | -------- |
+| `variant` | `"soft" \| "outline" \| "solid"` | `"soft"` |
 
-<Toggle variant="outline" aria-label="Bold">
-  <FontBoldIcon />
-</Toggle>
-
-```tsx
-import { FontBoldIcon } from '@radix-ui/react-icons';
-import { Toggle } from '@/components/ui/toggle';
-
-export default function ToggleOutline() {
-  return (
-    <Toggle variant="outline" aria-label="Bold">
-      <FontBoldIcon />
-    </Toggle>
-  );
-}
-```
-
-### Solid
-
-<Toggle variant="solid" aria-label="Bold">
-  <FontBoldIcon />
-</Toggle>
-
-```tsx
-import { FontBoldIcon } from '@radix-ui/react-icons';
-import { Toggle } from '@/components/ui/toggle';
-
-export default function ToggleSolid() {
-  return (
-    <Toggle variant="solid" aria-label="Bold">
-      <FontBoldIcon />
-    </Toggle>
-  );
-}
-```
-
-### With Text
-
-<Toggle aria-label="Toggle bold">
-  <FontBoldIcon />
-  Bold
-</Toggle>
-
-```tsx
-import { FontBoldIcon } from '@radix-ui/react-icons';
-import { Toggle } from '@/components/ui/toggle';
-
-export default function ToggleWithText() {
-  return (
-    <Toggle aria-label="Toggle bold">
-      <FontBoldIcon />
-      Bold
-    </Toggle>
-  );
-}
-```
-
-### Disabled
-
-<Toggle disabled aria-label="Bold">
-  <FontBoldIcon />
-</Toggle>
-
-```tsx
-import { FontBoldIcon } from '@radix-ui/react-icons';
-import { Toggle } from '@/components/ui/toggle';
-
-export default function ToggleDisabled() {
-  return (
-    <Toggle disabled aria-label="Bold">
-      <FontBoldIcon />
-    </Toggle>
-  );
-}
-```
-
-## Props
-
-| Prop        | Type                             | Default  |
-| ----------- | -------------------------------- | -------- |
-| `variant`   | `"soft" \| "outline" \| "solid"` | `"soft"` |
-| `size`      | `"sm" \| "md" \| "lg"`           | `"md"`   |
-| `className` | `string`                         | —        |
-
-All other props are forwarded to the underlying [Base UI Toggle](https://base-ui.com/components/toggle) primitive.
+All other props are forwarded to the underlying [Base UI Toggle](https://base-ui.com/react/components/toggle) primitive.

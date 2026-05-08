@@ -44,7 +44,7 @@ export async function ComponentPreview({ name, select }: ComponentPreviewProps) 
           : null;
         return {
           ...opt,
-          rendered: VariantComponent ? <VariantComponent /> : null,
+          rendered: VariantComponent ? <VariantComponent key={opt.value} /> : null,
           highlighted,
           source: snippet,
           lineCount: snippet.split('\n').length,

@@ -115,6 +115,11 @@ import BadgeWithIconDefault, {
 } from './badge/badge-with-icon';
 import BadgeIconOnly from './badge/badge-icon-only';
 import BadgeAsLink from './badge/badge-as-link';
+import ToggleHero from './toggle/toggle-hero';
+import ToggleVariantDefault, {
+  Outline as ToggleVariantOutline,
+  Solid as ToggleVariantSolid,
+} from './toggle/toggle-variant';
 import TextareaHero from './textarea/textarea-hero';
 import TextareaVariantDefault, {
   Outline as TextareaVariantOutline,
@@ -412,6 +417,19 @@ export const registry: Record<string, RegistryEntry> = {
   },
   'badge-icon-only': { component: BadgeIconOnly, source: readSource('badge/badge-icon-only.tsx') },
   'badge-as-link': { component: BadgeAsLink, source: readSource('badge/badge-as-link.tsx') },
+  'toggle-hero': {
+    component: ToggleHero,
+    source: readSource('toggle/toggle-hero.tsx'),
+  },
+  'toggle-variant': {
+    component: ToggleVariantDefault,
+    variants: {
+      soft: ToggleVariantDefault,
+      outline: ToggleVariantOutline,
+      solid: ToggleVariantSolid,
+    },
+    source: readSource('toggle/toggle-variant.tsx'),
+  },
   'textarea-hero': {
     component: TextareaHero,
     source: readSource('textarea/textarea-hero.tsx'),
