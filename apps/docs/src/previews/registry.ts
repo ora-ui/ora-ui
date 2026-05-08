@@ -65,6 +65,12 @@ import ToggleGroupVariantsDefault, {
 } from './toggle-group/toggle-group-variants';
 import ToggleGroupConnected from './toggle-group/toggle-group-connected';
 import ToggleGroupVertical from './toggle-group/toggle-group-vertical';
+import SwitchHero from './switch/switch-hero';
+import SwitchWithLabel from './switch/switch-with-label';
+import SwitchThemeDefault, {
+  Gray as SwitchThemeGray,
+  Accent as SwitchThemeAccent,
+} from './switch/switch-theme';
 
 // @scaffold:imports
 import DropdownMenuHero from './dropdown-menu/dropdown-menu-hero';
@@ -329,6 +335,22 @@ export const registry: Record<string, RegistryEntry> = {
   'toggle-group-vertical': {
     component: ToggleGroupVertical,
     source: readSource('toggle-group/toggle-group-vertical.tsx'),
+  },
+  'switch-hero': {
+    component: SwitchHero,
+    source: readSource('switch/switch-hero.tsx'),
+  },
+  'switch-with-label': {
+    component: SwitchWithLabel,
+    source: readSource('switch/switch-with-label.tsx'),
+  },
+  'switch-theme': {
+    component: SwitchThemeDefault,
+    variants: {
+      gray: SwitchThemeGray,
+      accent: SwitchThemeAccent,
+    },
+    source: readSource('switch/switch-theme.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-hero': {
