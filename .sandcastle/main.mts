@@ -79,7 +79,9 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     branchStrategy: { type: 'branch', branch: implementBranch, baseBranch },
     name: 'implementer',
     maxIterations: 15,
-    agent: sandcastle.pi('claude-sonnet-4-6'),
+    agent: sandcastle.pi('anthropic/claude-sonnet-4-6', {
+      env: { OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY! },
+    }),
     promptFile: './.sandcastle/implement-prompt.md',
     promptArgs: { ISSUE_DIRECTIVE: issueDirective },
   });
@@ -107,7 +109,9 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       branchStrategy: { type: 'branch', branch },
       name: 'reviewer',
       maxIterations: 5,
-      agent: sandcastle.pi('claude-sonnet-4-6'),
+      agent: sandcastle.pi('anthropic/claude-sonnet-4-6', {
+        env: { OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY! },
+      }),
       promptFile: './.sandcastle/review-prompt.md',
       promptArgs: { BRANCH: branch, SOURCE_BRANCH: baseBranch },
     });
