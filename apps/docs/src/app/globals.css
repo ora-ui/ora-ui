@@ -276,6 +276,33 @@
   }
 }
 
+/* Radio Group - gradient styles */
+[data-slot='radio-group'] {
+  [data-slot='radio-group-item'] {
+    &[data-variant='solid'] {
+      background-color: transparent;
+      background-image: linear-gradient(
+        to top,
+        color-mix(in oklch, var(--fill) 100%, transparent),
+        color-mix(in oklch, var(--fill) 82%, transparent)
+      );
+      &:not([data-checked]) {
+        background-image: none;
+      }
+    }
+
+    &[data-variant='surface'] {
+      &[data-checked] {
+        background-image: linear-gradient(
+          to top,
+          color-mix(in oklch, var(--active) 100%, transparent),
+          color-mix(in oklch, var(--active) 50%, transparent)
+        );
+      }
+    }
+  }
+}
+
 /* Checkbox-specific state changes */
 [data-slot='checkbox'] {
   &[data-variant='surface'] {
@@ -519,6 +546,32 @@
 
     &[data-variant='solid']:not([data-checked]):not([data-indeterminate]) {
       background-image: none;
+    }
+  }
+
+  [data-slot='radio-group'] {
+    [data-slot='radio-group-item'] {
+      &[data-variant='solid'] {
+        background-color: transparent;
+        background-image: linear-gradient(
+          to bottom,
+          color-mix(in oklch, var(--fill) 100%, transparent),
+          color-mix(in oklch, var(--fill) 87%, transparent)
+        );
+        &:not([data-checked]) {
+          background-image: none;
+        }
+      }
+
+      &[data-variant='surface'] {
+        &[data-checked] {
+          background-image: linear-gradient(
+            to bottom,
+            color-mix(in oklch, var(--active) 100%, transparent),
+            color-mix(in oklch, var(--active) 73%, transparent)
+          );
+        }
+      }
     }
   }
 
