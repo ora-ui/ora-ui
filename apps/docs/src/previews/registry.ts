@@ -58,6 +58,13 @@ import RadioGroupVariantDefault, {
 import SeparatorHero from './separator/separator-hero';
 import SeparatorVertical from './separator/separator-vertical';
 import SeparatorHorizontal from './separator/separator-horizontal';
+import ToggleGroupHero from './toggle-group/toggle-group-hero';
+import ToggleGroupVariantsDefault, {
+  Outline as ToggleGroupVariantsOutline,
+  Solid as ToggleGroupVariantsSolid,
+} from './toggle-group/toggle-group-variants';
+import ToggleGroupConnected from './toggle-group/toggle-group-connected';
+import ToggleGroupVertical from './toggle-group/toggle-group-vertical';
 
 // @scaffold:imports
 import DropdownMenuHero from './dropdown-menu/dropdown-menu-hero';
@@ -301,6 +308,27 @@ export const registry: Record<string, RegistryEntry> = {
   'separator-horizontal': {
     component: SeparatorHorizontal,
     source: readSource('separator/separator-horizontal.tsx'),
+  },
+  'toggle-group-hero': {
+    component: ToggleGroupHero,
+    source: readSource('toggle-group/toggle-group-hero.tsx'),
+  },
+  'toggle-group-variants': {
+    component: ToggleGroupVariantsDefault,
+    variants: {
+      soft: ToggleGroupVariantsDefault,
+      outline: ToggleGroupVariantsOutline,
+      solid: ToggleGroupVariantsSolid,
+    },
+    source: readSource('toggle-group/toggle-group-variants.tsx'),
+  },
+  'toggle-group-connected': {
+    component: ToggleGroupConnected,
+    source: readSource('toggle-group/toggle-group-connected.tsx'),
+  },
+  'toggle-group-vertical': {
+    component: ToggleGroupVertical,
+    source: readSource('toggle-group/toggle-group-vertical.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-hero': {

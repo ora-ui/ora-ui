@@ -26,5 +26,6 @@ export default {
   separator: readSource('separator.tsx'),
   textarea: readSource('textarea.tsx'),
   toggle: readSource('toggle.tsx'),
+  'toggle-group': readSource('toggle-group.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;
