@@ -3,11 +3,49 @@ title: Textarea
 description: A multi-line text input for longer-form content.
 ---
 
+<ComponentPreview name="textarea-hero" />
+
 ## Installation
 
-```bash
-npx shadcn@latest add "https://ora-ui.com/r/textarea.json"
-```
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/textarea.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/textarea.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/textarea.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/textarea.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add class-variance-authority' },
+          { label: 'npm', value: 'npm', code: 'npm install class-variance-authority' },
+          { label: 'bun', value: 'bun', code: 'bun add class-variance-authority' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add class-variance-authority' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="textarea" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
 
 ## Usage
 
@@ -19,136 +57,35 @@ import { Textarea } from '@/components/ui/textarea';
 
 ## Examples
 
-### Subtle
+### Variant
 
-The default variant. Has a border and a subtle background fill.
+The `variant` prop controls the visual style of the textarea.
 
-<Textarea placeholder="Write something..." />
+<ComponentPreview name="textarea-variant" select={['surface', 'outline', 'soft']} />
 
-```tsx
-import { Textarea } from '@/components/ui/textarea';
+### Manual resize
 
-export default function TextareaSubtle() {
-  return <Textarea placeholder="Write something..." />;
-}
-```
+Set `autoResize={false}` to disable auto-grow and let the user resize via the drag handle. Note that `field-sizing: content` requires a [modern browser](https://caniuse.com/mdn-css_properties_field-sizing) — `autoResize` defaults to `true` but falls back gracefully where the property is unsupported.
 
-### Outline
+<ComponentPreview name="textarea-manual-resize" />
 
-Border only, no background.
+### With label
 
-<Textarea variant="outline" placeholder="Write something..." />
+Use `Field` and `FieldLabel` to associate a label with the textarea.
 
-```tsx
-import { Textarea } from '@/components/ui/textarea';
+<ComponentPreview name="textarea-with-label" />
 
-export default function TextareaOutline() {
-  return <Textarea variant="outline" placeholder="Write something..." />;
-}
-```
+### With button
 
-### Soft
+Compose with `Button` inside a `Field` to add a submit action.
 
-Background fill only, no border.
+<ComponentPreview name="textarea-with-button" />
 
-<Textarea variant="soft" placeholder="Write something..." />
+## API Reference
 
-```tsx
-import { Textarea } from '@/components/ui/textarea';
-
-export default function TextareaSoft() {
-  return <Textarea variant="soft" placeholder="Write something..." />;
-}
-```
-
-### Manual Resize
-
-Set `autoResize={false}` to disable auto-grow and let the user resize the textarea manually via the drag handle. Note that `field-sizing: content` requires a [modern browser](https://caniuse.com/mdn-css_properties_field-sizing) — `autoResize` defaults to `true` but falls back gracefully where the property is unsupported.
-
-<Textarea autoResize={false} placeholder="Drag to resize..." />
-
-```tsx
-import { Textarea } from '@/components/ui/textarea';
-
-export default function TextareaManualResize() {
-  return <Textarea autoResize={false} placeholder="Drag to resize..." />;
-}
-```
-
-### Disabled
-
-<Textarea placeholder="Cannot edit this" disabled />
-
-```tsx
-import { Textarea } from '@/components/ui/textarea';
-
-export default function TextareaDisabled() {
-  return <Textarea placeholder="Cannot edit this" disabled />;
-}
-```
-
-### Invalid
-
-Use `aria-invalid` to indicate a validation error.
-
-<Textarea aria-invalid placeholder="Something went wrong..." />
-
-```tsx
-import { Textarea } from '@/components/ui/textarea';
-
-export default function TextareaInvalid() {
-  return <Textarea aria-invalid placeholder="Something went wrong..." />;
-}
-```
-
-### With Label
-
-<div className="grid w-full max-w-sm gap-1.5">
-  <Label htmlFor="bio">Bio</Label>
-  <Textarea id="bio" placeholder="Tell us about yourself." />
-</div>
-
-```tsx
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-
-export default function TextareaWithLabel() {
-  return (
-    <div className="grid w-full max-w-sm gap-1.5">
-      <Label htmlFor="bio">Bio</Label>
-      <Textarea id="bio" placeholder="Tell us about yourself." />
-    </div>
-  );
-}
-```
-
-### With Button
-
-<div className="flex w-full max-w-sm flex-col gap-2">
-  <Textarea placeholder="Leave a comment..." />
-  <Button className="self-end">Submit</Button>
-</div>
-
-```tsx
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-
-export default function TextareaWithButton() {
-  return (
-    <div className="flex w-full max-w-sm flex-col gap-2">
-      <Textarea placeholder="Leave a comment..." />
-      <Button className="self-end">Submit</Button>
-    </div>
-  );
-}
-```
-
-## Props
-
-| Prop         | Type                              | Default    |
-| ------------ | --------------------------------- | ---------- |
-| `variant`    | `"subtle" \| "outline" \| "soft"` | `"subtle"` |
-| `autoResize` | `boolean`                         | `true`     |
-| `className`  | `string`                          | —          |
+| Prop         | Type                               | Default     |
+| ------------ | ---------------------------------- | ----------- |
+| `variant`    | `"surface" \| "outline" \| "soft"` | `"surface"` |
+| `autoResize` | `boolean`                          | `true`      |
 
 All other props are forwarded to the underlying `<textarea>` element.

@@ -24,5 +24,6 @@ export default {
   kbd: readSource('kbd.tsx'),
   'radio-group': readSource('radio-group.tsx'),
   separator: readSource('separator.tsx'),
+  textarea: readSource('textarea.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;

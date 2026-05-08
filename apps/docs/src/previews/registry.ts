@@ -115,6 +115,14 @@ import BadgeWithIconDefault, {
 } from './badge/badge-with-icon';
 import BadgeIconOnly from './badge/badge-icon-only';
 import BadgeAsLink from './badge/badge-as-link';
+import TextareaHero from './textarea/textarea-hero';
+import TextareaVariantDefault, {
+  Outline as TextareaVariantOutline,
+  Soft as TextareaVariantSoft,
+} from './textarea/textarea-variant';
+import TextareaManualResize from './textarea/textarea-manual-resize';
+import TextareaWithLabel from './textarea/textarea-with-label';
+import TextareaWithButton from './textarea/textarea-with-button';
 
 const previewsDir = path.join(process.cwd(), 'src/previews');
 
@@ -404,4 +412,29 @@ export const registry: Record<string, RegistryEntry> = {
   },
   'badge-icon-only': { component: BadgeIconOnly, source: readSource('badge/badge-icon-only.tsx') },
   'badge-as-link': { component: BadgeAsLink, source: readSource('badge/badge-as-link.tsx') },
+  'textarea-hero': {
+    component: TextareaHero,
+    source: readSource('textarea/textarea-hero.tsx'),
+  },
+  'textarea-variant': {
+    component: TextareaVariantDefault,
+    variants: {
+      surface: TextareaVariantDefault,
+      outline: TextareaVariantOutline,
+      soft: TextareaVariantSoft,
+    },
+    source: readSource('textarea/textarea-variant.tsx'),
+  },
+  'textarea-manual-resize': {
+    component: TextareaManualResize,
+    source: readSource('textarea/textarea-manual-resize.tsx'),
+  },
+  'textarea-with-label': {
+    component: TextareaWithLabel,
+    source: readSource('textarea/textarea-with-label.tsx'),
+  },
+  'textarea-with-button': {
+    component: TextareaWithButton,
+    source: readSource('textarea/textarea-with-button.tsx'),
+  },
 };
