@@ -1,0 +1,106 @@
+---
+title: Tabs
+description: A set of layered content sections that are displayed one at a time.
+links:
+  doc: https://base-ui.com/react/components/tabs
+  api: https://base-ui.com/react/components/tabs#api-reference
+---
+
+<ComponentPreview name="tabs-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/tabs.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/tabs.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/tabs.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/tabs.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="tabs" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import { Tabs, TabsSurface, TabsList, TabsTab, TabsPanel } from '@/components/ui/tabs';
+
+<Tabs defaultValue="overview">
+  <TabsList>
+    <TabsTab value="overview">Overview</TabsTab>
+    <TabsTab value="analytics">Analytics</TabsTab>
+    <TabsTab value="reports">Reports</TabsTab>
+  </TabsList>
+  <TabsPanel value="overview">Overview content</TabsPanel>
+  <TabsPanel value="analytics">Analytics content</TabsPanel>
+  <TabsPanel value="reports">Reports content</TabsPanel>
+</Tabs>;
+```
+
+## Examples
+
+### Variants
+
+The `variant` prop on `TabsList` controls the active indicator style.
+
+<ComponentPreview name="tabs-variants" select={['soft', 'solid']} />
+
+### Orientation
+
+Set `orientation="vertical"` on `Tabs` to stack tabs alongside their panels.
+
+<ComponentPreview name="tabs-orientation" />
+
+### With surface
+
+Wrap `TabsList` in `TabsSurface` to add a background container around the tab list.
+
+<ComponentPreview name="tabs-with-surface" />
+
+### Transition
+
+Set `transition` on `TabsList` to smoothly animate the indicator when switching tabs.
+
+<ComponentPreview name="tabs-transition" />
+
+## API Reference
+
+### TabsList
+
+| Prop         | Type                | Default  |
+| ------------ | ------------------- | -------- |
+| `variant`    | `"soft" \| "solid"` | `"soft"` |
+| `track`      | `boolean`           | `true`   |
+| `transition` | `boolean`           | `false`  |
+
+For the remaining sub-components (`Tabs`, `TabsTab`, `TabsPanel`), all props are forwarded to the corresponding Base UI primitives. See the [Base UI Tabs API Reference](https://base-ui.com/react/components/tabs#api-reference).

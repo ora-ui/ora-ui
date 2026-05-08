@@ -47,6 +47,19 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
    },
    ```
 
+   **Select pattern footgun — every variant needs a named export.** `ComponentPreview` uses `extractExport(source, 'Soft')` to extract the code snippet for each variant. It scans the source file for `export function Soft(` literally — a default export never matches. If you map a variant key to the default export (e.g. `soft: MyDefault`), that variant's code block will be silently empty. Always give every variant its own named `export function`, including the first/primary one, and set the default export to one of them:
+
+   ```ts
+   // preview file — correct
+   export function Soft() { ... }   // named — extractExport finds this
+   export function Solid() { ... }  // named — extractExport finds this
+   export default Soft;             // default just sets the initial render
+
+   // preview file — wrong: default export is invisible to extractExport
+   export default function MyVariants() { ... }  // "soft" key → no code block shown
+   export function Solid() { ... }
+   ```
+
 7. **Fill MDX TODOs** — in `content/docs/components/<name>.mdx`:
    - Replace the usage snippet (import + minimal JSX)
    - Add a one-line description above each `<ComponentPreview>`

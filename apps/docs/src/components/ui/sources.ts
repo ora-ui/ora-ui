@@ -28,5 +28,6 @@ export default {
   toggle: readSource('toggle.tsx'),
   'toggle-group': readSource('toggle-group.tsx'),
   switch: readSource('switch.tsx'),
+  tabs: readSource('tabs.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;

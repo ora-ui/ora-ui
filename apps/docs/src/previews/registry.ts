@@ -71,6 +71,14 @@ import SwitchThemeDefault, {
   Gray as SwitchThemeGray,
   Accent as SwitchThemeAccent,
 } from './switch/switch-theme';
+import TabsHero from './tabs/tabs-hero';
+import TabsVariantsDefault, {
+  Soft as TabsVariantsSoft,
+  Solid as TabsVariantsSolid,
+} from './tabs/tabs-variants';
+import TabsOrientation from './tabs/tabs-orientation';
+import TabsWithSurface from './tabs/tabs-with-surface';
+import TabsTransition from './tabs/tabs-transition';
 
 // @scaffold:imports
 import DropdownMenuHero from './dropdown-menu/dropdown-menu-hero';
@@ -351,6 +359,27 @@ export const registry: Record<string, RegistryEntry> = {
       accent: SwitchThemeAccent,
     },
     source: readSource('switch/switch-theme.tsx'),
+  },
+  'tabs-hero': {
+    component: TabsHero,
+    source: readSource('tabs/tabs-hero.tsx'),
+  },
+  'tabs-variants': {
+    component: TabsVariantsDefault,
+    variants: { soft: TabsVariantsSoft, solid: TabsVariantsSolid },
+    source: readSource('tabs/tabs-variants.tsx'),
+  },
+  'tabs-orientation': {
+    component: TabsOrientation,
+    source: readSource('tabs/tabs-orientation.tsx'),
+  },
+  'tabs-with-surface': {
+    component: TabsWithSurface,
+    source: readSource('tabs/tabs-with-surface.tsx'),
+  },
+  'tabs-transition': {
+    component: TabsTransition,
+    source: readSource('tabs/tabs-transition.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-hero': {
