@@ -25,5 +25,9 @@ export default {
   'radio-group': readSource('radio-group.tsx'),
   separator: readSource('separator.tsx'),
   textarea: readSource('textarea.tsx'),
+  toggle: readSource('toggle.tsx'),
+  'toggle-group': readSource('toggle-group.tsx'),
+  switch: readSource('switch.tsx'),
+  tabs: readSource('tabs.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;

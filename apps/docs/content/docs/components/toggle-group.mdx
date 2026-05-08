@@ -1,13 +1,54 @@
 ---
 title: Toggle Group
 description: A set of toggle buttons where one or more items can be pressed at a time.
+links:
+  doc: https://base-ui.com/react/components/toggle-group
+  api: https://base-ui.com/react/components/toggle-group#api-reference
 ---
+
+<ComponentPreview name="toggle-group-hero" />
 
 ## Installation
 
-```bash
-npx shadcn@latest add "https://ora-ui.com/r/toggle-group.json"
-```
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/toggle-group.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/toggle-group.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/toggle-group.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/toggle-group.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react class-variance-authority' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react class-variance-authority' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react class-variance-authority' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react class-variance-authority' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="toggle-group" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
 
 ## Usage
 
@@ -23,164 +64,25 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 ## Examples
 
-### Default
+### Variants
 
-Items sit as separate toggles with a gap between them.
+The `variant` prop controls the visual style of each item.
 
-<ToggleGroup>
-  <ToggleGroupItem value="left" aria-label="Align left">
-    <TextAlignLeftIcon />
-  </ToggleGroupItem>
-  <ToggleGroupItem value="center" aria-label="Align center">
-    <TextAlignCenterIcon />
-  </ToggleGroupItem>
-  <ToggleGroupItem value="right" aria-label="Align right">
-    <TextAlignRightIcon />
-  </ToggleGroupItem>
-</ToggleGroup>
+<ComponentPreview name="toggle-group-variants" select={['soft', 'outline', 'solid']} />
 
-```tsx
-import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from '@radix-ui/react-icons';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+### Connected
 
-export default function ToggleGroupDefault() {
-  return (
-    <ToggleGroup>
-      <ToggleGroupItem value="left" aria-label="Align left">
-        <TextAlignLeftIcon />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="center" aria-label="Align center">
-        <TextAlignCenterIcon />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="right" aria-label="Align right">
-        <TextAlignRightIcon />
-      </ToggleGroupItem>
-    </ToggleGroup>
-  );
-}
-```
+Set `spacing={0}` with `variant="outline"` to render items as a single connected control with shared borders.
 
-### Outline
-
-Use `variant="outline"` with `spacing={0}` to render items as a connected pill with shared borders.
-
-<ToggleGroup variant="outline" spacing={0}>
-  <ToggleGroupItem value="left" aria-label="Align left">
-    <TextAlignLeftIcon />
-  </ToggleGroupItem>
-  <ToggleGroupItem value="center" aria-label="Align center">
-    <TextAlignCenterIcon />
-  </ToggleGroupItem>
-  <ToggleGroupItem value="right" aria-label="Align right">
-    <TextAlignRightIcon />
-  </ToggleGroupItem>
-  <ToggleGroupItem value="justify" aria-label="Align justify">
-    <TextAlignJustifyIcon />
-  </ToggleGroupItem>
-</ToggleGroup>
-
-```tsx
-import {
-  TextAlignCenterIcon,
-  TextAlignJustifyIcon,
-  TextAlignLeftIcon,
-  TextAlignRightIcon,
-} from '@radix-ui/react-icons';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-
-export default function ToggleGroupOutline() {
-  return (
-    <ToggleGroup variant="outline" spacing={0}>
-      <ToggleGroupItem value="left" aria-label="Align left">
-        <TextAlignLeftIcon />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="center" aria-label="Align center">
-        <TextAlignCenterIcon />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="right" aria-label="Align right">
-        <TextAlignRightIcon />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="justify" aria-label="Align justify">
-        <TextAlignJustifyIcon />
-      </ToggleGroupItem>
-    </ToggleGroup>
-  );
-}
-```
-
-### Solid
-
-<ToggleGroup variant="solid">
-  <ToggleGroupItem value="left" aria-label="Align left">
-    <TextAlignLeftIcon />
-  </ToggleGroupItem>
-  <ToggleGroupItem value="center" aria-label="Align center">
-    <TextAlignCenterIcon />
-  </ToggleGroupItem>
-  <ToggleGroupItem value="right" aria-label="Align right">
-    <TextAlignRightIcon />
-  </ToggleGroupItem>
-</ToggleGroup>
-
-```tsx
-import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from '@radix-ui/react-icons';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-
-export default function ToggleGroupSolid() {
-  return (
-    <ToggleGroup variant="solid">
-      <ToggleGroupItem value="left" aria-label="Align left">
-        <TextAlignLeftIcon />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="center" aria-label="Align center">
-        <TextAlignCenterIcon />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="right" aria-label="Align right">
-        <TextAlignRightIcon />
-      </ToggleGroupItem>
-    </ToggleGroup>
-  );
-}
-```
+<ComponentPreview name="toggle-group-connected" />
 
 ### Vertical
 
-Use `orientation="vertical"` to stack items.
+Set `orientation="vertical"` to stack items in a column.
 
-<ToggleGroup orientation="vertical" variant="outline" spacing={0}>
-  <ToggleGroupItem value="bold" aria-label="Bold">
-    <FontBoldIcon />
-  </ToggleGroupItem>
-  <ToggleGroupItem value="italic" aria-label="Italic">
-    <FontItalicIcon />
-  </ToggleGroupItem>
-  <ToggleGroupItem value="underline" aria-label="Underline">
-    <UnderlineIcon />
-  </ToggleGroupItem>
-</ToggleGroup>
+<ComponentPreview name="toggle-group-vertical" />
 
-```tsx
-import { FontBoldIcon, FontItalicIcon, UnderlineIcon } from '@radix-ui/react-icons';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-
-export default function ToggleGroupVertical() {
-  return (
-    <ToggleGroup orientation="vertical" variant="outline" spacing={0}>
-      <ToggleGroupItem value="bold" aria-label="Bold">
-        <FontBoldIcon />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="italic" aria-label="Italic">
-        <FontItalicIcon />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="underline" aria-label="Underline">
-        <UnderlineIcon />
-      </ToggleGroupItem>
-    </ToggleGroup>
-  );
-}
-```
-
-## Props
+## API Reference
 
 ### ToggleGroup
 
@@ -196,4 +98,4 @@ export default function ToggleGroupVertical() {
 
 Inherits `variant` and `size` from the parent `ToggleGroup` context. Individual items can override either prop directly.
 
-All other props are forwarded to the underlying [Base UI Toggle](https://base-ui.com/components/toggle) primitive.
+All other props are forwarded to the underlying [Base UI Toggle](https://base-ui.com/react/components/toggle) primitive.

@@ -1,0 +1,83 @@
+---
+title: Switch
+description: A control that allows the user to toggle between checked and unchecked.
+links:
+  doc: https://base-ui.com/react/components/switch
+  api: https://base-ui.com/react/components/switch#api-reference
+---
+
+<ComponentPreview name="switch-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/switch.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/switch.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/switch.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/switch.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="switch" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import { Switch } from '@/components/ui/switch';
+
+<Switch />;
+```
+
+## Examples
+
+### With label
+
+Pair with `Field` and `FieldLabel` to associate a label with the switch in a settings row.
+
+<ComponentPreview name="switch-with-label" />
+
+### Theme
+
+The `theme` prop applies a color scheme to the checked state.
+
+<ComponentPreview name="switch-theme" select={['gray', 'accent']} />
+
+## API Reference
+
+| Prop        | Type                 | Default     |
+| ----------- | -------------------- | ----------- |
+| `size`      | `"default" \| "sm"`  | `"default"` |
+| `theme`     | `"gray" \| "accent"` | `"gray"`    |
+| `className` | `string`             | —           |
+
+All other props are forwarded to the underlying [Base UI Switch](https://base-ui.com/react/components/switch) primitive.

@@ -10,11 +10,11 @@ const toggleVariants = cva(
   {
     variants: {
       variant: {
-        soft: 'bg-transparent text-foreground-subtle hover:bg-hover hover:text-foreground aria-pressed:bg-active aria-pressed:text-foreground focus-visible:outline-2 focus-visible:outline-focus',
+        soft: 'bg-transparent text-secondary hover:bg-hover hover:text-primary aria-pressed:bg-active aria-pressed:text-primary focus-visible:outline-2 focus-visible:outline-focus',
         outline:
-          'border border-line-ui/65 bg-transparent text-foreground-subtle hover:bg-hover hover:text-foreground aria-pressed:bg-active aria-pressed:text-foreground focus-visible:outline-2 focus-visible:outline-focus',
+          'border border-line-ui/65 bg-transparent text-secondary hover:bg-hover hover:text-primary aria-pressed:bg-active aria-pressed:text-primary focus-visible:outline-2 focus-visible:outline-focus',
         solid:
-          'bg-transparent text-foreground-subtle hover:bg-hover hover:text-foreground aria-pressed:bg-background-solid aria-pressed:text-foreground-solid focus-visible:outline-2 focus-visible:outline-focus aria-pressed:focus-visible:outline-focus-solid',
+          'bg-transparent text-secondary hover:bg-hover hover:text-primary aria-pressed:bg-fill aria-pressed:text-on-fill focus-visible:outline-2 focus-visible:outline-focus aria-pressed:focus-visible:outline-focus-fill',
       },
       size: {
         sm: 'h-8 min-w-8 px-2.5 has-[>svg:only-child]:p-0',

@@ -58,6 +58,27 @@ import RadioGroupVariantDefault, {
 import SeparatorHero from './separator/separator-hero';
 import SeparatorVertical from './separator/separator-vertical';
 import SeparatorHorizontal from './separator/separator-horizontal';
+import ToggleGroupHero from './toggle-group/toggle-group-hero';
+import ToggleGroupVariantsDefault, {
+  Outline as ToggleGroupVariantsOutline,
+  Solid as ToggleGroupVariantsSolid,
+} from './toggle-group/toggle-group-variants';
+import ToggleGroupConnected from './toggle-group/toggle-group-connected';
+import ToggleGroupVertical from './toggle-group/toggle-group-vertical';
+import SwitchHero from './switch/switch-hero';
+import SwitchWithLabel from './switch/switch-with-label';
+import SwitchThemeDefault, {
+  Gray as SwitchThemeGray,
+  Accent as SwitchThemeAccent,
+} from './switch/switch-theme';
+import TabsHero from './tabs/tabs-hero';
+import TabsVariantsDefault, {
+  Soft as TabsVariantsSoft,
+  Solid as TabsVariantsSolid,
+} from './tabs/tabs-variants';
+import TabsOrientation from './tabs/tabs-orientation';
+import TabsWithSurface from './tabs/tabs-with-surface';
+import TabsTransition from './tabs/tabs-transition';
 
 // @scaffold:imports
 import DropdownMenuHero from './dropdown-menu/dropdown-menu-hero';
@@ -115,6 +136,11 @@ import BadgeWithIconDefault, {
 } from './badge/badge-with-icon';
 import BadgeIconOnly from './badge/badge-icon-only';
 import BadgeAsLink from './badge/badge-as-link';
+import ToggleHero from './toggle/toggle-hero';
+import ToggleVariantDefault, {
+  Outline as ToggleVariantOutline,
+  Solid as ToggleVariantSolid,
+} from './toggle/toggle-variant';
 import TextareaHero from './textarea/textarea-hero';
 import TextareaVariantDefault, {
   Outline as TextareaVariantOutline,
@@ -297,6 +323,64 @@ export const registry: Record<string, RegistryEntry> = {
     component: SeparatorHorizontal,
     source: readSource('separator/separator-horizontal.tsx'),
   },
+  'toggle-group-hero': {
+    component: ToggleGroupHero,
+    source: readSource('toggle-group/toggle-group-hero.tsx'),
+  },
+  'toggle-group-variants': {
+    component: ToggleGroupVariantsDefault,
+    variants: {
+      soft: ToggleGroupVariantsDefault,
+      outline: ToggleGroupVariantsOutline,
+      solid: ToggleGroupVariantsSolid,
+    },
+    source: readSource('toggle-group/toggle-group-variants.tsx'),
+  },
+  'toggle-group-connected': {
+    component: ToggleGroupConnected,
+    source: readSource('toggle-group/toggle-group-connected.tsx'),
+  },
+  'toggle-group-vertical': {
+    component: ToggleGroupVertical,
+    source: readSource('toggle-group/toggle-group-vertical.tsx'),
+  },
+  'switch-hero': {
+    component: SwitchHero,
+    source: readSource('switch/switch-hero.tsx'),
+  },
+  'switch-with-label': {
+    component: SwitchWithLabel,
+    source: readSource('switch/switch-with-label.tsx'),
+  },
+  'switch-theme': {
+    component: SwitchThemeDefault,
+    variants: {
+      gray: SwitchThemeGray,
+      accent: SwitchThemeAccent,
+    },
+    source: readSource('switch/switch-theme.tsx'),
+  },
+  'tabs-hero': {
+    component: TabsHero,
+    source: readSource('tabs/tabs-hero.tsx'),
+  },
+  'tabs-variants': {
+    component: TabsVariantsDefault,
+    variants: { soft: TabsVariantsSoft, solid: TabsVariantsSolid },
+    source: readSource('tabs/tabs-variants.tsx'),
+  },
+  'tabs-orientation': {
+    component: TabsOrientation,
+    source: readSource('tabs/tabs-orientation.tsx'),
+  },
+  'tabs-with-surface': {
+    component: TabsWithSurface,
+    source: readSource('tabs/tabs-with-surface.tsx'),
+  },
+  'tabs-transition': {
+    component: TabsTransition,
+    source: readSource('tabs/tabs-transition.tsx'),
+  },
   // @scaffold:entries
   'dropdown-menu-hero': {
     component: DropdownMenuHero,
@@ -412,6 +496,19 @@ export const registry: Record<string, RegistryEntry> = {
   },
   'badge-icon-only': { component: BadgeIconOnly, source: readSource('badge/badge-icon-only.tsx') },
   'badge-as-link': { component: BadgeAsLink, source: readSource('badge/badge-as-link.tsx') },
+  'toggle-hero': {
+    component: ToggleHero,
+    source: readSource('toggle/toggle-hero.tsx'),
+  },
+  'toggle-variant': {
+    component: ToggleVariantDefault,
+    variants: {
+      soft: ToggleVariantDefault,
+      outline: ToggleVariantOutline,
+      solid: ToggleVariantSolid,
+    },
+    source: readSource('toggle/toggle-variant.tsx'),
+  },
   'textarea-hero': {
     component: TextareaHero,
     source: readSource('textarea/textarea-hero.tsx'),
