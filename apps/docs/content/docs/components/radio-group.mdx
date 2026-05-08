@@ -1,0 +1,85 @@
+---
+title: Radio Group
+description: A set of checkable buttons where only one can be selected at a time.
+links:
+  doc: https://base-ui.com/react/components/radio-group
+  api: https://base-ui.com/react/components/radio-group#api-reference
+---
+
+<ComponentPreview name="radio-group-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/radio-group.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/radio-group.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/radio-group.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/radio-group.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="radio-group" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+
+<RadioGroup defaultValue="a">
+  <label className="flex items-center gap-2">
+    <RadioGroupItem value="a" />
+    Option A
+  </label>
+  <label className="flex items-center gap-2">
+    <RadioGroupItem value="b" />
+    Option B
+  </label>
+</RadioGroup>;
+```
+
+## Examples
+
+### Variant
+
+The `variant` prop controls the visual style of the radio.
+
+<ComponentPreview name="radio-group-variant" select={['solid', 'surface']} />
+
+## API Reference
+
+| Prop      | Type                   | Default   |
+| --------- | ---------------------- | --------- |
+| `variant` | `"solid" \| "surface"` | `"solid"` |
+
+All other props are forwarded to the underlying [Base UI Radio](https://base-ui.com/react/components/radio) primitive.

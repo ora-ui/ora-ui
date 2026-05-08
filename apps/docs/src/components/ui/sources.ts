@@ -22,5 +22,6 @@ export default {
   form: readSource('form.tsx'),
   input: readSource('input.tsx'),
   kbd: readSource('kbd.tsx'),
+  'radio-group': readSource('radio-group.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;

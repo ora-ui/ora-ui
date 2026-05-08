@@ -51,6 +51,10 @@ import KbdVariantDefault, {
   Ghost as KbdVariantGhost,
   Surface as KbdVariantSurface,
 } from './kbd/kbd-variant';
+import RadioGroupHero from './radio-group/radio-group-hero';
+import RadioGroupVariantDefault, {
+  Surface as RadioGroupVariantSurface,
+} from './radio-group/radio-group-variant';
 
 // @scaffold:imports
 import DropdownMenuHero from './dropdown-menu/dropdown-menu-hero';
@@ -260,6 +264,15 @@ export const registry: Record<string, RegistryEntry> = {
     component: KbdVariantDefault,
     variants: { soft: KbdVariantDefault, surface: KbdVariantSurface, ghost: KbdVariantGhost },
     source: readSource('kbd/kbd-variant.tsx'),
+  },
+  'radio-group-hero': {
+    component: RadioGroupHero,
+    source: readSource('radio-group/radio-group-hero.tsx'),
+  },
+  'radio-group-variant': {
+    component: RadioGroupVariantDefault,
+    variants: { solid: RadioGroupVariantDefault, surface: RadioGroupVariantSurface },
+    source: readSource('radio-group/radio-group-variant.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-hero': {
