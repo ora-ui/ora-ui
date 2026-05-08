@@ -55,6 +55,9 @@ import RadioGroupHero from './radio-group/radio-group-hero';
 import RadioGroupVariantDefault, {
   Surface as RadioGroupVariantSurface,
 } from './radio-group/radio-group-variant';
+import SeparatorHero from './separator/separator-hero';
+import SeparatorVertical from './separator/separator-vertical';
+import SeparatorHorizontal from './separator/separator-horizontal';
 
 // @scaffold:imports
 import DropdownMenuHero from './dropdown-menu/dropdown-menu-hero';
@@ -273,6 +276,18 @@ export const registry: Record<string, RegistryEntry> = {
     component: RadioGroupVariantDefault,
     variants: { solid: RadioGroupVariantDefault, surface: RadioGroupVariantSurface },
     source: readSource('radio-group/radio-group-variant.tsx'),
+  },
+  'separator-hero': {
+    component: SeparatorHero,
+    source: readSource('separator/separator-hero.tsx'),
+  },
+  'separator-vertical': {
+    component: SeparatorVertical,
+    source: readSource('separator/separator-vertical.tsx'),
+  },
+  'separator-horizontal': {
+    component: SeparatorHorizontal,
+    source: readSource('separator/separator-horizontal.tsx'),
   },
   // @scaffold:entries
   'dropdown-menu-hero': {

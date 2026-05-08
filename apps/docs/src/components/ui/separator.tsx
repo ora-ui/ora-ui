@@ -10,7 +10,7 @@ function Separator({ className, orientation = 'horizontal', ...props }: Separato
       data-slot="separator"
       orientation={orientation}
       className={cn(
-        'shrink-0 bg-line data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch data-vertical:my-auto',
+        'shrink-0 bg-line data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch',
         className
       )}
       {...props}

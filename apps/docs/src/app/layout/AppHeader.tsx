@@ -66,7 +66,7 @@ export function HeaderDesktopActions({ onSearchOpen, showSearch }: HeaderActions
       >
         <GitHubIcon />
       </a>
-      <Separator orientation="vertical" className="h-4" />
+      <Separator orientation="vertical" className="h-4 my-auto" />
       <ModeSwitcher />
     </div>
   );

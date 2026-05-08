@@ -3,6 +3,8 @@ title: Separator
 description: Visually or semantically separates content.
 ---
 
+<ComponentPreview name="separator-hero" />
+
 ## Installation
 
 ```bash
@@ -14,80 +16,28 @@ npx shadcn@latest add "https://ora-ui.com/r/separator.json"
 ```tsx
 import { Separator } from '@/components/ui/separator';
 
-<Separator />;
-```
-
-## Horizontal
-
-The default orientation is `horizontal`, rendering a full-width dividing line.
-
-<div>
-  <div className="space-y-1">
-    <h4 className="text-sm font-medium leading-none">Ora UI</h4>
-    <p className="text-sm text-muted-foreground">An open-source component library.</p>
-  </div>
-  <Separator className="my-4" />
-  <div className="flex h-5 items-center gap-4 text-sm">
-    <span>Components</span>
-    <Separator orientation="vertical" />
-    <span>Primitives</span>
-    <Separator orientation="vertical" />
-    <span>Tokens</span>
-  </div>
-</div>
-
-```tsx
-import { Separator } from '@/components/ui/separator';
-
-export default function SeparatorDemo() {
-  return (
-    <div>
-      <div className="space-y-1">
-        <h4 className="text-sm font-medium leading-none">Ora UI</h4>
-        <p className="text-sm text-muted-foreground">An open-source component library.</p>
-      </div>
-      <Separator className="my-4" />
-      <div className="flex h-5 items-center gap-4 text-sm">
-        <span>Components</span>
-        <Separator orientation="vertical" />
-        <span>Primitives</span>
-        <Separator orientation="vertical" />
-        <span>Tokens</span>
-      </div>
-    </div>
-  );
+export default function Example() {
+  return <Separator />;
 }
 ```
 
-## Vertical
+The default orientation is `horizontal`. Use `orientation="vertical"` for vertical dividers.
 
-Use `orientation="vertical"` to render a vertical divider. The separator will stretch to fill the height of its container.
+## Examples
 
-<div className="flex h-5 items-center gap-4 text-sm">
-  <span>Blog</span>
-  <Separator orientation="vertical" />
-  <span>Docs</span>
-  <Separator orientation="vertical" />
-  <span>Source</span>
-</div>
+### Horizontal
 
-```tsx
-import { Separator } from '@/components/ui/separator';
+Render a full-width horizontal divider (default orientation).
 
-export default function SeparatorVertical() {
-  return (
-    <div className="flex h-5 items-center gap-4 text-sm">
-      <span>Blog</span>
-      <Separator orientation="vertical" />
-      <span>Docs</span>
-      <Separator orientation="vertical" />
-      <span>Source</span>
-    </div>
-  );
-}
-```
+<ComponentPreview name="separator-horizontal" />
 
-## Props
+### Vertical
+
+Render a vertical divider that stretches to fill its container's height.
+
+<ComponentPreview name="separator-vertical" />
+
+## API Reference
 
 | Prop          | Type                         | Default        |
 | ------------- | ---------------------------- | -------------- |

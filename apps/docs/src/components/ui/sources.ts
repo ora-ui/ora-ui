@@ -23,5 +23,6 @@ export default {
   input: readSource('input.tsx'),
   kbd: readSource('kbd.tsx'),
   'radio-group': readSource('radio-group.tsx'),
+  separator: readSource('separator.tsx'),
   // @scaffold:component-entries
 } as Record<string, string>;
