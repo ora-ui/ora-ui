@@ -114,7 +114,7 @@ export function AppHeader() {
         <Logo />
       </NextLink>
       <div className="hidden lg:flex items-center gap-8">
-        <nav className="flex items-center gap-6 text-sm">
+        <nav aria-label="Primary navigation" className="flex items-center gap-6 text-sm">
           <Link render={<NextLink href="/docs" />}>Documentation</Link>
           {/* <Link render={<NextLink href="/docs/components" />}>Components</Link> */}
         </nav>
