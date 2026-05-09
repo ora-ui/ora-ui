@@ -42,17 +42,7 @@ If the highest-priority issue looks too ambitious for an autonomous run (multi-c
 6. **Commit** — single git commit. The message MUST:
    - Start with `sandcastle-` prefix (lowercase) followed by a conventional type, e.g. `sandcastle-fix(button): correct focus ring color`
    - Reference the issue number in the body (`Closes #N`)
-7. **Summarise** — output a summary block for the pull request:
-
-   ```
-   <pr-summary>
-   Short description of what was changed and why (2–5 sentences).
-
-   Closes #N
-   </pr-summary>
-   ```
-
-   Replace `#N` with the actual issue number. The `Closes #N` line must be the last line of the summary — GitHub will auto-close the issue when the PR is merged.
+7. **Summarise** — see the **Done** section below. Output `<pr-summary>` and `<promise>COMPLETE</promise>` together in one final message. Replace `#N` with the actual issue number — the `Closes #N` line auto-closes the issue on merge.
 
 ## Rules
 
@@ -82,6 +72,14 @@ The orchestrator will post the reason as a comment on the issue and move on.
 
 # Done
 
-When the issue is complete (committed, gates green, summary output), output:
+When the issue is complete (committed, gates green), output both the summary and the completion signal in the same final message — do not split them across separate messages:
 
-`<promise>COMPLETE</promise>`
+```
+<pr-summary>
+Short description of what was changed and why (2–5 sentences).
+
+Closes #N
+</pr-summary>
+
+<promise>COMPLETE</promise>
+```
