@@ -11,6 +11,9 @@
     "typecheck": {
       "outputs": []
     },
+    "test": {
+      "outputs": []
+    },
     "dev": {
       "cache": false
     },
