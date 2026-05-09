@@ -9,6 +9,7 @@
 import * as sandcastle from '@ai-hero/sandcastle';
 import type { AgentProvider } from '@ai-hero/sandcastle';
 import { docker } from '@ai-hero/sandcastle/sandboxes/docker';
+import { createDashboard } from 'sandcastle-gui';
 import { execSync } from 'child_process';
 import { parseArgs } from 'node:util';
 
@@ -85,6 +86,12 @@ const hooks = {
 const copyToWorktree = ['node_modules'];
 
 // ---------------------------------------------------------------------------
+// Dashboard
+// ---------------------------------------------------------------------------
+
+const dashboard = await createDashboard({ port: 4800 });
+
+// ---------------------------------------------------------------------------
 // Main loop
 // ---------------------------------------------------------------------------
 
@@ -122,7 +129,13 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     agent: implAgent,
     promptFile: './.sandcastle/implement-prompt.md',
     promptArgs: { ISSUE_DIRECTIVE: issueDirective },
+    logging: {
+      type: 'file',
+      path: '.sandcastle/logs/implementer.log',
+      onAgentStreamEvent: dashboard.collector('implementer'),
+    },
   });
+  dashboard.recordResult('implementer', implement);
 
   const branch = implement.branch;
 
@@ -140,7 +153,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   if (skipReview) {
     console.log('\nSkipping review phase (--no-review).');
   } else {
-    await sandcastle.run({
+    const review = await sandcastle.run({
       hooks,
       copyToWorktree,
       sandbox: docker(),
@@ -150,7 +163,13 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       agent: reviewAgent,
       promptFile: './.sandcastle/review-prompt.md',
       promptArgs: { BRANCH: branch, SOURCE_BRANCH: baseBranch },
+      logging: {
+        type: 'file',
+        path: '.sandcastle/logs/reviewer.log',
+        onAgentStreamEvent: dashboard.collector('reviewer'),
+      },
     });
+    dashboard.recordResult('reviewer', review);
 
     console.log('\nReview complete.');
   }
@@ -176,4 +195,5 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   console.log(`\nDraft PR opened for branch: ${branch}`);
 }
 
+await dashboard.close();
 console.log('\nAll done.');
