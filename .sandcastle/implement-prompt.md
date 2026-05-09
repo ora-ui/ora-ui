@@ -27,6 +27,8 @@ Work on the highest-priority open issue that is not blocked:
 
 If the highest-priority issue looks too ambitious for an autonomous run (multi-component, ambiguous requirements, or needs design input), skip it and explain why in the BLOCKED reason for the _iteration_, not the issue.
 
+Skip any issue whose body contains "Depends on" or "Blocked by" — it has unresolved dependencies. Output a BLOCKED reason and move to the next issue.
+
 ## Workflow
 
 1. **Announce the issue** — output `<working-on-issue>NUMBER</working-on-issue>` on its own line so the orchestrator can track which issue this run is for. Do this **before** writing any code.
