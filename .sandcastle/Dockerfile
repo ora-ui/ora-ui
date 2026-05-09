@@ -32,6 +32,9 @@ RUN existing=$(getent group $AGENT_GID | cut -d: -f1); \
 # Install pnpm and pi coding agent (run as root before USER agent)
 RUN npm install -g pnpm @mariozechner/pi-coding-agent
 
+# Ensure the home dir is accessible regardless of runtime UID
+RUN chmod -R a+rwX /home/agent
+
 USER ${AGENT_UID}:${AGENT_GID}
 
 WORKDIR /home/agent
