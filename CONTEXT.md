@@ -1,0 +1,61 @@
+# Context
+
+Domain language for the Ora UI project. Keep terms here only if they
+have meaning to a domain expert (a user of Ora, a contributor reasoning
+about its product surface). Implementation details belong in code.
+
+## Terms
+
+### Registry
+
+The publishable surface of Ora UI: the set of components installable via
+the shadcn CLI, plus their metadata. Ora ships as a shadcn-compatible
+registry (not copy-paste only).
+
+In the codebase, `registry/` (the slice) holds the components and the
+metadata that defines what an external consumer can install.
+
+Do not use "registry" to mean "any index data structure." See **Index**.
+
+### Index
+
+A generated lookup table used internally by the docs app to map a slug
+to a renderable thing. The previews index (`previews/index.generated.ts`)
+maps preview slugs to components and snippets. Indexes are an
+implementation detail of the docs app — they are not part of the
+Registry.
+
+### Preview
+
+A small, self-contained example of a Registry component, rendered inline
+on a docs page via `<ComponentPreview />`. One preview file may export
+several named functions, each shown as a tab.
+
+### Playground
+
+The interactive surface at `/playground/<component>` where a user can
+manipulate every prop of a Registry component through controls before
+installing it. Distinct from a Preview (preview = curated example,
+playground = exhaustive prop space).
+
+### Component
+
+A single unit of the Registry — e.g. Button, Dialog, DropdownMenu. Each
+Component has Previews and a Playground entry.
+
+### Slice
+
+A top-level directory under `apps/www/` that owns a product surface
+end-to-end: its UI, its data, its content. Slices are siblings to
+`app/` (the Next.js route tree). Routes inside `app/` are thin shells
+that import from slices.
+
+Current slices: `docs/`, `playground/`, `registry/`, `landing/`,
+`shared/`. Layout helpers used by exactly one route layout do not
+qualify as slices and sit as direct siblings to that layout file
+(e.g. `app/header.tsx` next to `app/layout.tsx`).
+
+### Landing
+
+The home/marketing surface served at `/`. Distinct from the loose
+layout components in `app/` and from `docs/` (documentation surface).
