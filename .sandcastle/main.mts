@@ -341,8 +341,9 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   console.log(`\nDraft PR opened for branch: ${branch}`);
 
   // Label the issue awaiting-review so autonomous loops skip it until merged/closed.
-  const workingOnMatch = implement.stdout.match(/<working-on-issue>(\d+)<\/working-on-issue>/);
-  const issueNumber = workingOnMatch?.[1];
+  // Parse from Closes #N in the pr-summary (final message) — early tags may be lost with some providers.
+  const closesMatch = prBody.match(/Closes\s+#(\d+)/i);
+  const issueNumber = closesMatch?.[1];
   if (issueNumber) {
     try {
       execSync(`gh issue edit ${issueNumber} --add-label awaiting-review`, { stdio: 'inherit' });

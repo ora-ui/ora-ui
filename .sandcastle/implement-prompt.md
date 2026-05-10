@@ -27,7 +27,7 @@ Work on the highest-priority open issue that is not blocked:
 
 If the highest-priority issue looks too ambitious for an autonomous run (multi-component, ambiguous requirements, or needs design input), skip it and explain why in the BLOCKED reason for the _iteration_, not the issue.
 
-Skip any issue whose body contains "Depends on" or "Blocked by" — it has unresolved dependencies. Output a BLOCKED reason and move to the next issue.
+If an issue body contains "Depends on #N" or "Blocked by #N", check whether that issue is still open: `gh issue view N --json state --jq .state`. If the state is `OPEN`, skip and output a BLOCKED reason. If it is `CLOSED`, the dependency is resolved — proceed normally.
 
 ## Workflow
 
