@@ -140,6 +140,25 @@ if (reviewOnly) {
 }
 
 // ---------------------------------------------------------------------------
+// Pre-loop check: exit early if no agent-ready issues exist (autonomous mode)
+// ---------------------------------------------------------------------------
+
+if (!targetIssue) {
+  const openIssueCount = parseInt(
+    execSync(
+      'gh issue list --state open --label agent-ready --json number --jq length',
+      { encoding: 'utf8' }
+    ).trim(),
+    10
+  );
+
+  if (openIssueCount === 0) {
+    console.log('No agent-ready issues found. Exiting.');
+    process.exit(0);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Main loop
 // ---------------------------------------------------------------------------
 
