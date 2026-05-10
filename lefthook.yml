@@ -19,6 +19,8 @@ pre-push:
   commands:
     build:
       run: pnpm run build
+    test:
+      run: pnpm run test
 
 post-merge:
   commands:
