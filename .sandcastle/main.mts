@@ -39,6 +39,24 @@ const reviewOnly = Boolean(args['review-only']);
 const MAX_ITERATIONS = targetIssue ? 1 : 10;
 
 // ---------------------------------------------------------------------------
+// Autonomous mode: exit early if there are no agent-ready issues to work on
+// ---------------------------------------------------------------------------
+
+if (!targetIssue && !reviewOnly) {
+  const openIssueCount = parseInt(
+    execSync('gh issue list --state open --label agent-ready --json number --jq length', {
+      encoding: 'utf8',
+    }).trim(),
+    10
+  );
+
+  if (openIssueCount === 0) {
+    console.log('No agent-ready issues found. Exiting.');
+    process.exit(0);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Agent resolution
 //
 // Configure via .sandcastle/.env:
