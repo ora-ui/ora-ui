@@ -9,7 +9,7 @@
 import * as sandcastle from '@ai-hero/sandcastle';
 import type { AgentProvider } from '@ai-hero/sandcastle';
 import { docker } from '@ai-hero/sandcastle/sandboxes/docker';
-import { createDashboard } from 'sandcastle-gui';
+// import { createDashboard } from 'sandcastle-gui';
 import { execSync } from 'child_process';
 import { parseArgs } from 'node:util';
 
@@ -70,7 +70,9 @@ const resolveAgent = (envVar: string, fallback: string): AgentProvider => {
     case 'opencode':
       return sandcastle.opencode(model);
     default:
-      throw new Error(`Unknown agent provider "${provider}" in ${envVar}. Valid options: pi, claude-code, codex, opencode`);
+      throw new Error(
+        `Unknown agent provider "${provider}" in ${envVar}. Valid options: pi, claude-code, codex, opencode`
+      );
   }
 };
 
@@ -91,11 +93,7 @@ const copyToWorktree = ['node_modules'];
 // Dashboard
 // ---------------------------------------------------------------------------
 
-const dashboard = await createDashboard({ port: 4800 });
-
-// ---------------------------------------------------------------------------
-// Main loop
-// ---------------------------------------------------------------------------
+// const dashboard = await createDashboard({ port: 4800 });
 
 // ---------------------------------------------------------------------------
 // Review-only mode: skip implement, run reviewer + PR on an existing branch
@@ -123,10 +121,10 @@ if (reviewOnly) {
     logging: {
       type: 'file',
       path: '.sandcastle/logs/reviewer.log',
-      onAgentStreamEvent: dashboard.collector('reviewer'),
+      // onAgentStreamEvent: dashboard.collector('reviewer'),
     },
   });
-  dashboard.recordResult('reviewer', review);
+  // dashboard.recordResult('reviewer', review);
 
   console.log('\nReview complete.');
 
@@ -137,7 +135,7 @@ if (reviewOnly) {
   );
 
   console.log(`\nDraft PR opened for branch: ${branch}`);
-  await dashboard.close();
+  // await dashboard.close();
   process.exit(0);
 }
 
@@ -182,10 +180,10 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     logging: {
       type: 'file',
       path: '.sandcastle/logs/implementer.log',
-      onAgentStreamEvent: dashboard.collector('implementer'),
+      // onAgentStreamEvent: dashboard.collector('implementer'),
     },
   });
-  dashboard.recordResult('implementer', implement);
+  // dashboard.recordResult('implementer', implement);
 
   const branch = implement.branch;
 
@@ -216,10 +214,10 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       logging: {
         type: 'file',
         path: '.sandcastle/logs/reviewer.log',
-        onAgentStreamEvent: dashboard.collector('reviewer'),
+        // onAgentStreamEvent: dashboard.collector('reviewer'),
       },
     });
-    dashboard.recordResult('reviewer', review);
+    // dashboard.recordResult('reviewer', review);
 
     console.log('\nReview complete.');
   }
@@ -245,5 +243,5 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   console.log(`\nDraft PR opened for branch: ${branch}`);
 }
 
-await dashboard.close();
+// await dashboard.close();
 console.log('\nAll done.');
