@@ -52,7 +52,11 @@ If an issue's **body or comments** contain "Depends on", "Blocked by", or "Block
 6. **Commit** — single git commit. The message MUST:
    - Start with `sandcastle-` prefix (lowercase) followed by a conventional type, e.g. `sandcastle-fix(button): correct focus ring color`
    - Reference the issue number in the body (`Closes #N`)
-7. **Summarise** — see the **Done** section below. Output `<pr-summary>` and `<promise>COMPLETE</promise>` together in one final message. Replace `#N` with the actual issue number — the `Closes #N` line auto-closes the issue on merge.
+7. **Label** — add the `awaiting-review` label to the issue so future runs skip it:
+   ```
+   gh issue edit N --add-label awaiting-review
+   ```
+8. **Summarise** — see the **Done** section below. Output `<pr-summary>` and `<promise>COMPLETE</promise>` together in one final message. Replace `#N` with the actual issue number — the `Closes #N` line auto-closes the issue on merge.
 
 ## Rules
 
@@ -61,6 +65,7 @@ If an issue's **body or comments** contain "Depends on", "Blocked by", or "Block
 - No commented-out code, no `TODO` comments, no `any` casts added.
 - Do not edit files outside the scope of the issue.
 - Do not modify the lockfile (`pnpm-lock.yaml`) unless the issue is specifically about dependencies.
+- **Never skip hooks** — do not use `--no-verify` or any other flag that bypasses pre-commit hooks. If a hook fails, fix the root cause or stop with a `<blocked-reason>`.
 
 ## When you're stuck
 

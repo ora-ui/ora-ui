@@ -48,9 +48,15 @@ If you find improvements to make:
 
 1. Make the changes directly on this branch
 2. Run `pnpm typecheck && pnpm lint` to ensure nothing is broken
-3. Commit describing the refinements (prefix the message with `sandcastle:`)
+3. Commit describing the refinements (prefix the message with `sandcastle:`) — **never use `--no-verify`**; fix hook failures at the root cause or stop with `<promise>BLOCKED</promise>`
 
 If the code is already clean and well-structured, do nothing.
+
+Before signalling completion, add the `awaiting-review` label to the issue so future implementer runs skip it. Extract the issue number from the branch name or commits on the branch:
+
+```
+gh issue edit N --add-label awaiting-review
+```
 
 Once complete, output a title and the completion signal:
 
