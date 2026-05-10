@@ -24,6 +24,7 @@ const { values: args } = parseArgs({
     branch: { type: 'string', short: 'b' },
     base: { type: 'string' },
     'no-review': { type: 'boolean' },
+    'review-only': { type: 'boolean' },
   },
   strict: false,
 });
@@ -32,6 +33,7 @@ const targetIssue = args.issue ? parseInt(args.issue as string, 10) : null;
 const targetBranch = args.branch as string | undefined;
 const baseBranch = (args.base as string | undefined) ?? 'develop';
 const skipReview = Boolean(args['no-review']);
+const reviewOnly = Boolean(args['review-only']);
 
 // When targeting a specific issue, run exactly one iteration.
 const MAX_ITERATIONS = targetIssue ? 1 : 10;
@@ -90,6 +92,54 @@ const copyToWorktree = ['node_modules'];
 // ---------------------------------------------------------------------------
 
 const dashboard = await createDashboard({ port: 4800 });
+
+// ---------------------------------------------------------------------------
+// Main loop
+// ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Review-only mode: skip implement, run reviewer + PR on an existing branch
+// ---------------------------------------------------------------------------
+
+if (reviewOnly) {
+  const branch = targetBranch;
+  if (!branch) {
+    console.error('--review-only requires --branch <branch>');
+    process.exit(1);
+  }
+
+  console.log(`\nReview-only mode on branch: ${branch}\n`);
+
+  const review = await sandcastle.run({
+    hooks,
+    copyToWorktree,
+    sandbox: docker(),
+    branchStrategy: { type: 'branch', branch },
+    name: 'reviewer',
+    maxIterations: 5,
+    agent: reviewAgent,
+    promptFile: './.sandcastle/review-prompt.md',
+    promptArgs: { BRANCH: branch },
+    logging: {
+      type: 'file',
+      path: '.sandcastle/logs/reviewer.log',
+      onAgentStreamEvent: dashboard.collector('reviewer'),
+    },
+  });
+  dashboard.recordResult('reviewer', review);
+
+  console.log('\nReview complete.');
+
+  execSync(`git push origin ${branch}`, { stdio: 'inherit' });
+  execSync(
+    `gh pr create --head ${branch} --base ${baseBranch} --draft --title "sandcastle: ${branch}" --body "Automated implementation by Sandcastle. Please review before merging."`,
+    { stdio: 'inherit' }
+  );
+
+  console.log(`\nDraft PR opened for branch: ${branch}`);
+  await dashboard.close();
+  process.exit(0);
+}
 
 // ---------------------------------------------------------------------------
 // Main loop
@@ -162,7 +212,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       maxIterations: 5,
       agent: reviewAgent,
       promptFile: './.sandcastle/review-prompt.md',
-      promptArgs: { BRANCH: branch, SOURCE_BRANCH: baseBranch },
+      promptArgs: { BRANCH: branch },
       logging: {
         type: 'file',
         path: '.sandcastle/logs/reviewer.log',
