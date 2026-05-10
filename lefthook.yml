@@ -1,0 +1,32 @@
+pre-commit:
+  parallel: true
+  commands:
+    prettier:
+      run: pnpm exec prettier --ignore-unknown --write {staged_files}
+      stage_fixed: true
+    eslint:
+      glob: '*.{ts,tsx,js,jsx}'
+      run: pnpm --filter docs exec eslint --max-warnings=0 --no-warn-ignored {staged_files}
+    typecheck:
+      run: pnpm run typecheck
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm exec commitlint --edit {1}
+
+pre-push:
+  commands:
+    build:
+      run: pnpm run build
+
+post-merge:
+  commands:
+    install:
+      run: pnpm install
+
+post-checkout:
+  commands:
+    install:
+      run: pnpm install
+      when: sh -c 'git diff --name-only "$1" "$2" | grep -q pnpm-lock.yaml'
