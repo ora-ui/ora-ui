@@ -25,6 +25,9 @@ pnpm sandcastle
 
 # Cleanup stale worktrees and branches after a session
 pnpm sandcastle:clean
+
+# Test whether the configured provider captures early vs final agent output tags
+pnpm sandcastle --test-propagation
 ```
 
 ## PR title and description

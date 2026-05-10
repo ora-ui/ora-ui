@@ -28,6 +28,7 @@ const { values: args } = parseArgs({
     base: { type: 'string' },
     'no-review': { type: 'boolean' },
     'review-only': { type: 'boolean' },
+    'test-propagation': { type: 'boolean' },
   },
   strict: false,
 });
@@ -37,6 +38,7 @@ const targetBranch = args.branch as string | undefined;
 const baseBranch = (args.base as string | undefined) ?? 'develop';
 const skipReview = Boolean(args['no-review']);
 const reviewOnly = Boolean(args['review-only']);
+const testPropagation = Boolean(args['test-propagation']);
 
 // When targeting a specific issue, run exactly one iteration.
 const MAX_ITERATIONS = targetIssue ? 1 : 10;
@@ -115,6 +117,48 @@ const copyToWorktree = ['node_modules'];
 // ---------------------------------------------------------------------------
 
 // const dashboard = await createDashboard({ port: 4800 });
+
+// ---------------------------------------------------------------------------
+// Test-propagation mode: check whether early vs final agent output tags
+// both appear in stdout (useful for diagnosing pi provider behaviour).
+// ---------------------------------------------------------------------------
+
+if (testPropagation) {
+  console.log('\nRunning propagation test...\n');
+
+  const testBranch = `agent/test-propagation-${Date.now()}`;
+  const result = await sandcastle.run({
+    hooks,
+    copyToWorktree,
+    sandbox: docker(),
+    branchStrategy: { type: 'branch', branch: testBranch, baseBranch },
+    name: 'propagation-test',
+    maxIterations: 1,
+    agent: implAgent,
+    promptFile: './.sandcastle/test-propagation-prompt.md',
+    promptArgs: {},
+    logging: { type: 'file', path: '.sandcastle/logs/propagation-test.log' },
+  });
+
+  const earlyFound = /<test-early>propagation-check<\/test-early>/.test(result.stdout);
+  const finalFound = /<test-final>propagation-check<\/test-final>/.test(result.stdout);
+
+  console.log('\n--- Propagation test results ---');
+  console.log(`<test-early> captured: ${earlyFound ? '✓ yes' : '✗ no'}`);
+  console.log(`<test-final> captured: ${finalFound ? '✓ yes' : '✗ no'}`);
+
+  if (!earlyFound && finalFound) {
+    console.log('\nConclusion: provider only returns final message. Early tags will be lost.');
+  } else if (earlyFound && finalFound) {
+    console.log('\nConclusion: provider returns all messages. Early tags are safe.');
+  } else {
+    console.log(
+      '\nConclusion: unexpected result — check the log at .sandcastle/logs/propagation-test.log'
+    );
+  }
+
+  process.exit(0);
+}
 
 // ---------------------------------------------------------------------------
 // Review-only mode: skip implement, run reviewer + PR on an existing branch
@@ -213,11 +257,27 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   });
   // dashboard.recordResult('implementer', implement);
 
-  const branch = implement.branch;
+  let branch = implement.branch;
 
   if (!implement.commits.length) {
     console.log('Implementation agent made no commits. Skipping review.');
     continue;
+  }
+
+  // Rename branch to match the agent's assessed scope — autonomous mode only.
+  // Targeted runs keep the caller-supplied branch name.
+  if (!targetIssue) {
+    const branchNameMatch = implement.stdout.match(/<branch-name>([\s\S]*?)<\/branch-name>/);
+    const suggestedBranch = branchNameMatch?.[1]?.trim();
+    if (suggestedBranch && suggestedBranch !== branch) {
+      try {
+        execSync(`git branch -m ${branch} ${suggestedBranch}`);
+        console.log(`Branch renamed: ${branch} → ${suggestedBranch}`);
+        branch = suggestedBranch;
+      } catch {
+        console.warn(`Could not rename branch to ${suggestedBranch} — keeping ${branch}`);
+      }
+    }
   }
 
   console.log(`\nImplementation complete on branch: ${branch}`);
@@ -226,6 +286,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   // -------------------------------------------------------------------------
   // Phase 2: Review (skipped when --no-review is passed)
   // -------------------------------------------------------------------------
+  let reviewStdout = '';
   if (skipReview) {
     console.log('\nSkipping review phase (--no-review).');
   } else {
@@ -246,17 +307,23 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       },
     });
     // dashboard.recordResult('reviewer', review);
-
+    reviewStdout = review.stdout;
     console.log('\nReview complete.');
   }
 
   // -------------------------------------------------------------------------
   // Phase 3: Push & open draft PR for human review
   //
-  // PR title format: "sandcastle: <branch>" (always enforced)
+  // PR title: conventional commit format from <pr-title> block emitted by
+  //           the reviewer (or implementer when --no-review), falling back
+  //           to a generic branch-based title.
   // PR body: agent-generated summary extracted from <pr-summary> block,
   //          falling back to a generic message.
   // -------------------------------------------------------------------------
+  const titleSource = skipReview ? implement.stdout : reviewStdout;
+  const prTitleMatch = titleSource.match(/<pr-title>([\s\S]*?)<\/pr-title>/);
+  const prTitle = prTitleMatch?.[1]?.trim() ?? `agent: ${branch}`;
+
   const prSummaryMatch = implement.stdout.match(/<pr-summary>([\s\S]*?)<\/pr-summary>/);
   const prBody =
     prSummaryMatch?.[1]?.trim() ??
@@ -267,7 +334,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
 
   execSync(`git push origin ${branch}`, { stdio: 'inherit' });
   execSync(
-    `gh pr create --head ${branch} --base ${baseBranch} --draft --title "sandcastle: ${branch}" --body-file ${JSON.stringify(prBodyFile)}`,
+    `gh pr create --head ${branch} --base ${baseBranch} --draft --title ${JSON.stringify(prTitle)} --body-file ${JSON.stringify(prBodyFile)}`,
     { stdio: 'inherit' }
   );
 

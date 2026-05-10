@@ -74,9 +74,13 @@ The orchestrator will post the reason as a comment on the issue and move on.
 
 # Done
 
-When the issue is complete (committed, gates green), output both the summary and the completion signal in the same final message — do not split them across separate messages:
+When the issue is complete (committed, gates green), output the title, summary, and completion signal together in the same final message — do not split them across separate messages:
 
 ```
+<pr-title>agent:type(scope): short description</pr-title>
+
+<branch-name>agent/type-scope-short-description</branch-name>
+
 <pr-summary>
 Short description of what was changed and why (2–5 sentences).
 
@@ -85,3 +89,7 @@ Closes #N
 
 <promise>COMPLETE</promise>
 ```
+
+`<pr-title>` must follow the format `agent:type(scope): description`. Use the type that best describes the change: `feat`, `fix`, `chore`, `docs`, `test`, `refactor`, or `perf`. Scope should be the component or area changed (e.g. `button`, `badge`, `docs`). Keep the description under 60 characters.
+
+`<branch-name>` must follow the format `agent/type-scope-short-description` using the same type and scope as `<pr-title>`. Use hyphens only, no slashes beyond the `agent/` prefix, no special characters. Only output `<branch-name>` if you are in autonomous mode (i.e. you chose the issue yourself — not given a specific issue to work on).

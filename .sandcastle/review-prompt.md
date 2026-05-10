@@ -52,6 +52,14 @@ If you find improvements to make:
 
 If the code is already clean and well-structured, do nothing.
 
-Once complete, output <promise>COMPLETE</promise>.
+Once complete, output a title and the completion signal:
+
+```
+<pr-title>agent:type(scope): short description</pr-title>
+
+<promise>COMPLETE</promise>
+```
+
+`<pr-title>` must follow the format `agent:type(scope): description`. Use the type that best describes the overall change: `feat`, `fix`, `chore`, `docs`, `test`, `refactor`, or `perf`. Scope should be the component or area changed (e.g. `button`, `badge`, `docs`). Base it on the diff and commit messages above. Keep the description under 60 characters.
 
 If you cannot review safely (broken gates you can't fix, change scope unclear), output a `<blocked-reason>...</blocked-reason>` block followed by `<promise>BLOCKED</promise>`.
