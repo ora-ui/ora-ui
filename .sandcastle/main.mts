@@ -11,6 +11,9 @@ import type { AgentProvider } from '@ai-hero/sandcastle';
 import { docker } from '@ai-hero/sandcastle/sandboxes/docker';
 // import { createDashboard } from 'sandcastle-gui';
 import { execSync } from 'child_process';
+import { writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 
 // ---------------------------------------------------------------------------
@@ -146,9 +149,16 @@ if (reviewOnly) {
 
   console.log('\nReview complete.');
 
+  const reviewBodyFile = join(tmpdir(), `sandcastle-pr-${Date.now()}.txt`);
+  writeFileSync(
+    reviewBodyFile,
+    'Automated implementation by Sandcastle. Please review before merging.',
+    'utf8'
+  );
+
   execSync(`git push origin ${branch}`, { stdio: 'inherit' });
   execSync(
-    `gh pr create --head ${branch} --base ${baseBranch} --draft --title "sandcastle: ${branch}" --body "Automated implementation by Sandcastle. Please review before merging."`,
+    `gh pr create --head ${branch} --base ${baseBranch} --draft --title "sandcastle: ${branch}" --body-file ${JSON.stringify(reviewBodyFile)}`,
     { stdio: 'inherit' }
   );
 
@@ -252,9 +262,12 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     prSummaryMatch?.[1]?.trim() ??
     'Automated implementation by Sandcastle. Please review before merging.';
 
+  const prBodyFile = join(tmpdir(), `sandcastle-pr-${Date.now()}.txt`);
+  writeFileSync(prBodyFile, prBody, 'utf8');
+
   execSync(`git push origin ${branch}`, { stdio: 'inherit' });
   execSync(
-    `gh pr create --head ${branch} --base ${baseBranch} --draft --title "sandcastle: ${branch}" --body ${JSON.stringify(prBody)}`,
+    `gh pr create --head ${branch} --base ${baseBranch} --draft --title "sandcastle: ${branch}" --body-file ${JSON.stringify(prBodyFile)}`,
     { stdio: 'inherit' }
   );
 
