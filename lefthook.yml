@@ -1,0 +1,34 @@
+pre-commit:
+  parallel: true
+  commands:
+    prettier:
+      run: pnpm exec prettier --ignore-unknown --write {staged_files}
+      stage_fixed: true
+    eslint:
+      glob: 'apps/docs/**/*.{ts,tsx,js,jsx}'
+      root: 'apps/docs'
+      run: pnpm exec eslint --max-warnings=0 --no-warn-ignored {staged_files}
+    typecheck:
+      run: pnpm run typecheck
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm exec commitlint --edit {1}
+
+pre-push:
+  commands:
+    build:
+      run: pnpm run build
+    test:
+      run: pnpm run test
+
+post-merge:
+  commands:
+    install:
+      run: pnpm install
+
+post-checkout:
+  commands:
+    install:
+      run: git diff --name-only "$1" "$2" | grep -q pnpm-lock.yaml && pnpm install || true
