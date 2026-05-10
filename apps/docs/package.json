@@ -9,9 +9,8 @@
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:codegen": "playwright codegen",
-    "test": "pnpm test:e2e",
+    "test": "pnpm test:unit && pnpm test:e2e",
     "test:watch": "vitest",
-    "test:all": "pnpm test:unit && pnpm test:e2e",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "scaffold": "plop --plopfile scripts/plopfile.mjs"
