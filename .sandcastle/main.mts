@@ -259,6 +259,34 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
 
   let branch = implement.branch;
 
+  const blockedReasonMatch = implement.stdout.match(
+    /<blocked-reason>([\s\S]*?)<\/blocked-reason>/
+  );
+  if (blockedReasonMatch) {
+    const blockedReason = blockedReasonMatch?.[1]?.trim() ?? '';
+    console.log('\nAgent is blocked.');
+    console.log(`Reason: ${blockedReason}`);
+
+    // Post the blocked reason as a comment on the issue.
+    const workingOnMatch = implement.stdout.match(
+      /<working-on-issue>(\d+)<\/working-on-issue>/
+    );
+    const issueNumber = workingOnMatch?.[1];
+    if (issueNumber) {
+      try {
+        execSync(
+          `gh issue comment ${issueNumber} --body ${JSON.stringify(blockedReason)}`,
+          { stdio: 'inherit' }
+        );
+        console.log(`Posted blocked reason on issue #${issueNumber}.`);
+      } catch {
+        console.warn(`Could not post comment on issue #${issueNumber}.`);
+      }
+    }
+
+    continue;
+  }
+
   if (!implement.commits.length) {
     console.log('Implementation agent made no commits. Skipping review.');
     continue;
