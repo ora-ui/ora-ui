@@ -259,6 +259,20 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   );
 
   console.log(`\nDraft PR opened for branch: ${branch}`);
+
+  // Label the issue awaiting-review so autonomous loops skip it until merged/closed.
+  const workingOnMatch = implement.stdout.match(/<working-on-issue>(\d+)<\/working-on-issue>/);
+  const issueNumber = workingOnMatch?.[1];
+  if (issueNumber) {
+    try {
+      execSync(`gh issue edit ${issueNumber} --add-label awaiting-review`, { stdio: 'inherit' });
+      console.log(`Labelled issue #${issueNumber} as awaiting-review.`);
+    } catch {
+      console.warn(
+        `Could not label issue #${issueNumber} — label may not exist yet. Create it with: gh label create awaiting-review`
+      );
+    }
+  }
 }
 
 // await dashboard.close();

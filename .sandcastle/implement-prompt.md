@@ -2,7 +2,7 @@
 
 ## Open issues
 
-!`gh issue list --state open --label agent-ready --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'`
+!`gh issue list --state open --label agent-ready --json number,title,body,labels,comments --jq '[.[] | select(.labels | map(.name) | contains(["awaiting-review"]) | not) | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'`
 
 ## Recent agent commits (last 10)
 
