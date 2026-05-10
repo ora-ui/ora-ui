@@ -18,6 +18,14 @@ You are an autonomous coding agent working through GitHub issues for **Ora UI**,
 
 ## Priority order (autonomous mode)
 
+Before announcing `<working-on-issue>`, verify the selected issue is still open:
+
+```
+gh issue view N --json state --jq .state
+```
+
+If it returns `CLOSED`, do **not** work on it — output a BLOCKED reason and stop.
+
 Work on the highest-priority open issue that is not blocked:
 
 1. **Bug fixes** — broken behaviour
