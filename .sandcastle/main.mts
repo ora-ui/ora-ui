@@ -126,7 +126,7 @@ const copyToWorktree = ['node_modules'];
 if (testPropagation) {
   console.log('\nRunning propagation test...\n');
 
-  const testBranch = `agent/test-propagation-${Date.now()}`;
+  const testBranch = `agent-chore/test-propagation-${Date.now()}`;
   const result = await sandcastle.run({
     hooks,
     copyToWorktree,
@@ -223,12 +223,12 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
 
   if (targetIssue) {
     // Targeted mode: branch and issue were provided by the caller.
-    implementBranch = targetBranch ?? `agent/issue-${targetIssue}`;
+    implementBranch = targetBranch ?? `agent-wip/issue-${targetIssue}`;
     issueDirective = `**Work on issue #${targetIssue} specifically.** Do not pick a different issue.`;
   } else {
     // Autonomous mode: timestamp-based branch name, agent picks the issue.
     const timestamp = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '');
-    implementBranch = `agent/implementer-${timestamp}`;
+    implementBranch = `agent-wip/implementer-${timestamp}`;
     issueDirective = [
       'Work on the highest-priority open issue that is not blocked (see priority order below).',
       'You MUST only pick an issue from the "Open issues" list above — every issue in that list carries the `agent-ready` label.',
@@ -251,7 +251,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     promptArgs: { ISSUE_DIRECTIVE: issueDirective },
     logging: {
       type: 'file',
-      path: '.sandcastle/logs/implementer.log',
+      path: `.sandcastle/logs/${implementBranch.replace(/\//g, '-')}.log`,
       // onAgentStreamEvent: dashboard.collector('implementer'),
     },
   });
@@ -302,7 +302,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       promptArgs: { BRANCH: branch },
       logging: {
         type: 'file',
-        path: '.sandcastle/logs/reviewer.log',
+        path: `.sandcastle/logs/${implementBranch.replace(/\//g, '-')}-review.log`,
         // onAgentStreamEvent: dashboard.collector('reviewer'),
       },
     });
@@ -322,7 +322,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   // -------------------------------------------------------------------------
   const titleSource = skipReview ? implement.stdout : reviewStdout;
   const prTitleMatch = titleSource.match(/<pr-title>([\s\S]*?)<\/pr-title>/);
-  const prTitle = prTitleMatch?.[1]?.trim() ?? `agent: ${branch}`;
+  const prTitle = prTitleMatch?.[1]?.trim() ?? `agent: ${branch.replace(/^agent-[^/]+\//, '')}`;
 
   const prSummaryMatch = implement.stdout.match(/<pr-summary>([\s\S]*?)<\/pr-summary>/);
   const prBody =
