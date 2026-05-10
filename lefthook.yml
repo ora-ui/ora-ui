@@ -5,8 +5,9 @@ pre-commit:
       run: pnpm exec prettier --ignore-unknown --write {staged_files}
       stage_fixed: true
     eslint:
-      glob: '*.{ts,tsx,js,jsx}'
-      run: pnpm --filter docs exec eslint --max-warnings=0 --no-warn-ignored {staged_files}
+      glob: 'apps/docs/**/*.{ts,tsx,js,jsx}'
+      root: 'apps/docs'
+      run: pnpm exec eslint --max-warnings=0 --no-warn-ignored {staged_files}
     typecheck:
       run: pnpm run typecheck
 
