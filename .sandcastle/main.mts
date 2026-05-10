@@ -68,7 +68,9 @@ const resolveAgent = (envVar: string, fallback: string): AgentProvider => {
     case 'opencode':
       return sandcastle.opencode(model);
     default:
-      throw new Error(`Unknown agent provider "${provider}" in ${envVar}. Valid options: pi, claude-code, codex, opencode`);
+      throw new Error(
+        `Unknown agent provider "${provider}" in ${envVar}. Valid options: pi, claude-code, codex, opencode`
+      );
   }
 };
 

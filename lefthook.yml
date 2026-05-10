@@ -28,5 +28,4 @@ post-merge:
 post-checkout:
   commands:
     install:
-      run: pnpm install
-      when: sh -c 'git diff --name-only "$1" "$2" | grep -q pnpm-lock.yaml'
+      run: git diff --name-only "$1" "$2" | grep -q pnpm-lock.yaml && pnpm install || true
