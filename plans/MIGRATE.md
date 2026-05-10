@@ -52,10 +52,10 @@ Box, Container, Flex, Grid, Typography, IconButton, Link
 
 1. **Install shadcn counterpart into docs app**
    ```bash
-   # Run from apps/docs/
+   # Run from apps/www/
    npx shadcn@latest add [component]
    ```
-   - Output goes to `apps/docs/src/components/ui/` (create the `ui/` folder if it doesn't exist)
+   - Output goes to `apps/www/src/components/ui/` (create the `ui/` folder if it doesn't exist)
    - Use `--base-ui` flag if the component supports it (prefer Base UI)
 
 2. **Create registry JSON**
@@ -72,14 +72,14 @@ Box, Container, Flex, Grid, Typography, IconButton, Link
      "registryDependencies": []
    }
    ```
-   - Save to `apps/docs/public/r/[component].json`
+   - Save to `apps/www/public/r/[component].json`
    - Test: `npx shadcn add "http://localhost:3000/r/[component].json"`
 
 3. **Commit the component**
    Run each command separately (do NOT chain with &&):
    ```bash
    cd /Users/gregogun/webdev/ora-ui/ora-ui
-   git add apps/docs/src/components/ui/[component].tsx apps/docs/public/r/[component].json progress.txt
+   git add apps/www/src/components/ui/[component].tsx apps/www/public/r/[component].json progress.txt
    git commit -m "feat: add [component] shadcn component"
    ```
 
@@ -110,7 +110,7 @@ Box, Container, Flex, Grid, Typography, IconButton, Link
 
 ```
 ora-ui/
-├── apps/docs/              # Next.js docs site
+├── apps/www/              # Next.js docs site
 │   ├── content/docs/
 │   ├── components/ui/
 │   └── public/r/           # Registry JSONs
@@ -162,12 +162,12 @@ When shadcn supports Base UI variant, **prefer Base UI**:
 ## Task Breakdown
 
 ### Phase 1: Infrastructure
-- Monorepo structure (apps/docs/, src/components/)
+- Monorepo structure (apps/www/, src/components/)
 - Tailwind config, PostCSS, globals.css
 - src/lib/utils.ts (cn + helpers)
 - components.json
 - Docs site boilerplate
-- apps/docs/public/r/ for registry
+- apps/www/public/r/ for registry
 - Registry generation script
 
 ### Phase 2-6: Component Migration

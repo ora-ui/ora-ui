@@ -78,7 +78,7 @@ The playground currently renders all component sections in a scrollable list. Na
 ## File Structure
 
 ```
-apps/docs/src/app/playground/
+apps/www/src/app/playground/
 ├── layout.tsx                    # Fixed shell with sidebar
 ├── page.tsx                      # Index redirect or welcome
 ├── [component]/

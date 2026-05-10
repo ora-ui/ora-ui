@@ -7,7 +7,7 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
 
 ## Procedure
 
-1. **Verify** — check `apps/docs/src/components/ui/<name>.tsx` exists. If not, suggest `build-component` instead.
+1. **Verify** — check `apps/www/src/components/ui/<name>.tsx` exists. If not, suggest `build-component` instead.
 
 2. **Check for existing docs** — check if `content/docs/components/<name>.mdx` exists.
    - **Exists → update path**: read the existing MDX and restructure it to follow current conventions (add `## Examples` wrapper, demote example headings from `##` to `###`, replace any inline code blocks with `<ComponentPreview>`, ensure `## API Reference` follows the API Reference convention). Then ask the user which examples (if any) should use the `select` pattern for interactive variant switching before touching any preview files. Skip to step 6.
@@ -23,7 +23,7 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
 5. **Scaffold** — run non-interactively, passing example names as the variants argument:
 
    ```bash
-   pnpm --filter docs scaffold component <name> "<description>" "<example1,example2>"
+   pnpm --filter www scaffold component <name> "<description>" "<example1,example2>"
    ```
 
    Generates preview files, registry entries, `sources.ts` entry, and the MDX page. See [REFERENCE.md](REFERENCE.md) for the full file list.
@@ -55,7 +55,7 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
 8. **Typecheck**:
 
    ```bash
-   pnpm --filter docs typecheck
+   pnpm --filter www typecheck
    ```
 
 9. Report what was created or changed. Ask the user to spot-check in dev.

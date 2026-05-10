@@ -28,7 +28,7 @@ shadcn manifest live as sibling files at the slice root, keyed by
 component name, not as per-component folders.
 
 ```
-apps/docs/src/registry/
+apps/www/src/registry/
 ├── ui/
 │   ├── button.tsx
 │   ├── dialog.tsx
@@ -39,7 +39,7 @@ apps/docs/src/registry/
 ```
 
 Registry-build tooling (generators, manifest builders) stays in
-`apps/docs/scripts/`, not inside the slice.
+`apps/www/scripts/`, not inside the slice.
 
 ## Consequences
 

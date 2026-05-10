@@ -6,7 +6,7 @@ Accepted — 2026-05-09
 
 ## Context
 
-The docs app (currently `apps/docs/`) had grown a layout that scattered
+The docs app (currently `apps/www/`) had grown a layout that scattered
 related concerns across multiple top-level directories:
 
 - MDX content lived in `content/docs/`
@@ -32,7 +32,7 @@ remove the `src/` indirection, and group code semantically instead of by technic
 
 ### Rename the app
 
-`apps/docs/` → `apps/www/`. The app is the website; documentation is
+`apps/www/` → `apps/www/`. The app is the website; documentation is
 one slice within it. CONTEXT.md term: **App = www**.
 
 ### Drop `src/`
@@ -67,7 +67,7 @@ apps/www/
 │   ├── docs/[[...slug]]/page.tsx
 │   └── playground/[component]/page.tsx
 ├── docs/                      ← documentation slice
-│   ├── content/               ← MDX (moved from apps/docs/content/docs/)
+│   ├── content/               ← MDX (moved from apps/www/content/docs/)
 │   ├── components/            ← flat: callout, steps, code-block,
 │   │                            mdx, component-preview, component-source, ...
 │   ├── previews/              ← preview files + index.generated.ts
