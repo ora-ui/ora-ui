@@ -17,6 +17,9 @@ pnpm sandcastle --issue 124 --branch agent/fix-thing
 # Skip the reviewer phase for straightforward tasks
 pnpm sandcastle --issue 124 --branch agent/fix-thing --no-review
 
+# Resume a failed run — run reviewer + PR on an existing branch
+pnpm sandcastle --review-only --branch agent/fix-thing
+
 # Autonomous (picks highest-priority agent-ready issue)
 pnpm sandcastle
 

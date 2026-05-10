@@ -6,7 +6,7 @@
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "test": "vitest run",
+    "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
     "prettier": "prettier --write '**/*.{json,md,js,ts,jsx,tsx,yml,css}'",
     "version": "pnpm changeset version && pnpm install --lockfile-only",
@@ -23,7 +23,6 @@
     "@types/node": "^20",
     "lefthook": "^1.7.0",
     "prettier": "^3.8.1",
-    "sandcastle-gui": "file:../../ai/sandcastle-gui",
     "turbo": "^2.8.16",
     "typescript": "^5.9.3",
     "vitest": "^4.1.5"
