@@ -263,7 +263,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     /<blocked-reason>([\s\S]*?)<\/blocked-reason>/
   );
   if (blockedReasonMatch) {
-    const blockedReason = blockedReasonMatch?.[1]?.trim() ?? '';
+    const blockedReason = blockedReasonMatch[1]?.trim() ?? '';
     console.log('\nAgent is blocked.');
     console.log(`Reason: ${blockedReason}`);
 
