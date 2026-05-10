@@ -43,7 +43,7 @@ Before engaging the user, silently prepare:
    - `badge` — simple component with polymorphic rendering
    - `dropdown-menu` — complex compositional component with context
 
-   Read the reference file in `apps/docs/src/components/ui/`.
+   Read the reference file in `apps/www/src/components/ui/`.
 
 5. **If reworking an existing component** — read the current component
    file and its playground section. Understand what exists before asking

@@ -7,7 +7,7 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
 
 ## Procedure
 
-1. **Verify** — check `apps/docs/src/components/ui/<name>.tsx` exists. If not, suggest `build-component` instead.
+1. **Verify** — check `apps/www/src/components/ui<name>.tsx` exists. If not, suggest `build-component` instead.
 
 2. **Check for existing docs** — check if `content/docs/components/<name>.mdx` exists.
    - **Exists → update path**: read the existing MDX and restructure it to follow current conventions (add `## Examples` wrapper, demote example headings from `##` to `###`, replace any inline code blocks with `<ComponentPreview>`, ensure `## API Reference` follows the API Reference convention). Then ask the user which examples (if any) should use the `select` pattern for interactive variant switching before touching any preview files. Skip to step 6.

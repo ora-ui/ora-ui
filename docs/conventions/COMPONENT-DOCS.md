@@ -1,6 +1,6 @@
 # Component Documentation
 
-Conventions for writing and maintaining component docs pages in `apps/docs/content/docs/components/`.
+Conventions for writing and maintaining component docs pages in `apps/www/content/docs/components/`.
 
 ---
 

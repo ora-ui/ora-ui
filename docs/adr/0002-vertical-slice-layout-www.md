@@ -6,7 +6,7 @@ Accepted — 2026-05-09
 
 ## Context
 
-The docs app (currently `apps/docs/`) had grown a layout that scattered
+The docs app (currently `apps/www/`) had grown a layout that scattered
 related concerns across multiple top-level directories:
 
 - MDX content lived in `content/docs/`

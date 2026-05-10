@@ -1,12 +1,12 @@
 # Phase 1: Infrastructure - COMPLETE
 
 ## Created
-- apps/docs/ - Next.js app w/ Tailwind v4
-- apps/docs/components.json - shadcn config
-- apps/docs/src/lib/utils.ts - cn() + ariaAttr + dataAttr helpers
-- apps/docs/tailwind.config.ts - minimal config
-- apps/docs/src/app/globals.css - CSS vars (light/dark)
-- apps/docs/public/r/ - registry dir (empty)
+- apps/www/ - Next.js app w/ Tailwind v4
+- apps/www/components.json - shadcn config
+- apps/www/src/lib/utils.ts - cn() + ariaAttr + dataAttr helpers
+- apps/www/tailwind.config.ts - minimal config
+- apps/www/src/app/globals.css - CSS vars (light/dark)
+- apps/www/public/r/ - registry dir (empty)
 
 ## Modified
 - pnpm-workspace.yaml - added 'apps/*'
@@ -26,7 +26,7 @@
 
 # Phase 2: Component Migration
 
-Install each shadcn component into apps/docs/src/components/ui/.
+Install each shadcn component into apps/www/src/components/ui/.
 Complete and commit one component at a time. Check off after each commit.
 
 **Known issue**: shadcn installs components with `@/components/lib/utils` instead of `@/lib/utils` (likely due to style preset). All components will need this import path fixed before publishing registry JSONs.
@@ -73,20 +73,20 @@ Complete and commit one component at a time. Check off after each commit.
 - [x] Component page templates (button page added as reference)
 
 ## Created
-- apps/docs/source.config.ts - fumadocs-mdx config
-- apps/docs/next.config.mjs - renamed from .ts, added createMDX plugin
-- apps/docs/src/lib/source.ts - fumadocs source loader
-- apps/docs/src/lib/layout.shared.tsx - shared nav options
-- apps/docs/src/components/mdx.tsx - MDX component registry
-- apps/docs/src/app/docs/layout.tsx - DocsLayout wrapper
-- apps/docs/src/app/docs/[[...slug]]/page.tsx - dynamic docs page
-- apps/docs/src/app/api/search/route.ts - full-text search
-- apps/docs/content/docs/ - MDX content root (index + components)
+- apps/www/source.config.ts - fumadocs-mdx config
+- apps/www/next.config.mjs - renamed from .ts, added createMDX plugin
+- apps/www/src/lib/source.ts - fumadocs source loader
+- apps/www/src/lib/layout.shared.tsx - shared nav options
+- apps/www/src/components/mdx.tsx - MDX component registry
+- apps/www/src/app/docs/layout.tsx - DocsLayout wrapper
+- apps/www/src/app/docs/[[...slug]]/page.tsx - dynamic docs page
+- apps/www/src/app/api/search/route.ts - full-text search
+- apps/www/content/docs/ - MDX content root (index + components)
 
 ## Modified
-- apps/docs/tsconfig.json - added collections/* alias
-- apps/docs/src/app/globals.css - added fumadocs CSS imports
-- apps/docs/src/app/layout.tsx - added RootProvider, cleaned up fonts
+- apps/www/tsconfig.json - added collections/* alias
+- apps/www/src/app/globals.css - added fumadocs CSS imports
+- apps/www/src/app/layout.tsx - added RootProvider, cleaned up fonts
 - .gitignore - added .source (fumadocs auto-generated)
 
 ## Installed

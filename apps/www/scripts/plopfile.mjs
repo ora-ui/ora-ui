@@ -14,8 +14,8 @@
  * Test + cleanup:
  *   pnpm --filter docs scaffold component test "A test component" "default,alt"
  *   # Then revert:
- *   git checkout -- apps/docs/src/previews/registry.ts apps/docs/src/components/ui/sources.ts apps/docs/content/docs/components/meta.json
- *   git clean -fd apps/docs/src/previews/test/ apps/docs/content/docs/components/test.mdx
+ *   git checkout -- apps/www/src/previews/registry.ts apps/www/src/components/ui/sources.ts apps/www/src/content/docs/components/meta.json
+ *   git clean -fd apps/www/src/previews/test/ apps/www/src/content/docs/components/test.mdx
  */
 
 import { dirname, join } from 'node:path';
