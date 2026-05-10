@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const uiDir = path.join(process.cwd(), 'src/components/ui');
+const uiDir = path.join(process.cwd(), 'components/ui');
 
 function readSource(filename: string): string {
   return fs.readFileSync(path.join(uiDir, filename), 'utf-8');

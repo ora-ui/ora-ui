@@ -150,7 +150,7 @@ import TextareaManualResize from './textarea/textarea-manual-resize';
 import TextareaWithLabel from './textarea/textarea-with-label';
 import TextareaWithButton from './textarea/textarea-with-button';
 
-const previewsDir = path.join(process.cwd(), 'src/previews');
+const previewsDir = path.join(process.cwd(), 'previews');
 
 function readSource(subpath: string): string {
   return fs.readFileSync(path.join(previewsDir, subpath), 'utf-8');

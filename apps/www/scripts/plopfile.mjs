@@ -14,8 +14,8 @@
  * Test + cleanup:
  *   pnpm --filter docs scaffold component test "A test component" "default,alt"
  *   # Then revert:
- *   git checkout -- apps/www/src/previews/registry.ts apps/www/src/components/ui/sources.ts apps/www/src/content/docs/components/meta.json
- *   git clean -fd apps/www/src/previews/test/ apps/www/src/content/docs/components/test.mdx
+ *   git checkout -- apps/www/previews/registry.ts apps/www/components/ui/sources.ts apps/www/content/docs/components/meta.json
+ *   git clean -fd apps/www/previews/test/ apps/www/content/docs/components/test.mdx
  */
 
 import { dirname, join } from 'node:path';
@@ -91,20 +91,20 @@ export default function (plop) {
       return [
         {
           type: 'add',
-          path: join(DOC_ROOT, 'src/previews/{{name}}/{{name}}-hero.tsx'),
+          path: join(DOC_ROOT, 'previews/{{name}}/{{name}}-hero.tsx'),
           templateFile: join(TPL_ROOT, 'preview-hero.tsx.hbs'),
           skipIfExists: true,
         },
         ...variants.map((variant) => ({
           type: 'add',
-          path: join(DOC_ROOT, `src/previews/{{name}}/{{name}}-${variant}.tsx`),
+          path: join(DOC_ROOT, `previews/{{name}}/{{name}}-${variant}.tsx`),
           templateFile: join(TPL_ROOT, 'preview.tsx.hbs'),
           data: { variant },
           skipIfExists: true,
         })),
         {
           type: 'modify',
-          path: join(DOC_ROOT, 'src/previews/registry.ts'),
+          path: join(DOC_ROOT, 'previews/registry.ts'),
           transform(content) {
             const newImports = [];
             const heroImport = `import ${pascalCase(name)}Hero from './${name}/${name}-hero';`;
@@ -120,7 +120,7 @@ export default function (plop) {
         },
         {
           type: 'modify',
-          path: join(DOC_ROOT, 'src/previews/registry.ts'),
+          path: join(DOC_ROOT, 'previews/registry.ts'),
           transform(content) {
             const newEntries = [];
             const heroEntry = `  '${name}-hero': {\n    component: ${pascalCase(name)}Hero,\n    source: readSource('${name}/${name}-hero.tsx'),\n  },`;
@@ -136,7 +136,7 @@ export default function (plop) {
         },
         {
           type: 'modify',
-          path: join(DOC_ROOT, 'src/components/ui/sources.ts'),
+          path: join(DOC_ROOT, 'components/ui/sources.ts'),
           transform(content) {
             const needsQuotes = name.includes('-');
             const sourceKey = needsQuotes ? `"${name}"` : name;
