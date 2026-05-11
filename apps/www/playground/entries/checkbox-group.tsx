@@ -4,9 +4,9 @@ import * as React from 'react';
 import { Checkbox } from '@/registry/ui/checkbox';
 import { CheckboxGroup } from '@/registry/ui/checkbox-group';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
-import { PreviewShell } from '../../components/preview-shell';
-import { SelectControl } from '../../components/controls';
-import { CHECKBOX_VARIANTS, CHECKBOX_THEMES } from '../../components/constants';
+import { PreviewShell } from '@/playground/components/preview-shell';
+import { SelectControl } from '@/playground/components/controls';
+import { CHECKBOX_VARIANTS, CHECKBOX_THEMES } from '@/playground/components/constants';
 
 type CheckboxVariant = (typeof CHECKBOX_VARIANTS)[number];
 type CheckboxTheme = (typeof CHECKBOX_THEMES)[number];
@@ -126,8 +126,9 @@ function CheckboxGroupVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: CheckboxGroupPreview,
   Variants: CheckboxGroupVariants,
   defaults,
 };
+export default entry;

@@ -14,7 +14,7 @@ import {
   SidebarGroupContent,
 } from '@/registry/ui/sidebar';
 import { Input } from '@/registry/ui/input';
-import { registry } from '../registry';
+import { registry } from '@/playground/entries';
 import { GlobalControls } from './global-controls';
 import { cn } from '@/registry/lib/utils';
 

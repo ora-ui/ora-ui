@@ -3,8 +3,8 @@
 import * as React from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/registry/ui/avatar';
 import { AvatarGroup, AvatarGroupCount } from '@/registry/ui/avatar-group';
-import { PreviewShell } from '../../components/preview-shell';
-import { SelectControl, CheckboxControl } from '../../components/controls';
+import { PreviewShell } from '@/playground/components/preview-shell';
+import { SelectControl, CheckboxControl } from '@/playground/components/controls';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
 
 const AVATAR_COUNT_OPTIONS = [
@@ -187,8 +187,9 @@ function AvatarGroupVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: AvatarGroupPreview,
   Variants: AvatarGroupVariants,
   defaults,
 };
+export default entry;

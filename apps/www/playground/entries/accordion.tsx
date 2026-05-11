@@ -7,8 +7,8 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/registry/ui/accordion';
-import { CheckboxControl } from '../../components/controls';
-import { PreviewShell } from '../../components/preview-shell';
+import { CheckboxControl } from '@/playground/components/controls';
+import { PreviewShell } from '@/playground/components/preview-shell';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
 
 const DEMO_ITEMS = [
@@ -109,8 +109,9 @@ function AccordionVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: AccordionPreview,
   Variants: AccordionVariants,
   defaults,
 };
+export default entry;

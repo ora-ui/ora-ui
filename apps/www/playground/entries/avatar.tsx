@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '@/registry/ui/avatar';
-import { PreviewShell } from '../../components/preview-shell';
-import { SelectControl, TextControl, CheckboxControl } from '../../components/controls';
+import { PreviewShell } from '@/playground/components/preview-shell';
+import { SelectControl, TextControl, CheckboxControl } from '@/playground/components/controls';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
 import { cn } from '@/registry/lib/utils';
 
@@ -205,8 +205,9 @@ function AvatarVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: AvatarPreview,
   Variants: AvatarVariants,
   defaults,
 };
+export default entry;

@@ -3,9 +3,9 @@
 import * as React from 'react';
 import { Checkbox } from '@/registry/ui/checkbox';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
-import { PreviewShell } from '../../components/preview-shell';
-import { SelectControl, CheckboxControl, TextControl } from '../../components/controls';
-import { CHECKBOX_VARIANTS, CHECKBOX_THEMES } from '../../components/constants';
+import { PreviewShell } from '@/playground/components/preview-shell';
+import { SelectControl, CheckboxControl, TextControl } from '@/playground/components/controls';
+import { CHECKBOX_VARIANTS, CHECKBOX_THEMES } from '@/playground/components/constants';
 
 type CheckboxVariant = (typeof CHECKBOX_VARIANTS)[number];
 type CheckboxTheme = (typeof CHECKBOX_THEMES)[number];
@@ -111,8 +111,9 @@ function CheckboxVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: CheckboxPreview,
   Variants: CheckboxVariants,
   defaults,
 };
+export default entry;

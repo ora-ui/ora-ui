@@ -15,10 +15,10 @@ import {
   AlertDialogMedia,
 } from '@/registry/ui/alert-dialog';
 import { Button } from '@/registry/ui/button';
-import { PreviewShell } from '../../components/preview-shell';
-import { TextControl, SelectControl, CheckboxControl } from '../../components/controls';
+import { PreviewShell } from '@/playground/components/preview-shell';
+import { TextControl, SelectControl, CheckboxControl } from '@/playground/components/controls';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
-import { BUTTON_VARIANTS, BUTTON_THEMES } from '../../components/constants';
+import { BUTTON_VARIANTS, BUTTON_THEMES } from '@/playground/components/constants';
 
 type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
 type ButtonTheme = (typeof BUTTON_THEMES)[number];
@@ -174,8 +174,9 @@ function AlertDialogVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: AlertDialogPreview,
   Variants: AlertDialogVariants,
   defaults,
 };
+export default entry;

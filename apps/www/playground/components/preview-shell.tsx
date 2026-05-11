@@ -6,7 +6,6 @@ import { Separator } from '@/registry/ui/separator';
 import { Label } from '@/registry/ui/label';
 import { Button } from '@/registry/ui/button';
 import { SquaresFourIcon } from '@phosphor-icons/react';
-import { cn } from '@/registry/lib/utils';
 import { BACKGROUNDS } from './constants';
 
 interface PreviewShellProps {

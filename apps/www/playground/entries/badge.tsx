@@ -4,9 +4,9 @@ import * as React from 'react';
 import { CircleIcon, SparkleIcon, StarIcon } from '@phosphor-icons/react';
 import { Badge } from '@/registry/ui/badge';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
-import { PreviewShell } from '../../components/preview-shell';
-import { TextControl, SelectControl } from '../../components/controls';
-import { BADGE_VARIANTS, BADGE_THEMES } from '../../components/constants';
+import { PreviewShell } from '@/playground/components/preview-shell';
+import { TextControl, SelectControl } from '@/playground/components/controls';
+import { BADGE_VARIANTS, BADGE_THEMES } from '@/playground/components/constants';
 
 type BadgeVariant = (typeof BADGE_VARIANTS)[number];
 type BadgeTheme = (typeof BADGE_THEMES)[number];
@@ -109,8 +109,9 @@ function BadgeVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: BadgePreview,
   Variants: BadgeVariants,
   defaults,
 };
+export default entry;

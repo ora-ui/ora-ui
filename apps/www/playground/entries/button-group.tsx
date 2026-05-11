@@ -17,9 +17,9 @@ import {
   DropdownMenuItem,
 } from '@/registry/ui/dropdown-menu';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
-import { PreviewShell } from '../../components/preview-shell';
-import { SelectControl } from '../../components/controls';
-import { BUTTON_VARIANTS } from '../../components/constants';
+import { PreviewShell } from '@/playground/components/preview-shell';
+import { SelectControl } from '@/playground/components/controls';
+import { BUTTON_VARIANTS } from '@/playground/components/constants';
 
 type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
 type Orientation = 'horizontal' | 'vertical';
@@ -197,8 +197,9 @@ function ButtonGroupVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: ButtonGroupPreview,
   Variants: ButtonGroupVariants,
   defaults,
 };
+export default entry;

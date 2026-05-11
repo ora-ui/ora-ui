@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import { getEntryBySlug, getAllEntries } from '../registry';
-import { ComponentLoader } from './component-loader';
+import { getEntryBySlug, getAllEntries } from '@/playground/entries';
+import { ComponentLoader } from '@/playground/components/component-loader';
 
 interface PageProps {
   params: Promise<{ component: string }>;
