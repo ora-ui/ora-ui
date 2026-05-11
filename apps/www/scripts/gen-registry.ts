@@ -1,3 +1,7 @@
+import fs from 'fs';
+import path from 'path';
+import ts from 'typescript';
+
 export interface ExportMeta {
   name: string;
   value: string;
@@ -12,6 +16,123 @@ export interface PreviewEntry {
   source: string;
 }
 
+export class NamingViolationError extends Error {
+  constructor(
+    public file: string,
+    public line: number,
+    public actual: string,
+    public expectedPrefix: string
+  ) {
+    super(
+      `${file}:${line} — exported function \`${actual}\` does not start with expected prefix \`${expectedPrefix}\``
+    );
+    this.name = 'NamingViolationError';
+  }
+}
+
+function dirToPascal(dirName: string): string {
+  return dirName
+    .split('-')
+    .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+    .join('');
+}
+
+function pascalToKebab(pascal: string): string {
+  return pascal
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
+    .toLowerCase();
+}
+
+function splitPascal(pascal: string): string {
+  return pascal.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
+}
+
+interface NamedFn {
+  name: string;
+  start: number;
+  end: number;
+  line: number;
+}
+
+function collectExports(sourceFile: ts.SourceFile): {
+  named: NamedFn[];
+  defaultName: string | null;
+} {
+  const named: NamedFn[] = [];
+  let defaultName: string | null = null;
+
+  for (const stmt of sourceFile.statements) {
+    if (ts.isFunctionDeclaration(stmt) && stmt.name) {
+      const isExport = stmt.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
+      const isDefault = stmt.modifiers?.some((m) => m.kind === ts.SyntaxKind.DefaultKeyword);
+      if (isExport) {
+        const name = stmt.name.text;
+        const { line } = sourceFile.getLineAndCharacterOfPosition(stmt.getStart(sourceFile));
+        named.push({ name, start: stmt.getStart(sourceFile), end: stmt.getEnd(), line: line + 1 });
+        if (isDefault) defaultName = name;
+      }
+    } else if (ts.isExportAssignment(stmt) && !stmt.isExportEquals) {
+      if (ts.isIdentifier(stmt.expression)) {
+        defaultName = stmt.expression.text;
+      }
+    }
+  }
+
+  return { named, defaultName };
+}
+
 export function parsePreviewFile(filePath: string): PreviewEntry {
-  throw new Error(`not implemented: ${filePath}`);
+  const source = fs.readFileSync(filePath, 'utf-8');
+  const fileName = path.basename(filePath);
+  const slug = fileName.replace(/\.tsx?$/, '');
+  const dirName = path.basename(path.dirname(filePath));
+  const dirPascal = dirToPascal(dirName);
+
+  const sourceFile = ts.createSourceFile(
+    fileName,
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX
+  );
+
+  const { named, defaultName } = collectExports(sourceFile);
+
+  if (named.length === 0) {
+    throw new Error(
+      `${filePath}:1 — no exported functions found; expected at least one named export starting with \`${dirPascal}\``
+    );
+  }
+
+  for (const fn of named) {
+    if (!fn.name.startsWith(dirPascal)) {
+      throw new NamingViolationError(filePath, fn.line, fn.name, dirPascal);
+    }
+  }
+
+  const exports: ExportMeta[] = named.map((fn) => {
+    const suffix = fn.name.slice(dirPascal.length);
+    return {
+      name: fn.name,
+      value: pascalToKebab(suffix),
+      label: splitPascal(suffix),
+      snippet: source.slice(fn.start, fn.end),
+    };
+  });
+
+  if (!defaultName) {
+    throw new Error(
+      `${filePath}:1 — missing default export; expected one of: ${named.map((f) => f.name).join(', ')}`
+    );
+  }
+
+  const defaultExport = exports.find((e) => e.name === defaultName);
+  if (!defaultExport) {
+    throw new Error(
+      `${filePath}:1 — default export \`${defaultName}\` does not match any named export`
+    );
+  }
+
+  return { slug, defaultExport, exports, source };
 }
