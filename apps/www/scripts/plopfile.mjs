@@ -14,7 +14,7 @@
  * Test + cleanup:
  *   pnpm --filter docs scaffold component test "A test component" "default,alt"
  *   # Then revert:
- *   git checkout -- apps/www/previews/registry.ts apps/www/components/ui/sources.ts apps/www/content/docs/components/meta.json
+ *   git checkout -- apps/www/previews/registry.ts apps/www/registry/lib/sources.ts apps/www/content/docs/components/meta.json
  *   git clean -fd apps/www/previews/test/ apps/www/content/docs/components/test.mdx
  */
 
@@ -136,7 +136,7 @@ export default function (plop) {
         },
         {
           type: 'modify',
-          path: join(DOC_ROOT, 'components/ui/sources.ts'),
+          path: join(DOC_ROOT, 'registry/lib/sources.ts'),
           transform(content) {
             const needsQuotes = name.includes('-');
             const sourceKey = needsQuotes ? `"${name}"` : name;

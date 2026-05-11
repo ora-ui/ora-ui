@@ -1,4 +1,4 @@
-import { Tabs, TabsList, TabsTab, TabsPanel } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTab, TabsPanel } from '@/registry/ui/tabs';
 
 export function Soft() {
   return (

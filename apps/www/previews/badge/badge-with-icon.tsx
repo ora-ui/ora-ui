@@ -1,5 +1,5 @@
 import { StarIcon } from '@heroicons/react/16/solid';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/registry/ui/badge';
 
 export function Leading() {
   return (

@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Collapsible } from '@base-ui/react/collapsible';
-import { cn } from '@/lib/utils';
+import { cn } from '@/registry/lib/utils';
 
 interface CodeCollapsibleContextValue {
   open: boolean;

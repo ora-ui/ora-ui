@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Checkbox } from '@/components/ui/checkbox';
-import { CheckboxGroup } from '@/components/ui/checkbox-group';
+import { Checkbox } from '@/registry/ui/checkbox';
+import { CheckboxGroup } from '@/registry/ui/checkbox-group';
 
 const OPTIONS = [
   { value: 'email', label: 'Email updates' },

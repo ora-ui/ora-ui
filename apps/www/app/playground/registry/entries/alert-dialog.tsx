@@ -13,11 +13,11 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogMedia,
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
+} from '@/registry/ui/alert-dialog';
+import { Button } from '@/registry/ui/button';
 import { PreviewShell } from '../../components/preview-shell';
 import { TextControl, SelectControl, CheckboxControl } from '../../components/controls';
-import { ToolbarSeparator } from '@/components/ui/toolbar';
+import { ToolbarSeparator } from '@/registry/ui/toolbar';
 import { BUTTON_VARIANTS, BUTTON_THEMES } from '../../components/constants';
 
 type ButtonVariant = (typeof BUTTON_VARIANTS)[number];

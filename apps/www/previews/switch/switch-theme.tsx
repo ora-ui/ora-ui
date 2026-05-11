@@ -1,4 +1,4 @@
-import { Switch } from '@/components/ui/switch';
+import { Switch } from '@/registry/ui/switch';
 
 export function Gray() {
   return <Switch defaultChecked />;

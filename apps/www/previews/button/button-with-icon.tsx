@@ -1,5 +1,5 @@
 import { PlusCircleIcon } from '@heroicons/react/16/solid';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/registry/ui/button';
 
 export function Leading() {
   return (

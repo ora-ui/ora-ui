@@ -6,7 +6,7 @@ import {
   CodeBlockCommandBar,
   CodeBlockCopyButton,
 } from '@/app/docs/components/code-block-command-bar';
-import { Tabs, TabsList, TabsTab, TabsPanel } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTab, TabsPanel } from '@/registry/ui/tabs';
 
 interface CodeBlockTabsClientItem {
   label: string;

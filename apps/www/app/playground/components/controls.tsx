@@ -1,11 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { ToolbarGroup } from '@/components/ui/toolbar';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Checkbox } from '@/components/ui/checkbox';
+import { ToolbarGroup } from '@/registry/ui/toolbar';
+import { Label } from '@/registry/ui/label';
+import { Input } from '@/registry/ui/input';
+import { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';
+import { Checkbox } from '@/registry/ui/checkbox';
 
 interface TextControlProps {
   label: string;

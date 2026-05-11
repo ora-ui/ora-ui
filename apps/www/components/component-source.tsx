@@ -1,5 +1,5 @@
 import { highlight } from 'fumadocs-core/highlight';
-import sources from '@/components/ui/sources';
+import sources from '@/registry/lib/sources';
 import { CodeBlock } from '@/app/docs/components/code-block';
 import { CodeCollapsibleWrapper } from '@/app/docs/components/code-collapsible-wrapper';
 import {

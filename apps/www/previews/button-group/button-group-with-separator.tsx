@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/16/solid';
-import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group';
-import { Button } from '@/components/ui/button';
+import { ButtonGroup, ButtonGroupSeparator } from '@/registry/ui/button-group';
+import { Button } from '@/registry/ui/button';
 
 export default function ButtonGroupWithSeparator() {
   return (

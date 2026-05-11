@@ -8,8 +8,8 @@ import {
   InputGroupText,
   InputGroupButton,
   InputGroupTextarea,
-} from '@/components/ui/input-group';
-import { ToolbarSeparator } from '@/components/ui/toolbar';
+} from '@/registry/ui/input-group';
+import { ToolbarSeparator } from '@/registry/ui/toolbar';
 import { PreviewShell } from '../../components/preview-shell';
 import { SelectControl, CheckboxControl, TextControl } from '../../components/controls';
 import { INPUT_VARIANTS } from '../../components/constants';

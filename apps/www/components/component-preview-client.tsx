@@ -8,7 +8,7 @@ import {
   CodeBlockExpandButton,
   CodeBlockCopyButton,
 } from '@/app/docs/components/code-block-command-bar';
-import { Separator } from '@/components/ui/separator';
+import { Separator } from '@/registry/ui/separator';
 
 export interface VariantItem {
   label: string;

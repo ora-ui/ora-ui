@@ -28,7 +28,7 @@ import {
 } from '@radix-ui/react-icons';
 import type { MDXComponents } from 'mdx/types';
 import NextImage from 'next/image';
-import { cn } from '@/lib/utils';
+import { cn } from '@/registry/lib/utils';
 import { CodeBlock, CodeBlockRoot } from '@/app/docs/components/code-block';
 import { CodeBlockCopyButton } from '@/app/docs/components/code-block-command-bar';
 import { Steps, Step } from '@/app/docs/components/steps';
@@ -36,17 +36,17 @@ import { CodeBlockTabs } from '@/app/docs/components/code-block-tabs';
 import { Callout } from '@/app/docs/components/callout';
 import { ComponentPreview } from '@/components/component-preview';
 import { ComponentSource } from '@/components/component-source';
-import { Tabs, TabsList, TabsTab, TabsPanel, TabsSurface } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Kbd, KbdGroup } from '@/components/ui/kbd';
-import { Separator } from '@/components/ui/separator';
-import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from '@/components/ui/button-group';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Toggle } from '@/components/ui/toggle';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Tabs, TabsList, TabsTab, TabsPanel, TabsSurface } from '@/registry/ui/tabs';
+import { Badge } from '@/registry/ui/badge';
+import { Button } from '@/registry/ui/button';
+import { Kbd, KbdGroup } from '@/registry/ui/kbd';
+import { Separator } from '@/registry/ui/separator';
+import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from '@/registry/ui/button-group';
+import { Input } from '@/registry/ui/input';
+import { Label } from '@/registry/ui/label';
+import { Textarea } from '@/registry/ui/textarea';
+import { Toggle } from '@/registry/ui/toggle';
+import { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';
 import {
   DropdownMenu,
   DropdownMenuPortal,
@@ -63,7 +63,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
-} from '@/components/ui/dropdown-menu';
+} from '@/registry/ui/dropdown-menu';
 
 function extractTextContent(node: React.ReactNode): string {
   if (typeof node === 'string') return node;

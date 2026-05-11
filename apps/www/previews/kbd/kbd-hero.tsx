@@ -1,6 +1,6 @@
 'use client';
 
-import { Kbd, KbdGroup } from '@/components/ui/kbd';
+import { Kbd, KbdGroup } from '@/registry/ui/kbd';
 
 export default function KbdHero() {
   return (

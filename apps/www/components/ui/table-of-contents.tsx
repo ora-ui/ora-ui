@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { AnchorProvider, useActiveAnchor, type TOCItemType } from 'fumadocs-core/toc';
-import { cn } from '@/lib/utils';
+import { cn } from '@/registry/lib/utils';
 
 interface TableOfContentsProps {
   toc: TOCItemType[];

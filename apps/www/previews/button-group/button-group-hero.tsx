@@ -1,5 +1,5 @@
-import { ButtonGroup } from '@/components/ui/button-group';
-import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/registry/ui/button-group';
+import { Button } from '@/registry/ui/button';
 
 export default function ButtonGroupHero() {
   return (

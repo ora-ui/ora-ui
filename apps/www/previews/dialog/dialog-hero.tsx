@@ -9,8 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+} from '@/registry/ui/dialog';
+import { Button } from '@/registry/ui/button';
 
 export default function DialogHero() {
   return (

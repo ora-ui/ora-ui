@@ -2,7 +2,7 @@
 
 import { BoldIcon } from '@heroicons/react/16/solid';
 
-import { Toggle } from '@/components/ui/toggle';
+import { Toggle } from '@/registry/ui/toggle';
 
 export function Soft() {
   return (

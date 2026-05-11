@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { ArrowUpIcon, InfoIcon, SparkleIcon, StarIcon } from '@phosphor-icons/react';
-import { Button } from '@/components/ui/button';
-import { ToolbarSeparator } from '@/components/ui/toolbar';
+import { Button } from '@/registry/ui/button';
+import { ToolbarSeparator } from '@/registry/ui/toolbar';
 import { PreviewShell } from '../../components/preview-shell';
 import { TextControl, SelectControl } from '../../components/controls';
 import { BUTTON_VARIANTS, BUTTON_THEMES } from '../../components/constants';

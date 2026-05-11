@@ -12,11 +12,11 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarGroupContent,
-} from '@/components/ui/sidebar';
-import { Input } from '@/components/ui/input';
+} from '@/registry/ui/sidebar';
+import { Input } from '@/registry/ui/input';
 import { registry } from '../registry';
 import { GlobalControls } from './global-controls';
-import { cn } from '@/lib/utils';
+import { cn } from '@/registry/lib/utils';
 
 export function PlaygroundSidebar() {
   const pathname = usePathname();

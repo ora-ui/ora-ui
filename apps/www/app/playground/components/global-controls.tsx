@@ -3,8 +3,8 @@
 import * as React from 'react';
 import { useTheme } from 'next-themes';
 import { MoonIcon, SunIcon } from '@phosphor-icons/react';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Label } from '@/components/ui/label';
+import { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';
+import { Label } from '@/registry/ui/label';
 import { RADIUS_PRESETS } from './constants';
 
 export function GlobalControls() {

@@ -1,6 +1,6 @@
 'use client';
 
-import { Kbd } from '@/components/ui/kbd';
+import { Kbd } from '@/registry/ui/kbd';
 
 export function Soft() {
   return <Kbd variant="soft">K</Kbd>;

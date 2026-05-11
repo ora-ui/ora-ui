@@ -1,8 +1,8 @@
 'use client';
 
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/registry/ui/sidebar';
 import { PlaygroundSidebar } from './components/playground-sidebar';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from '@/registry/ui/sonner';
 
 export default function PlaygroundLayout({ children }: { children: React.ReactNode }) {
   return (

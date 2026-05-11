@@ -1,11 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { AvatarGroup, AvatarGroupCount } from '@/components/ui/avatar-group';
+import { Avatar, AvatarImage, AvatarFallback } from '@/registry/ui/avatar';
+import { AvatarGroup, AvatarGroupCount } from '@/registry/ui/avatar-group';
 import { PreviewShell } from '../../components/preview-shell';
 import { SelectControl, CheckboxControl } from '../../components/controls';
-import { ToolbarSeparator } from '@/components/ui/toolbar';
+import { ToolbarSeparator } from '@/registry/ui/toolbar';
 
 const AVATAR_COUNT_OPTIONS = [
   { label: '3', value: '3' },

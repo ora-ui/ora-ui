@@ -1,5 +1,5 @@
-import { Field, FieldLabel } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
+import { Field, FieldLabel } from '@/registry/ui/form';
+import { Textarea } from '@/registry/ui/textarea';
 
 export default function TextareaWithLabel() {
   return (

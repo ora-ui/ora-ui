@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Tabs, TabsSurface, TabsList, TabsTab, TabsPanel } from '@/components/ui/tabs';
-import { ToolbarSeparator } from '@/components/ui/toolbar';
+import { Tabs, TabsSurface, TabsList, TabsTab, TabsPanel } from '@/registry/ui/tabs';
+import { ToolbarSeparator } from '@/registry/ui/toolbar';
 import { PreviewShell } from '../../components/preview-shell';
 import { SelectControl, CheckboxControl } from '../../components/controls';
 import { TABS_VARIANTS } from '../../components/constants';

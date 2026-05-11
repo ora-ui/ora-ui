@@ -1,6 +1,6 @@
 import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from '@radix-ui/react-icons';
 
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';
 
 export default function ToggleGroupVariants() {
   return (

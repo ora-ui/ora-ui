@@ -6,11 +6,11 @@ import { usePathname } from 'next/navigation';
 import { SearchDialog } from './SearchDialog';
 
 import { Logo } from '../assets/Logo';
-import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
-import { Kbd } from '@/components/ui/kbd';
-import { Link } from '@/components/ui/link';
-import { Separator } from '@/components/ui/separator';
+import { cn } from '@/registry/lib/utils';
+import { buttonVariants } from '@/registry/ui/button';
+import { Kbd } from '@/registry/ui/kbd';
+import { Link } from '@/registry/ui/link';
+import { Separator } from '@/registry/ui/separator';
 import { MobileNav } from '@/app/docs/components/mobile-nav';
 import { ModeSwitcher } from './ModeSwitcher';
 

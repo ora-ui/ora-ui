@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Input } from '@/components/ui/input';
-import { ToolbarSeparator } from '@/components/ui/toolbar';
+import { Input } from '@/registry/ui/input';
+import { ToolbarSeparator } from '@/registry/ui/toolbar';
 import { PreviewShell } from '../../components/preview-shell';
 import { SelectControl, CheckboxControl, TextControl } from '../../components/controls';
 import { INPUT_VARIANTS } from '../../components/constants';

@@ -4,7 +4,7 @@ import {
   AvatarFallback,
   AvatarGroup,
   AvatarGroupCount,
-} from '@/components/ui/avatar';
+} from '@/registry/ui/avatar';
 
 const SRC = 'https://images.unsplash.com/photo-1729552958114-f9fe2e585476?w=128&h=128&dpr=2&q=80';
 
