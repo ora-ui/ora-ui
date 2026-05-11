@@ -1,11 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { CodeBlock, CodeBlockRoot } from '@/app/docs/components/code-block';
+import { CodeBlock, CodeBlockRoot } from '@/docs/components/code-block';
 import {
   CodeBlockCommandBar,
   CodeBlockCopyButton,
-} from '@/app/docs/components/code-block-command-bar';
+} from '@/docs/components/code-block-command-bar';
 import { Tabs, TabsList, TabsTab, TabsPanel } from '@/registry/ui/tabs';
 
 interface CodeBlockTabsClientItem {

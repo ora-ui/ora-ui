@@ -1,6 +1,6 @@
-import { source } from '@/lib/source';
-import { getMDXComponents } from '@/components/mdx';
-import { TableOfContents } from '@/components/ui/table-of-contents';
+import { source } from '@/docs/lib/source';
+import { getMDXComponents } from '@/docs/components/mdx';
+import { TableOfContents } from '@/docs/components/table-of-contents';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
