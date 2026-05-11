@@ -1,13 +1,13 @@
 'use client';
 
 import * as React from 'react';
-import { CodeBlock } from '@/app/docs/components/code-block';
-import { CodeCollapsibleWrapper } from '@/app/docs/components/code-collapsible-wrapper';
+import { CodeBlock } from '@/docs/components/code-block';
+import { CodeCollapsibleWrapper } from '@/docs/components/code-collapsible-wrapper';
 import {
   CodeBlockCommandBar,
   CodeBlockExpandButton,
   CodeBlockCopyButton,
-} from '@/app/docs/components/code-block-command-bar';
+} from '@/docs/components/code-block-command-bar';
 import { Separator } from '@/registry/ui/separator';
 
 export interface VariantItem {

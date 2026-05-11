@@ -1,13 +1,13 @@
 import { highlight } from 'fumadocs-core/highlight';
-import { registry } from '@/previews/registry';
-import { extractExport } from '@/lib/extract-export';
-import { CodeBlock } from '@/app/docs/components/code-block';
-import { CodeCollapsibleWrapper } from '@/app/docs/components/code-collapsible-wrapper';
+import { registry } from '@/docs/previews/registry';
+import { extractExport } from '@/docs/lib/extract-export';
+import { CodeBlock } from '@/docs/components/code-block';
+import { CodeCollapsibleWrapper } from '@/docs/components/code-collapsible-wrapper';
 import {
   CodeBlockCommandBar,
   CodeBlockExpandButton,
   CodeBlockCopyButton,
-} from '@/app/docs/components/code-block-command-bar';
+} from '@/docs/components/code-block-command-bar';
 import { Separator } from '@/registry/ui/separator';
 import { ComponentPreviewClient } from './component-preview-client';
 

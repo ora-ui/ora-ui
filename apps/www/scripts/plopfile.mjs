@@ -14,8 +14,8 @@
  * Test + cleanup:
  *   pnpm --filter docs scaffold component test "A test component" "default,alt"
  *   # Then revert:
- *   git checkout -- apps/www/previews/registry.ts apps/www/registry/lib/sources.ts apps/www/content/docs/components/meta.json
- *   git clean -fd apps/www/previews/test/ apps/www/content/docs/components/test.mdx
+ *   git checkout -- apps/www/docs/previews/registry.ts apps/www/registry/lib/sources.ts apps/www/docs/content/components/meta.json
+ *   git clean -fd apps/www/docs/previews/test/ apps/www/docs/content/components/test.mdx
  */
 
 import { dirname, join } from 'node:path';
@@ -91,20 +91,20 @@ export default function (plop) {
       return [
         {
           type: 'add',
-          path: join(DOC_ROOT, 'previews/{{name}}/{{name}}-hero.tsx'),
+          path: join(DOC_ROOT, 'docs/previews/{{name}}/{{name}}-hero.tsx'),
           templateFile: join(TPL_ROOT, 'preview-hero.tsx.hbs'),
           skipIfExists: true,
         },
         ...variants.map((variant) => ({
           type: 'add',
-          path: join(DOC_ROOT, `previews/{{name}}/{{name}}-${variant}.tsx`),
+          path: join(DOC_ROOT, `docs/previews/{{name}}/{{name}}-${variant}.tsx`),
           templateFile: join(TPL_ROOT, 'preview.tsx.hbs'),
           data: { variant },
           skipIfExists: true,
         })),
         {
           type: 'modify',
-          path: join(DOC_ROOT, 'previews/registry.ts'),
+          path: join(DOC_ROOT, 'docs/previews/registry.ts'),
           transform(content) {
             const newImports = [];
             const heroImport = `import ${pascalCase(name)}Hero from './${name}/${name}-hero';`;
@@ -120,7 +120,7 @@ export default function (plop) {
         },
         {
           type: 'modify',
-          path: join(DOC_ROOT, 'previews/registry.ts'),
+          path: join(DOC_ROOT, 'docs/previews/registry.ts'),
           transform(content) {
             const newEntries = [];
             const heroEntry = `  '${name}-hero': {\n    component: ${pascalCase(name)}Hero,\n    source: readSource('${name}/${name}-hero.tsx'),\n  },`;
@@ -150,13 +150,13 @@ export default function (plop) {
         },
         {
           type: 'add',
-          path: join(DOC_ROOT, 'content/docs/components/{{name}}.mdx'),
+          path: join(DOC_ROOT, 'docs/content/components/{{name}}.mdx'),
           templateFile: join(TPL_ROOT, 'component.mdx.hbs'),
           skipIfExists: true,
         },
         {
           type: 'modify',
-          path: join(DOC_ROOT, 'content/docs/components/meta.json'),
+          path: join(DOC_ROOT, 'docs/content/components/meta.json'),
           transform(content) {
             const meta = JSON.parse(content);
             if (!meta.pages.includes(name)) {

@@ -1,4 +1,7 @@
-import { source } from '@/lib/source';
-import { createFromSource } from 'fumadocs-core/search/server';
+import { type NextRequest } from 'next/server';
+import { searchDocs } from '@/docs/lib/search';
 
-export const { GET } = createFromSource(source);
+export async function GET(req: NextRequest) {
+  const q = req.nextUrl.searchParams.get('query') ?? '';
+  return Response.json(await searchDocs(q));
+}
