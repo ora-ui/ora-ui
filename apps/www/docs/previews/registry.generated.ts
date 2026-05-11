@@ -2103,21 +2103,21 @@ export const registry: Record<string, PreviewEntry> = {
   'toggle-group-variants': {
     slug: 'toggle-group-variants',
     defaultExport: {
-      name: 'ToggleGroupVariants',
-      value: 'variants',
-      label: 'Variants',
-      component: ToggleGroupVariantsModule.default,
+      name: 'ToggleGroupSoft',
+      value: 'soft',
+      label: 'Soft',
+      component: ToggleGroupVariantsModule.ToggleGroupSoft,
       snippet:
-        'export default function ToggleGroupVariants() {\n  return (\n    <ToggleGroup>\n      <ToggleGroupItem value="left" aria-label="Align left">\n        <TextAlignLeftIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="center" aria-label="Align center">\n        <TextAlignCenterIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="right" aria-label="Align right">\n        <TextAlignRightIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}',
+        'export function ToggleGroupSoft() {\n  return (\n    <ToggleGroup>\n      <ToggleGroupItem value="left" aria-label="Align left">\n        <TextAlignLeftIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="center" aria-label="Align center">\n        <TextAlignCenterIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="right" aria-label="Align right">\n        <TextAlignRightIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}',
     },
     exports: [
       {
-        name: 'ToggleGroupVariants',
-        value: 'variants',
-        label: 'Variants',
-        component: ToggleGroupVariantsModule.default,
+        name: 'ToggleGroupSoft',
+        value: 'soft',
+        label: 'Soft',
+        component: ToggleGroupVariantsModule.ToggleGroupSoft,
         snippet:
-          'export default function ToggleGroupVariants() {\n  return (\n    <ToggleGroup>\n      <ToggleGroupItem value="left" aria-label="Align left">\n        <TextAlignLeftIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="center" aria-label="Align center">\n        <TextAlignCenterIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="right" aria-label="Align right">\n        <TextAlignRightIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}',
+          'export function ToggleGroupSoft() {\n  return (\n    <ToggleGroup>\n      <ToggleGroupItem value="left" aria-label="Align left">\n        <TextAlignLeftIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="center" aria-label="Align center">\n        <TextAlignCenterIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="right" aria-label="Align right">\n        <TextAlignRightIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}',
       },
       {
         name: 'ToggleGroupOutline',
@@ -2137,7 +2137,7 @@ export const registry: Record<string, PreviewEntry> = {
       },
     ],
     source:
-      'import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from \'@radix-ui/react-icons\';\n\nimport { ToggleGroup, ToggleGroupItem } from \'@/registry/ui/toggle-group\';\n\nexport default function ToggleGroupVariants() {\n  return (\n    <ToggleGroup>\n      <ToggleGroupItem value="left" aria-label="Align left">\n        <TextAlignLeftIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="center" aria-label="Align center">\n        <TextAlignCenterIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="right" aria-label="Align right">\n        <TextAlignRightIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}\n\nexport function ToggleGroupOutline() {\n  return (\n    <ToggleGroup variant="outline">\n      <ToggleGroupItem value="left" aria-label="Align left">\n        <TextAlignLeftIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="center" aria-label="Align center">\n        <TextAlignCenterIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="right" aria-label="Align right">\n        <TextAlignRightIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}\n\nexport function ToggleGroupSolid() {\n  return (\n    <ToggleGroup variant="solid">\n      <ToggleGroupItem value="left" aria-label="Align left">\n        <TextAlignLeftIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="center" aria-label="Align center">\n        <TextAlignCenterIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="right" aria-label="Align right">\n        <TextAlignRightIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}\n',
+      'import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from \'@radix-ui/react-icons\';\n\nimport { ToggleGroup, ToggleGroupItem } from \'@/registry/ui/toggle-group\';\n\nexport function ToggleGroupSoft() {\n  return (\n    <ToggleGroup>\n      <ToggleGroupItem value="left" aria-label="Align left">\n        <TextAlignLeftIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="center" aria-label="Align center">\n        <TextAlignCenterIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="right" aria-label="Align right">\n        <TextAlignRightIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}\n\nexport default ToggleGroupSoft;\n\nexport function ToggleGroupOutline() {\n  return (\n    <ToggleGroup variant="outline">\n      <ToggleGroupItem value="left" aria-label="Align left">\n        <TextAlignLeftIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="center" aria-label="Align center">\n        <TextAlignCenterIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="right" aria-label="Align right">\n        <TextAlignRightIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}\n\nexport function ToggleGroupSolid() {\n  return (\n    <ToggleGroup variant="solid">\n      <ToggleGroupItem value="left" aria-label="Align left">\n        <TextAlignLeftIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="center" aria-label="Align center">\n        <TextAlignCenterIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value="right" aria-label="Align right">\n        <TextAlignRightIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}\n',
   },
   'toggle-group-vertical': {
     slug: 'toggle-group-vertical',

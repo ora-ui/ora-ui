@@ -1,6 +1,5 @@
 import { highlight } from 'fumadocs-core/highlight';
-import { registry } from '@/docs/previews/registry';
-import { extractExport } from '@/docs/lib/extract-export';
+import { registry } from '@/docs/previews/registry.generated';
 import { CodeBlock } from '@/docs/components/code-block';
 import { CodeCollapsibleWrapper } from '@/docs/components/code-collapsible-wrapper';
 import {
@@ -27,15 +26,13 @@ function normalize(opt: SelectOption): { label: string; value: string } {
 export async function ComponentPreview({ name, select }: ComponentPreviewProps) {
   const entry = registry[name];
 
-  if (select && entry?.variants) {
+  if (select && entry) {
     const options = select.map(normalize);
     const variants = await Promise.all(
       options.map(async (opt) => {
-        const VariantComponent = entry.variants![opt.value];
-        const snippet = extractExport(
-          entry.source,
-          opt.value.charAt(0).toUpperCase() + opt.value.slice(1)
-        );
+        const exportMeta = entry.exports.find((e) => e.value === opt.value);
+        const VariantComponent = exportMeta?.component;
+        const snippet = exportMeta?.snippet ?? '';
         const highlighted = snippet
           ? await highlight(snippet, {
               lang: 'tsx',
@@ -68,7 +65,7 @@ export async function ComponentPreview({ name, select }: ComponentPreviewProps) 
       })
     : null;
 
-  const Preview = entry?.component;
+  const Preview = entry?.defaultExport.component;
 
   return (
     <div className="mt-3 mb-7 rounded-lg border border-line">
