@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { renderToString } from 'react-dom/server';
 import { createElement } from 'react';
-import { registry } from '../registry';
+import { registry } from '../registry.generated';
 
 /**
- * Baseline rendered-output snapshot for the legacy previews registry.
+ * Baseline rendered-output snapshot for the previews registry.
  *
  * Regression bar for the registry generator (#140 chain). Any divergence
  * from this snapshot represents a user-visible regression in preview
@@ -18,12 +18,12 @@ describe('previews registry baseline', () => {
     for (const key of keys) {
       const entry = registry[key];
       lines.push(`# ${key}`);
-      lines.push(renderToString(createElement(entry.component)));
-      if (entry.variants) {
-        const variantKeys = Object.keys(entry.variants).sort();
-        for (const variantKey of variantKeys) {
-          lines.push(`# ${key} :: ${variantKey}`);
-          lines.push(renderToString(createElement(entry.variants[variantKey])));
+      lines.push(renderToString(createElement(entry.defaultExport.component)));
+      if (entry.exports.length > 1) {
+        for (const exp of entry.exports) {
+          if (exp.name === entry.defaultExport.name) continue;
+          lines.push(`# ${key} :: ${exp.value}`);
+          lines.push(renderToString(createElement(exp.component)));
         }
       }
     }

@@ -2,7 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { NamingViolationError, parsePreviewFile } from './gen-registry';
+import { NamingViolationError, generate, generateToMemory, parsePreviewFile } from './gen-registry';
 
 let tmpRoot: string;
 
@@ -106,6 +106,66 @@ describe('parsePreviewFile — naming validation', () => {
     expect(err.expectedPrefix).toBe('Button');
     expect(err.message).toContain(`${file}:3`);
     expect(err.message).toContain('Button');
+  });
+});
+
+const PREVIEW_FIXTURE = [
+  `import { Button } from '@/registry/ui/button';`,
+  ``,
+  `export function ButtonSolid() {`,
+  `  return <Button variant="solid">Sign up</Button>;`,
+  `}`,
+  ``,
+  `export default ButtonSolid;`,
+  ``,
+].join('\n');
+
+const UI_FIXTURE = `export function Button() { return null; }\n`;
+
+function setupGenFixture() {
+  const previewsDir = path.join(tmpRoot, 'previews');
+  const uiDir = path.join(tmpRoot, 'ui');
+  const registryOut = path.join(tmpRoot, 'registry.generated.ts');
+  const sourcesOut = path.join(tmpRoot, 'sources.generated.ts');
+  fs.mkdirSync(path.join(previewsDir, 'button'), { recursive: true });
+  fs.mkdirSync(uiDir, { recursive: true });
+  fs.writeFileSync(path.join(previewsDir, 'button', 'button-default.tsx'), PREVIEW_FIXTURE);
+  fs.writeFileSync(path.join(uiDir, 'button.tsx'), UI_FIXTURE);
+  return { previewsDir, uiDir, registryOut, sourcesOut };
+}
+
+describe('drift round-trip', () => {
+  it('generate then generateToMemory matches on-disk (no drift)', () => {
+    const opts = setupGenFixture();
+    generate(opts);
+    const memory = generateToMemory(opts);
+    expect(fs.readFileSync(opts.registryOut, 'utf-8')).toBe(memory.registry);
+    expect(fs.readFileSync(opts.sourcesOut, 'utf-8')).toBe(memory.sources);
+  });
+
+  it('generateToMemory differs from on-disk after preview file changes (drift)', () => {
+    const opts = setupGenFixture();
+    generate(opts);
+
+    // mutate the preview file after generation
+    const previewFile = path.join(opts.previewsDir, 'button', 'button-default.tsx');
+    fs.writeFileSync(
+      previewFile,
+      [
+        `import { Button } from '@/registry/ui/button';`,
+        ``,
+        `export function ButtonSolid() {`,
+        `  return <Button variant="outline">Changed</Button>;`,
+        `}`,
+        ``,
+        `export default ButtonSolid;`,
+        ``,
+      ].join('\n')
+    );
+
+    const memory = generateToMemory(opts);
+    const onDisk = fs.readFileSync(opts.registryOut, 'utf-8');
+    expect(onDisk).not.toBe(memory.registry);
   });
 });
 

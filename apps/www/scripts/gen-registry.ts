@@ -276,3 +276,17 @@ export function generate(opts: GenerateOptions): void {
   fs.writeFileSync(opts.registryOut, renderRegistryModule(entries));
   fs.writeFileSync(opts.sourcesOut, renderSourcesModule(sources));
 }
+
+export interface GeneratedOutput {
+  registry: string;
+  sources: string;
+}
+
+export function generateToMemory(opts: GenerateOptions): GeneratedOutput {
+  const entries = parsePreviewsDir(opts.previewsDir);
+  const sources = readUiSources(opts.uiDir);
+  return {
+    registry: renderRegistryModule(entries),
+    sources: renderSourcesModule(sources),
+  };
+}
