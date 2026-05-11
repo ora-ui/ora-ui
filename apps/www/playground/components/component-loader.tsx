@@ -1,7 +1,7 @@
 'use client';
 
 import { use, useMemo } from 'react';
-import { getEntryBySlug, type PlaygroundComponent } from '../registry';
+import { getEntryBySlug, type PlaygroundComponent } from '@/playground/entries';
 
 interface ComponentLoaderProps {
   slug: string;

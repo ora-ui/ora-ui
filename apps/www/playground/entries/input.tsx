@@ -3,9 +3,9 @@
 import * as React from 'react';
 import { Input } from '@/registry/ui/input';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
-import { PreviewShell } from '../../components/preview-shell';
-import { SelectControl, CheckboxControl, TextControl } from '../../components/controls';
-import { INPUT_VARIANTS } from '../../components/constants';
+import { PreviewShell } from '@/playground/components/preview-shell';
+import { SelectControl, CheckboxControl, TextControl } from '@/playground/components/controls';
+import { INPUT_VARIANTS } from '@/playground/components/constants';
 
 type InputVariant = (typeof INPUT_VARIANTS)[number];
 
@@ -81,8 +81,9 @@ function InputVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: InputPreview,
   Variants: InputVariants,
   defaults,
 };
+export default entry;

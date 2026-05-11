@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getAllEntries } from './registry';
+import { getAllEntries } from '@/playground/entries';
 
 export default function PlaygroundPage() {
   const entries = getAllEntries();

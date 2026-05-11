@@ -3,9 +3,9 @@
 import * as React from 'react';
 import { Tabs, TabsSurface, TabsList, TabsTab, TabsPanel } from '@/registry/ui/tabs';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
-import { PreviewShell } from '../../components/preview-shell';
-import { SelectControl, CheckboxControl } from '../../components/controls';
-import { TABS_VARIANTS } from '../../components/constants';
+import { PreviewShell } from '@/playground/components/preview-shell';
+import { SelectControl, CheckboxControl } from '@/playground/components/controls';
+import { TABS_VARIANTS } from '@/playground/components/constants';
 
 type TabsVariant = (typeof TABS_VARIANTS)[number];
 
@@ -168,8 +168,9 @@ function TabsVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: TabsPreview,
   Variants: TabsVariants,
   defaults,
 };
+export default entry;

@@ -4,9 +4,9 @@ import * as React from 'react';
 import { ArrowUpIcon, InfoIcon, SparkleIcon, StarIcon } from '@phosphor-icons/react';
 import { Button } from '@/registry/ui/button';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
-import { PreviewShell } from '../../components/preview-shell';
-import { TextControl, SelectControl } from '../../components/controls';
-import { BUTTON_VARIANTS, BUTTON_THEMES } from '../../components/constants';
+import { PreviewShell } from '@/playground/components/preview-shell';
+import { TextControl, SelectControl } from '@/playground/components/controls';
+import { BUTTON_VARIANTS, BUTTON_THEMES } from '@/playground/components/constants';
 
 type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
 type ButtonTheme = (typeof BUTTON_THEMES)[number];
@@ -113,8 +113,9 @@ function ButtonVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: ButtonPreview,
   Variants: ButtonVariants,
   defaults,
 };
+export default entry;

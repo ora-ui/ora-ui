@@ -34,9 +34,13 @@ import {
   DropdownMenuSubContent,
 } from '@/registry/ui/dropdown-menu';
 import { ToolbarSeparator } from '@/registry/ui/toolbar';
-import { PreviewShell } from '../../components/preview-shell';
-import { SelectControl } from '../../components/controls';
-import { DROPDOWN_VARIANTS, DROPDOWN_THEMES, DROPDOWN_SCENARIOS } from '../../components/constants';
+import { PreviewShell } from '@/playground/components/preview-shell';
+import { SelectControl } from '@/playground/components/controls';
+import {
+  DROPDOWN_VARIANTS,
+  DROPDOWN_THEMES,
+  DROPDOWN_SCENARIOS,
+} from '@/playground/components/constants';
 
 type DropdownVariant = (typeof DROPDOWN_VARIANTS)[number];
 type DropdownTheme = (typeof DROPDOWN_THEMES)[number];
@@ -338,8 +342,9 @@ function DropdownMenuVariants() {
   );
 }
 
-export default {
+const entry = {
   Preview: DropdownMenuPreview,
   Variants: DropdownMenuVariants,
   defaults,
 };
+export default entry;
