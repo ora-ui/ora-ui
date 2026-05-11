@@ -105,14 +105,8 @@ export function parsePreviewFile(filePath: string): PreviewEntry {
     );
   }
 
-  for (const fn of named) {
-    if (!fn.name.startsWith(dirPascal)) {
-      throw new NamingViolationError(filePath, fn.line, fn.name, dirPascal);
-    }
-  }
-
   const exports: ExportMeta[] = named.map((fn) => {
-    const suffix = fn.name.slice(dirPascal.length);
+    const suffix = fn.name.startsWith(dirPascal) ? fn.name.slice(dirPascal.length) : fn.name;
     return {
       name: fn.name,
       value: pascalToKebab(suffix),

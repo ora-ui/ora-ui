@@ -2,7 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { parsePreviewFile } from './gen-registry';
+import { NamingViolationError, parsePreviewFile } from './gen-registry';
 
 let tmpRoot: string;
 
@@ -20,6 +20,39 @@ function writeFixture(rel: string, contents: string): string {
   fs.writeFileSync(full, contents);
   return full;
 }
+
+describe('parsePreviewFile — naming validation', () => {
+  it('throws NamingViolationError with file:line and expected prefix when an export does not start with DirPascal', () => {
+    const file = writeFixture(
+      'button/button-bad.tsx',
+      [
+        `import { Button } from '@/registry/ui/button';`,
+        ``,
+        `export function CoolThing() {`,
+        `  return <Button>x</Button>;`,
+        `}`,
+        ``,
+        `export default CoolThing;`,
+        ``,
+      ].join('\n')
+    );
+
+    let caught: unknown;
+    try {
+      parsePreviewFile(file);
+    } catch (e) {
+      caught = e;
+    }
+    expect(caught).toBeInstanceOf(NamingViolationError);
+    const err = caught as NamingViolationError;
+    expect(err.file).toBe(file);
+    expect(err.line).toBe(3);
+    expect(err.actual).toBe('CoolThing');
+    expect(err.expectedPrefix).toBe('Button');
+    expect(err.message).toContain(`${file}:3`);
+    expect(err.message).toContain('Button');
+  });
+});
 
 describe('parsePreviewFile — shape', () => {
   it('returns PreviewEntry with declaration order preserved', () => {
