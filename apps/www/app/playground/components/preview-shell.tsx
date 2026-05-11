@@ -1,12 +1,12 @@
 'use client';
 
 import * as React from 'react';
-import { Toolbar, ToolbarGroup, ToolbarSeparator } from '@/components/ui/toolbar';
-import { Separator } from '@/components/ui/separator';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import { Toolbar, ToolbarGroup, ToolbarSeparator } from '@/registry/ui/toolbar';
+import { Separator } from '@/registry/ui/separator';
+import { Label } from '@/registry/ui/label';
+import { Button } from '@/registry/ui/button';
 import { SquaresFourIcon } from '@phosphor-icons/react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/registry/lib/utils';
 import { BACKGROUNDS } from './constants';
 
 interface PreviewShellProps {

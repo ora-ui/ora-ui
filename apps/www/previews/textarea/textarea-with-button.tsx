@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { Field, FieldLabel } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/registry/ui/button';
+import { Field, FieldLabel } from '@/registry/ui/form';
+import { Textarea } from '@/registry/ui/textarea';
 
 export default function TextareaWithButton() {
   return (

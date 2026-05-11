@@ -12,7 +12,7 @@ npx shadcn@latest add "https://ora-ui.com/r/label.json"
 ## Usage
 
 ```tsx
-import { Label } from '@/components/ui/label';
+import { Label } from '@/registry/ui/label';
 
 <Label htmlFor="name">Name</Label>;
 ```
@@ -24,7 +24,7 @@ import { Label } from '@/components/ui/label';
 <Label htmlFor="demo">Full name</Label>
 
 ```tsx
-import { Label } from '@/components/ui/label';
+import { Label } from '@/registry/ui/label';
 
 export default function LabelDefault() {
   return <Label htmlFor="demo">Full name</Label>;
@@ -41,8 +41,8 @@ Pair with [Input](/docs/components/input) using a matching `htmlFor` / `id` to c
 </div>
 
 ```tsx
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Input } from '@/registry/ui/input';
+import { Label } from '@/registry/ui/label';
 
 export default function LabelWithInput() {
   return (
@@ -64,8 +64,8 @@ The label dims automatically when its associated control is disabled via the `pe
 </div>
 
 ```tsx
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Input } from '@/registry/ui/input';
+import { Label } from '@/registry/ui/label';
 
 export default function LabelDisabled() {
   return (

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/registry/lib/utils';
 
 type CalloutVariant = 'default' | 'info' | 'warning';
 

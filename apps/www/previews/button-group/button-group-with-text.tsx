@@ -1,5 +1,5 @@
-import { ButtonGroup, ButtonGroupText } from '@/components/ui/button-group';
-import { Button } from '@/components/ui/button';
+import { ButtonGroup, ButtonGroupText } from '@/registry/ui/button-group';
+import { Button } from '@/registry/ui/button';
 
 export default function ButtonGroupWithText() {
   return (

@@ -6,7 +6,7 @@ import { useDocsSearch } from 'fumadocs-core/search/client';
 import { useRouter } from 'next/navigation';
 import type { SortedResult } from 'fumadocs-core/search';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/registry/lib/utils';
 
 function SearchInputIcon() {
   return (

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { XMarkIcon } from '@heroicons/react/16/solid';
 
 import { source } from '@/lib/source';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/registry/ui/button';
 import {
   Drawer,
   DrawerBackdrop,
@@ -17,14 +17,14 @@ import {
   DrawerTitle,
   DrawerTrigger,
   DrawerViewport,
-} from '@/components/ui/drawer';
+} from '@/registry/ui/drawer';
 import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarItem,
-} from '@/components/ui/sidebar';
+} from '@/registry/ui/sidebar';
 
 function MenuIcon() {
   return (

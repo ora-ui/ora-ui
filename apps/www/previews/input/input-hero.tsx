@@ -1,5 +1,5 @@
-import { Field, FieldLabel } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Field, FieldLabel } from '@/registry/ui/form';
+import { Input } from '@/registry/ui/input';
 
 export default function InputHero() {
   return (

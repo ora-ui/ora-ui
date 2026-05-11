@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/registry/ui/button';
+import { Checkbox } from '@/registry/ui/checkbox';
 import {
   Field,
   FieldDescription,
@@ -10,9 +10,9 @@ import {
   Fieldset,
   FieldsetLegend,
   Form,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+} from '@/registry/ui/form';
+import { Input } from '@/registry/ui/input';
+import { RadioGroup, RadioGroupItem } from '@/registry/ui/radio-group';
 
 const NOTIFICATION_OPTIONS = [
   { value: 'comments', label: 'New comments' },

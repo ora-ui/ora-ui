@@ -5,7 +5,7 @@
   "tsx": true,
   "tailwind": {
     "config": "tailwind.config.ts",
-    "css": "app/globals.css",
+    "css": "registry/theme/globals.css",
     "baseColor": "neutral",
     "cssVariables": true
   },
@@ -13,8 +13,8 @@
   "rtl": false,
   "aliases": {
     "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui"
+    "utils": "@/registry/lib/utils",
+    "ui": "@/registry/ui"
   },
   "menuColor": "default",
   "menuAccent": "subtle",

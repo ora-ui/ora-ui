@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/registry/ui/button';
 
 export function Solid() {
   return <Button variant="solid">Sign up</Button>;

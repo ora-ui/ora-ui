@@ -6,10 +6,10 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from '@/components/ui/accordion';
+} from '@/registry/ui/accordion';
 import { CheckboxControl } from '../../components/controls';
 import { PreviewShell } from '../../components/preview-shell';
-import { ToolbarSeparator } from '@/components/ui/toolbar';
+import { ToolbarSeparator } from '@/registry/ui/toolbar';
 
 const DEMO_ITEMS = [
   {

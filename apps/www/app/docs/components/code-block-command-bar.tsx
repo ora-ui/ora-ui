@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { CopySimpleIcon, CheckIcon } from '@phosphor-icons/react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { Button } from '@/registry/ui/button';
+import { cn } from '@/registry/lib/utils';
 import { useCodeCollapsible } from './code-collapsible-wrapper';
 
 export function CodeBlockCommandBar({

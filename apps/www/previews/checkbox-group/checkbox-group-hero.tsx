@@ -1,7 +1,7 @@
 'use client';
 
-import { Checkbox } from '@/components/ui/checkbox';
-import { CheckboxGroup } from '@/components/ui/checkbox-group';
+import { Checkbox } from '@/registry/ui/checkbox';
+import { CheckboxGroup } from '@/registry/ui/checkbox-group';
 
 const GENRES = [
   { value: 'jazz', label: 'Jazz' },

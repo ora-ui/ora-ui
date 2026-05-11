@@ -16,7 +16,7 @@ import {
   PlusIcon,
   DownloadSimpleIcon,
 } from '@phosphor-icons/react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/registry/ui/button';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -32,8 +32,8 @@ import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
-} from '@/components/ui/dropdown-menu';
-import { ToolbarSeparator } from '@/components/ui/toolbar';
+} from '@/registry/ui/dropdown-menu';
+import { ToolbarSeparator } from '@/registry/ui/toolbar';
 import { PreviewShell } from '../../components/preview-shell';
 import { SelectControl } from '../../components/controls';
 import { DROPDOWN_VARIANTS, DROPDOWN_THEMES, DROPDOWN_SCENARIOS } from '../../components/constants';

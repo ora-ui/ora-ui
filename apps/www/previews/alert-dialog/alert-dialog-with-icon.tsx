@@ -11,8 +11,8 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
+} from '@/registry/ui/alert-dialog';
+import { Button } from '@/registry/ui/button';
 import { ExclamationMarkIcon } from '@phosphor-icons/react';
 
 export default function AlertDialogWithIcon() {

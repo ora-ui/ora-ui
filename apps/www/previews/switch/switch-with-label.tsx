@@ -1,6 +1,6 @@
-import { Field, FieldLabel } from '@/components/ui/form';
+import { Field, FieldLabel } from '@/registry/ui/form';
 
-import { Switch } from '@/components/ui/switch';
+import { Switch } from '@/registry/ui/switch';
 
 export default function SwitchWithLabel() {
   return (

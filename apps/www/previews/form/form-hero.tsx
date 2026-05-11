@@ -1,9 +1,9 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Field, FieldDescription, FieldError, FieldLabel, Form } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/registry/ui/button';
+import { Checkbox } from '@/registry/ui/checkbox';
+import { Field, FieldDescription, FieldError, FieldLabel, Form } from '@/registry/ui/form';
+import { Input } from '@/registry/ui/input';
 
 export default function FormHero() {
   return (

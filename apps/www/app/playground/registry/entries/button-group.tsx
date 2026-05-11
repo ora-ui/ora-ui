@@ -8,15 +8,15 @@ import {
   CopyIcon,
   StarIcon,
 } from '@phosphor-icons/react';
-import { Button } from '@/components/ui/button';
-import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group';
+import { Button } from '@/registry/ui/button';
+import { ButtonGroup, ButtonGroupSeparator } from '@/registry/ui/button-group';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from '@/components/ui/dropdown-menu';
-import { ToolbarSeparator } from '@/components/ui/toolbar';
+} from '@/registry/ui/dropdown-menu';
+import { ToolbarSeparator } from '@/registry/ui/toolbar';
 import { PreviewShell } from '../../components/preview-shell';
 import { SelectControl } from '../../components/controls';
 import { BUTTON_VARIANTS } from '../../components/constants';

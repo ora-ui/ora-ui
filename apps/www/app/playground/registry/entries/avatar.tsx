@@ -1,11 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '@/components/ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '@/registry/ui/avatar';
 import { PreviewShell } from '../../components/preview-shell';
 import { SelectControl, TextControl, CheckboxControl } from '../../components/controls';
-import { ToolbarSeparator } from '@/components/ui/toolbar';
-import { cn } from '@/lib/utils';
+import { ToolbarSeparator } from '@/registry/ui/toolbar';
+import { cn } from '@/registry/lib/utils';
 
 type Theme = 'gray' | 'accent';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { Switch } from '@/components/ui/switch';
+import { Switch } from '@/registry/ui/switch';
 
 const SETTINGS = [
   { id: 'email', label: 'Email notifications', defaultChecked: true },

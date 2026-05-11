@@ -1,4 +1,4 @@
-import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '@/components/ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '@/registry/ui/avatar';
 
 export default function AvatarWithBadge() {
   return (

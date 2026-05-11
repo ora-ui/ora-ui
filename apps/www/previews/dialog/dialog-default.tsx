@@ -8,9 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Kbd, KbdGroup } from '@/components/ui/kbd';
+} from '@/registry/ui/dialog';
+import { Button } from '@/registry/ui/button';
+import { Kbd, KbdGroup } from '@/registry/ui/kbd';
 
 export default function DialogDefault() {
   return (

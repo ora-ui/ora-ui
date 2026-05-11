@@ -10,7 +10,7 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarItem,
-} from '@/components/ui/sidebar';
+} from '@/registry/ui/sidebar';
 
 interface DocsSidebarProps {
   tree: typeof source.pageTree;
