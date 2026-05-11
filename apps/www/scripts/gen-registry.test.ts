@@ -21,6 +21,33 @@ function writeFixture(rel: string, contents: string): string {
   return full;
 }
 
+describe('parsePreviewFile — kebab-case value', () => {
+  it('converts multi-word PascalCase suffixes to kebab-case (ButtonIconSm → icon-sm, ButtonSm → sm)', () => {
+    const file = writeFixture(
+      'button/button-sizes.tsx',
+      [
+        `import { Button } from '@/registry/ui/button';`,
+        ``,
+        `export function ButtonIconSm() {`,
+        `  return <Button size="icon-sm">x</Button>;`,
+        `}`,
+        ``,
+        `export function ButtonSm() {`,
+        `  return <Button size="sm">x</Button>;`,
+        `}`,
+        ``,
+        `export default ButtonSm;`,
+        ``,
+      ].join('\n')
+    );
+
+    const entry = parsePreviewFile(file);
+    const byName = Object.fromEntries(entry.exports.map((e) => [e.name, e.value]));
+    expect(byName.ButtonIconSm).toBe('icon-sm');
+    expect(byName.ButtonSm).toBe('sm');
+  });
+});
+
 describe('parsePreviewFile — naming validation', () => {
   it('throws NamingViolationError with file:line and expected prefix when an export does not start with DirPascal', () => {
     const file = writeFixture(
