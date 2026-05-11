@@ -1,6 +1,6 @@
 import { Checkbox } from '@/registry/ui/checkbox';
 
-export function Gray() {
+export function CheckboxGray() {
   return (
     <label className="flex items-center gap-2">
       <Checkbox theme="gray" defaultChecked />
@@ -9,7 +9,7 @@ export function Gray() {
   );
 }
 
-export function Accent() {
+export function CheckboxAccent() {
   return (
     <label className="flex items-center gap-2">
       <Checkbox theme="accent" defaultChecked />
@@ -18,4 +18,4 @@ export function Accent() {
   );
 }
 
-export default Gray;
+export default CheckboxGray;

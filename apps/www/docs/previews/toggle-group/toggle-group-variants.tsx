@@ -18,7 +18,7 @@ export default function ToggleGroupVariants() {
   );
 }
 
-export function Outline() {
+export function ToggleGroupOutline() {
   return (
     <ToggleGroup variant="outline">
       <ToggleGroupItem value="left" aria-label="Align left">
@@ -34,7 +34,7 @@ export function Outline() {
   );
 }
 
-export function Solid() {
+export function ToggleGroupSolid() {
   return (
     <ToggleGroup variant="solid">
       <ToggleGroupItem value="left" aria-label="Align left">

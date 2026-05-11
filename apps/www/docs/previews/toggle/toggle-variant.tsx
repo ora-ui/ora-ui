@@ -4,7 +4,7 @@ import { BoldIcon } from '@heroicons/react/16/solid';
 
 import { Toggle } from '@/registry/ui/toggle';
 
-export function Soft() {
+export function ToggleSoft() {
   return (
     <Toggle aria-label="Toggle bold">
       <BoldIcon />
@@ -12,7 +12,7 @@ export function Soft() {
   );
 }
 
-export function Outline() {
+export function ToggleOutline() {
   return (
     <Toggle variant="outline" aria-label="Toggle bold">
       <BoldIcon />
@@ -20,7 +20,7 @@ export function Outline() {
   );
 }
 
-export function Solid() {
+export function ToggleSolid() {
   return (
     <Toggle variant="solid" aria-label="Toggle bold">
       <BoldIcon />
@@ -28,4 +28,4 @@ export function Solid() {
   );
 }
 
-export default Soft;
+export default ToggleSoft;
