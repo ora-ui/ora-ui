@@ -21,6 +21,34 @@ function writeFixture(rel: string, contents: string): string {
   return full;
 }
 
+describe('parsePreviewFile — snippet extraction', () => {
+  it('snippet for ButtonSolid contains its own body and excludes ButtonOutline body', () => {
+    const file = writeFixture(
+      'button/button-variants.tsx',
+      [
+        `import { Button } from '@/registry/ui/button';`,
+        ``,
+        `export function ButtonSolid() {`,
+        `  return <Button variant="solid">Sign up</Button>;`,
+        `}`,
+        ``,
+        `export function ButtonOutline() {`,
+        `  return <Button variant="outline">Sign up</Button>;`,
+        `}`,
+        ``,
+        `export default ButtonSolid;`,
+        ``,
+      ].join('\n')
+    );
+
+    const entry = parsePreviewFile(file);
+    const solid = entry.exports.find((e) => e.name === 'ButtonSolid')!;
+    expect(solid.snippet).toContain('variant="solid"');
+    expect(solid.snippet).not.toContain('variant="outline"');
+    expect(solid.snippet.startsWith('export function ButtonSolid')).toBe(true);
+  });
+});
+
 describe('parsePreviewFile — kebab-case value', () => {
   it('converts multi-word PascalCase suffixes to kebab-case (ButtonIconSm → icon-sm, ButtonSm → sm)', () => {
     const file = writeFixture(

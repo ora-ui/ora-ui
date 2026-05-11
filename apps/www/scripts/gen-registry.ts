@@ -117,7 +117,7 @@ export function parsePreviewFile(filePath: string): PreviewEntry {
       name: fn.name,
       value: pascalToKebab(suffix),
       label: splitPascal(suffix),
-      snippet: source.slice(fn.start, fn.end),
+      snippet: '',
     };
   });
 
