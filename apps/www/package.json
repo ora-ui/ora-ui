@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "scaffold": "plop --plopfile scripts/plopfile.mjs"
+    "scaffold": "plop --plopfile scripts/plopfile.mjs",
+    "gen:registry": "tsx scripts/gen-registry.cli.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
@@ -47,6 +48,7 @@
     "eslint-config-next": "16.1.6",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
