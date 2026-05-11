@@ -4,7 +4,7 @@ import { ThemeProvider } from 'next-themes';
 import '@/registry/theme/globals.css';
 import './layout.css';
 import { cn } from '@/registry/lib/utils';
-import { AppHeader } from './layout/AppHeader';
+import { Header } from '@/header/components/header';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -30,7 +30,7 @@ export default function RootLayout({
           <div className="RootLayout">
             <div className="RootLayoutContainer">
               <div className="RootLayoutContent">
-                <AppHeader />
+                <Header />
                 <main>{children}</main>
               </div>
               <span className="AppFooter"></span>

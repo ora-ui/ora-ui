@@ -3,16 +3,16 @@
 import * as React from 'react';
 import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
-import { SearchDialog } from './SearchDialog';
+import { SearchDialog } from './search-dialog';
 
-import { Logo } from '../assets/Logo';
+import { Logo } from '../assets/logo';
 import { cn } from '@/registry/lib/utils';
 import { buttonVariants } from '@/registry/ui/button';
 import { Kbd } from '@/registry/ui/kbd';
 import { Link } from '@/registry/ui/link';
 import { Separator } from '@/registry/ui/separator';
 import { MobileNav } from '@/docs/components/mobile-nav';
-import { ModeSwitcher } from './ModeSwitcher';
+import { ModeSwitcher } from './mode-switcher';
 
 function SearchIcon() {
   return (
@@ -91,7 +91,7 @@ export function HeaderMobileActions({ onSearchOpen, showSearch }: HeaderActionsP
   );
 }
 
-export function AppHeader() {
+export function Header() {
   const [searchOpen, setSearchOpen] = React.useState(false);
   const pathname = usePathname();
   const showSearch = pathname.startsWith('/docs');
