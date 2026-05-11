@@ -1,11 +1,11 @@
 import { Switch } from '@/registry/ui/switch';
 
-export function Gray() {
+export function SwitchGray() {
   return <Switch defaultChecked />;
 }
 
-export function Accent() {
+export function SwitchAccent() {
   return <Switch theme="accent" defaultChecked />;
 }
 
-export default Gray;
+export default SwitchGray;

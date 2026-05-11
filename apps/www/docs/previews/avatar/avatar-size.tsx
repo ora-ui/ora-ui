@@ -1,6 +1,6 @@
 import { Avatar, AvatarImage, AvatarFallback } from '@/registry/ui/avatar';
 
-export function Default() {
+export function AvatarDefault() {
   return (
     <Avatar>
       <AvatarImage
@@ -12,9 +12,9 @@ export function Default() {
   );
 }
 
-export default Default;
+export default AvatarDefault;
 
-export function Sm() {
+export function AvatarSm() {
   return (
     <Avatar size="sm">
       <AvatarImage
@@ -26,7 +26,7 @@ export function Sm() {
   );
 }
 
-export function Lg() {
+export function AvatarLg() {
   return (
     <Avatar size="lg">
       <AvatarImage

@@ -7,7 +7,7 @@ const GENRES = [
   { value: 'hip-hop', label: 'Hip-Hop' },
 ];
 
-export function Gray() {
+export function CheckboxGroupGray() {
   return (
     <div className="flex flex-col gap-3">
       <p className="text-sm font-medium text-foreground">Pick a genre</p>
@@ -23,7 +23,7 @@ export function Gray() {
   );
 }
 
-export function Accent() {
+export function CheckboxGroupAccent() {
   return (
     <div className="flex flex-col gap-3">
       <p className="text-sm font-medium text-foreground">Pick a genre</p>
@@ -39,4 +39,4 @@ export function Accent() {
   );
 }
 
-export default Gray;
+export default CheckboxGroupGray;

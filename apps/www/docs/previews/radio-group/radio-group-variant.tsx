@@ -2,7 +2,7 @@
 
 import { RadioGroup, RadioGroupItem } from '@/registry/ui/radio-group';
 
-export function Solid() {
+export function RadioGroupSolid() {
   return (
     <RadioGroup defaultValue="a" className="w-48">
       <label className="flex cursor-pointer items-center gap-2 text-sm text-primary">
@@ -17,7 +17,7 @@ export function Solid() {
   );
 }
 
-export function Surface() {
+export function RadioGroupSurface() {
   return (
     <RadioGroup defaultValue="a" className="w-48">
       <label className="flex cursor-pointer items-center gap-2 text-sm text-primary">
@@ -32,4 +32,4 @@ export function Surface() {
   );
 }
 
-export default Solid;
+export default RadioGroupSolid;

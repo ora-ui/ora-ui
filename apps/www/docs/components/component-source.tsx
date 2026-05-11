@@ -1,11 +1,8 @@
 import { highlight } from 'fumadocs-core/highlight';
-import sources from '@/registry/lib/sources';
+import sources from '@/registry/lib/sources.generated';
 import { CodeBlock } from '@/docs/components/code-block';
 import { CodeCollapsibleWrapper } from '@/docs/components/code-collapsible-wrapper';
-import {
-  CodeBlockCommandBar,
-  CodeBlockCopyButton,
-} from '@/docs/components/code-block-command-bar';
+import { CodeBlockCommandBar, CodeBlockCopyButton } from '@/docs/components/code-block-command-bar';
 
 interface ComponentSourceProps {
   name: string;

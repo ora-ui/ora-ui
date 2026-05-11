@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "tsx scripts/gen-registry.cli.ts --watch & next dev",
     "build": "next build",
     "start": "next start",
     "test:unit": "vitest run",
@@ -13,7 +13,9 @@
     "test:watch": "vitest",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "scaffold": "plop --plopfile scripts/plopfile.mjs"
+    "scaffold": "plop --plopfile scripts/plopfile.mjs",
+    "gen:registry": "tsx scripts/gen-registry.cli.ts",
+    "gen:registry:check": "tsx scripts/gen-registry.cli.ts --check"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
@@ -21,6 +23,7 @@
     "@phosphor-icons/react": "^2.1.10",
     "@radix-ui/react-icons": "^1.3.2",
     "@radix-ui/react-slot": "^1.2.4",
+    "chokidar": "^5.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "fumadocs-core": "^16.6.13",
@@ -47,6 +50,7 @@
     "eslint-config-next": "16.1.6",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

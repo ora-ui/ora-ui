@@ -2,7 +2,7 @@ import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from '@rad
 
 import { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';
 
-export default function ToggleGroupVariants() {
+export function ToggleGroupSoft() {
   return (
     <ToggleGroup>
       <ToggleGroupItem value="left" aria-label="Align left">
@@ -18,7 +18,9 @@ export default function ToggleGroupVariants() {
   );
 }
 
-export function Outline() {
+export default ToggleGroupSoft;
+
+export function ToggleGroupOutline() {
   return (
     <ToggleGroup variant="outline">
       <ToggleGroupItem value="left" aria-label="Align left">
@@ -34,7 +36,7 @@ export function Outline() {
   );
 }
 
-export function Solid() {
+export function ToggleGroupSolid() {
   return (
     <ToggleGroup variant="solid">
       <ToggleGroupItem value="left" aria-label="Align left">

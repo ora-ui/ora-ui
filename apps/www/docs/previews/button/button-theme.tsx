@@ -1,15 +1,15 @@
 import { Button } from '@/registry/ui/button';
 
-export function Gray() {
+export function ButtonGray() {
   return <Button theme="gray">Cancel</Button>;
 }
 
-export function Accent() {
+export function ButtonAccent() {
   return <Button theme="accent">Cancel</Button>;
 }
 
-export function Destructive() {
+export function ButtonDestructive() {
   return <Button theme="destructive">Cancel</Button>;
 }
 
-export default Gray;
+export default ButtonGray;

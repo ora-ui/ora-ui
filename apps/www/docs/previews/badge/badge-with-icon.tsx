@@ -1,7 +1,7 @@
 import { StarIcon } from '@heroicons/react/16/solid';
 import { Badge } from '@/registry/ui/badge';
 
-export function Leading() {
+export function BadgeLeading() {
   return (
     <Badge>
       <StarIcon />
@@ -10,7 +10,7 @@ export function Leading() {
   );
 }
 
-export function Trailing() {
+export function BadgeTrailing() {
   return (
     <Badge>
       Featured
@@ -19,4 +19,4 @@ export function Trailing() {
   );
 }
 
-export default Leading;
+export default BadgeLeading;

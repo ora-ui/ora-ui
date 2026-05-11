@@ -1,23 +1,23 @@
 import { Button } from '@/registry/ui/button';
 
-export function Solid() {
+export function ButtonSolid() {
   return <Button variant="solid">Sign up</Button>;
 }
 
-export function Outline() {
+export function ButtonOutline() {
   return <Button variant="outline">Sign up</Button>;
 }
 
-export function Surface() {
+export function ButtonSurface() {
   return <Button variant="surface">Sign up</Button>;
 }
 
-export function Soft() {
+export function ButtonSoft() {
   return <Button variant="soft">Sign up</Button>;
 }
 
-export function Ghost() {
+export function ButtonGhost() {
   return <Button variant="ghost">Sign up</Button>;
 }
 
-export default Solid;
+export default ButtonSolid;
