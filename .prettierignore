@@ -4,3 +4,7 @@ coverage
 .next
 build
 *.hbs
+
+# generated — must match generator output exactly for drift check
+apps/www/docs/previews/registry.generated.ts
+apps/www/registry/lib/sources.generated.ts
