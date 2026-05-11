@@ -9,29 +9,32 @@ import AlertDialogDefault from './alert-dialog/alert-dialog-default';
 import AlertDialogWithIcon from './alert-dialog/alert-dialog-with-icon';
 import AvatarHero from './avatar/avatar-hero';
 import AvatarDefault from './avatar/avatar-default';
-import AvatarSizeDefault, { Sm as AvatarSizeSm, Lg as AvatarSizeLg } from './avatar/avatar-size';
+import AvatarSizeDefault, {
+  AvatarSm as AvatarSizeSm,
+  AvatarLg as AvatarSizeLg,
+} from './avatar/avatar-size';
 import AvatarWithBadge from './avatar/avatar-with-badge';
 import AvatarGroup from './avatar/avatar-group';
 import CheckboxHero from './checkbox/checkbox-hero';
 import CheckboxDefault from './checkbox/checkbox-default';
 import CheckboxVariantDefault, {
-  Solid as CheckboxVariantSolid,
-  Surface as CheckboxVariantSurface,
+  CheckboxSolid as CheckboxVariantSolid,
+  CheckboxSurface as CheckboxVariantSurface,
 } from './checkbox/checkbox-variant';
 import CheckboxThemeDefault, {
-  Gray as CheckboxThemeGray,
-  Accent as CheckboxThemeAccent,
+  CheckboxGray as CheckboxThemeGray,
+  CheckboxAccent as CheckboxThemeAccent,
 } from './checkbox/checkbox-theme';
 import CheckboxIndeterminate from './checkbox/checkbox-indeterminate';
 import CheckboxGroupHero from './checkbox-group/checkbox-group-hero';
 import CheckboxGroupDefault from './checkbox-group/checkbox-group-default';
 import CheckboxGroupVariantDefault, {
-  Solid as CheckboxGroupVariantSolid,
-  Surface as CheckboxGroupVariantSurface,
+  CheckboxGroupSolid as CheckboxGroupVariantSolid,
+  CheckboxGroupSurface as CheckboxGroupVariantSurface,
 } from './checkbox-group/checkbox-group-variant';
 import CheckboxGroupThemeDefault, {
-  Gray as CheckboxGroupThemeGray,
-  Accent as CheckboxGroupThemeAccent,
+  CheckboxGroupGray as CheckboxGroupThemeGray,
+  CheckboxGroupAccent as CheckboxGroupThemeAccent,
 } from './checkbox-group/checkbox-group-theme';
 import CheckboxGroupParent from './checkbox-group/checkbox-group-parent';
 import CheckboxGroupNested from './checkbox-group/checkbox-group-nested';
@@ -42,39 +45,39 @@ import FormHero from './form/form-hero';
 import FormProduct from './form/form-product';
 import InputHero from './input/input-hero';
 import InputVariantDefault, {
-  Outline as InputVariantOutline,
-  Soft as InputVariantSoft,
+  InputOutline as InputVariantOutline,
+  InputSoft as InputVariantSoft,
 } from './input/input-variant';
 import KbdHero from './kbd/kbd-hero';
 import KbdCombination from './kbd/kbd-combination';
 import KbdVariantDefault, {
-  Ghost as KbdVariantGhost,
-  Surface as KbdVariantSurface,
+  KbdGhost as KbdVariantGhost,
+  KbdSurface as KbdVariantSurface,
 } from './kbd/kbd-variant';
 import RadioGroupHero from './radio-group/radio-group-hero';
 import RadioGroupVariantDefault, {
-  Surface as RadioGroupVariantSurface,
+  RadioGroupSurface as RadioGroupVariantSurface,
 } from './radio-group/radio-group-variant';
 import SeparatorHero from './separator/separator-hero';
 import SeparatorVertical from './separator/separator-vertical';
 import SeparatorHorizontal from './separator/separator-horizontal';
 import ToggleGroupHero from './toggle-group/toggle-group-hero';
 import ToggleGroupVariantsDefault, {
-  Outline as ToggleGroupVariantsOutline,
-  Solid as ToggleGroupVariantsSolid,
+  ToggleGroupOutline as ToggleGroupVariantsOutline,
+  ToggleGroupSolid as ToggleGroupVariantsSolid,
 } from './toggle-group/toggle-group-variants';
 import ToggleGroupConnected from './toggle-group/toggle-group-connected';
 import ToggleGroupVertical from './toggle-group/toggle-group-vertical';
 import SwitchHero from './switch/switch-hero';
 import SwitchWithLabel from './switch/switch-with-label';
 import SwitchThemeDefault, {
-  Gray as SwitchThemeGray,
-  Accent as SwitchThemeAccent,
+  SwitchGray as SwitchThemeGray,
+  SwitchAccent as SwitchThemeAccent,
 } from './switch/switch-theme';
 import TabsHero from './tabs/tabs-hero';
 import TabsVariantsDefault, {
-  Soft as TabsVariantsSoft,
-  Solid as TabsVariantsSolid,
+  TabsSoft as TabsVariantsSoft,
+  TabsSolid as TabsVariantsSolid,
 } from './tabs/tabs-variants';
 import TabsOrientation from './tabs/tabs-orientation';
 import TabsWithSurface from './tabs/tabs-with-surface';
@@ -84,29 +87,29 @@ import TabsTransition from './tabs/tabs-transition';
 import DropdownMenuHero from './dropdown-menu/dropdown-menu-hero';
 import DropdownMenuBasic from './dropdown-menu/dropdown-menu-basic';
 import DropdownMenuVariantDefault, {
-  Soft as DropdownMenuVariantSoft,
-  Solid as DropdownMenuVariantSolid,
+  DropdownMenuSoft as DropdownMenuVariantSoft,
+  DropdownMenuSolid as DropdownMenuVariantSolid,
 } from './dropdown-menu/dropdown-menu-variant';
 import DropdownMenuThemeDefault, {
-  Gray as DropdownMenuThemeGray,
-  Accent as DropdownMenuThemeAccent,
+  DropdownMenuGray as DropdownMenuThemeGray,
+  DropdownMenuAccent as DropdownMenuThemeAccent,
 } from './dropdown-menu/dropdown-menu-theme';
 import ButtonHero from './button/button-hero';
 import ButtonVariantsDefault, {
-  Solid as ButtonVariantsSolid,
-  Outline as ButtonVariantsOutline,
-  Surface as ButtonVariantsSurface,
-  Soft as ButtonVariantsSoft,
-  Ghost as ButtonVariantsGhost,
+  ButtonSolid as ButtonVariantsSolid,
+  ButtonOutline as ButtonVariantsOutline,
+  ButtonSurface as ButtonVariantsSurface,
+  ButtonSoft as ButtonVariantsSoft,
+  ButtonGhost as ButtonVariantsGhost,
 } from './button/button-variants';
 import ButtonThemeDefault, {
-  Gray as ButtonThemeGray,
-  Accent as ButtonThemeAccent,
-  Destructive as ButtonThemeDestructive,
+  ButtonGray as ButtonThemeGray,
+  ButtonAccent as ButtonThemeAccent,
+  ButtonDestructive as ButtonThemeDestructive,
 } from './button/button-theme';
 import ButtonWithIconDefault, {
-  Leading as ButtonWithIconLeading,
-  Trailing as ButtonWithIconTrailing,
+  ButtonLeading as ButtonWithIconLeading,
+  ButtonTrailing as ButtonWithIconTrailing,
 } from './button/button-with-icon';
 import ButtonIconButton from './button/button-icon-button';
 import ButtonGroupHero from './button-group/button-group-hero';
@@ -118,33 +121,33 @@ import ButtonGroupWithSeparator from './button-group/button-group-with-separator
 import ButtonGroupWithText from './button-group/button-group-with-text';
 import BadgeHero from './badge/badge-hero';
 import BadgeVariantsDefault, {
-  Solid as BadgeVariantsSolid,
-  Outline as BadgeVariantsOutline,
-  Surface as BadgeVariantsSurface,
-  Soft as BadgeVariantsSoft,
+  BadgeSolid as BadgeVariantsSolid,
+  BadgeOutline as BadgeVariantsOutline,
+  BadgeSurface as BadgeVariantsSurface,
+  BadgeSoft as BadgeVariantsSoft,
 } from './badge/badge-variants';
 import BadgeThemeDefault, {
-  Gray as BadgeThemeGray,
-  Accent as BadgeThemeAccent,
-  Destructive as BadgeThemeDestructive,
-  Warning as BadgeThemeWarning,
-  Success as BadgeThemeSuccess,
+  BadgeGray as BadgeThemeGray,
+  BadgeAccent as BadgeThemeAccent,
+  BadgeDestructive as BadgeThemeDestructive,
+  BadgeWarning as BadgeThemeWarning,
+  BadgeSuccess as BadgeThemeSuccess,
 } from './badge/badge-theme';
 import BadgeWithIconDefault, {
-  Leading as BadgeWithIconLeading,
-  Trailing as BadgeWithIconTrailing,
+  BadgeLeading as BadgeWithIconLeading,
+  BadgeTrailing as BadgeWithIconTrailing,
 } from './badge/badge-with-icon';
 import BadgeIconOnly from './badge/badge-icon-only';
 import BadgeAsLink from './badge/badge-as-link';
 import ToggleHero from './toggle/toggle-hero';
 import ToggleVariantDefault, {
-  Outline as ToggleVariantOutline,
-  Solid as ToggleVariantSolid,
+  ToggleOutline as ToggleVariantOutline,
+  ToggleSolid as ToggleVariantSolid,
 } from './toggle/toggle-variant';
 import TextareaHero from './textarea/textarea-hero';
 import TextareaVariantDefault, {
-  Outline as TextareaVariantOutline,
-  Soft as TextareaVariantSoft,
+  TextareaOutline as TextareaVariantOutline,
+  TextareaSoft as TextareaVariantSoft,
 } from './textarea/textarea-variant';
 import TextareaManualResize from './textarea/textarea-manual-resize';
 import TextareaWithLabel from './textarea/textarea-with-label';

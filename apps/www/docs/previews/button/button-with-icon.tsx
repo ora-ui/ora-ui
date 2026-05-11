@@ -1,7 +1,7 @@
 import { PlusCircleIcon } from '@heroicons/react/16/solid';
 import { Button } from '@/registry/ui/button';
 
-export function Leading() {
+export function ButtonLeading() {
   return (
     <Button>
       <PlusCircleIcon />
@@ -10,7 +10,7 @@ export function Leading() {
   );
 }
 
-export function Trailing() {
+export function ButtonTrailing() {
   return (
     <Button>
       Create New
@@ -19,4 +19,4 @@ export function Trailing() {
   );
 }
 
-export default Leading;
+export default ButtonLeading;

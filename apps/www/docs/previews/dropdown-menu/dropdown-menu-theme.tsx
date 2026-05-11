@@ -30,12 +30,12 @@ function EditMenu({ theme }: { theme: 'gray' | 'accent' }) {
   );
 }
 
-export function Gray() {
+export function DropdownMenuGray() {
   return <EditMenu theme="gray" />;
 }
 
-export function Accent() {
+export function DropdownMenuAccent() {
   return <EditMenu theme="accent" />;
 }
 
-export default Gray;
+export default DropdownMenuGray;

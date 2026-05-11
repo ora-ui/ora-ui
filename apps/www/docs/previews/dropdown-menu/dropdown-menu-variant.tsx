@@ -30,12 +30,12 @@ function EditMenu({ variant }: { variant: 'soft' | 'solid' }) {
   );
 }
 
-export function Soft() {
+export function DropdownMenuSoft() {
   return <EditMenu variant="soft" />;
 }
 
-export function Solid() {
+export function DropdownMenuSolid() {
   return <EditMenu variant="solid" />;
 }
 
-export default Soft;
+export default DropdownMenuSoft;

@@ -1,6 +1,6 @@
 import { Checkbox } from '@/registry/ui/checkbox';
 
-export function Solid() {
+export function CheckboxSolid() {
   return (
     <label className="flex items-center gap-2">
       <Checkbox variant="solid" defaultChecked />
@@ -9,7 +9,7 @@ export function Solid() {
   );
 }
 
-export function Surface() {
+export function CheckboxSurface() {
   return (
     <label className="flex items-center gap-2">
       <Checkbox variant="surface" defaultChecked />
@@ -18,4 +18,4 @@ export function Surface() {
   );
 }
 
-export default Solid;
+export default CheckboxSolid;

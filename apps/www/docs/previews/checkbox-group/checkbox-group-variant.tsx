@@ -7,7 +7,7 @@ const GENRES = [
   { value: 'hip-hop', label: 'Hip-Hop' },
 ];
 
-export function Solid() {
+export function CheckboxGroupSolid() {
   return (
     <div className="flex flex-col gap-3">
       <p className="text-sm font-medium text-foreground">Pick a genre</p>
@@ -23,7 +23,7 @@ export function Solid() {
   );
 }
 
-export function Surface() {
+export function CheckboxGroupSurface() {
   return (
     <div className="flex flex-col gap-3">
       <p className="text-sm font-medium text-foreground">Pick a genre</p>
@@ -39,4 +39,4 @@ export function Surface() {
   );
 }
 
-export default Solid;
+export default CheckboxGroupSolid;

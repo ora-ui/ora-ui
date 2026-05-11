@@ -2,16 +2,16 @@
 
 import { Kbd } from '@/registry/ui/kbd';
 
-export function Soft() {
+export function KbdSoft() {
   return <Kbd variant="soft">K</Kbd>;
 }
 
-export function Surface() {
+export function KbdSurface() {
   return <Kbd variant="surface">K</Kbd>;
 }
 
-export function Ghost() {
+export function KbdGhost() {
   return <Kbd variant="ghost">K</Kbd>;
 }
 
-export default Soft;
+export default KbdSoft;

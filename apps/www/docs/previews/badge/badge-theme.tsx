@@ -1,23 +1,23 @@
 import { Badge } from '@/registry/ui/badge';
 
-export function Gray() {
+export function BadgeGray() {
   return <Badge theme="gray">Badge</Badge>;
 }
 
-export function Accent() {
+export function BadgeAccent() {
   return <Badge theme="accent">Badge</Badge>;
 }
 
-export function Destructive() {
+export function BadgeDestructive() {
   return <Badge theme="destructive">Badge</Badge>;
 }
 
-export function Warning() {
+export function BadgeWarning() {
   return <Badge theme="warning">Badge</Badge>;
 }
 
-export function Success() {
+export function BadgeSuccess() {
   return <Badge theme="success">Badge</Badge>;
 }
 
-export default Gray;
+export default BadgeGray;

@@ -1,15 +1,15 @@
 import { Input } from '@/registry/ui/input';
 
-export function Surface() {
+export function InputSurface() {
   return <Input placeholder="Email address" />;
 }
 
-export function Outline() {
+export function InputOutline() {
   return <Input variant="outline" placeholder="Email address" />;
 }
 
-export function Soft() {
+export function InputSoft() {
   return <Input variant="soft" placeholder="Email address" />;
 }
 
-export default Surface;
+export default InputSurface;

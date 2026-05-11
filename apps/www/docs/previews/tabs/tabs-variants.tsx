@@ -1,6 +1,6 @@
 import { Tabs, TabsList, TabsTab, TabsPanel } from '@/registry/ui/tabs';
 
-export function Soft() {
+export function TabsSoft() {
   return (
     <Tabs defaultValue="overview">
       <TabsList variant="soft">
@@ -21,7 +21,7 @@ export function Soft() {
   );
 }
 
-export function Solid() {
+export function TabsSolid() {
   return (
     <Tabs defaultValue="overview">
       <TabsList variant="solid">
@@ -42,4 +42,4 @@ export function Solid() {
   );
 }
 
-export default Soft;
+export default TabsSoft;
