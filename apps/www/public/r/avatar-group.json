@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar-group",
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/ui/avatar-group.tsx",
+      "content": "'use client';\n\nimport * as React from 'react';\n\nimport { cn } from '@/registry/lib/utils';\n\nfunction AvatarGroup({ className, ...props }: React.ComponentProps<'div'>) {\n  return (\n    <div\n      data-slot=\"avatar-group\"\n      className={cn(\n        'group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-1 *:data-[slot=avatar]:ring-background',\n        className\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction AvatarGroupCount({ className, ...props }: React.ComponentProps<'div'>) {\n  return (\n    <div\n      data-slot=\"avatar-group-count\"\n      className={cn(\n        'relative flex size-8 shrink-0 items-center justify-center rounded-full bg-ui text-sm text-secondary group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3',\n        className\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { AvatarGroup, AvatarGroupCount };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

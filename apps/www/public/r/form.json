@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form",
+  "dependencies": ["@base-ui/react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/ui/form.tsx",
+      "content": "'use client';\n\nimport { Field as FieldPrimitive } from '@base-ui/react/field';\nimport { Fieldset as FieldsetPrimitive } from '@base-ui/react/fieldset';\nimport { Form as FormPrimitive } from '@base-ui/react/form';\n\nimport { cn } from '@/registry/lib/utils';\n\nfunction Field({ className, ...props }: FieldPrimitive.Root.Props) {\n  return (\n    <FieldPrimitive.Root\n      data-slot=\"field\"\n      className={cn('flex flex-col gap-1.5', className)}\n      {...props}\n    />\n  );\n}\n\nfunction FieldLabel({ className, ...props }: FieldPrimitive.Label.Props) {\n  return (\n    <FieldPrimitive.Label\n      data-slot=\"field-label\"\n      className={cn(\n        'text-sm font-medium text-primary data-invalid:text-(--destructive-secondary)',\n        className\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction FieldControl({ className, ...props }: FieldPrimitive.Control.Props) {\n  return <FieldPrimitive.Control data-slot=\"field-control\" className={cn(className)} {...props} />;\n}\n\nfunction FieldDescription({ className, ...props }: FieldPrimitive.Description.Props) {\n  return (\n    <FieldPrimitive.Description\n      data-slot=\"field-description\"\n      className={cn('text-xs text-muted', className)}\n      {...props}\n    />\n  );\n}\n\nfunction FieldValidity(props: FieldPrimitive.Validity.Props) {\n  return <FieldPrimitive.Validity data-slot=\"field-validity\" {...props} />;\n}\n\nfunction FieldError({ className, ...props }: FieldPrimitive.Error.Props) {\n  return (\n    <FieldPrimitive.Error\n      data-slot=\"field-error\"\n      className={cn('text-xs text-(--destructive-secondary)', className)}\n      {...props}\n    />\n  );\n}\n\nfunction Form({ className, ...props }: FormPrimitive.Props) {\n  return <FormPrimitive data-slot=\"form\" className={cn(className)} {...props} />;\n}\n\nfunction Fieldset({ className, ...props }: FieldsetPrimitive.Root.Props) {\n  return (\n    <FieldsetPrimitive.Root\n      data-slot=\"fieldset\"\n      className={cn('flex flex-col gap-4 border-0 p-0 m-0', className)}\n      {...props}\n    />\n  );\n}\n\nfunction FieldsetLegend({ className, ...props }: FieldsetPrimitive.Legend.Props) {\n  return (\n    <FieldsetPrimitive.Legend\n      data-slot=\"fieldset-legend\"\n      className={cn('text-sm font-medium text-primary', className)}\n      {...props}\n    />\n  );\n}\n\nexport {\n  Form,\n  Field,\n  FieldLabel,\n  FieldControl,\n  FieldDescription,\n  FieldValidity,\n  FieldError,\n  Fieldset,\n  FieldsetLegend,\n};\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

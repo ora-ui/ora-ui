@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox-group",
+  "dependencies": ["@base-ui/react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/ui/checkbox-group.tsx",
+      "content": "'use client';\n\nimport * as React from 'react';\nimport { CheckboxGroup as CheckboxGroupPrimitive } from '@base-ui/react/checkbox-group';\n\nimport { cn } from '@/registry/lib/utils';\n\ninterface CheckboxGroupContextValue {\n  variant?: 'solid' | 'surface';\n  theme?: 'gray' | 'accent';\n}\n\nconst CheckboxGroupContext = React.createContext<CheckboxGroupContextValue>({});\n\n/**\n * Slots: checkbox-group\n */\nfunction CheckboxGroup({\n  className,\n  variant,\n  theme,\n  ...props\n}: CheckboxGroupPrimitive.Props & CheckboxGroupContextValue) {\n  return (\n    <CheckboxGroupContext.Provider value={{ variant, theme }}>\n      <CheckboxGroupPrimitive\n        data-slot=\"checkbox-group\"\n        className={cn('flex flex-col gap-2', className)}\n        {...props}\n      />\n    </CheckboxGroupContext.Provider>\n  );\n}\n\nexport { CheckboxGroup, CheckboxGroupContext };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

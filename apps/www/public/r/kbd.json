@@ -1,13 +1,14 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kbd",
-  "type": "registry:ui",
+  "dependencies": ["class-variance-authority"],
+  "registryDependencies": ["utils"],
   "files": [
     {
-      "path": "components/ui/kbd.tsx",
-      "content": "import { cn } from \"@/lib/utils\"\n\nfunction Kbd({ className, ...props }: React.ComponentProps<\"kbd\">) {\n  return (\n    <kbd\n      data-slot=\"kbd\"\n      className={cn(\n        \"bg-muted text-muted-foreground pointer-events-none inline-flex h-5 w-fit min-w-5 select-none items-center justify-center gap-1 rounded-sm px-1 font-sans text-xs font-medium\",\n        \"[&_svg:not([class*='size-'])]:size-3\",\n        \"[[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background dark:[[data-slot=tooltip-content]_&]:bg-background/10\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction KbdGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <kbd\n      data-slot=\"kbd-group\"\n      className={cn(\"inline-flex items-center gap-1\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Kbd, KbdGroup }\n",
+      "path": "registry/ui/kbd.tsx",
+      "content": "/**\n * Slots: kbd, kbd-group\n */\n\nimport { cva, type VariantProps } from 'class-variance-authority';\n\nimport { cn } from '@/registry/lib/utils';\n\nconst kbdVariants = cva(\n  \"pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm px-1 font-sans text-xs text-ui-label font-medium select-none in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3\",\n  {\n    variants: {\n      variant: {\n        ghost: 'bg-transparent text-secondary focus-visible:outline-2 focus-visible:outline-focus',\n        soft: 'bg-ui text-secondary focus-visible:outline-2 focus-visible:outline-focus',\n        surface:\n          'bg-ui text-secondary shadow-[0_1px_0_var(--line-subtle)] focus-visible:outline-2 focus-visible:outline-focus',\n      },\n    },\n    defaultVariants: {\n      variant: 'soft',\n    },\n  }\n);\n\nfunction Kbd({\n  className,\n  variant,\n  ...props\n}: React.ComponentProps<'kbd'> & VariantProps<typeof kbdVariants>) {\n  return <kbd data-slot=\"kbd\" className={cn(kbdVariants({ variant }), className)} {...props} />;\n}\n\nfunction KbdGroup({ className, ...props }: React.ComponentProps<'div'>) {\n  return (\n    <kbd\n      data-slot=\"kbd-group\"\n      className={cn('inline-flex items-center gap-1 shadow-none', className)}\n      {...props}\n    />\n  );\n}\n\nexport { Kbd, KbdGroup, kbdVariants };\n",
       "type": "registry:ui"
     }
   ],
-  "dependencies": [],
-  "registryDependencies": []
+  "type": "registry:ui"
 }
