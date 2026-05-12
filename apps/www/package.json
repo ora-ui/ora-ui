@@ -15,7 +15,10 @@
     "typecheck": "tsc --noEmit",
     "scaffold": "plop --plopfile scripts/plopfile.mjs",
     "gen:registry": "tsx scripts/gen-registry.cli.ts",
-    "gen:registry:check": "tsx scripts/gen-registry.cli.ts --check"
+    "gen:registry:check": "tsx scripts/gen-registry.cli.ts --check",
+    "gen:manifest": "tsx scripts/gen-manifest.ts",
+    "gen:manifest:check": "tsx scripts/gen-manifest.ts --check",
+    "build:registry": "pnpm gen:manifest && shadcn build"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",

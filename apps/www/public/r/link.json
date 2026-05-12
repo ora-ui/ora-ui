@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "link",
+  "dependencies": ["@base-ui/react", "class-variance-authority"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/ui/link.tsx",
+      "content": "import { mergeProps } from '@base-ui/react/merge-props';\nimport { useRender } from '@base-ui/react/use-render';\nimport { cva, type VariantProps } from 'class-variance-authority';\n\nimport { cn } from '@/registry/lib/utils';\n\ntype Theme = 'gray' | 'accent' | 'destructive' | (string & {});\n\nconst linkVariants = cva(\n  'decoration-1 decoration-secondary underline-offset-[calc(.025em+2px)] focus-visible:outline-2 focus-visible:outline-focus rounded-xs',\n  {\n    variants: {\n      underline: {\n        always: 'underline',\n        hover: 'no-underline hover:underline',\n        none: 'no-underline',\n      },\n      theme: {\n        gray: '',\n        accent: 'text-secondary',\n        destructive: 'text-secondary',\n      },\n    },\n    defaultVariants: {\n      underline: 'hover',\n      theme: 'gray',\n    },\n  }\n);\n\ninterface LinkProps\n  extends useRender.ComponentProps<'a'>, Omit<VariantProps<typeof linkVariants>, 'theme'> {\n  theme?: Theme;\n}\n\nfunction Link({ className, underline, theme = 'gray', render, ...props }: LinkProps) {\n  return useRender({\n    defaultTagName: 'a',\n    props: mergeProps<'a'>(\n      {\n        className: cn(\n          linkVariants({ underline, theme: theme as 'gray' | 'accent' | 'destructive', className })\n        ),\n        ...({\n          'data-slot': 'link',\n          'data-theme': theme !== 'gray' ? theme : undefined,\n        } as React.HTMLAttributes<HTMLAnchorElement>),\n      },\n      props\n    ),\n    render,\n    state: { slot: 'link' },\n  });\n}\n\nexport { Link, linkVariants };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -17,4 +17,5 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter www gen:registry:check
+      - run: pnpm --filter www gen:manifest:check
       - run: pnpm run lint && pnpm run build

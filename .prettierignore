@@ -8,3 +8,4 @@ build
 # generated — must match generator output exactly for drift check
 apps/www/docs/previews/registry.generated.ts
 apps/www/registry/lib/sources.generated.ts
+apps/www/registry.json

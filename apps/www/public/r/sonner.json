@@ -1,13 +1,13 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "sonner",
-  "type": "registry:ui",
+  "dependencies": ["@heroicons/react", "next-themes", "sonner"],
   "files": [
     {
-      "path": "components/ui/sonner.tsx",
-      "content": "\"use client\"\n\nimport { useTheme } from \"next-themes\"\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\"\nimport { HugeiconsIcon } from \"@hugeicons/react\"\nimport { CheckmarkCircle02Icon, InformationCircleIcon, Alert02Icon, MultiplicationSignCircleIcon, Loading03Icon } from \"@hugeicons/core-free-icons\"\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = \"system\" } = useTheme()\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      className=\"toaster group\"\n      icons={{\n        success: (\n          <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className=\"size-4\" />\n        ),\n        info: (\n          <HugeiconsIcon icon={InformationCircleIcon} strokeWidth={2} className=\"size-4\" />\n        ),\n        warning: (\n          <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} className=\"size-4\" />\n        ),\n        error: (\n          <HugeiconsIcon icon={MultiplicationSignCircleIcon} strokeWidth={2} className=\"size-4\" />\n        ),\n        loading: (\n          <HugeiconsIcon icon={Loading03Icon} strokeWidth={2} className=\"size-4 animate-spin\" />\n        ),\n      }}\n      style={\n        {\n          \"--normal-bg\": \"var(--popover)\",\n          \"--normal-text\": \"var(--popover-foreground)\",\n          \"--normal-border\": \"var(--border)\",\n          \"--border-radius\": \"var(--radius)\",\n        } as React.CSSProperties\n      }\n      toastOptions={{\n        classNames: {\n          toast: \"cn-toast\",\n        },\n      }}\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+      "path": "registry/ui/sonner.tsx",
+      "content": "'use client';\n\nimport { useTheme } from 'next-themes';\nimport { Toaster as Sonner, type ToasterProps } from 'sonner';\nimport {\n  ArrowPathIcon,\n  CheckCircleIcon,\n  ExclamationTriangleIcon,\n  InformationCircleIcon,\n  XCircleIcon,\n} from '@heroicons/react/16/solid';\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = 'system' } = useTheme();\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps['theme']}\n      className=\"toaster group\"\n      icons={{\n        success: <CheckCircleIcon className=\"size-4\" />,\n        info: <InformationCircleIcon className=\"size-4\" />,\n        warning: <ExclamationTriangleIcon className=\"size-4\" />,\n        error: <XCircleIcon className=\"size-4\" />,\n        loading: <ArrowPathIcon className=\"size-4 animate-spin\" />,\n      }}\n      style={\n        {\n          '--normal-bg': 'var(--popover)',\n          '--normal-text': 'var(--popover-foreground)',\n          '--normal-border': 'var(--border)',\n          '--border-radius': 'var(--radius)',\n        } as React.CSSProperties\n      }\n      toastOptions={{\n        classNames: {\n          toast: 'cn-toast',\n        },\n      }}\n      {...props}\n    />\n  );\n};\n\nexport { Toaster };\n",
       "type": "registry:ui"
     }
   ],
-  "dependencies": ["sonner", "next-themes", "@hugeicons/react", "@hugeicons/core-free-icons"],
-  "registryDependencies": []
+  "type": "registry:ui"
 }

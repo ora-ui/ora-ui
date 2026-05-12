@@ -1,13 +1,14 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "badge",
-  "type": "registry:ui",
+  "dependencies": ["@base-ui/react", "class-variance-authority"],
+  "registryDependencies": ["utils"],
   "files": [
     {
-      "path": "components/ui/badge.tsx",
-      "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst badgeVariants = cva(\n  \"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2\",\n  {\n    variants: {\n      variant: {\n        default:\n          \"border-transparent bg-primary text-primary-foreground hover:bg-primary/80\",\n        secondary:\n          \"border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        destructive:\n          \"border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80\",\n        outline: \"text-foreground\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nexport interface BadgeProps\n  extends React.HTMLAttributes<HTMLDivElement>,\n    VariantProps<typeof badgeVariants> {}\n\nfunction Badge({ className, variant, ...props }: BadgeProps) {\n  return (\n    <div className={cn(badgeVariants({ variant }), className)} {...props} />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+      "path": "registry/ui/badge.tsx",
+      "content": "import { mergeProps } from '@base-ui/react/merge-props';\nimport { useRender } from '@base-ui/react/use-render';\nimport { cva, type VariantProps } from 'class-variance-authority';\n\nimport { cn } from '@/registry/lib/utils';\n\ntype Theme = 'gray' | 'accent' | 'destructive' | (string & {});\n\n/**\n * Slots: badge\n */\nconst badgeVariants = cva(\n  \"group/badge inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-[min(var(--radius),max(8px,calc(var(--radius)-10px)))] border border-transparent whitespace-nowrap font-medium text-ui-label focus-visible:outline-2 focus-visible:outline-focus [&>svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3\",\n  {\n    variants: {\n      variant: {\n        solid:\n          'bg-fill text-on-fill focus-visible:outline-focus-fill focus-visible:outline-offset-2',\n        soft: 'bg-ui',\n        outline: 'border-line-ui bg-transparent',\n        surface: 'border-line-ui bg-ui/40',\n      },\n      size: {\n        default: 'min-w-4.5 h-5 px-1.5 text-xs',\n        icon: 'size-5 p-0 text-xs',\n      },\n      theme: {\n        gray: '',\n        accent: '',\n        destructive: '',\n        warning: '',\n        success: '',\n      },\n    },\n    defaultVariants: {\n      variant: 'soft',\n      size: 'default',\n      theme: 'gray',\n    },\n  }\n);\n\nfunction Badge({\n  className,\n  variant = 'soft',\n  size = 'default',\n  theme = 'gray',\n  render,\n  ...props\n}: useRender.ComponentProps<'span'> & VariantProps<typeof badgeVariants>) {\n  return useRender({\n    defaultTagName: 'span',\n    props: mergeProps<'span'>(\n      {\n        className: cn(badgeVariants({ variant, size, theme }), className),\n        ...({\n          'data-slot': 'badge',\n          'data-variant': variant,\n          'data-theme': theme !== 'gray' ? theme : undefined,\n        } as React.HTMLAttributes<HTMLSpanElement>),\n      },\n      props\n    ),\n    render,\n    state: {\n      slot: 'badge',\n      variant,\n    },\n  });\n}\n\nexport { Badge, badgeVariants };\n",
       "type": "registry:ui"
     }
   ],
-  "dependencies": ["class-variance-authority"],
-  "registryDependencies": []
+  "type": "registry:ui"
 }

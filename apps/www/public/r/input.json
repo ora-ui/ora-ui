@@ -1,13 +1,14 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "input",
-  "type": "registry:ui",
+  "dependencies": ["@base-ui/react", "class-variance-authority"],
+  "registryDependencies": ["utils"],
   "files": [
     {
-      "path": "components/ui/input.tsx",
-      "content": "import * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst Input = React.forwardRef<HTMLInputElement, React.ComponentProps<\"input\">>(\n  ({ className, type, ...props }, ref) => {\n    return (\n      <input\n        type={type}\n        className={cn(\n          \"flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm\",\n          className\n        )}\n        ref={ref}\n        {...props}\n      />\n    )\n  }\n)\nInput.displayName = \"Input\"\n\nexport { Input }\n",
+      "path": "registry/ui/input.tsx",
+      "content": "/**\n * Slots: input\n */\n\nimport * as React from 'react';\nimport { Input as InputPrimitive } from '@base-ui/react/input';\nimport { cva, type VariantProps } from 'class-variance-authority';\n\nimport { cn } from '@/registry/lib/utils';\n\nconst inputVariants = cva(\n  [\n    'h-9 w-full min-w-0 rounded-dynamic px-3 py-1 text-sm text-primary outline-none transition-colors',\n    'placeholder:text-muted',\n    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',\n    'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-primary',\n    'focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-0',\n    'aria-invalid:border-[var(--destructive-fill)] aria-invalid:focus-visible:outline-[var(--destructive-fill)]',\n  ],\n  {\n    variants: {\n      variant: {\n        surface: 'border border-line-ui focus-visible:border-focus-fill',\n        outline: 'border border-line-ui shadow-2xs focus-visible:border-focus-fill',\n        soft: 'border border-transparent focus-visible:border-focus-fill',\n      },\n    },\n    defaultVariants: {\n      variant: 'surface',\n    },\n  }\n);\n\nfunction Input({\n  className,\n  type,\n  variant = 'surface',\n  ...props\n}: InputPrimitive.Props & VariantProps<typeof inputVariants>) {\n  return (\n    <InputPrimitive\n      type={type}\n      data-slot=\"input\"\n      data-variant={variant}\n      className={cn(inputVariants({ variant, className }))}\n      {...props}\n    />\n  );\n}\n\nexport { Input, inputVariants };\n",
       "type": "registry:ui"
     }
   ],
-  "dependencies": [],
-  "registryDependencies": []
+  "type": "registry:ui"
 }
