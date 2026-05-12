@@ -6,7 +6,10 @@
     {
       "name": "utils",
       "type": "registry:lib",
-      "dependencies": ["clsx", "tailwind-merge"],
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/lib/utils.ts",
@@ -23,8 +26,13 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react", "@heroicons/react"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react",
+        "@heroicons/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "alert-dialog",
@@ -35,8 +43,13 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": ["button", "utils"]
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "button",
+        "utils"
+      ]
     },
     {
       "name": "avatar-group",
@@ -47,7 +60,9 @@
           "type": "registry:ui"
         }
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "avatar",
@@ -58,8 +73,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "badge",
@@ -70,8 +89,13 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "button-group",
@@ -82,8 +106,14 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@radix-ui/react-slot", "class-variance-authority"],
-      "registryDependencies": ["separator", "utils"]
+      "dependencies": [
+        "@radix-ui/react-slot",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "separator",
+        "utils"
+      ]
     },
     {
       "name": "button",
@@ -94,8 +124,13 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "checkbox-group",
@@ -106,8 +141,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "checkbox",
@@ -118,8 +157,15 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react", "@phosphor-icons/react", "class-variance-authority"],
-      "registryDependencies": ["checkbox-group", "utils"]
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "checkbox-group",
+        "utils"
+      ]
     },
     {
       "name": "dialog",
@@ -130,8 +176,14 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react", "@phosphor-icons/react"],
-      "registryDependencies": ["button", "utils"]
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ],
+      "registryDependencies": [
+        "button",
+        "utils"
+      ]
     },
     {
       "name": "drawer",
@@ -142,8 +194,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "dropdown-menu",
@@ -154,8 +210,13 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react", "@phosphor-icons/react"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "form",
@@ -166,8 +227,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "input-group",
@@ -178,8 +243,15 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["class-variance-authority"],
-      "registryDependencies": ["button", "input", "textarea", "utils"]
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "textarea",
+        "utils"
+      ]
     },
     {
       "name": "input",
@@ -190,8 +262,13 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "kbd",
@@ -202,8 +279,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["class-variance-authority"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "label",
@@ -214,7 +295,9 @@
           "type": "registry:ui"
         }
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "link",
@@ -225,8 +308,13 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "radio-group",
@@ -237,8 +325,13 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "separator",
@@ -249,8 +342,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "sidebar",
@@ -261,8 +358,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@radix-ui/react-slot"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@radix-ui/react-slot"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "sonner",
@@ -273,7 +374,11 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@heroicons/react", "next-themes", "sonner"]
+      "dependencies": [
+        "@heroicons/react",
+        "next-themes",
+        "sonner"
+      ]
     },
     {
       "name": "switch",
@@ -284,8 +389,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "tabs",
@@ -296,8 +405,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "textarea",
@@ -308,8 +421,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["class-variance-authority"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "toggle-group",
@@ -320,8 +437,14 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
-      "registryDependencies": ["toggle", "utils"]
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "toggle",
+        "utils"
+      ]
     },
     {
       "name": "toggle",
@@ -332,8 +455,13 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "toolbar",
@@ -344,8 +472,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "tooltip",
@@ -356,8 +488,12 @@
           "type": "registry:ui"
         }
       ],
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "visually-hidden",
@@ -368,7 +504,9 @@
           "type": "registry:ui"
         }
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": [
+        "utils"
+      ]
     }
   ]
 }

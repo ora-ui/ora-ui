@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import ts from 'typescript';
 
-const SCRIPT_DIR = path.resolve(__dirname);
+const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const WWW_DIR = path.resolve(SCRIPT_DIR, '..');
 const UI_DIR = path.join(WWW_DIR, 'registry', 'ui');
 const OUT_FILE = path.join(WWW_DIR, 'registry.json');
