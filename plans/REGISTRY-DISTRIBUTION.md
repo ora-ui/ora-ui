@@ -1,0 +1,143 @@
+# Registry Distribution Plan
+
+How Ora UI ships components via the shadcn CLI for alpha v1.
+
+Install command consumers will use:
+
+```
+shadcn add https://ora-ui.com/r/button.json
+```
+
+---
+
+## Decisions
+
+| Decision            | Choice                                              | Reason                                                                                  |
+| ------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Registry layout     | `apps/www/registry/ui/`                             | ADR-0001 executed                                                                       |
+| Public endpoint     | `apps/www/public/r/<name>.json`                     | Matches shadcn convention; served at `ora-ui.com/r/`                                    |
+| Manifest generation | `gen-manifest.ts` → `shadcn build`                  | `shadcn build` handles file-embedding + schema validation                               |
+| Dep inference       | Auto-infer imports + `registry.config.ts` overrides | 32 components, will grow; manual manifest drifts                                        |
+| Theme distribution  | Documented in docs, not a registryDep               | Avoids friction for incremental adoption — consumers bring their own tokens or override |
+| Pipeline            | Local `gen:manifest` + CI drift check               | Matches existing `gen-registry --check` pattern                                         |
+| Scope               | All of `registry/ui/`                               | Docs-internal components live in `docs/components/` and are never in scope              |
+
+---
+
+## Implementation phases
+
+### Phase 1 — Foundation entries
+
+Create two special registry entries before any component entries.
+
+**`utils` entry** (`registry:lib`):
+
+```json
+{
+  "name": "utils",
+  "type": "registry:lib",
+  "dependencies": ["clsx", "tailwind-merge"],
+  "files": [{ "path": "registry/lib/utils.ts", "type": "registry:lib" }]
+}
+```
+
+**`theme` entry** (`registry:theme`):
+
+```json
+{
+  "name": "theme",
+  "type": "registry:theme",
+  "files": [
+    { "path": "registry/theme/globals.css", "type": "registry:theme" },
+    { "path": "registry/theme/colors.css", "type": "registry:theme" }
+  ]
+}
+```
+
+### Phase 2 — _(no config needed)_
+
+No exclusions or overrides required. The generator reads only `registry/ui/`
+— docs-internal components like `table-of-contents` live in `docs/components/`
+and are never in scope. Animations are handled in `globals.css` or
+component-scoped CSS, so no indirect devDependency overrides are needed either.
+
+### Phase 3 — `gen-manifest.ts`
+
+New script at `apps/www/scripts/gen-manifest.ts`. Produces `registry.json`.
+
+**Algorithm:**
+
+1. Read all `*.tsx` from `registry/ui/` (excluding `registry.config.ts` exclusions)
+2. Parse imports with the existing TypeScript AST setup (`ts.createSourceFile`)
+3. Map imports to deps:
+   - `@base-ui/react/*` → `dependencies: ["@base-ui/react"]`
+   - `@radix-ui/react-*` → `dependencies: ["@radix-ui/react-*"]`
+   - `class-variance-authority` → `dependencies: ["class-variance-authority"]`
+   - `sonner` → `dependencies: ["sonner"]`
+   - `next-themes` → `dependencies: ["next-themes"]`
+   - `@heroicons/react` → `dependencies: ["@heroicons/react"]`
+   - `@/registry/lib/utils` → `registryDependencies: ["utils"]`
+   - `@/registry/ui/<name>` → `registryDependencies: ["<name>"]`
+4. Write `apps/www/registry.json` with `utils` entry then all component entries
+
+**CLI flags** (matching gen-registry pattern):
+
+- `--check` — compare generated output to disk, exit 1 on drift
+- default — write to disk
+
+### Phase 4 — Wire `shadcn build`
+
+Add to `apps/www/package.json` scripts:
+
+```json
+"gen:manifest": "tsx scripts/gen-manifest.ts",
+"build:registry": "pnpm gen:manifest && shadcn build"
+```
+
+`shadcn build` reads `registry.json`, embeds source into each entry, writes `public/r/<name>.json`.
+
+### Phase 5 — CI drift check
+
+Add to the existing CI workflow (alongside the current `gen-registry --check`):
+
+```
+pnpm --filter=www tsx scripts/gen-manifest.ts --check
+```
+
+This ensures `registry.json` stays in sync with `registry/ui/` source. The
+`public/r/` files are outputs of `shadcn build` — regenerated on deploy, not
+committed.
+
+> `public/r/` is committed to git. Matches shadcn's own approach; Vercel serves
+> the files statically with no extra build wiring. Run `pnpm build:registry`
+> locally and commit the output whenever components change.
+
+---
+
+## File map
+
+```
+apps/www/
+├── registry/
+│   ├── ui/               ← 31 distributable components (ADR-0001)
+│   ├── lib/
+│   │   └── utils.ts      ← ships as registry:lib entry
+│   └── theme/
+│       ├── globals.css   ← ships as registry:theme entry
+│       └── colors.css
+├── registry.json         ← generated by gen-manifest.ts (Manifest)
+├── public/r/             ← generated by shadcn build (built output)
+│   ├── button.json
+│   └── ...
+└── scripts/
+    ├── gen-registry.ts   ← existing (previews index)
+    └── gen-manifest.ts   ← new (registry.json)
+```
+
+---
+
+## Out of scope for alpha
+
+- Multi-theme/style variants (shadcn supports base×style combos — Ora ships one)
+- Block entries (`registry:block`)
+- Versioned registry (future: `ora-ui.com/r/v1/button.json`)
