@@ -244,8 +244,8 @@
   --focus-fill: var(--accent-focus-fill);
   /* line-ui @deprecated, use --ring instead */
   --line-ui: var(--accent-line-ui);
-  --ring: var(--ring);
-  --ring-alpha: var(--ring-alpha);
+  --ring: var(--accent-ring);
+  --ring-alpha: var(--accent-ring-alpha);
   --secondary: var(--accent-secondary);
   --primary: var(--accent-primary);
   --on-fill: var(--accent-on-fill);
@@ -263,8 +263,8 @@
   --focus: var(--destructive-focus);
   --focus-fill: var(--destructive-focus-fill);
   --line-ui: var(--destructive-line-ui);
-  --ring: var(--ring);
-  --ring-alpha: var(--ring-alpha);
+  --ring: var(--destructive-ring);
+  --ring-alpha: var(--destructive-ring-alpha);
   --secondary: var(--destructive-secondary);
   --primary: var(--destructive-primary);
   --on-fill: var(--destructive-on-fill);
@@ -282,8 +282,8 @@
   --focus: var(--warning-focus);
   --focus-fill: var(--warning-focus-fill);
   --line-ui: var(--warning-line-ui);
-  --ring: var(--ring);
-  --ring-alpha: var(--ring-alpha);
+  --ring: var(--warning-ring);
+  --ring-alpha: var(--warning-ring-alpha);
   --secondary: var(--warning-secondary);
   --primary: var(--warning-primary);
   --on-fill: var(--warning-on-fill);
@@ -301,8 +301,8 @@
   --focus: var(--success-focus);
   --focus-fill: var(--success-focus-fill);
   --line-ui: var(--success-line-ui);
-  --ring: var(--ring);
-  --ring-alpha: var(--ring-alpha);
+  --ring: var(--success-ring);
+  --ring-alpha: var(--success-ring-alpha);
   --secondary: var(--success-secondary);
   --primary: var(--success-primary);
   --on-fill: var(--success-on-fill);
