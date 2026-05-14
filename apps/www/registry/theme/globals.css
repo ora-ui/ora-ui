@@ -130,8 +130,8 @@
 .dark {
   /* backgrounds */
   --background: oklch(0.105 0 0);
-  --surface: oklch(0.178 0 0);
-  --overlay: oklch(0.213 0 0);
+  --surface: oklch(0.145 0 0);
+  --overlay: oklch(0.178 0 0);
   --ui: oklch(0.256 0 0);
   --ui-alpha: oklch(1 0 0 / 0.075);
   --fill: oklch(0.949 0 0);
@@ -332,18 +332,14 @@
   --color-line: var(--line);
   --color-line-subtle: var(--line-subtle);
   --color-line-ui: var(--line-ui);
+  --color-separator: var(--separator);
+  --color-ring: var(--ring);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-muted: var(--muted);
   --color-disabled: var(--disabled);
   --color-on-fill: var(--on-fill);
   --color-ui-label: var(--ui-label);
-  --color-warning-ui: var(--warning-ui);
-  --color-warning-line-ui: var(--warning-line-ui);
-  --color-warning-secondary: var(--warning-secondary);
-  --color-warning-primary: var(--warning-primary)
-    /* --color-accent: var(--accent);
-  --color-destructive: var(--destructive); */;
 }
 
 /* Shiki dual-theme: map code block backgrounds to Ora surface token */
