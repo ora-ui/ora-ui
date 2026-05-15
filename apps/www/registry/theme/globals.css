@@ -9,63 +9,90 @@
   --radius: 0.375rem;
 
   /* backgrounds */
-  --background: oklch(0.985 0 0);
-  --surface: oklch(0.97 0 0);
-  --overlay: oklch(0.985 0 0);
-  --ui: oklch(0 0 0 / 0.059);
-  --fill: oklch(0.14 0 0);
+  --background: oklch(1 0 0); /* gray-base */
+  --surface: oklch(0.982 0 0); /* gray-50 */
+  --overlay: oklch(1 0 0); /* gray-base */
+  --ui: oklch(0 0 0 / 0.063); /* gray-a100 */
+  --fill: oklch(0.244 0 0); /*.gray-950 */
+
+  /* wip: surfaces */
+  --surface-1: oklch(0 0 0 / 0.025);
+  --surface-2: oklch(0 0 0 / 0.05);
+
   /* interactive */
-  --hover: oklch(0 0 0 / 0.091);
-  --active: oklch(0 0 0 / 0.123);
-  --focus: oklch(0.85 0 0);
-  --focus-fill: oklch(0.35 0 0);
-  /* line/border */
+  --hover: oklch(0 0 0 / 0.091); /* gray-a200 */
+  --active: oklch(0 0 0 / 0.123); /* gray-a300 */
+  --focus: oklch(0.792 0 0); /* gray-600 */
+  --focus-fill: oklch(0.61 0 0); /* gray-800 */
+
+  /* line/border  - @deprecated, use separator & ring instead */
   --line: oklch(0.925 0 0);
   --line-subtle: oklch(0.945 0 0);
   --line-ui: oklch(0 0 0 / 0.112);
+
+  --separator: oklch(0.885 0 0); /* gray-400 */
+  --ring: oklch(0 0 0 / 0.192); /* gray-a500 */
+
   /* foreground */
-  --primary: oklch(0.07 0 0);
-  --secondary: oklch(0.45 0 0);
+  --primary: oklch(0.244 0 0);
+  --secondary: oklch(0.556 0 0);
+  /* may deprectate muted - TBD */
   --muted: oklch(0.556 0 0);
+  /* not yet pulling value from scale..
+    if deprecating --muted, may assign gray-700
+  */
   --disabled: oklch(0.7 0 0);
-  --on-fill: oklch(0.985 0 0);
+  --on-fill: oklch(0.982 0 0);
   --ui-label: var(--primary);
 
-  /* accent palette */
-  --accent-ui: oklch(0.601 0.203 246.9 / 0.11);
+  --accent-ui: oklch(0.597 0.221 258.03 / 0.227);
   --accent-fill: oklch(0.649 0.193 251.8);
-  --accent-hover: oklch(0.641 0.197 252.972 / 0.17);
-  --accent-active: oklch(0.641 0.197 252.972 / 0.22);
+  --accent-hover: oklch(0.63 0.203 254.355 / 0.149);
+  --accent-active: oklch(0.615 0.211 256.099 / 0.22);
   --accent-focus: oklch(0.735 0.121 243);
-  --accent-focus-fill: oklch(0.473 0.216 264.376);
+  --accent-focus-fill: oklch(0.622 0.183 251.7);
   --accent-line-ui: oklch(0.552 0.206 251 / 0.393);
-  --accent-secondary: oklch(0.558 0.189 253);
+  --accent-ring: oklch(0.574 0.211 257.838 / 0.408);
+  --accent-secondary: oklch(0.556 0.162 252.2);
   --accent-primary: oklch(0.324 0.096 258.8);
   --accent-on-fill: white;
 
+  --success-ui: oklch(0.631 0.212 142.843 / 0.09);
+  --success-fill: oklch(0.651 0.147 147.392);
+  --success-hover: oklch(0.589 0.199 142.742 / 0.145);
+  --success-active: oklch(0.592 0.198 143 / 0.216);
+  --success-focus: oklch(0.716 0.129 147.413);
+  --success-focus-fill: oklch(0.612 0.141 147.431);
+  --success-line-ui: oklch(0.552 0.184 143.139 / 0.42);
+  --success-ring: oklch(0.552 0.184 143.139 / 0.42);
+  --success-secondary: oklch(0.526 0.13 147.36);
+  --success-primary: oklch(0.327 0.054 146.815);
+  --success-on-fill: white;
+
+  --warning-ui: oklch(0.879 0.18 93.577 / 0.247);
+  --warning-fill: oklch(0.867 0.176 90.669);
+  --warning-hover: oklch(0.865 0.177 90.382 / 0.392);
+  --warning-active: oklch(0.856 0.175 88.008 / 0.529);
+  --warning-focus: oklch(0.761 0.135 90.498);
+  --warning-focus-fill: oklch(0.838 0.165 90.363);
+  --warning-line-ui: oklch(0.724 0.149 83.651 / 0.596);
+  --warning-ring: oklch(0.724 0.149 83.651 / 0.596);
+  --warning-secondary: oklch(0.572 0.117 86.53);
+  --warning-primary: oklch(0.352 0.045 90.33);
+  --warning-on-fill: black;
+
   /* destructive palette */
-  --destructive-ui: oklch(0.583 0.24 32.8 / 0.091);
-  --destructive-fill: oklch(0.627 0.194 33.339);
-  --destructive-hover: oklch(0.653 0.277 32 / 0.165);
-  --destructive-active: oklch(0.625 0.262 32.4 / 0.232);
-  --destructive-focus: oklch(0.741 0.118 32.1);
-  --destructive-focus-fill: oklch(0.741 0.118 32.1);
+  --destructive-ui: oklch(0.65 0.237 33.432 / 0.106);
+  --destructive-fill: oklch(0.664 0.179 34.086);
+  --destructive-hover: oklch(0.65 0.237 33.432 / 0.106);
+  --destructive-active: oklch(0.651 0.237 33.578 / 0.278);
+  --destructive-focus: oklch(0.744 0.117 34.256);
+  --destructive-focus-fill: oklch(0.625 0.181 34.021);
   --destructive-line-ui: oklch(0.802 0.095 32.2 / 0.7);
-  --destructive-secondary: oklch(0.566 0.198 32.726);
-  --destructive-primary: oklch(0.346 0.08 30.39);
+  --destructive-ring: oklch(0.609 0.227 32.494 / 0.416);
+  --destructive-secondary: oklch(0.532 0.199 32.458 / 0.839);
+  --destructive-primary: oklch(0.243 0.081 37.215 / 0.867);
   --destructive-on-fill: white;
-
-  /* warning palette */
-  --warning-ui: oklch(0.986 0.024 99.096);
-  --warning-line-ui: oklch(0.901 0.186 98.266 / 0.239);
-  --warning-secondary: oklch(0.571 0.129 63.938);
-  --warning-primary: oklch(0.352 0.049 54.169);
-
-  /* success palette */
-  --success-ui: oklch(0.962 0.044 156.743);
-  --success-line-ui: oklch(0.765 0.177 163.224 / 0.239);
-  --success-secondary: oklch(0.488 0.172 142.499);
-  --success-primary: oklch(0.337 0.085 148.067);
 
   /* --primary-foreground: oklch(0.985 0 0); */
   /* --secondary-foreground: oklch(0.205 0 0); */
@@ -83,59 +110,82 @@
 .dark {
   /* backgrounds */
   --background: oklch(0.105 0 0);
-  --surface: oklch(0.148 0 0);
-  --overlay: oklch(0.202 0 0);
-  --ui: oklch(1 0 0 / 0.071);
-  --fill: oklch(0.985 0 0);
+  --surface: oklch(0.145 0 0);
+  --overlay: oklch(0.178 0 0);
+  --ui: oklch(1 0 0 / 0.075);
+  --fill: oklch(0.949 0 0);
+
+  /* wip: surfaces */
+  --surface-1: oklch(1 0 0 / 0.05);
+  --surface-2: oklch(1 0 0 / 0.09);
+
   /* interactive */
   --hover: oklch(1 0 0 / 0.106);
   --active: oklch(1 0 0 / 0.133);
   --focus: oklch(0.489 0 0);
-  --focus-fill: oklch(0.683 0 0);
+  --focus-fill: oklch(0.586 0 0);
+
   /* line/border */
   --line: oklch(0.258 0 0);
   --line-subtle: oklch(0.21 0 0);
   --line-ui: oklch(1 0 0 / 0.14);
+
+  --separator: oklch(0.348 0 0);
+  --ring: oklch(1 0 0 / 0.231);
+
   /* foreground */
-  --primary: oklch(0.985 0 0);
-  --secondary: oklch(0.862 0 0);
+  --primary: oklch(0.949 0 0);
+  --secondary: oklch(0.77 0 0);
   --muted: oklch(0.705 0 0);
   --disabled: oklch(0.586 0 0);
-  --on-fill: oklch(0.085 0 0);
-  --ui-label: var(--primary);
+  --on-fill: oklch(0.178 0 0);
 
-  --accent-ui: oklch(0.641 0.197 252.972 / 0.15);
-  --accent-fill: oklch(0.641 0.197 252.972);
-  --accent-hover: oklch(0.641 0.197 252.972 / 0.22);
-  --accent-active: oklch(0.641 0.197 252.972 / 0.28);
-  --accent-focus: oklch(0.541 0.14 253.2);
-  --accent-focus-fill: oklch(0.546 0.245 262.881);
+  --accent-ui: oklch(0.597 0.221 258.03 / 0.227);
+  --accent-fill: oklch(0.649 0.193 251.78);
+  --accent-hover: oklch(0.587 0.227 258.962 / 0.341);
+  --accent-active: oklch(0.61 0.211 256.319 / 0.424);
+  --accent-focus: oklch(0.542 0.14 251.762);
+  --accent-focus-fill: oklch(0.636 0.2 253.539 / 0.941);
   --accent-line-ui: oklch(0.674 0.191 252.9 / 0.572);
+  --accent-ring: oklch(0.662 0.184 252.588 / 0.588);
   --accent-secondary: oklch(0.746 0.16 251.5);
-  --accent-primary: oklch(0.841 0.106 251.3);
+  --accent-primary: oklch(0.905 0.048 249.319);
 
-  --destructive-ui: oklch(0.68 0.261 30.8 / 0.148);
-  --destructive-fill: oklch(0.627 0.194 33.339);
-  --destructive-hover: oklch(0.667 0.279 29.9 / 0.232);
-  --destructive-active: oklch(0.683 0.261 30.2 / 0.29);
-  --destructive-focus: oklch(0.447 0.107 31.5);
-  --destructive-focus-fill: oklch(0.538 0.13 32.9);
+  --success-ui: oklch(0.894 0.202 145.082 / 0.106);
+  --success-fill: oklch(0.651 0.147 147.392);
+  --success-hover: oklch(0.888 0.22 146.073 / 0.173);
+  --success-active: oklch(0.894 0.207 145.856 / 0.231);
+  --success-focus: oklch(0.895 0.189 146.676 / 0.439);
+  --success-focus-fill: oklch(0.884 0.226 146.957 / 0.576);
+  --success-line-ui: oklch(0.894 0.191 146.754 / 0.365);
+  --success-ring: oklch(0.894 0.191 146.754 / 0.365);
+  --success-secondary: oklch(0.78 0.143 147.473);
+  --success-primary: oklch(0.91 0.077 147.124);
+  --success-on-fill: white;
+
+  --warning-ui: oklch(0.804 0.17 74.67 / 0.11);
+  --warning-fill: oklch(0.82 0.165 90.325);
+  --warning-hover: oklch(0.805 0.17 74.308 / 0.169);
+  --warning-active: oklch(0.818 0.171 77.948 / 0.224);
+  --warning-focus: oklch(0.536 0.089 90.735);
+  --warning-focus-fill: oklch(0.787 0.161 89.593);
+  --warning-line-ui: oklch(0.863 0.162 88.771 / 0.361);
+  --warning-ring: oklch(0.863 0.162 88.771 / 0.361);
+  --warning-secondary: oklch(0.871 0.162 90.498);
+  --warning-primary: oklch(0.936 0.067 91.506);
+  --warning-on-fill: black;
+
+  --destructive-ui: oklch(0.647 0.238 32.438 / 0.165);
+  --destructive-fill: oklch(0.664 0.179 34.086);
+  --destructive-hover: oklch(0.634 0.247 31.052 / 0.259);
+  --destructive-active: oklch(0.645 0.237 32.467 / 0.322);
+  --destructive-focus: oklch(0.538 0.13 33.898);
+  --destructive-focus-fill: oklch(0.625 0.179 34.149);
   --destructive-line-ui: oklch(0.712 0.231 31.6 / 0.353);
-  --destructive-secondary: oklch(0.784 0.164 36);
-  --destructive-primary: oklch(0.899 0.047 31.1);
+  --destructive-ring: oklch(0.698 0.19 34.508 / 0.49);
+  --destructive-secondary: oklch(0.77 0.138 35.323);
+  --destructive-primary: oklch(0.898 0.047 32.8);
   --destructive-on-fill: white;
-
-  /* warning palette */
-  --warning-ui: oklch(0.212 0.018 81.986);
-  --warning-line-ui: oklch(0.728 0.18 55.008 / 0.133);
-  --warning-secondary: oklch(0.862 0.173 89.018);
-  --warning-primary: oklch(0.935 0.072 86.068);
-
-  /* success palette */
-  --success-ui: oklch(0.212 0.042 150);
-  --success-line-ui: oklch(0.7 0.15 150 / 0.133);
-  --success-secondary: oklch(0.792 0.209 151.711);
-  --success-primary: oklch(0.88 0.074 154.5);
 }
 
 /* ------------------------------------------------
@@ -151,7 +201,9 @@
   --active: var(--accent-active);
   --focus: var(--accent-focus);
   --focus-fill: var(--accent-focus-fill);
+  /* line-ui @deprecated, use --ring instead */
   --line-ui: var(--accent-line-ui);
+  --ring: var(--accent-ring);
   --secondary: var(--accent-secondary);
   --primary: var(--accent-primary);
   --on-fill: var(--accent-on-fill);
@@ -166,6 +218,7 @@
   --focus: var(--destructive-focus);
   --focus-fill: var(--destructive-focus-fill);
   --line-ui: var(--destructive-line-ui);
+  --ring: var(--destructive-ring);
   --secondary: var(--destructive-secondary);
   --primary: var(--destructive-primary);
   --on-fill: var(--destructive-on-fill);
@@ -174,456 +227,32 @@
 
 [data-theme='warning'] {
   --ui: var(--warning-ui);
+  --fill: var(--warning-fill);
+  --hover: var(--warning-hover);
+  --active: var(--warning-active);
+  --focus: var(--warning-focus);
+  --focus-fill: var(--warning-focus-fill);
   --line-ui: var(--warning-line-ui);
+  --ring: var(--warning-ring);
   --secondary: var(--warning-secondary);
   --primary: var(--warning-primary);
+  --on-fill: var(--warning-on-fill);
   --ui-label: var(--warning-secondary);
 }
 
 [data-theme='success'] {
   --ui: var(--success-ui);
+  --fill: var(--success-fill);
+  --hover: var(--success-hover);
+  --active: var(--success-active);
+  --focus: var(--success-focus);
+  --focus-fill: var(--success-focus-fill);
   --line-ui: var(--success-line-ui);
+  --ring: var(--success-ring);
   --secondary: var(--success-secondary);
   --primary: var(--success-primary);
+  --on-fill: var(--success-on-fill);
   --ui-label: var(--success-secondary);
-}
-
-/* Variant gradient styles - Interactive components (button, checkbox) */
-[data-slot='button'],
-[data-slot='checkbox'] {
-  &[data-variant='soft'],
-  &[data-variant='surface'] {
-    background-color: transparent;
-    background-image: linear-gradient(
-      to top,
-      color-mix(in oklch, var(--ui) 100%, transparent),
-      color-mix(in oklch, var(--ui) 50%, transparent)
-    );
-  }
-
-  &[data-variant='solid'] {
-    background-color: transparent;
-    background-image: linear-gradient(
-      to top,
-      color-mix(in oklch, var(--fill) 100%, transparent),
-      color-mix(in oklch, var(--fill) 82%, transparent)
-    );
-  }
-}
-
-/* Button-specific interactive states */
-[data-slot='button'] {
-  &[data-variant='soft'],
-  &[data-variant='surface'],
-  &[data-variant='outline'],
-  &[data-variant='ghost'] {
-    &:hover {
-      background-image: linear-gradient(
-        to top,
-        color-mix(in oklch, var(--hover) 100%, transparent),
-        color-mix(in oklch, var(--hover) 50%, transparent)
-      );
-    }
-
-    &:active {
-      background-image: linear-gradient(
-        to top,
-        color-mix(in oklch, var(--active) 100%, transparent),
-        color-mix(in oklch, var(--active) 50%, transparent)
-      );
-    }
-  }
-
-  &[data-variant='ghost'],
-  &[data-variant='outline'] {
-    background-color: transparent;
-    background-image: none;
-  }
-
-  &[data-variant='outline'] {
-    &:hover {
-      background-image: linear-gradient(
-        to top,
-        color-mix(in oklch, var(--hover) 40%, transparent),
-        color-mix(in oklch, var(--hover) 15%, transparent)
-      );
-    }
-    &:active {
-      background-image: linear-gradient(
-        to top,
-        color-mix(in oklch, var(--active) 50%, transparent),
-        color-mix(in oklch, var(--active) 20%, transparent)
-      );
-    }
-  }
-
-  &[data-variant='solid'] {
-    &:hover {
-      background-image: linear-gradient(
-        to top,
-        color-mix(in oklch, var(--fill) 93%, transparent),
-        color-mix(in oklch, var(--fill) 74%, transparent)
-      );
-    }
-
-    &:active {
-      background-image: linear-gradient(
-        to top,
-        color-mix(in oklch, var(--fill) 89%, transparent),
-        color-mix(in oklch, var(--fill) 71%, transparent)
-      );
-    }
-  }
-}
-
-/* Radio Group - gradient styles */
-[data-slot='radio-group'] {
-  [data-slot='radio-group-item'] {
-    &[data-variant='solid'] {
-      background-color: transparent;
-      background-image: linear-gradient(
-        to top,
-        color-mix(in oklch, var(--fill) 100%, transparent),
-        color-mix(in oklch, var(--fill) 82%, transparent)
-      );
-      &:not([data-checked]) {
-        background-image: none;
-      }
-    }
-
-    &[data-variant='surface'] {
-      &[data-checked] {
-        background-image: linear-gradient(
-          to top,
-          color-mix(in oklch, var(--active) 100%, transparent),
-          color-mix(in oklch, var(--active) 50%, transparent)
-        );
-      }
-    }
-  }
-}
-
-/* Checkbox-specific state changes */
-[data-slot='checkbox'] {
-  &[data-variant='surface'] {
-    &[data-checked],
-    &[data-indeterminate] {
-      background-image: linear-gradient(
-        to top,
-        color-mix(in oklch, var(--active) 100%, transparent),
-        color-mix(in oklch, var(--active) 50%, transparent)
-      );
-    }
-  }
-
-  /* Solid variant only shows gradient when checked */
-  &[data-variant='solid']:not([data-checked]):not([data-indeterminate]) {
-    background-image: none;
-  }
-}
-
-/* Dropdown menu items - focus state gradients */
-[data-slot='dropdown-menu-item'],
-[data-slot='dropdown-menu-checkbox-item'],
-[data-slot='dropdown-menu-radio-item'],
-[data-slot='dropdown-menu-sub-trigger'] {
-  background-color: unset;
-  &:focus,
-  &[data-popup-open],
-  &[data-open] {
-    background-image: linear-gradient(
-      to top,
-      color-mix(in oklch, var(--active) 100%, transparent),
-      color-mix(in oklch, var(--active) 50%, transparent)
-    );
-  }
-}
-
-[data-slot='dropdown-menu-content'][data-variant='solid'],
-[data-slot='dropdown-menu-sub-content'][data-variant='solid'] {
-  [data-slot='dropdown-menu-item'],
-  [data-slot='dropdown-menu-checkbox-item'],
-  [data-slot='dropdown-menu-radio-item'],
-  [data-slot='dropdown-menu-sub-trigger'] {
-    background-color: unset;
-    &:focus,
-    &[data-popup-open],
-    &[data-open] {
-      background-image: linear-gradient(
-        to top,
-        color-mix(in oklch, var(--fill) 100%, transparent),
-        color-mix(in oklch, var(--fill) 82%, transparent)
-      );
-    }
-  }
-}
-
-/* Variant gradient styles - Input specific (no interactions) */
-[data-slot='input'] {
-  &[data-variant='soft'],
-  &[data-variant='surface'] {
-    background-color: transparent;
-    background-image: linear-gradient(
-      to top,
-      color-mix(in oklch, var(--ui) 100%, transparent),
-      color-mix(in oklch, var(--ui) 50%, transparent)
-    );
-  }
-
-  &[data-variant='outline'] {
-    background-image: none;
-  }
-}
-
-/* Dropdown menu - component-scoped tokens (always gray, never remapped) */
-[data-slot='dropdown-menu-item'],
-[data-slot='dropdown-menu-checkbox-item'],
-[data-slot='dropdown-menu-radio-item'],
-[data-slot='dropdown-menu-sub-trigger'],
-[data-slot='dropdown-menu-label'],
-[data-slot='dropdown-menu-shortcut'] {
-  --menu-item-text: oklch(0.07 0 0);
-  --menu-item-text-secondary: oklch(0.45 0 0);
-  --menu-item-text-muted: oklch(0.556 0 0);
-}
-
-/* Concentric border radius for dropdown menu items */
-[data-slot='dropdown-menu-content'],
-[data-slot='dropdown-menu-sub-content'] {
-  /* Both containers use rounded-md (max 10px), padding is 4px (p-1) */
-  /* Item radius = container radius - padding, clamped to 2px-6px to prevent full rounding */
-  --menu-item-radius: min(max(calc(var(--radius-md) - 4px), 2px), 6px);
-}
-
-[data-slot='tabs-indicator'] {
-  background-color: transparent;
-  &[data-variant='soft'] {
-    background-image: linear-gradient(
-      to bottom,
-      color-mix(in oklch, var(--hover) 100%, transparent),
-      color-mix(in oklch, var(--hover) 76%, transparent)
-    );
-  }
-
-  &[data-variant='solid'] {
-    background-image: linear-gradient(
-      to bottom,
-      color-mix(in oklch, var(--fill) 100%, transparent),
-      color-mix(in oklch, var(--fill) 87%, transparent)
-    );
-  }
-}
-
-.dark {
-  [data-slot='tabs-indicator'] {
-    &[data-variant='soft'] {
-      background-image: linear-gradient(
-        to bottom,
-        color-mix(in oklch, var(--hover) 100%, transparent),
-        color-mix(in oklch, var(--hover) 76%, transparent)
-      );
-    }
-
-    &[data-variant='solid'] {
-      background-image: linear-gradient(
-        to bottom,
-        color-mix(in oklch, var(--fill) 100%, transparent),
-        color-mix(in oklch, var(--fill) 87%, transparent)
-      );
-    }
-  }
-}
-
-.dark {
-  /* Dropdown menu - dark mode tokens */
-  [data-slot='dropdown-menu-item'],
-  [data-slot='dropdown-menu-checkbox-item'],
-  [data-slot='dropdown-menu-radio-item'],
-  [data-slot='dropdown-menu-sub-trigger'],
-  [data-slot='dropdown-menu-label'],
-  [data-slot='dropdown-menu-shortcut'] {
-    --menu-item-text: oklch(0.985 0 0);
-    --menu-item-text-secondary: oklch(0.862 0 0);
-    --menu-item-text-muted: oklch(0.705 0 0);
-  }
-
-  [data-slot='button'],
-  [data-slot='checkbox'] {
-    &[data-variant='soft'],
-    &[data-variant='surface'] {
-      background-color: transparent;
-      background-image: linear-gradient(
-        to bottom,
-        color-mix(in oklch, var(--ui) 100%, transparent),
-        color-mix(in oklch, var(--ui) 83%, transparent)
-      );
-    }
-
-    &[data-variant='solid'] {
-      background-color: transparent;
-      background-image: linear-gradient(
-        to bottom,
-        color-mix(in oklch, var(--fill) 100%, transparent),
-        color-mix(in oklch, var(--fill) 87%, transparent)
-      );
-    }
-  }
-
-  [data-slot='button'] {
-    &[data-variant='soft'],
-    &[data-variant='surface'],
-    &[data-variant='outline'],
-    &[data-variant='ghost'] {
-      &:hover {
-        background-image: linear-gradient(
-          to bottom,
-          color-mix(in oklch, var(--hover) 100%, transparent),
-          color-mix(in oklch, var(--hover) 76%, transparent)
-        );
-      }
-
-      &:active {
-        background-image: linear-gradient(
-          to bottom,
-          color-mix(in oklch, var(--active) 100%, transparent),
-          color-mix(in oklch, var(--active) 73%, transparent)
-        );
-      }
-    }
-
-    &[data-variant='ghost'],
-    &[data-variant='outline'] {
-      background-image: none;
-    }
-
-    &[data-variant='outline'] {
-      &:hover {
-        background-image: linear-gradient(
-          to bottom,
-          color-mix(in oklch, var(--hover) 70%, transparent),
-          color-mix(in oklch, var(--hover) 45%, transparent)
-        );
-      }
-      &:active {
-        background-image: linear-gradient(
-          to bottom,
-          color-mix(in oklch, var(--active) 50%, transparent),
-          color-mix(in oklch, var(--active) 20%, transparent)
-        );
-      }
-    }
-
-    &[data-variant='solid'] {
-      &:hover {
-        background-image: linear-gradient(
-          to bottom,
-          color-mix(in oklch, var(--fill) 92%, transparent),
-          color-mix(in oklch, var(--fill) 82%, transparent)
-        );
-      }
-
-      &:active {
-        background-image: linear-gradient(
-          to bottom,
-          color-mix(in oklch, var(--fill) 87%, transparent),
-          color-mix(in oklch, var(--fill) 77%, transparent)
-        );
-      }
-    }
-  }
-
-  [data-slot='checkbox'] {
-    &[data-variant='surface'] {
-      &[data-checked],
-      &[data-indeterminate] {
-        background-image: linear-gradient(
-          to bottom,
-          color-mix(in oklch, var(--active) 100%, transparent),
-          color-mix(in oklch, var(--active) 73%, transparent)
-        );
-      }
-    }
-
-    &[data-variant='solid']:not([data-checked]):not([data-indeterminate]) {
-      background-image: none;
-    }
-  }
-
-  [data-slot='radio-group'] {
-    [data-slot='radio-group-item'] {
-      &[data-variant='solid'] {
-        background-color: transparent;
-        background-image: linear-gradient(
-          to bottom,
-          color-mix(in oklch, var(--fill) 100%, transparent),
-          color-mix(in oklch, var(--fill) 87%, transparent)
-        );
-        &:not([data-checked]) {
-          background-image: none;
-        }
-      }
-
-      &[data-variant='surface'] {
-        &[data-checked] {
-          background-image: linear-gradient(
-            to bottom,
-            color-mix(in oklch, var(--active) 100%, transparent),
-            color-mix(in oklch, var(--active) 73%, transparent)
-          );
-        }
-      }
-    }
-  }
-
-  [data-slot='input'] {
-    &[data-variant='soft'],
-    &[data-variant='surface'] {
-      background-color: transparent;
-      background-image: linear-gradient(
-        to bottom,
-        color-mix(in oklch, var(--ui) 100%, transparent),
-        color-mix(in oklch, var(--ui) 83%, transparent)
-      );
-    }
-
-    &[data-variant='outline'] {
-      background-image: none;
-    }
-  }
-
-  /* Dropdown menu items - focus state gradients (dark mode) */
-  [data-slot='dropdown-menu-item'],
-  [data-slot='dropdown-menu-checkbox-item'],
-  [data-slot='dropdown-menu-radio-item'],
-  [data-slot='dropdown-menu-sub-trigger'] {
-    &:focus,
-    &[data-popup-open],
-    &[data-open] {
-      background-image: linear-gradient(
-        to bottom,
-        color-mix(in oklch, var(--active) 100%, transparent),
-        color-mix(in oklch, var(--active) 73%, transparent)
-      );
-    }
-  }
-
-  [data-slot='dropdown-menu-content'][data-variant='solid'],
-  [data-slot='dropdown-menu-sub-content'][data-variant='solid'] {
-    [data-slot='dropdown-menu-item'],
-    [data-slot='dropdown-menu-checkbox-item'],
-    [data-slot='dropdown-menu-radio-item'],
-    [data-slot='dropdown-menu-sub-trigger'] {
-      &:focus,
-      &[data-popup-open],
-      &[data-open] {
-        background-image: linear-gradient(
-          to bottom,
-          color-mix(in oklch, var(--fill) 100%, transparent),
-          color-mix(in oklch, var(--fill) 87%, transparent)
-        );
-      }
-    }
-  }
 }
 
 @theme inline {
@@ -649,18 +278,14 @@
   --color-line: var(--line);
   --color-line-subtle: var(--line-subtle);
   --color-line-ui: var(--line-ui);
+  --color-separator: var(--separator);
+  --color-ring: var(--ring);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-muted: var(--muted);
   --color-disabled: var(--disabled);
   --color-on-fill: var(--on-fill);
   --color-ui-label: var(--ui-label);
-  --color-warning-ui: var(--warning-ui);
-  --color-warning-line-ui: var(--warning-line-ui);
-  --color-warning-secondary: var(--warning-secondary);
-  --color-warning-primary: var(--warning-primary)
-    /* --color-accent: var(--accent);
-  --color-destructive: var(--destructive); */;
 }
 
 /* Shiki dual-theme: map code block backgrounds to Ora surface token */
