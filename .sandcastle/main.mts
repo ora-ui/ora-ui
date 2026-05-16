@@ -60,9 +60,10 @@ const MAX_ITERATIONS = targetIssue ? 1 : 10;
 
 if (!targetIssue && !reviewOnly) {
   const openIssueCount = parseInt(
-    execSync('gh issue list --state open --label agent-ready --json number --jq length', {
-      encoding: 'utf8',
-    }).trim(),
+    execSync(
+      `gh issue list --state open --label agent-ready --json number,labels --jq '[.[] | select(.labels | map(.name) | contains(["awaiting-review"]) | not)] | length'`,
+      { encoding: 'utf8' }
+    ).trim(),
     10
   );
 
@@ -232,9 +233,10 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   // Autonomous mode: re-check for remaining agent-ready issues each iteration.
   if (!targetIssue && !reviewOnly) {
     const remaining = parseInt(
-      execSync('gh issue list --state open --label agent-ready --json number --jq length', {
-        encoding: 'utf8',
-      }).trim(),
+      execSync(
+        `gh issue list --state open --label agent-ready --json number,labels --jq '[.[] | select(.labels | map(.name) | contains(["awaiting-review"]) | not)] | length'`,
+        { encoding: 'utf8' }
+      ).trim(),
       10
     );
     if (remaining === 0) {
