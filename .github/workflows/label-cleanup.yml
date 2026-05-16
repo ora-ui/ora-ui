@@ -1,15 +1,16 @@
-name: Remove agent-ready label on close
+name: Strip agent labels on close
 
 on:
   issues:
     types: [closed]
 
 jobs:
-  remove-agent-ready:
+  strip-labels:
     runs-on: ubuntu-latest
     steps:
-      - name: Remove agent-ready label
-        run: gh issue edit ${{ github.event.issue.number }} --remove-label agent-ready
+      - name: Remove agent-ready and awaiting-review labels
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          gh issue edit "$ISSUE" --remove-label agent-ready --remove-label awaiting-review || true

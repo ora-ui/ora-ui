@@ -1,0 +1,33 @@
+name: Close referenced issues on develop merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [develop]
+
+jobs:
+  close-issues:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close issues referenced by Closes/Fixes/Resolves
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          set -euo pipefail
+          issues=$(printf '%s\n' "$PR_BODY" \
+            | grep -oiE '(close[sd]?|fix(e[sd])?|resolve[sd]?)[[:space:]]+#[0-9]+' \
+            | grep -oE '#[0-9]+' \
+            | tr -d '#' \
+            | sort -u)
+          if [ -z "$issues" ]; then
+            echo "No Closes/Fixes/Resolves references found in PR body."
+            exit 0
+          fi
+          for n in $issues; do
+            echo "Closing issue #$n (referenced by PR #$PR_NUMBER)"
+            gh issue close "$n" --comment "Closed by $PR_URL (merged to \`develop\`)." || true
+          done
