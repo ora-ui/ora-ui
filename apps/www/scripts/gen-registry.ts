@@ -39,6 +39,7 @@ function dirToPascal(dirName: string): string {
     .join('');
 }
 
+// Second clause handles acronym boundaries: URLParser → url-parser (not ur-lparser)
 function pascalToKebab(pascal: string): string {
   return pascal
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
@@ -46,6 +47,7 @@ function pascalToKebab(pascal: string): string {
     .toLowerCase();
 }
 
+// Second clause handles acronym boundaries: URLParser → URL Parser (not U RLParser)
 function splitPascal(pascal: string): string {
   return pascal.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
 }
@@ -59,6 +61,11 @@ interface NamedFn {
   defaultOnly: boolean;
 }
 
+/**
+ * Handles two default-export shapes:
+ * - `export default function X() {}` — populates defaultName from the fn declaration
+ * - `export default X` (assignment, X is a separately-declared exported fn) — populates defaultName from the identifier
+ */
 function collectExports(sourceFile: ts.SourceFile): {
   named: NamedFn[];
   defaultName: string | null;
@@ -92,6 +99,13 @@ function collectExports(sourceFile: ts.SourceFile): {
   return { named, defaultName };
 }
 
+/**
+ * Enforces three invariants:
+ * 1. At least one named export starting with `<DirPascal>` prefix
+ * 2. A default export must exist
+ * 3. The default export must resolve to one of the named exports
+ * Each invariant throws on violation.
+ */
 export function parsePreviewFile(filePath: string): PreviewEntry {
   const source = fs.readFileSync(filePath, 'utf-8');
   const fileName = path.basename(filePath);
