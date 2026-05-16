@@ -47,7 +47,10 @@ If an issue's **body or comments** contain "Depends on", "Blocked by", or "Block
    - `pnpm typecheck`
    - `pnpm lint`
 
-   Fix failures before proceeding. Do not commit a red build.
+   Fix failures before proceeding. Do not commit a red build. If a gate
+   fails and you cannot fix it after a genuine attempt, stop immediately
+   with a `<blocked-reason>` and `<promise>BLOCKED</promise>` — never
+   emit `<promise>COMPLETE</promise>` without a green, committed build.
 
 6. **Commit** — single git commit. The message MUST:
    - Start with `sandcastle-` prefix (lowercase) followed by a conventional type, e.g. `sandcastle-fix(button): correct focus ring color`
@@ -87,7 +90,15 @@ The orchestrator will post the reason as a comment on the issue and move on.
 
 # Done
 
-When the issue is complete (committed, gates green), output the title, summary, and completion signal together in the same final message — do not split them across separate messages:
+When the issue is complete (committed, gates green), first verify you actually made a commit:
+
+```
+git log --oneline --grep="^sandcastle-" -1
+```
+
+If that returns nothing, you have not committed — output `<blocked-reason>` explaining why and `<promise>BLOCKED</promise>` instead.
+
+Otherwise, output the title, summary, and completion signal together in the same final message — do not split them across separate messages:
 
 ```
 <pr-title>agent:type(scope): short description</pr-title>
