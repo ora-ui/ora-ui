@@ -39,7 +39,7 @@ function dirToPascal(dirName: string): string {
     .join('');
 }
 
-// Second clause handles acronym boundaries: URLParser → url-parser (not ur-lparser)
+// Second clause handles acronym boundaries: URLParser → url-parser (not urlparser)
 function pascalToKebab(pascal: string): string {
   return pascal
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
@@ -47,7 +47,7 @@ function pascalToKebab(pascal: string): string {
     .toLowerCase();
 }
 
-// Second clause handles acronym boundaries: URLParser → URL Parser (not U RLParser)
+// Second clause handles acronym boundaries: URLParser → URL Parser (not URLParser)
 function splitPascal(pascal: string): string {
   return pascal.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
 }
