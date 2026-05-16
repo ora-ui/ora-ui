@@ -13,13 +13,16 @@ jobs:
       - name: Close issues referenced by Closes/Fixes/Resolves
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
           PR_BODY: ${{ github.event.pull_request.body }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: |
           set -euo pipefail
+          # Extract issue numbers from any line containing a Closes/Fixes/Resolves
+          # keyword. Supports comma-lists like "Closes #1, #2, #3".
           issues=$(printf '%s\n' "$PR_BODY" \
-            | grep -oiE '(close[sd]?|fix(e[sd])?|resolve[sd]?)[[:space:]]+#[0-9]+' \
+            | grep -iE '(close[sd]?|fix(e[sd])?|resolve[sd]?)\b' \
             | grep -oE '#[0-9]+' \
             | tr -d '#' \
             | sort -u)
