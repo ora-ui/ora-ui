@@ -32,8 +32,9 @@ export class NamingViolationError extends Error {
   }
 }
 
-function dirToPascal(dirName: string): string {
-  return dirName
+/** Converts a kebab-case string to PascalCase, e.g. "button-group" → "ButtonGroup". */
+function kebabToPascal(str: string): string {
+  return str
     .split('-')
     .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
     .join('');
@@ -116,7 +117,7 @@ export function parsePreviewFile(filePath: string): PreviewEntry {
   const fileName = path.basename(filePath);
   const slug = fileName.replace(/\.tsx?$/, '');
   const dirName = path.basename(path.dirname(filePath));
-  const dirPascal = dirToPascal(dirName);
+  const dirPascal = kebabToPascal(dirName);
 
   const sourceFile = ts.createSourceFile(
     fileName,
@@ -171,13 +172,6 @@ interface ParsedPreview extends PreviewEntry {
   componentDir: string;
 }
 
-function slugToPascal(slug: string): string {
-  return slug
-    .split('-')
-    .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
-    .join('');
-}
-
 export function parsePreviewsDir(previewsDir: string): ParsedPreview[] {
   const entries: ParsedPreview[] = [];
   const subdirs = fs
@@ -212,7 +206,7 @@ export function renderRegistryModule(entries: ParsedPreview[]): string {
   }
 
   for (const entry of entries) {
-    const moduleAlias = `${slugToPascal(entry.slug)}Module`;
+    const moduleAlias = `${kebabToPascal(entry.slug)}Module`;
     importLines.push(`import * as ${moduleAlias} from './${entry.componentDir}/${entry.slug}';`);
 
     const exportLines = entry.exports.map((e) => {
