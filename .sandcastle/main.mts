@@ -40,6 +40,17 @@ const skipReview = Boolean(args['no-review']);
 const reviewOnly = Boolean(args['review-only']);
 const testPropagation = Boolean(args['test-propagation']);
 
+// Targeted mode: verify issue is OPEN before doing any work.
+if (targetIssue) {
+  const state = execSync(`gh issue view ${targetIssue} --json state --jq .state`, {
+    encoding: 'utf8',
+  }).trim();
+  if (state !== 'OPEN') {
+    console.log(`Issue #${targetIssue} is ${state}. Exiting.`);
+    process.exit(0);
+  }
+}
+
 // When targeting a specific issue, run exactly one iteration.
 const MAX_ITERATIONS = targetIssue ? 1 : 10;
 
@@ -218,6 +229,20 @@ if (reviewOnly) {
 for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   console.log(`\n=== Iteration ${iteration}/${MAX_ITERATIONS} ===\n`);
 
+  // Autonomous mode: re-check for remaining agent-ready issues each iteration.
+  if (!targetIssue && !reviewOnly) {
+    const remaining = parseInt(
+      execSync('gh issue list --state open --label agent-ready --json number --jq length', {
+        encoding: 'utf8',
+      }).trim(),
+      10
+    );
+    if (remaining === 0) {
+      console.log('No agent-ready issues remaining. Exiting.');
+      break;
+    }
+  }
+
   let implementBranch: string;
   let issueDirective: string;
 
@@ -259,9 +284,47 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
 
   let branch = implement.branch;
 
+  // Fix: detect BLOCKED runs — post reason as issue comment and skip review.
+  const blockedMatch = implement.stdout.match(/<blocked-reason>([\s\S]*?)<\/blocked-reason>/);
+  if (blockedMatch) {
+    const reason = blockedMatch[1]!.trim();
+    console.log(`\nImplementer reported BLOCKED:\n${reason}`);
+    const workingOnMatch = implement.stdout.match(/<working-on-issue>(\d+)<\/working-on-issue>/);
+    const blockedIssue = workingOnMatch?.[1] ?? (targetIssue ? String(targetIssue) : null);
+    if (blockedIssue) {
+      try {
+        execSync(
+          `gh issue comment ${blockedIssue} --body ${JSON.stringify(`**Sandcastle blocked:** ${reason}`)}`,
+          { stdio: 'inherit' }
+        );
+      } catch {
+        console.warn(`Could not post blocked comment to issue #${blockedIssue}`);
+      }
+    }
+    continue;
+  }
+
   if (!implement.commits.length) {
     console.log('Implementation agent made no commits. Skipping review.');
     continue;
+  }
+
+  // Fix: in autonomous mode, verify the issue the agent picked carries agent-ready label.
+  if (!targetIssue) {
+    const workingOnMatch = implement.stdout.match(/<working-on-issue>(\d+)<\/working-on-issue>/);
+    const pickedIssue = workingOnMatch?.[1];
+    if (pickedIssue) {
+      const labels: string = execSync(
+        `gh issue view ${pickedIssue} --json labels --jq '[.labels[].name] | join(",")'`,
+        { encoding: 'utf8' }
+      ).trim();
+      if (!labels.split(',').includes('agent-ready')) {
+        console.warn(
+          `Issue #${pickedIssue} does not carry agent-ready label (labels: ${labels || 'none'}). Skipping.`
+        );
+        continue;
+      }
+    }
   }
 
   // Rename branch to match the agent's assessed scope — autonomous mode only.
