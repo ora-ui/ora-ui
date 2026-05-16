@@ -1,71 +1,63 @@
-# TASK
+# Task
 
-Review the code changes on branch `{{BRANCH}}` and improve code clarity, consistency, and maintainability while preserving exact functionality.
+Review the implementer's work on branch `{{BRANCH}}`. **Default to no-op.**
+Commits during review are the exception, not the norm.
 
-# CONTEXT
+## Context
 
-## Branch diff
+### Branch diff
 
 !`git diff {{SOURCE_BRANCH}}...{{BRANCH}}`
 
-## Commits on this branch
+### Commits on this branch
 
 !`git log {{SOURCE_BRANCH}}..{{BRANCH}} --oneline`
 
-# REVIEW PROCESS
+## When to commit a refinement
 
-1. **Understand the change**: Read the diff and commits above to understand the intent.
+Commit **only** when the change clearly meets one of these:
 
-2. **Analyze for improvements**: Look for opportunities to:
-   - Reduce unnecessary complexity and nesting
-   - Eliminate redundant code and abstractions
-   - Improve readability through clear variable and function names
-   - Consolidate related logic
-   - Remove unnecessary comments that describe obvious code
-   - Avoid nested ternary operators - prefer switch statements or if/else chains
-   - Choose clarity over brevity - explicit code is often better than overly compact code
+- **Correctness fix** — bug, edge case, unsafe cast, missing handling
+- **Security fix** — injection, leak, unchecked input from a boundary
+- **Substantial clarity gain** — ≥10 net lines removed AND readability
+  improves (consolidating duplication, flattening nesting, deleting dead
+  code)
 
-3. **Check correctness**:
-   - Does the implementation match the intent? Are edge cases handled?
-   - Are new/changed behaviours covered by tests?
-   - Are there unsafe casts, `any` types, or unchecked assumptions?
-   - Does the change introduce injection vulnerabilities, credential leaks, or other security issues?
+**Forbidden:** aesthetic-only edits, renames for taste, comment churn,
+re-ordering imports, formatting changes, splitting/joining lines, adding
+abstractions "for future use".
 
-4. **Maintain balance**: Avoid over-simplification that could:
-   - Reduce code clarity or maintainability
-   - Create overly clever solutions that are hard to understand
-   - Combine too many concerns into single functions or components
-   - Remove helpful abstractions that improve code organization
-   - Make the code harder to debug or extend
+If the diff is already clean by this bar — do nothing and emit COMPLETE.
+The implementer's commit stands as-is.
 
-5. **Apply project standards**: Follow the coding standards defined in @.sandcastle/CODING_STANDARDS.md
+## Error cases
 
-6. **Preserve functionality**: Never change what the code does - only how it does it. All original features, outputs, and behaviors must remain intact.
+- **Empty diff** (`git diff {{SOURCE_BRANCH}}...{{BRANCH}}` is empty) →
+  emit COMPLETE with `<pr-title>` based on the latest commit message.
+- **Gates fail on entry** (typecheck/lint already red before your edits) →
+  do not edit. Emit BLOCKED with the failing output.
+- **Gates fail after your edits** → revert your changes (`git reset --hard`
+  to the implementer's commit), then emit COMPLETE on the original. Do not
+  ship a red build.
 
-# EXECUTION
+## Workflow
 
-If you find improvements to make:
+1. Read the diff and commits above.
+2. Check correctness, edge cases, security.
+3. Apply the **When to commit** bar. If nothing qualifies, skip to step 6.
+4. Make the change. Single commit per shared protocol.
+5. Run gates (`pnpm typecheck && pnpm lint`). Revert if red.
+6. Output:
 
-1. Make the changes directly on this branch
-2. Run `pnpm typecheck && pnpm lint` to ensure nothing is broken
-3. Commit describing the refinements (prefix the message with `sandcastle:`) — **never use `--no-verify`**; fix hook failures at the root cause or stop with `<promise>BLOCKED</promise>`
+   ```
+   <pr-title>agent:type(scope): short description</pr-title>
 
-If the code is already clean and well-structured, do nothing.
+   <promise>COMPLETE</promise>
+   ```
 
-Before signalling completion, add the `awaiting-review` label to the issue so future implementer runs skip it. Extract the issue number from the branch name or commits on the branch:
+   Base `<pr-title>` on the combined intent of the branch. Do not add the
+   `awaiting-review` label — the orchestrator handles it.
 
-```
-gh issue edit N --add-label awaiting-review
-```
+---
 
-Once complete, output a title and the completion signal:
-
-```
-<pr-title>agent:type(scope): short description</pr-title>
-
-<promise>COMPLETE</promise>
-```
-
-`<pr-title>` must follow the format `agent:type(scope): description`. Use the type that best describes the overall change: `feat`, `fix`, `chore`, `docs`, `test`, `refactor`, or `perf`. Scope should be the component or area changed (e.g. `button`, `badge`, `docs`). Base it on the diff and commit messages above. Keep the description under 60 characters.
-
-If you cannot review safely (broken gates you can't fix, change scope unclear), output a `<blocked-reason>...</blocked-reason>` block followed by `<promise>BLOCKED</promise>`.
+{{SHARED}}

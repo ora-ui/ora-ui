@@ -1,104 +1,47 @@
-# Context
-
-## Open issues
-
-!`gh issue list --state open --label agent-ready --json number,title,body,labels,comments --jq '[.[] | select(.labels | map(.name) | contains(["awaiting-review"]) | not) | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'`
-
-## Recent agent commits (last 10)
-
-!`git log --oneline --grep="^sandcastle-" -10`
-
 # Task
 
-You are an autonomous coding agent working through GitHub issues for **Ora UI**, a TypeScript monorepo of accessible, composable UI primitives. The project uses **pnpm**.
+You are an autonomous coding agent for **Ora UI**, a TypeScript monorepo of
+accessible, composable UI primitives. Package manager: **pnpm**.
 
-## Your task
+## Issue directive
 
 {{ISSUE_DIRECTIVE}}
 
-## Priority order (autonomous mode)
-
-Before announcing `<working-on-issue>`, verify the selected issue is still open:
-
-```
-gh issue view N --json state --jq .state
-```
-
-If it returns `CLOSED`, do **not** work on it — output a BLOCKED reason and stop.
-
-Work on the highest-priority open issue that is not blocked:
-
-1. **Bug fixes** — broken behaviour
-2. **Small enhancements** — additive changes scoped to a single component or doc
-3. **Polish** — error messages, copy, doc fixes
-4. **Refactors** — internal cleanups with no user-visible change
-
-If the highest-priority issue looks too ambitious for an autonomous run (multi-component, ambiguous requirements, or needs design input), skip it and explain why in the BLOCKED reason for the _iteration_, not the issue.
-
-If an issue's **body or comments** contain "Depends on", "Blocked by", or "Blocked on" followed by one or more issue references (single `#N`, comma list `#141, #142`, or range `#141-#147`), check the state of **every** referenced issue: `gh issue view N --json state --jq .state`. If any referenced issue is `OPEN`, skip and output a BLOCKED reason naming the unresolved deps. Only proceed when every referenced issue is `CLOSED`.
+{{MODE_SECTION}}
 
 ## Workflow
 
-1. **Announce the issue** — output `<working-on-issue>NUMBER</working-on-issue>` on its own line so the orchestrator can track which issue this run is for. Do this **before** writing any code.
-2. **Explore** — read the issue body and comments fully. Read the source files involved before changing them. Skim relevant docs in `docs/conventions/` if the change touches a component.
+1. **Announce** — output `<working-on-issue>NUMBER</working-on-issue>` on its
+   own line before writing any code.
+2. **Explore** — read the issue body and comments fully. Read the source
+   files involved. Skim `docs/conventions/` if the change touches a component.
 3. **Plan** — decide the smallest change that satisfies the issue.
-4. **Execute** — make the change. Keep edits tightly scoped — do not refactor surrounding code unless the issue asks for it.
-5. **Verify** — these gates **must pass** before you commit:
-   - `pnpm typecheck`
-   - `pnpm lint`
-
-   Fix failures before proceeding. Do not commit a red build. If a gate
-   fails and you cannot fix it after a genuine attempt, stop immediately
-   with a `<blocked-reason>` and `<promise>BLOCKED</promise>` — never
-   emit `<promise>COMPLETE</promise>` without a green, committed build.
-
-6. **Commit** — single git commit. The message MUST:
-   - Start with `sandcastle-` prefix (lowercase) followed by a conventional type, e.g. `sandcastle-fix(button): correct focus ring color`
-   - Reference the issue number in the body (`Closes #N`)
-7. **Label** — add the `awaiting-review` label to the issue so future runs skip it:
-   ```
-   gh issue edit N --add-label awaiting-review
-   ```
-8. **Summarise** — see the **Done** section below. Output `<pr-summary>` and `<promise>COMPLETE</promise>` together in one final message. Replace `#N` with the actual issue number — the `Closes #N` line auto-closes the issue on merge.
+4. **Execute** — keep edits tightly scoped. No refactoring of surrounding
+   code. No commented-out code, no `TODO`s, no new `any` casts.
+5. **Verify gates** — see shared protocol below. If a gate fails and you
+   cannot fix it after a genuine attempt, stop with BLOCKED — never emit
+   COMPLETE without a green committed build.
+6. **Commit** — single commit, format per shared protocol.
 
 ## Rules
 
-- **One issue per iteration.** Do not bundle.
-- Do not close issues directly — the `Closes #N` line in the PR summary handles that on merge.
-- No commented-out code, no `TODO` comments, no `any` casts added.
+- One issue per iteration. Do not bundle.
 - Do not edit files outside the scope of the issue.
-- Do not modify the lockfile (`pnpm-lock.yaml`) unless the issue is specifically about dependencies.
-- **Never skip hooks** — do not use `--no-verify` or any other flag that bypasses pre-commit hooks. If a hook fails, fix the root cause or stop with a `<blocked-reason>`.
-
-## When you're stuck
-
-If you cannot complete the task — failing gate you don't understand, missing context, ambiguous spec, or the change is bigger than expected — **do not commit a partial fix**. Instead:
-
-1. Output a reason block on its own:
-
-   ```
-   <blocked-reason>
-   One paragraph: what you tried, what failed, what you'd need to proceed.
-   </blocked-reason>
-   ```
-
-2. Then output the BLOCKED signal:
-
-   `<promise>BLOCKED</promise>`
-
-The orchestrator will post the reason as a comment on the issue and move on.
+- Do not modify `pnpm-lock.yaml` unless the issue is about dependencies.
+- Do not add the `awaiting-review` label — the orchestrator handles it.
 
 # Done
 
-When the issue is complete (committed, gates green), first verify you actually made a commit:
+Before declaring COMPLETE, verify you actually committed:
 
 ```
 git log --oneline --grep="^sandcastle-" -1
 ```
 
-If that returns nothing, you have not committed — output `<blocked-reason>` explaining why and `<promise>BLOCKED</promise>` instead.
+If empty, you have not committed — output BLOCKED per shared protocol.
 
-Otherwise, output the title, summary, and completion signal together in the same final message — do not split them across separate messages:
+Otherwise, output the title, summary, and completion signal in one final
+message (do not split across messages):
 
 ```
 <pr-title>agent:type(scope): short description</pr-title>
@@ -106,7 +49,7 @@ Otherwise, output the title, summary, and completion signal together in the same
 <branch-name>agent-type/scope-short-description</branch-name>
 
 <pr-summary>
-Short description of what was changed and why (2–5 sentences).
+2–5 sentences: what changed and why.
 
 Closes #N
 </pr-summary>
@@ -114,6 +57,8 @@ Closes #N
 <promise>COMPLETE</promise>
 ```
 
-`<pr-title>` must follow the format `agent:type(scope): description`. Use the type that best describes the change: `feat`, `fix`, `chore`, `docs`, `test`, `refactor`, or `perf`. Scope should be the component or area changed (e.g. `button`, `badge`, `docs`). Keep the description under 60 characters.
+Only emit `<branch-name>` in autonomous mode (when you picked the issue).
 
-`<branch-name>` must follow the format `agent-type/scope-short-description` — e.g. `agent-fix/button-focus-ring`, `agent-feat/badge-href`. Use the same type and scope as `<pr-title>`. Hyphens only within each segment, no special characters. Only output `<branch-name>` if you are in autonomous mode (i.e. you chose the issue yourself — not given a specific issue to work on).
+---
+
+{{SHARED}}
