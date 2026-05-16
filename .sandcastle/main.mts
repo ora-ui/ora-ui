@@ -11,7 +11,7 @@ import type { AgentProvider } from '@ai-hero/sandcastle';
 import { docker } from '@ai-hero/sandcastle/sandboxes/docker';
 // import { createDashboard } from 'sandcastle-gui';
 import { execSync } from 'child_process';
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -60,9 +60,10 @@ const MAX_ITERATIONS = targetIssue ? 1 : 10;
 
 if (!targetIssue && !reviewOnly) {
   const openIssueCount = parseInt(
-    execSync('gh issue list --state open --label agent-ready --json number --jq length', {
-      encoding: 'utf8',
-    }).trim(),
+    execSync(
+      `gh issue list --state open --label agent-ready --json number,labels --jq '[.[] | select(.labels | map(.name) | contains(["awaiting-review"]) | not)] | length'`,
+      { encoding: 'utf8' }
+    ).trim(),
     10
   );
 
@@ -71,6 +72,13 @@ if (!targetIssue && !reviewOnly) {
     process.exit(0);
   }
 }
+
+// ---------------------------------------------------------------------------
+// Shared prompt fragments
+// ---------------------------------------------------------------------------
+
+const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
+const AUTONOMOUS_SECTION = readFileSync('./.sandcastle/autonomous-section.md', 'utf8');
 
 // ---------------------------------------------------------------------------
 // Agent resolution
@@ -193,7 +201,7 @@ if (reviewOnly) {
     maxIterations: 5,
     agent: reviewAgent,
     promptFile: './.sandcastle/review-prompt.md',
-    promptArgs: { BRANCH: branch },
+    promptArgs: { BRANCH: branch, SOURCE_BRANCH: baseBranch, SHARED },
     logging: {
       type: 'file',
       path: '.sandcastle/logs/reviewer.log',
@@ -232,9 +240,10 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   // Autonomous mode: re-check for remaining agent-ready issues each iteration.
   if (!targetIssue && !reviewOnly) {
     const remaining = parseInt(
-      execSync('gh issue list --state open --label agent-ready --json number --jq length', {
-        encoding: 'utf8',
-      }).trim(),
+      execSync(
+        `gh issue list --state open --label agent-ready --json number,labels --jq '[.[] | select(.labels | map(.name) | contains(["awaiting-review"]) | not)] | length'`,
+        { encoding: 'utf8' }
+      ).trim(),
       10
     );
     if (remaining === 0) {
@@ -249,17 +258,15 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   if (targetIssue) {
     // Targeted mode: branch and issue were provided by the caller.
     implementBranch = targetBranch ?? `agent-wip/issue-${targetIssue}`;
-    issueDirective = `**Work on issue #${targetIssue} specifically.** Do not pick a different issue.`;
+    issueDirective = `Work on issue #${targetIssue}. Do not pick a different issue.`;
   } else {
     // Autonomous mode: timestamp-based branch name, agent picks the issue.
     const timestamp = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '');
     implementBranch = `agent-wip/implementer-${timestamp}`;
-    issueDirective = [
-      'Work on the highest-priority open issue that is not blocked (see priority order below).',
-      'You MUST only pick an issue from the "Open issues" list above — every issue in that list carries the `agent-ready` label.',
-      'Do NOT work on any issue that does not appear in that list, regardless of its number or content.',
-    ].join(' ');
+    issueDirective =
+      'Pick the highest-priority issue from the **Open issues** list per the priority order in the autonomous section below.';
   }
+  const modeSection = targetIssue ? '' : AUTONOMOUS_SECTION;
 
   // -------------------------------------------------------------------------
   // Phase 1: Implement
@@ -273,7 +280,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     maxIterations: 15,
     agent: implAgent,
     promptFile: './.sandcastle/implement-prompt.md',
-    promptArgs: { ISSUE_DIRECTIVE: issueDirective },
+    promptArgs: { ISSUE_DIRECTIVE: issueDirective, MODE_SECTION: modeSection, SHARED },
     logging: {
       type: 'file',
       path: `.sandcastle/logs/${implementBranch.replace(/\//g, '-')}.log`,
@@ -362,7 +369,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       maxIterations: 5,
       agent: reviewAgent,
       promptFile: './.sandcastle/review-prompt.md',
-      promptArgs: { BRANCH: branch },
+      promptArgs: { BRANCH: branch, SOURCE_BRANCH: baseBranch, SHARED },
       logging: {
         type: 'file',
         path: `.sandcastle/logs/${implementBranch.replace(/\//g, '-')}-review.log`,
@@ -406,7 +413,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   // Label the issue awaiting-review so autonomous loops skip it until merged/closed.
   // Parse from Closes #N in the pr-summary (final message) — early tags may be lost with some providers.
   const closesMatch = prBody.match(/Closes\s+#(\d+)/i);
-  const issueNumber = closesMatch?.[1];
+  const issueNumber = closesMatch?.[1] ?? (targetIssue ? String(targetIssue) : null);
   if (issueNumber) {
     try {
       execSync(`gh issue edit ${issueNumber} --add-label awaiting-review`, { stdio: 'inherit' });
