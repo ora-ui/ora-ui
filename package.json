@@ -13,7 +13,7 @@
     "release": "pnpm changeset publish",
     "prepare": "lefthook install",
     "sandcastle": "npx tsx --env-file=.sandcastle/.env .sandcastle/main.mts",
-    "sandcastle:clean": "git worktree list --porcelain | grep -E 'worktree .+\\.sandcastle' | sed 's/worktree //' | xargs -I{} git worktree remove --force {} 2>/dev/null; git worktree prune; git branch | grep -E 'agent-|sandcastle/implementer/' | xargs git branch -D"
+    "sandcastle:clean": "git worktree list --porcelain | grep -E 'worktree .+\\.sandcastle' | sed 's/worktree //' | xargs -I{} git worktree remove --force {} 2>/dev/null; git worktree prune; git branch | grep -E 'agent-' | xargs git branch -D"
   },
   "devDependencies": {
     "@ai-hero/sandcastle": "^0.5.8",
