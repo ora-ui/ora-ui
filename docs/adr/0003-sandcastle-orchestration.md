@@ -132,11 +132,20 @@ At cap (default: 2 reviews), reviewer stops commenting and adds
 Two workflows:
 
 - `sandcastle-v2-impl.yml` — fires on `on: schedule:` (twice daily sweep)
-  - `on: issues.labeled` for `agent-ready`. Scans for issues needing fresh
-    impl and PRs with `agent-impl-todo`.
+  only. Scans for issues needing fresh impl and PRs with `agent-impl-todo`.
 - `sandcastle-v2-review.yml` — fires on `on: schedule:` (twice daily,
   offset) + `on: pull_request.synchronize` for draft PRs with
   `agent-review-pending`.
+
+`on: issues.labeled` was considered for `sandcastle-v2-impl.yml` but rejected.
+Issues are frequently created in batches (e.g. from a `to-issues` run against
+a PRD), which would fire N simultaneous orchestrator invocations — one per
+label event. Even with a concurrency group, the queued runs would re-process
+an already-handled backlog. The orchestrator's full work-list scan on every
+invocation makes scheduled sweeps the natural trigger; event firing only adds
+value when sub-minute latency matters, which pre-alpha does not require.
+`on: pull_request.synchronize` is kept on the review workflow because PR
+pushes are 1:1 events, not batch.
 
 Each workflow runs the orchestrator script (`main.v2.mts`), which:
 
