@@ -19,9 +19,9 @@ const checkboxVariants = cva(
     variants: {
       variant: {
         solid:
-          'border-line-ui bg-transparent text-ui-label data-checked:border-none data-checked:text-on-fill data-indeterminate:border-none data-indeterminate:text-on-fill',
+          'border-gray-ring bg-gray-ui text-ui-label data-checked:border-none data-checked:bg-fill data-checked:text-on-fill',
         surface:
-          'border-line-ui text-ui-label data-checked:text-secondary data-checked:data-[theme=gray]:text-primary data-indeterminate:text-secondary data-indeterminate:data-[theme="gray]:text-primary',
+          'border-gray-ring bg-gray-ui text-ui-label data-checked:text-secondary data-checked:data-[theme=gray]:text-primary data-indeterminate:text-secondary data-indeterminate:data-[theme="gray]:text-primary',
       },
       theme: {
         gray: '',
@@ -58,7 +58,7 @@ function Checkbox({
       className={cn(
         checkboxVariants({ variant: resolvedVariant, theme: resolvedTheme }),
         'data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
+        'focus-visible:outline-2 data-[variant=solid]:focus-visible:outline-offset-2 focus-visible:outline-focus',
         resolvedVariant === 'solid' &&
           'data-checked:focus-visible:outline-focus-fill data-indeterminate:focus-visible:outline-focus-fill',
         className
