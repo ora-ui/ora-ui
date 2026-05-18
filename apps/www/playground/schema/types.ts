@@ -6,15 +6,40 @@ export type VariantSpec = {
   default: string;
 };
 
+export type InputSpec =
+  | {
+      type: 'string';
+      label?: string;
+      default: string;
+      visibleWhen?: (inputs: Record<string, unknown>) => boolean;
+    }
+  | {
+      type: 'boolean';
+      label?: string;
+      default: boolean;
+      visibleWhen?: (inputs: Record<string, unknown>) => boolean;
+    }
+  | {
+      type: 'select';
+      values: readonly string[];
+      label?: string;
+      default: string;
+      visibleWhen?: (inputs: Record<string, unknown>) => boolean;
+    };
+
+export type ContentSpec = Record<string, InputSpec>;
+
 export type EntrySchema = {
   component: string;
   name: string;
   variants: Record<string, VariantSpec>;
+  content?: ContentSpec;
   render: (state: EntryState) => ReactNode;
 };
 
 export type EntryState = {
   variants: Record<string, string>;
+  inputs: Record<string, unknown>;
 };
 
 export function defaultState(schema: EntrySchema): EntryState {
@@ -22,5 +47,11 @@ export function defaultState(schema: EntrySchema): EntryState {
   for (const [key, spec] of Object.entries(schema.variants)) {
     variants[key] = spec.default;
   }
-  return { variants };
+  const inputs: Record<string, unknown> = {};
+  if (schema.content) {
+    for (const [key, spec] of Object.entries(schema.content)) {
+      inputs[key] = spec.default;
+    }
+  }
+  return { variants, inputs };
 }
