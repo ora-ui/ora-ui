@@ -46,6 +46,12 @@ PR titles follow conventional commit format: `agent:type(scope): short descripti
 
 The PR body is taken from the `<pr-summary>` block emitted by the implementer at the end of its run. If no such block is present, a generic fallback message is used instead.
 
+## Bot identity
+
+All sandcastle commits, PR comments, and reviews are authored by the dedicated bot user **`ora-gh-bot`**. Downstream code (e.g. the v2 orchestrator's rounds-counting layer) filters reviews by `user.login == "ora-gh-bot"` to distinguish agent reviews from human ones.
+
+The bot's PAT is provided to sandcastle via the `GH_TOKEN` env var (local: `.sandcastle/.env`; CI: repo secret `SANDCASTLE_BOT_TOKEN` mapped to `GH_TOKEN`).
+
 ## Rules for agents
 
 - Only work on issues labelled `agent-ready`
