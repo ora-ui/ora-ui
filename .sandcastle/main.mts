@@ -204,7 +204,7 @@ if (reviewOnly) {
     promptArgs: { BRANCH: branch, SHARED },
     logging: {
       type: 'file',
-      path: '.sandcastle/logs/reviewer.log',
+      path: `.sandcastle/logs/${branch.replace(/\//g, '-')}-review.log`,
       // onAgentStreamEvent: dashboard.collector('reviewer'),
     },
   });
