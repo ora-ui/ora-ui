@@ -201,7 +201,7 @@ if (reviewOnly) {
     maxIterations: 5,
     agent: reviewAgent,
     promptFile: './.sandcastle/review-prompt.md',
-    promptArgs: { BRANCH: branch, SOURCE_BRANCH: baseBranch, SHARED },
+    promptArgs: { BRANCH: branch, SHARED },
     logging: {
       type: 'file',
       path: '.sandcastle/logs/reviewer.log',
@@ -369,7 +369,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       maxIterations: 5,
       agent: reviewAgent,
       promptFile: './.sandcastle/review-prompt.md',
-      promptArgs: { BRANCH: branch, SOURCE_BRANCH: baseBranch, SHARED },
+      promptArgs: { BRANCH: branch, SHARED },
       logging: {
         type: 'file',
         path: `.sandcastle/logs/${implementBranch.replace(/\//g, '-')}-review.log`,
