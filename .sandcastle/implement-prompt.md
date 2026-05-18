@@ -18,9 +18,12 @@ accessible, composable UI primitives. Package manager: **pnpm**.
 3. **Plan** — decide the smallest change that satisfies the issue.
 4. **Execute** — keep edits tightly scoped. No refactoring of surrounding
    code. No commented-out code, no `TODO`s, no new `any` casts.
+   Stay on the branch you started on — see shared protocol for the
+   forbidden git commands. Violating this strands your work.
 5. **Verify gates** — see shared protocol below. If a gate fails and you
    cannot fix it after a genuine attempt, stop with BLOCKED — never emit
-   COMPLETE without a green committed build.
+   COMPLETE without a green committed build. Do not rationalize a failing
+   gate as "environment-related" — emit BLOCKED with the failing output.
 6. **Commit** — single commit, format per shared protocol.
 
 ## Rules
@@ -32,13 +35,16 @@ accessible, composable UI primitives. Package manager: **pnpm**.
 
 # Done
 
-Before declaring COMPLETE, verify you actually committed:
+Before declaring COMPLETE, verify both:
 
 ```
-git log --oneline --grep="^sandcastle-" -1
+git branch --show-current   # must equal the branch you started on
+git log --oneline --grep="^sandcastle-" -1   # must show your commit
 ```
 
-If empty, you have not committed — output BLOCKED per shared protocol.
+If you are on a different branch, or the log is empty, you have not
+successfully landed work on the expected ref — output BLOCKED per shared
+protocol with the failing output included.
 
 Otherwise, output the title, summary, and completion signal in one final
 message (do not split across messages):

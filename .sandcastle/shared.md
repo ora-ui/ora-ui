@@ -1,5 +1,19 @@
 # Shared protocol
 
+## Branch discipline
+
+The branch you start on is the only branch you may touch. Forbidden commands:
+
+- `git checkout -b ...`
+- `git switch -c ...`
+- `git branch <new>`
+- `git branch -m ...`
+- `git worktree add ...`
+
+If you believe a different branch is needed, emit BLOCKED with the reason —
+do not act on it. Violation here strands work on a branch the orchestrator
+cannot find and produces silent zero-commit runs.
+
 ## Gates
 
 Before any commit, both must pass:
@@ -8,6 +22,11 @@ Before any commit, both must pass:
 - `pnpm lint`
 
 Never use `--no-verify` or any flag that skips hooks. Fix root causes.
+
+A gate failure you cannot resolve → emit BLOCKED. Never rationalize a
+failing gate as "environment-related" or "unrelated to my changes" and
+proceed to COMPLETE. If gates are red, the only valid outcomes are: fix
+them, or BLOCKED.
 
 ## Commit format
 
