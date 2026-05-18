@@ -220,20 +220,36 @@ if (reviewOnly) {
 
   console.log('\nReview complete.');
 
+  const prTitleMatch = review.stdout.match(/<pr-title>([\s\S]*?)<\/pr-title>/);
+  const prTitle = prTitleMatch?.[1]?.trim() ?? `agent: ${branch.replace(/^agent-[^/]+\//, '')}`;
+
+  const prSummaryMatch = review.stdout.match(/<pr-summary>([\s\S]*?)<\/pr-summary>/);
+  const prBody =
+    prSummaryMatch?.[1]?.trim() ??
+    'Automated implementation by Sandcastle. Please review before merging.';
+
   const reviewBodyFile = join(tmpdir(), `sandcastle-pr-${Date.now()}.txt`);
-  writeFileSync(
-    reviewBodyFile,
-    'Automated implementation by Sandcastle. Please review before merging.',
-    'utf8'
-  );
+  writeFileSync(reviewBodyFile, prBody, 'utf8');
 
   execSync(`git push origin ${branch}`, { stdio: 'inherit' });
   execSync(
-    `gh pr create --head ${branch} --base ${baseBranch} --draft --title "sandcastle: ${branch}" --body-file ${JSON.stringify(reviewBodyFile)}`,
+    `gh pr create --head ${branch} --base ${baseBranch} --draft --title ${JSON.stringify(prTitle)} --body-file ${JSON.stringify(reviewBodyFile)}`,
     { stdio: 'inherit' }
   );
 
   console.log(`\nDraft PR opened for branch: ${branch}`);
+
+  const closesMatch = prBody.match(/Closes\s+#(\d+)/i);
+  const issueNumber = closesMatch?.[1] ?? null;
+  if (issueNumber) {
+    try {
+      execSync(`gh issue edit ${issueNumber} --add-label awaiting-review`, { stdio: 'inherit' });
+      console.log(`Labelled issue #${issueNumber} as awaiting-review.`);
+    } catch {
+      console.warn(`Could not label issue #${issueNumber}.`);
+    }
+  }
+
   // await dashboard.close();
   process.exit(0);
 }
@@ -402,7 +418,9 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   const prTitleMatch = titleSource.match(/<pr-title>([\s\S]*?)<\/pr-title>/);
   const prTitle = prTitleMatch?.[1]?.trim() ?? `agent: ${branch.replace(/^agent-[^/]+\//, '')}`;
 
-  const prSummaryMatch = implement.stdout.match(/<pr-summary>([\s\S]*?)<\/pr-summary>/);
+  const prSummaryMatch =
+    implement.stdout.match(/<pr-summary>([\s\S]*?)<\/pr-summary>/) ??
+    reviewStdout.match(/<pr-summary>([\s\S]*?)<\/pr-summary>/);
   const prBody =
     prSummaryMatch?.[1]?.trim() ??
     'Automated implementation by Sandcastle. Please review before merging.';

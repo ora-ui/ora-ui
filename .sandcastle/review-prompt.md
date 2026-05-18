@@ -52,10 +52,18 @@ The implementer's commit stands as-is.
    ```
    <pr-title>agent:type(scope): short description</pr-title>
 
+   <pr-summary>
+   2–5 sentences: what changed and why, based on the branch diff and commits.
+
+   Closes #N
+   </pr-summary>
+
    <promise>COMPLETE</promise>
    ```
 
-   Base `<pr-title>` on the combined intent of the branch. Do not add the
+   Base `<pr-title>` and `<pr-summary>` on the combined intent of the branch.
+   Derive `Closes #N` from the issue number referenced in the branch's commit
+   messages; omit the line if none is referenced. Do not add the
    `awaiting-review` label — the orchestrator handles it.
 
 ---
