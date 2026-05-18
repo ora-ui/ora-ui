@@ -3,9 +3,16 @@ name: Strip agent labels on close
 on:
   issues:
     types: [closed]
+  pull_request:
+    types: [closed]
+
+permissions:
+  issues: write
+  pull-requests: write
 
 jobs:
-  strip-labels:
+  strip-issue-labels:
+    if: github.event_name == 'issues'
     runs-on: ubuntu-latest
     steps:
       - name: Remove agent-ready and awaiting-review labels
@@ -15,3 +22,15 @@ jobs:
           ISSUE: ${{ github.event.issue.number }}
         run: |
           gh issue edit "$ISSUE" --remove-label agent-ready --remove-label awaiting-review || true
+
+  strip-pr-labels:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove agent-review-pending, agent-impl-todo, and agent-approved
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          gh pr edit "$PR" --remove-label agent-review-pending --remove-label agent-impl-todo --remove-label agent-approved || true
