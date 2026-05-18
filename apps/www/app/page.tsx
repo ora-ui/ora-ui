@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useQueryState, parseAsString } from 'nuqs';
 import { SchemaRuntime } from '@/playground/schema/runtime';
 import { schemaRegistry } from '@/playground/schema/registry';
 import { cn } from '@/registry/lib/utils';
@@ -8,7 +8,10 @@ import { cn } from '@/registry/lib/utils';
 const INTRODUCTION_KEY = '__introduction__';
 
 export default function PlaygroundHome() {
-  const [selected, setSelected] = React.useState<string>(INTRODUCTION_KEY);
+  const [selected, setSelected] = useQueryState(
+    'c',
+    parseAsString.withDefault(INTRODUCTION_KEY).withOptions({ history: 'replace' })
+  );
   const schema = schemaRegistry.find((entry) => entry.component === selected);
 
   return (
