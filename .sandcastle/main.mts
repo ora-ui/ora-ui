@@ -131,6 +131,14 @@ const hooks = {
 
 const copyToWorktree = ['node_modules'];
 
+const BOT_EMAIL = '285688469+ora-gh-bot@users.noreply.github.com';
+const botGitEnv = {
+  GIT_AUTHOR_NAME: 'ora-gh-bot',
+  GIT_AUTHOR_EMAIL: BOT_EMAIL,
+  GIT_COMMITTER_NAME: 'ora-gh-bot',
+  GIT_COMMITTER_EMAIL: BOT_EMAIL,
+};
+
 // ---------------------------------------------------------------------------
 // Dashboard
 // ---------------------------------------------------------------------------
@@ -149,7 +157,7 @@ if (testPropagation) {
   const result = await sandcastle.run({
     hooks,
     copyToWorktree,
-    sandbox: docker(),
+    sandbox: docker({ env: botGitEnv }),
     branchStrategy: { type: 'branch', branch: testBranch, baseBranch },
     name: 'propagation-test',
     maxIterations: 1,
@@ -195,7 +203,7 @@ if (reviewOnly) {
   const review = await sandcastle.run({
     hooks,
     copyToWorktree,
-    sandbox: docker(),
+    sandbox: docker({ env: botGitEnv }),
     branchStrategy: { type: 'branch', branch },
     name: 'reviewer',
     maxIterations: 5,
@@ -274,7 +282,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   const implement = await sandcastle.run({
     hooks,
     copyToWorktree,
-    sandbox: docker(),
+    sandbox: docker({ env: botGitEnv }),
     branchStrategy: { type: 'branch', branch: implementBranch, baseBranch },
     name: 'implementer',
     maxIterations: 15,
@@ -363,7 +371,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     const review = await sandcastle.run({
       hooks,
       copyToWorktree,
-      sandbox: docker(),
+      sandbox: docker({ env: botGitEnv }),
       branchStrategy: { type: 'branch', branch },
       name: 'reviewer',
       maxIterations: 5,
