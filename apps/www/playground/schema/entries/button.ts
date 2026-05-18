@@ -11,11 +11,25 @@ export const buttonEntry: EntrySchema = {
       label: 'Variant',
       default: 'solid',
     },
+    size: {
+      values: ['sm', 'md', 'lg', 'icon', 'icon-sm', 'icon-lg'],
+      label: 'Size',
+      default: 'md',
+    },
+    theme: {
+      values: ['gray', 'accent', 'destructive'],
+      label: 'Theme',
+      default: 'gray',
+    },
   },
   render: ({ variants }) =>
     createElement(
       Button,
-      { variant: variants.variant as 'solid' | 'outline' | 'surface' | 'soft' | 'ghost' },
+      {
+        variant: variants.variant as 'solid' | 'outline' | 'surface' | 'soft' | 'ghost',
+        size: variants.size as 'sm' | 'md' | 'lg' | 'icon' | 'icon-sm' | 'icon-lg',
+        theme: variants.theme,
+      },
       'Button'
     ),
 };
