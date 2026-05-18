@@ -103,7 +103,7 @@ const resolveAgent = (envVar: string, fallback: string): AgentProvider => {
       });
     case 'claude-code':
       return sandcastle.claudeCode(model, {
-        env: { ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY! },
+        env: { CLAUDE_CODE_OAUTH_TOKEN: process.env.CLAUDE_CODE_OAUTH_TOKEN! },
       });
     case 'codex':
       return sandcastle.codex(model, {
