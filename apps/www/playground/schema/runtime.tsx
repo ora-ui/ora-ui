@@ -1,26 +1,66 @@
 'use client';
 
 import * as React from 'react';
+import { useQueryStates, parseAsString, parseAsBoolean } from 'nuqs';
 import type { EntrySchema, EntryState, InputSpec } from './types';
-import { defaultState } from './types';
+
+type SchemaParser =
+  | ReturnType<typeof parseAsString.withDefault>
+  | ReturnType<typeof parseAsBoolean.withDefault>;
 
 interface SchemaRuntimeProps {
   schema: EntrySchema;
 }
 
-export function SchemaRuntime({ schema }: SchemaRuntimeProps) {
-  const [state, setState] = React.useState<EntryState>(() => defaultState(schema));
+function buildSchemaParsers(schema: EntrySchema) {
+  const parsers: Record<string, SchemaParser> = {};
+  const prefix = `${schema.component}-`;
+  const variantKeys: string[] = [];
+  const inputKeys: string[] = [];
 
-  React.useEffect(() => {
-    setState(defaultState(schema));
-  }, [schema]);
+  for (const [key, spec] of Object.entries(schema.variants)) {
+    parsers[prefix + key] = parseAsString.withDefault(spec.default);
+    variantKeys.push(key);
+  }
+  if (schema.content) {
+    for (const [key, spec] of Object.entries(schema.content)) {
+      parsers[prefix + key] =
+        spec.type === 'boolean'
+          ? parseAsBoolean.withDefault(spec.default)
+          : parseAsString.withDefault(spec.default);
+      inputKeys.push(key);
+    }
+  }
+
+  return { parsers, prefix, variantKeys, inputKeys };
+}
+
+export function SchemaRuntime({ schema }: SchemaRuntimeProps) {
+  const { parsers, prefix, variantKeys, inputKeys } = React.useMemo(
+    () => buildSchemaParsers(schema),
+    [schema]
+  );
+
+  const [urlState, setUrlState] = useQueryStates(parsers, { history: 'replace' });
+
+  const state: EntryState = React.useMemo(() => {
+    const variants: Record<string, string> = {};
+    for (const key of variantKeys) {
+      variants[key] = urlState[prefix + key] as string;
+    }
+    const inputs: Record<string, unknown> = {};
+    for (const key of inputKeys) {
+      inputs[key] = urlState[prefix + key];
+    }
+    return { variants, inputs };
+  }, [urlState, variantKeys, inputKeys, prefix]);
 
   const setVariant = (key: string, value: string) => {
-    setState((prev) => ({ ...prev, variants: { ...prev.variants, [key]: value } }));
+    setUrlState({ [prefix + key]: value });
   };
 
   const setInput = (key: string, value: unknown) => {
-    setState((prev) => ({ ...prev, inputs: { ...prev.inputs, [key]: value } }));
+    setUrlState({ [prefix + key]: value as string | boolean });
   };
 
   const hasContent = schema.content && Object.keys(schema.content).length > 0;

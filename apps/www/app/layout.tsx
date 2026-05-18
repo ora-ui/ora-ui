@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import '@/registry/theme/globals.css';
 import './layout.css';
 // import './app.css';
@@ -27,17 +28,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn(geist.variable, geistMono.variable)} suppressHydrationWarning>
       <body className="flex min-h-screen flex-col font-sans antialiased">
-        <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
-          <div className="RootLayout">
-            <div className="RootLayoutContainer">
-              <div className="RootLayoutContent">
-                <Header />
-                <main>{children}</main>
+        <NuqsAdapter>
+          <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
+            <div className="RootLayout">
+              <div className="RootLayoutContainer">
+                <div className="RootLayoutContent">
+                  <Header />
+                  <main>{children}</main>
+                </div>
+                <span className="AppFooter"></span>
               </div>
-              <span className="AppFooter"></span>
             </div>
-          </div>
-        </ThemeProvider>
+          </ThemeProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );
