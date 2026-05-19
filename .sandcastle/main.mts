@@ -1,96 +1,921 @@
-// Sequential Reviewer — implement-then-review loop
+// Sandcastle v2 Orchestrator — implements the ADR-0003 decision table.
 //
-// Usage (targeted — recommended via skill):
-//   pnpm sandcastle --issue 121 --branch agent/fix-badge-link
+// Usage:
+//   pnpm sandcastle [--dry-run | --execute]
 //
-// Usage (autonomous — picks issues by priority):
-//   pnpm sandcastle
+// --dry-run (default; also active when env var SANDCASTLE_DRY_RUN=1):
+//   Computes intended actions, logs them, exits with code 0.
+//   No gh writes, no Docker spawns, no token spend.
+//   Structured JSON goes to .sandcastle/logs/v2-dry-run.json.
+//
+// --execute (Phase 1+):
+//   Acts on the decision table. For this slice only the fresh-implementer
+//   dispatch is wired: one qualifying issue per invocation. Reviewer and
+//   address-review dispatches print "not yet implemented" and skip.
+//
+// Decision logic (read-only):
+//   1. List agent-ready issues with no open PR → would spawn fresh implementer
+//   2. List draft PRs with agent-review-pending (authored by bot) → would spawn reviewer if last_commit > last_review
+//   3. List draft PRs with agent-impl-todo (authored by bot) → would spawn address-review implementer if last_review > last_commit
+//   4. Exclude anything with needs-human
+//   5. Count bot-authored reviews per PR; flag those at rounds-cap (default 2)
+//
+// ADR-0003 §4 (Loop prevention) encodes the timestamp gate:
+//   - Spawn reviewer only if last_commit > last_review
+//   - Spawn address-review only if last_review > last_commit AND review has unresolved comments
+//   - Neither newer → skip
 
 import * as sandcastle from '@ai-hero/sandcastle';
 import type { AgentProvider } from '@ai-hero/sandcastle';
 import { docker } from '@ai-hero/sandcastle/sandboxes/docker';
-// import { createDashboard } from 'sandcastle-gui';
-import { execSync } from 'child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { execSync } from 'node:child_process';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 
 // ---------------------------------------------------------------------------
-// Args
+// Config
 // ---------------------------------------------------------------------------
 
-const { values: args } = parseArgs({
+const BOT_LOGIN = process.env.SANDCASTLE_BOT_LOGIN ?? 'ora-gh-bot';
+const ROUNDS_CAP = parseInt(process.env.SANDCASTLE_ROUNDS_CAP ?? '3', 10);
+const BASE_BRANCH = process.env.SANDCASTLE_BASE_BRANCH ?? 'develop';
+
+// Canonical bot git env passed into every docker dispatch. All dispatchers
+// (fresh, reviewer, address-review) MUST reuse this verbatim so commits,
+// reviews, and label edits all attribute to the bot user. Do not inline a
+// per-dispatcher copy — drift here breaks the rounds-counter filter in
+// fetchDraftPRs which keys on user.login == BOT_LOGIN.
+const BOT_EMAIL =
+  process.env.SANDCASTLE_BOT_EMAIL ?? '285688469+ora-gh-bot@users.noreply.github.com';
+const BOT_NAME = process.env.SANDCASTLE_BOT_NAME ?? 'ora-gh-bot';
+const botGitEnv = {
+  GIT_AUTHOR_NAME: BOT_NAME,
+  GIT_AUTHOR_EMAIL: BOT_EMAIL,
+  GIT_COMMITTER_NAME: BOT_NAME,
+  GIT_COMMITTER_EMAIL: BOT_EMAIL,
+  GH_TOKEN: process.env.SANDCASTLE_BOT_TOKEN ?? process.env.GH_TOKEN ?? '',
+};
+
+// Token presence check shared by all execute-mode dispatchers. Fail closed
+// rather than spawning a Docker run that cannot push or open a PR.
+function assertBotToken(): void {
+  if (!process.env.SANDCASTLE_BOT_TOKEN && !process.env.GH_TOKEN) {
+    console.error(
+      'Refusing to dispatch: neither SANDCASTLE_BOT_TOKEN nor GH_TOKEN is set. ' +
+        'The agent cannot push or open a PR without one of these.'
+    );
+    process.exit(1);
+  }
+}
+
+const { values: cliArgs } = parseArgs({
   args: process.argv.slice(2),
   options: {
-    issue: { type: 'string', short: 'i' },
-    branch: { type: 'string', short: 'b' },
-    base: { type: 'string' },
-    'no-review': { type: 'boolean' },
-    'review-only': { type: 'boolean' },
-    'test-propagation': { type: 'boolean' },
+    'dry-run': { type: 'boolean' },
+    execute: { type: 'boolean' },
+    only: { type: 'string' },
   },
   strict: false,
 });
 
-const targetIssue = args.issue ? parseInt(args.issue as string, 10) : null;
-const targetBranch = args.branch as string | undefined;
-const baseBranch = (args.base as string | undefined) ?? 'develop';
-const skipReview = Boolean(args['no-review']);
-const reviewOnly = Boolean(args['review-only']);
-const testPropagation = Boolean(args['test-propagation']);
+type OnlyMode = 'impl' | 'review' | 'address-review' | undefined;
 
-// Targeted mode: verify issue is OPEN before doing any work.
-if (targetIssue) {
-  const state = execSync(`gh issue view ${targetIssue} --json state --jq .state`, {
-    encoding: 'utf8',
-  }).trim();
-  if (state !== 'OPEN') {
-    console.log(`Issue #${targetIssue} is ${state}. Exiting.`);
-    process.exit(0);
+const EXECUTE = Boolean(cliArgs.execute);
+const DRY_RUN = !EXECUTE && (process.env.SANDCASTLE_DRY_RUN === '1' || Boolean(cliArgs['dry-run']));
+const ONLY_MODE = cliArgs.only as OnlyMode;
+
+if (EXECUTE && cliArgs['dry-run']) {
+  console.error('Cannot pass --execute and --dry-run together.');
+  process.exit(1);
+}
+
+// Validate --only argument
+if (ONLY_MODE !== undefined && !['impl', 'review', 'address-review'].includes(ONLY_MODE)) {
+  console.error(`Invalid --only value "${ONLY_MODE}". Valid options: impl, review, address-review`);
+  process.exit(1);
+}
+
+// ---------------------------------------------------------------------------
+// GitHub helpers
+// ---------------------------------------------------------------------------
+
+interface Issue {
+  number: number;
+  title: string;
+  labels: string[];
+}
+
+interface PR {
+  number: number;
+  title: string;
+  body: string | null;
+  headRefName: string;
+  baseRefName: string;
+  state: 'OPEN' | 'CLOSED' | 'MERGED';
+  isDraft: boolean;
+  authorLogin: string;
+  labels: string[];
+  lastCommit: string | null;
+  lastReview: string | null;
+  reviewCount: number;
+  headSha: string;
+}
+
+// Extracts the issue number from a PR body's closing keyword
+// (`Closes #N`, `Fixes #N`, `Resolves #N`, case-insensitive). First match wins.
+function extractClosingIssue(body: string | null): number | null {
+  if (!body) return null;
+  const m = body.match(/\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b/i);
+  return m ? parseInt(m[1]!, 10) : null;
+}
+
+function ghJson<T>(query: string): T {
+  return JSON.parse(
+    execSync(`gh api ${query}`, {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        GITHUB_TOKEN: process.env.GH_TOKEN ?? process.env.SANDCASTLE_BOT_TOKEN,
+      },
+    })
+  ) as T;
+}
+
+function ghJsonSafe<T>(query: string, fallback: T): T {
+  try {
+    return ghJson<T>(query);
+  } catch {
+    return fallback;
   }
 }
 
-// When targeting a specific issue, run exactly one iteration.
-const MAX_ITERATIONS = targetIssue ? 1 : 10;
+// Apply label/draft state mutations after a review outcome. The reviewer prompt
+// only submits content (a comment-state review + inline comments); the orchestrator
+// owns all state transitions so failures here surface as orchestrator errors
+// rather than half-landed prompt-side gh sequences.
+//
+// Note: the bot cannot formally `--approve` its own PRs (GitHub blocks
+// self-approval). The agent-approved label is the canonical hand-off signal —
+// a human approves and merges from there. `reviewDecision` is not consulted.
+//
+// Idempotent: removing an already-absent label or adding an already-present one
+// is a no-op in gh.
+function applyReviewStateOps(
+  prNumber: number,
+  outcome: 'approved' | 'changes_requested' | 'escalate',
+  issueNumber: number | null
+): void {
+  const ghEnv = {
+    ...process.env,
+    GITHUB_TOKEN: process.env.GH_TOKEN ?? process.env.SANDCASTLE_BOT_TOKEN ?? '',
+  };
+  const gh = (cmd: string): void => {
+    execSync(cmd, { encoding: 'utf8', env: ghEnv, stdio: 'pipe' });
+  };
+
+  if (outcome === 'approved') {
+    gh(`gh pr edit ${prNumber} --remove-label agent-review-pending --add-label agent-approved`);
+    gh(`gh pr ready ${prNumber}`);
+    return;
+  }
+
+  if (outcome === 'changes_requested') {
+    gh(`gh pr edit ${prNumber} --remove-label agent-review-pending --add-label agent-impl-todo`);
+    return;
+  }
+
+  // outcome === 'escalate'
+  gh(`gh pr edit ${prNumber} --remove-label agent-review-pending --add-label needs-human`);
+  if (issueNumber !== null) {
+    gh(`gh issue edit ${issueNumber} --add-label needs-human`);
+  }
+}
+
+// Rounds-cap escalation: identical to applyReviewStateOps('escalate') except
+// the agent-* label currently on the PR might be either agent-review-pending
+// or agent-impl-todo, depending on which phase the PR was in when it hit the
+// cap. Strip whichever's there and add needs-human.
+function escalateToHuman(
+  prNumber: number,
+  stripLabel: 'agent-review-pending' | 'agent-impl-todo' | undefined,
+  issueNumber: number | null
+): void {
+  const ghEnv = {
+    ...process.env,
+    GITHUB_TOKEN: process.env.GH_TOKEN ?? process.env.SANDCASTLE_BOT_TOKEN ?? '',
+  };
+  const gh = (cmd: string): void => {
+    execSync(cmd, { encoding: 'utf8', env: ghEnv, stdio: 'pipe' });
+  };
+
+  const removeFlag = stripLabel ? `--remove-label ${stripLabel}` : '';
+  gh(`gh pr edit ${prNumber} ${removeFlag} --add-label needs-human`.replace(/\s+/g, ' '));
+  if (issueNumber !== null) {
+    gh(`gh issue edit ${issueNumber} --add-label needs-human`);
+  }
+}
+
+// Fetch open draft PRs authored by the bot.
+function fetchDraftPRs(): PR[] {
+  // gh api returns REST shape (draft, user.login, head.ref, ...). Project to the
+  // camelCase shape we use locally via --jq so the TS types match runtime values.
+  const raw = ghJson<
+    Array<{
+      number: number;
+      title: string;
+      body: string | null;
+      state: string;
+      isDraft: boolean;
+      headRefName: string;
+      baseRefName: string;
+      author: { login: string };
+      labels: Array<{ name: string }>;
+      headSha: string;
+    }>
+  >(
+    `repos/ora-ui/ora-ui/pulls --jq '[.[] | {number, title, body, state, isDraft: .draft, headRefName: .head.ref, baseRefName: .base.ref, author: {login: .user.login}, labels: [.labels[] | {name}], headSha: .head.sha}]'`
+  ).filter((pr) => pr.isDraft && pr.author.login === BOT_LOGIN);
+
+  return raw.map((pr) => {
+    const reviews = ghJsonSafe<
+      Array<{ user: { login: string }; submittedAt: string; state: string; body: string | null }>
+    >(
+      `repos/ora-ui/ora-ui/pulls/${pr.number}/reviews --jq '[.[] | {user: {login: .user.login}, submittedAt: .submitted_at, state, body}]'`,
+      []
+    );
+    // Filter to bot-authored reviews with a non-empty body. The line-anchored
+    // comments endpoint (POST /pulls/N/comments) auto-creates a Review record
+    // with empty body when no parent review ID is supplied — those are not
+    // distinct "rounds" of feedback and would otherwise double-count against
+    // ROUNDS_CAP. A real review submitted via `gh pr review --body=…` always
+    // carries the agent's summary text.
+    const botReviews = reviews.filter(
+      (r) => r.user.login === BOT_LOGIN && r.body !== null && r.body.trim() !== ''
+    );
+
+    const commits = ghJsonSafe<Array<{ committedDate: string }>>(
+      `repos/ora-ui/ora-ui/pulls/${pr.number}/commits --jq '[.[] | {committedDate: .commit.committer.date}]'`,
+      []
+    );
+    const lastCommit = commits.length > 0 ? commits[commits.length - 1]!.committedDate : null;
+
+    const lastReview =
+      botReviews.length > 0 ? botReviews[botReviews.length - 1]!.submittedAt : null;
+
+    return {
+      number: pr.number,
+      title: pr.title,
+      body: pr.body,
+      headRefName: pr.headRefName,
+      baseRefName: pr.baseRefName,
+      state: pr.state as PR['state'],
+      isDraft: pr.isDraft,
+      authorLogin: pr.author.login,
+      labels: pr.labels.map((l) => l.name),
+      lastCommit,
+      lastReview,
+      reviewCount: botReviews.length,
+      headSha: pr.headSha,
+    };
+  });
+}
+
+// Fetch agent-ready open issues.
+// All issues are returned by the API; we filter in JS for open issues and required labels.
+function fetchOpenIssues(): Issue[] {
+  const raw = ghJson<
+    Array<{ number: number; title: string; state: string; labels: Array<{ name: string }> }>
+  >(`repos/ora-ui/ora-ui/issues --jq '[.[] | select(.state == "open")]'`);
+
+  return raw
+    .filter((issue) => {
+      const labelNames = issue.labels.map((l) => l.name);
+      if (!labelNames.includes('agent-ready')) return false;
+      if (labelNames.includes('needs-human')) return false;
+      return true;
+    })
+    .map((issue) => ({
+      number: issue.number,
+      title: issue.title,
+      labels: issue.labels.map((l) => l.name),
+    }));
+}
+
+// Issue numbers referenced by any open PR via a closing keyword in the body
+// (`Closes #N`, `Fixes #N`, `Resolves #N`, case-insensitive). Used to keep
+// fresh-mode dispatch idempotent across sweeps: once a PR exists for an issue,
+// subsequent sweeps must skip it until the PR merges (auto-closing the issue)
+// or is itself closed.
+//
+// LOAD-BEARING: this is issue-level idempotency for Rule 1. It is orthogonal
+// to the PR-level timestamp gate in Rules 2/3 — do not collapse them. After
+// #194 removed the `agent-v2` opt-in filter — all `agent-ready` issues are now eligible.
+// input set widens significantly; this filter becomes the only thing
+// preventing duplicate fresh-mode dispatches per sweep.
+function fetchIssuesUnderOpenPR(): Set<number> {
+  const prs = ghJsonSafe<Array<{ state: string; body: string | null }>>(
+    `repos/ora-ui/ora-ui/pulls --jq '[.[] | select(.state == "open") | {state, body}]'`,
+    []
+  );
+  const closing = /\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b/gi;
+  const taken = new Set<number>();
+  for (const pr of prs) {
+    if (!pr.body) continue;
+    for (const m of pr.body.matchAll(closing)) {
+      taken.add(parseInt(m[1]!, 10));
+    }
+  }
+  return taken;
+}
 
 // ---------------------------------------------------------------------------
-// Autonomous mode: exit early if there are no agent-ready issues to work on
+// Decision engine
 // ---------------------------------------------------------------------------
 
-if (!targetIssue && !reviewOnly) {
-  const openIssueCount = parseInt(
-    execSync(
-      `gh issue list --state open --label agent-ready --json number,labels --jq '[.[] | select(.labels | map(.name) | contains(["awaiting-review"]) | not)] | length'`,
-      { encoding: 'utf8' }
-    ).trim(),
-    10
+interface Action {
+  kind:
+    | 'spawn-implementer-fresh'
+    | 'spawn-reviewer'
+    | 'spawn-address-review'
+    | 'escalate-to-human'
+    | 'skip';
+  target: string; // issue number or PR number
+  reason: string;
+  detail?: string;
+  // For escalate-to-human: linked issue number (from `Closes #N` in PR body),
+  // and which agent-* label to strip when adding needs-human. Only populated
+  // for that kind; ignored otherwise.
+  issueNumber?: number | null;
+  stripLabel?: 'agent-review-pending' | 'agent-impl-todo';
+}
+
+function computeDecisionTable(): { actions: Action[]; skipped: Action[] } {
+  const actions: Action[] = [];
+  const skipped: Action[] = [];
+
+  // --- Rule 1: agent-ready issues with no open PR → spawn implementer fresh ---
+  const issues = fetchOpenIssues();
+  const issuesUnderOpenPR = fetchIssuesUnderOpenPR();
+  for (const issue of issues) {
+    if (issue.labels.includes('needs-human')) {
+      skipped.push({ kind: 'skip', target: `#${issue.number}`, reason: 'has needs-human label' });
+      continue;
+    }
+    if (issuesUnderOpenPR.has(issue.number)) {
+      skipped.push({
+        kind: 'skip',
+        target: `#${issue.number}`,
+        reason: 'already has an open PR referencing it',
+        detail: issue.title,
+      });
+      continue;
+    }
+    actions.push({
+      kind: 'spawn-implementer-fresh',
+      target: `#${issue.number}`,
+      reason: 'agent-ready issue with no open PR',
+      detail: issue.title,
+    });
+  }
+
+  // --- Rules 2–5: draft PRs authored by bot ---
+  const prs = fetchDraftPRs();
+  for (const pr of prs) {
+    const labelSet = new Set(pr.labels);
+
+    if (labelSet.has('needs-human')) {
+      skipped.push({ kind: 'skip', target: `#${pr.number}`, reason: 'PR has needs-human label' });
+      continue;
+    }
+
+    // Rule 5: at rounds cap → escalate to human (add needs-human to PR + issue,
+    // strip the agent-* label so subsequent sweeps fall through the needs-human
+    // guard at the top of this loop). Idempotent: re-running adds labels that
+    // are already present; gh treats that as a no-op.
+    if (pr.reviewCount >= ROUNDS_CAP) {
+      const stripLabel = labelSet.has('agent-review-pending')
+        ? ('agent-review-pending' as const)
+        : labelSet.has('agent-impl-todo')
+          ? ('agent-impl-todo' as const)
+          : null;
+      actions.push({
+        kind: 'escalate-to-human',
+        target: `#${pr.number}`,
+        reason: `rounds cap reached (${pr.reviewCount}/${ROUNDS_CAP} bot reviews) — adding needs-human`,
+        detail: pr.title,
+        issueNumber: extractClosingIssue(pr.body),
+        stripLabel: stripLabel ?? undefined,
+      });
+      continue;
+    }
+
+    if (labelSet.has('agent-review-pending')) {
+      // Rule 2: spawn reviewer if last_commit > last_review
+      const shouldSpawn =
+        pr.lastCommit !== null && (pr.lastReview === null || pr.lastCommit > pr.lastReview);
+      if (shouldSpawn) {
+        actions.push({
+          kind: 'spawn-reviewer',
+          target: `#${pr.number}`,
+          reason: 'agent-review-pending label present, new commits since last review',
+          detail: pr.title,
+        });
+      } else {
+        skipped.push({
+          kind: 'skip',
+          target: `#${pr.number}`,
+          reason: 'agent-review-pending but no new commits since last review',
+          detail: pr.title,
+        });
+      }
+    } else if (labelSet.has('agent-impl-todo')) {
+      // Rule 3: spawn address-review implementer if last_review > last_commit
+      const shouldSpawn =
+        pr.lastReview !== null && (pr.lastCommit === null || pr.lastReview > pr.lastCommit);
+      if (shouldSpawn) {
+        actions.push({
+          kind: 'spawn-address-review',
+          target: `#${pr.number}`,
+          reason: 'agent-impl-todo label present, new review since last commit',
+          detail: pr.title,
+        });
+      } else {
+        skipped.push({
+          kind: 'skip',
+          target: `#${pr.number}`,
+          reason: 'agent-impl-todo but no new review since last commit',
+          detail: pr.title,
+        });
+      }
+    } else {
+      // PR by bot but none of the tracked labels — skip
+      skipped.push({
+        kind: 'skip',
+        target: `#${pr.number}`,
+        reason: 'bot-authored draft PR but no agent-review-pending or agent-impl-todo label',
+        detail: pr.title,
+      });
+    }
+  }
+
+  return { actions, skipped };
+}
+
+// ---------------------------------------------------------------------------
+// Output
+// ---------------------------------------------------------------------------
+
+function humanReadable(actions: Action[], skipped: Action[]): string {
+  const lines: string[] = [];
+  lines.push(`\n=== Sandcastle v2 ${EXECUTE ? 'Execute' : 'Dry-Run'} ===\n`);
+
+  if (actions.length === 0 && skipped.length === 0) {
+    lines.push('No items to process. Exiting.\n');
+    return lines.join('\n');
+  }
+
+  const spawnVerb = EXECUTE ? 'Spawning' : 'Would spawn';
+  const skipVerb = EXECUTE ? 'Skipping' : 'Would skip';
+
+  if (actions.length > 0) {
+    lines.push(`${spawnVerb}:\n`);
+    lines.push('  TARGET     TYPE                    REASON');
+    lines.push('  --------   ---------------------  ----------------------------------------');
+    for (const a of actions) {
+      lines.push(`  ${a.target.padEnd(9)} ${a.kind.replace(/-/g, ' ').padEnd(19)} ${a.reason}`);
+    }
+    lines.push('');
+  } else {
+    lines.push(`${spawnVerb}: none\n`);
+  }
+
+  if (skipped.length > 0) {
+    lines.push(`${skipVerb}:\n`);
+    lines.push('  TARGET     REASON');
+    lines.push('  --------   ----------------------------------------');
+    for (const s of skipped) {
+      lines.push(`  ${s.target.padEnd(9)} ${s.reason}`);
+    }
+    lines.push('');
+  } else {
+    lines.push(`${skipVerb}: none\n`);
+  }
+
+  lines.push('Bot user: ' + BOT_LOGIN);
+  lines.push('Rounds cap: ' + ROUNDS_CAP);
+  lines.push('');
+
+  return lines.join('\n');
+}
+
+// ---------------------------------------------------------------------------
+// Main
+// ---------------------------------------------------------------------------
+
+const { actions, skipped } = computeDecisionTable();
+
+console.log(humanReadable(actions, skipped));
+
+// Write structured JSON log for Phase 0 exit criteria assertions.
+try {
+  mkdirSync('.sandcastle/logs', { recursive: true });
+} catch {
+  // dir exists
+}
+const logPath = EXECUTE ? '.sandcastle/logs/v2-execute.json' : '.sandcastle/logs/v2-dry-run.json';
+writeFileSync(
+  logPath,
+  JSON.stringify(
+    {
+      timestamp: new Date().toISOString(),
+      botLogin: BOT_LOGIN,
+      roundsCap: ROUNDS_CAP,
+      actions,
+      skipped,
+      totalActions: actions.length,
+      totalSkipped: skipped.length,
+    },
+    null,
+    2
+  ),
+  'utf8'
+);
+console.log(`Structured log written to: ${logPath}`);
+
+if (!EXECUTE) {
+  // --dry-run / default path: no side effects beyond the JSON log written above.
+  process.exit(0);
+}
+
+// ---------------------------------------------------------------------------
+// Execute mode (ADR-0003 Phase 1)
+//
+// Dispatch ONE qualifying action per invocation:
+// - spawn-address-review: implementer responding to review feedback (highest priority)
+// - spawn-reviewer: PR reviewer
+// - spawn-implementer-fresh: fresh-mode implementer
+// ---------------------------------------------------------------------------
+
+await runExecute(actions);
+
+async function runExecute(actions: Action[]): Promise<void> {
+  // Escalations are cheap gh calls and idempotent — handle them all first
+  // (does not consume the per-invocation docker dispatch budget).
+  for (const a of actions.filter((x) => x.kind === 'escalate-to-human')) {
+    const prNumber = parseInt(a.target.replace(/^#/, ''), 10);
+    if (!Number.isFinite(prNumber)) {
+      console.error(`Could not parse PR number from escalate target "${a.target}".`);
+      continue;
+    }
+    try {
+      escalateToHuman(prNumber, a.stripLabel, a.issueNumber ?? null);
+      console.log(
+        `Escalated PR #${prNumber} to human (rounds cap). needs-human added to PR${
+          a.issueNumber ? ` and issue #${a.issueNumber}` : ''
+        }.`
+      );
+    } catch (err) {
+      console.error(`Escalation failed for PR #${prNumber}: ${(err as Error).message}`);
+      process.exit(1);
+    }
+  }
+
+  const freshTargets = actions.filter((a) => a.kind === 'spawn-implementer-fresh');
+  const reviewerTargets = actions.filter((a) => a.kind === 'spawn-reviewer');
+  const addressReviewTargets = actions.filter((a) => a.kind === 'spawn-address-review');
+
+  // Apply --only filter. 'impl' covers both fresh and address-review (implementer work).
+  // Escalations always run regardless of --only.
+  const filteredFresh = ONLY_MODE === undefined || ONLY_MODE === 'impl' ? freshTargets : [];
+  const filteredReviewer = ONLY_MODE === undefined || ONLY_MODE === 'review' ? reviewerTargets : [];
+  const filteredAddressReview =
+    ONLY_MODE === undefined || ONLY_MODE === 'address-review' || ONLY_MODE === 'impl'
+      ? addressReviewTargets
+      : [];
+
+  // Priority: address-review (responding to review feedback) > reviewer > fresh implementer
+  const addressReviewTarget = filteredAddressReview[0];
+  if (addressReviewTarget) {
+    const prNumber = parseInt(addressReviewTarget.target.replace(/^#/, ''), 10);
+    if (!Number.isFinite(prNumber)) {
+      console.error(`Could not parse PR number from target "${addressReviewTarget.target}".`);
+      process.exit(1);
+    }
+    await dispatchAddressReview(prNumber);
+    process.exit(0);
+  }
+
+  const reviewerTarget = filteredReviewer[0];
+  if (reviewerTarget) {
+    const prNumber = parseInt(reviewerTarget.target.replace(/^#/, ''), 10);
+    if (!Number.isFinite(prNumber)) {
+      console.error(`Could not parse PR number from target "${reviewerTarget.target}".`);
+      process.exit(1);
+    }
+    await dispatchReviewer(prNumber);
+    process.exit(0);
+  }
+
+  const target = filteredFresh[0];
+  if (!target) {
+    console.log('\nNo agent dispatches needed this invocation. Exiting.');
+    process.exit(0);
+  }
+
+  if (freshTargets.length > 1) {
+    console.log(
+      `Found ${freshTargets.length} fresh-implementer candidates; dispatching ${target.target} this invocation. Remaining will be picked up on the next sweep.`
+    );
+  }
+
+  const issueNumber = parseInt(target.target.replace(/^#/, ''), 10);
+  if (!Number.isFinite(issueNumber)) {
+    console.error(`Could not parse issue number from target "${target.target}".`);
+    process.exit(1);
+  }
+
+  await dispatchFreshImplementer(issueNumber);
+}
+
+async function dispatchReviewer(prNumber: number): Promise<void> {
+  console.log(`\n=== Dispatching reviewer for PR #${prNumber} ===\n`);
+
+  assertBotToken();
+
+  // Fetch PR metadata for the prompt (project REST shape → camelCase via jq).
+  const prData = ghJson<{
+    number: number;
+    title: string;
+    body: string | null;
+    headRefName: string;
+    baseRefName: string;
+    headSha: string;
+  }>(
+    `repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName: .head.ref, baseRefName: .base.ref, headSha: .head.sha}'`
   );
 
-  if (openIssueCount === 0) {
-    console.log('No agent-ready issues found. Exiting.');
-    process.exit(0);
+  // Fetch existing review comments for context
+  const existingReviews = ghJsonSafe<
+    Array<{ id: number; body: string | null; state: string; submittedAt: string }>
+  >(
+    `repos/ora-ui/ora-ui/pulls/${prNumber}/reviews --jq '[.[] | {id, body, state, submittedAt: .submitted_at}]'`,
+    []
+  );
+
+  const reviewThread =
+    existingReviews.length > 0
+      ? existingReviews
+          .map((r) => `[${r.state}] ${r.submittedAt}: ${r.body ?? '(no body)'}`)
+          .join('\n\n')
+      : 'No previous reviews.';
+
+  // Fetch existing inline comments (line-anchored) by the bot, grouped by file+line.
+  // REVIEW_COMMENTS is only populated with bot-authored comments — human inline
+  // comments are not part of the reviewer agent loop and would confuse it.
+  const existingComments = ghJsonSafe<
+    Array<{
+      path: string | null;
+      line: number | null;
+      body: string | null;
+      user: { login: string };
+      createdAt: string;
+    }>
+  >(
+    `repos/ora-ui/ora-ui/pulls/${prNumber}/comments --jq '[.[] | select(.user.login == "${BOT_LOGIN}") | {path: .path, line: .line, body: .body, user: {login: .user.login}, createdAt: .created_at}]'`,
+    []
+  );
+
+  // Group by path then line ascending; render as "path:line — body" lines.
+  const sortedComments = existingComments
+    .filter((c) => c.path !== null && c.line !== null)
+    .sort((a, b) => (a.path! > b.path! ? 1 : a.path! < b.path! ? -1 : a.line! - b.line!));
+
+  const reviewComments =
+    sortedComments.length > 0
+      ? sortedComments.map((c) => `**${c.path}:${c.line}** — ${c.body ?? ''}`).join('\n')
+      : 'No inline comments yet.';
+
+  const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
+  const reviewerAgent = resolveAgent('SANDCASTLE_REVIEWER_AGENT', 'pi:anthropic/claude-sonnet-4-6');
+
+  const branch = prData.headRefName;
+  const logPath = `.sandcastle/logs/${branch.replace(/\//g, '-')}-reviewer.log`;
+
+  const result = await sandcastle.run({
+    hooks: { sandbox: { onSandboxReady: [{ command: 'pnpm install' }] } },
+    copyToWorktree: ['node_modules'],
+    sandbox: docker({ env: botGitEnv }),
+    branchStrategy: { type: 'branch', branch, baseBranch: prData.baseRefName },
+    name: 'reviewer',
+    // Reviewer is a one-shot decision task — not an iterative build. Each
+    // sandcastle iteration is a fresh agent run with the original prompt args
+    // (REVIEW_THREAD/REVIEW_COMMENTS are snapshotted at dispatch), so retries
+    // don't see prior-iteration work and re-post the same review. If iter 1
+    // doesn't yield a promise tag, escalate instead of looping. See #234.
+    maxIterations: 1,
+    agent: reviewerAgent,
+    promptFile: './.sandcastle/review-prompt.md',
+    // SOURCE_BRANCH/TARGET_BRANCH are sandcastle built-ins injected from
+    // branchStrategy — passing them here errors with PromptError.
+    promptArgs: {
+      PR_NUMBER: String(prNumber),
+      BRANCH: branch,
+      PR_BODY: prData.body ?? '(no description)',
+      REVIEW_THREAD: reviewThread,
+      REVIEW_COMMENTS: reviewComments,
+      SHARED,
+    },
+    logging: { type: 'file', path: logPath },
+  });
+
+  // Search both result.stdout AND the on-disk log. result.stdout may be
+  // truncated, only-final-iteration, or otherwise lossy depending on provider;
+  // the log file is the canonical transcript. See #234 (promise-parse miss).
+  let logContents = '';
+  try {
+    logContents = readFileSync(logPath, 'utf8');
+  } catch {
+    // Log file missing is unexpected but non-fatal — fall back to stdout only.
   }
+  const transcript = result.stdout + '\n' + logContents;
+
+  // Whitespace-tolerant matching: agents occasionally emit the promise tag
+  // across multiple lines (e.g. `<promise>agent:review:\n  approve</promise>`)
+  // or with stray padding. \s* between every segment absorbs those without
+  // matching unrelated content.
+  const approveMatch = transcript.match(
+    /<promise>\s*agent\s*:\s*review\s*:\s*approve\s*<\/promise>/
+  );
+  const requestChangesMatch = transcript.match(
+    /<promise>\s*agent\s*:\s*review\s*:\s*request-changes\s*<\/promise>/
+  );
+  const escalateMatch = transcript.match(
+    /<promise>\s*agent\s*:\s*review\s*:\s*escalate\s*<\/promise>/
+  );
+
+  const issueNumber = extractClosingIssue(prData.body);
+
+  if (approveMatch || requestChangesMatch) {
+    const expected = approveMatch ? 'approved' : 'changes_requested';
+    try {
+      applyReviewStateOps(prNumber, expected, issueNumber);
+    } catch (err) {
+      console.error(
+        `\nState ops failed for PR #${prNumber} on ${expected} outcome: ${(err as Error).message}\n` +
+          `Manual recovery required. Log: ${logPath}`
+      );
+      process.exit(1);
+    }
+  } else if (escalateMatch) {
+    try {
+      applyReviewStateOps(prNumber, 'escalate', issueNumber);
+    } catch (err) {
+      console.error(
+        `\nState ops failed for PR #${prNumber} during escalate: ${(err as Error).message}\n` +
+          `Manual recovery required. Log: ${logPath}`
+      );
+      process.exit(1);
+    }
+  } else {
+    console.error(
+      `\nReviewer for PR #${prNumber} produced no recognizable promise (approve, request-changes, or escalate).\n` +
+        `Log: ${logPath}`
+    );
+    process.exit(1);
+  }
+
+  console.log(`\nReviewer completed for PR #${prNumber}.`);
+  console.log(`Log: ${logPath}`);
+  process.exit(0);
 }
 
 // ---------------------------------------------------------------------------
-// Shared prompt fragments
+// Address-review implementer
 // ---------------------------------------------------------------------------
 
-const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
-const AUTONOMOUS_SECTION = readFileSync('./.sandcastle/autonomous-section.md', 'utf8');
+async function dispatchAddressReview(prNumber: number): Promise<void> {
+  console.log(`\n=== Dispatching address-review implementer for PR #${prNumber} ===\n`);
 
-// ---------------------------------------------------------------------------
-// Agent resolution
-//
-// Configure via .sandcastle/.env:
-//   SANDCASTLE_IMPL_AGENT=pi:anthropic/claude-sonnet-4-6
-//   SANDCASTLE_REVIEW_AGENT=pi:anthropic/claude-sonnet-4-6
-//
-// Supported providers: pi, claude-code, codex, opencode
-// ---------------------------------------------------------------------------
+  assertBotToken();
 
-const resolveAgent = (envVar: string, fallback: string): AgentProvider => {
+  const prData = ghJson<{
+    number: number;
+    title: string;
+    body: string | null;
+    headRefName: string;
+    baseRefName: string;
+    headSha: string;
+  }>(
+    // The REST shape returns nested head.ref/base.ref/head.sha — project them
+    // to camelCase here so the TS types match runtime values. Same pattern as
+    // dispatchReviewer; this dispatcher was missing the projection so all
+    // three string fields came through as null and crashed at `.replace()`.
+    `repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName: .head.ref, baseRefName: .base.ref, headSha: .head.sha}'`
+  );
+
+  // Falls back to the PR number itself — not ideal but avoids leaving a blank.
+  const closingIssue = extractClosingIssue(prData.body);
+  const issueRef = closingIssue !== null ? String(closingIssue) : String(prNumber);
+
+  const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
+  const implAgent = resolveAgent('SANDCASTLE_IMPL_AGENT', 'pi:anthropic/claude-sonnet-4-6');
+
+  const branch = prData.headRefName;
+  const logPath = `.sandcastle/logs/${branch.replace(/\//g, '-')}-impl-address-review.log`;
+
+  const result = await sandcastle.run({
+    hooks: { sandbox: { onSandboxReady: [{ command: 'pnpm install' }] } },
+    copyToWorktree: ['node_modules'],
+    sandbox: docker({ env: botGitEnv }),
+    branchStrategy: { type: 'branch', branch, baseBranch: prData.baseRefName },
+    name: 'implementer-address-review',
+    maxIterations: 10,
+    agent: implAgent,
+    promptFile: './.sandcastle/implement-address-review.md',
+    promptArgs: { PR_NUMBER: String(prNumber), ISSUE_REF: issueRef, SHARED },
+    logging: { type: 'file', path: logPath },
+  });
+
+  // Handle BLOCKED — post the reason as a PR comment, no commits.
+  const blockedMatch = result.stdout.match(/<blocked-reason>([\s\S]*?)<\/blocked-reason>/);
+  if (blockedMatch) {
+    const reason = blockedMatch[1]!.trim();
+    console.log(`\nAddress-review reported BLOCKED on PR #${prNumber}:\n${reason}\n`);
+    try {
+      execSync(
+        `gh api repos/ora-ui/ora-ui/issues/${prNumber}/comments ` +
+          `--method POST --field body=${JSON.stringify(`**Sandcastle blocked:** ${reason}`)}`,
+        { stdio: 'inherit' }
+      );
+    } catch {
+      console.warn(`Could not post blocked comment to PR #${prNumber}.`);
+    }
+    process.exit(0);
+  }
+
+  console.log(`\nAddress-review completed for PR #${prNumber}.`);
+  console.log(`Log: ${logPath}`);
+  process.exit(0);
+}
+
+async function dispatchFreshImplementer(issueNumber: number): Promise<void> {
+  console.log(`\n=== Dispatching fresh implementer for issue #${issueNumber} ===\n`);
+
+  assertBotToken();
+
+  const timestamp = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '');
+  const branch = `agent-wip/issue-${issueNumber}-${timestamp}`;
+
+  const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
+  const implAgent = resolveAgent('SANDCASTLE_IMPL_AGENT', 'pi:anthropic/claude-sonnet-4-6');
+
+  const logPath = `.sandcastle/logs/${branch.replace(/\//g, '-')}-impl-fresh.log`;
+
+  const result = await sandcastle.run({
+    hooks: { sandbox: { onSandboxReady: [{ command: 'pnpm install' }] } },
+    copyToWorktree: ['node_modules'],
+    sandbox: docker({ env: botGitEnv }),
+    branchStrategy: { type: 'branch', branch, baseBranch: BASE_BRANCH },
+    name: 'implementer-fresh',
+    maxIterations: 15,
+    agent: implAgent,
+    promptFile: './.sandcastle/implement-fresh.md',
+    promptArgs: { ISSUE_NUMBER: String(issueNumber), SHARED },
+    logging: { type: 'file', path: logPath },
+  });
+
+  // Handle BLOCKED — post the reason as an issue comment, no PR.
+  const blockedMatch = result.stdout.match(/<blocked-reason>([\s\S]*?)<\/blocked-reason>/);
+  if (blockedMatch) {
+    const reason = blockedMatch[1]!.trim();
+    console.log(`\nImplementer reported BLOCKED on #${issueNumber}:\n${reason}\n`);
+    try {
+      execSync(
+        `gh issue comment ${issueNumber} --body ${JSON.stringify(`**Sandcastle blocked:** ${reason}`)}`,
+        { stdio: 'inherit' }
+      );
+    } catch {
+      console.warn(`Could not post blocked comment to issue #${issueNumber}.`);
+    }
+    process.exit(0);
+  }
+
+  // Parse PR number emitted by the agent.
+  const prMatch = result.stdout.match(/<pr-number>\s*(\d+)\s*<\/pr-number>/);
+  if (!prMatch) {
+    console.error(
+      `\nImplementer did not emit <pr-number> and was not BLOCKED. Manual recovery required.\nLog: ${logPath}`
+    );
+    process.exit(1);
+  }
+
+  const prNumber = parseInt(prMatch[1]!, 10);
+  console.log(`\nFresh implementer landed PR #${prNumber} for issue #${issueNumber}.`);
+  console.log(`Log: ${logPath}`);
+  process.exit(0);
+}
+
+function resolveAgent(envVar: string, fallback: string): AgentProvider {
   const value = process.env[envVar] ?? fallback;
   const colonIdx = value.indexOf(':');
   const provider = colonIdx === -1 ? value : value.slice(0, colonIdx);
@@ -116,414 +941,4 @@ const resolveAgent = (envVar: string, fallback: string): AgentProvider => {
         `Unknown agent provider "${provider}" in ${envVar}. Valid options: pi, claude-code, codex, opencode`
       );
   }
-};
-
-const implAgent = resolveAgent('SANDCASTLE_IMPL_AGENT', 'pi:anthropic/claude-sonnet-4-6');
-const reviewAgent = resolveAgent('SANDCASTLE_REVIEW_AGENT', 'pi:anthropic/claude-sonnet-4-6');
-
-// ---------------------------------------------------------------------------
-// Configuration
-// ---------------------------------------------------------------------------
-
-const hooks = {
-  sandbox: { onSandboxReady: [{ command: 'pnpm install' }] },
-};
-
-const copyToWorktree = ['node_modules'];
-
-const BOT_EMAIL = '285688469+ora-gh-bot@users.noreply.github.com';
-const botGitEnv = {
-  GIT_AUTHOR_NAME: 'ora-gh-bot',
-  GIT_AUTHOR_EMAIL: BOT_EMAIL,
-  GIT_COMMITTER_NAME: 'ora-gh-bot',
-  GIT_COMMITTER_EMAIL: BOT_EMAIL,
-};
-
-// ---------------------------------------------------------------------------
-// Dashboard
-// ---------------------------------------------------------------------------
-
-// const dashboard = await createDashboard({ port: 4800 });
-
-// ---------------------------------------------------------------------------
-// Test-propagation mode: check whether early vs final agent output tags
-// both appear in stdout (useful for diagnosing pi provider behaviour).
-// ---------------------------------------------------------------------------
-
-if (testPropagation) {
-  console.log('\nRunning propagation test...\n');
-
-  const testBranch = `agent-chore/test-propagation-${Date.now()}`;
-  const result = await sandcastle.run({
-    hooks,
-    copyToWorktree,
-    sandbox: docker({ env: botGitEnv }),
-    branchStrategy: { type: 'branch', branch: testBranch, baseBranch },
-    name: 'propagation-test',
-    maxIterations: 1,
-    agent: implAgent,
-    promptFile: './.sandcastle/test-propagation-prompt.md',
-    promptArgs: {},
-    logging: { type: 'file', path: '.sandcastle/logs/propagation-test.log' },
-  });
-
-  const earlyFound = /<test-early>propagation-check<\/test-early>/.test(result.stdout);
-  const finalFound = /<test-final>propagation-check<\/test-final>/.test(result.stdout);
-
-  console.log('\n--- Propagation test results ---');
-  console.log(`<test-early> captured: ${earlyFound ? '✓ yes' : '✗ no'}`);
-  console.log(`<test-final> captured: ${finalFound ? '✓ yes' : '✗ no'}`);
-
-  if (!earlyFound && finalFound) {
-    console.log('\nConclusion: provider only returns final message. Early tags will be lost.');
-  } else if (earlyFound && finalFound) {
-    console.log('\nConclusion: provider returns all messages. Early tags are safe.');
-  } else {
-    console.log(
-      '\nConclusion: unexpected result — check the log at .sandcastle/logs/propagation-test.log'
-    );
-  }
-
-  process.exit(0);
 }
-
-// ---------------------------------------------------------------------------
-// Review-only mode: skip implement, run reviewer + PR on an existing branch
-// ---------------------------------------------------------------------------
-
-if (reviewOnly) {
-  const branch = targetBranch;
-  if (!branch) {
-    console.error('--review-only requires --branch <branch>');
-    process.exit(1);
-  }
-
-  console.log(`\nReview-only mode on branch: ${branch}\n`);
-
-  const review = await sandcastle.run({
-    hooks,
-    copyToWorktree,
-    sandbox: docker({ env: botGitEnv }),
-    branchStrategy: { type: 'branch', branch },
-    name: 'reviewer',
-    maxIterations: 5,
-    agent: reviewAgent,
-    promptFile: './.sandcastle/review-prompt.md',
-    promptArgs: { BRANCH: branch, SHARED },
-    logging: {
-      type: 'file',
-      path: `.sandcastle/logs/${branch.replace(/\//g, '-')}-review.log`,
-      // onAgentStreamEvent: dashboard.collector('reviewer'),
-    },
-  });
-  // dashboard.recordResult('reviewer', review);
-
-  console.log('\nReview complete.');
-
-  const prTitleMatch = review.stdout.match(/<pr-title>([\s\S]*?)<\/pr-title>/);
-  const prTitle = prTitleMatch?.[1]?.trim() ?? `agent: ${branch.replace(/^agent-[^/]+\//, '')}`;
-
-  const prSummaryMatch = review.stdout.match(/<pr-summary>([\s\S]*?)<\/pr-summary>/);
-  const prBody =
-    prSummaryMatch?.[1]?.trim() ??
-    'Automated implementation by Sandcastle. Please review before merging.';
-
-  const reviewBodyFile = join(tmpdir(), `sandcastle-pr-${Date.now()}.txt`);
-  writeFileSync(reviewBodyFile, prBody, 'utf8');
-
-  execSync(`git push origin ${branch}`, { stdio: 'inherit' });
-  execSync(
-    `gh pr create --head ${branch} --base ${baseBranch} --draft --title ${JSON.stringify(prTitle)} --body-file ${JSON.stringify(reviewBodyFile)}`,
-    { stdio: 'inherit' }
-  );
-
-  console.log(`\nDraft PR opened for branch: ${branch}`);
-
-  const closesMatch = prBody.match(/Closes\s+#(\d+)/i);
-  const issueNumber = closesMatch?.[1] ?? null;
-  if (issueNumber) {
-    try {
-      execSync(`gh issue edit ${issueNumber} --add-label awaiting-review`, { stdio: 'inherit' });
-      console.log(`Labelled issue #${issueNumber} as awaiting-review.`);
-    } catch {
-      console.warn(`Could not label issue #${issueNumber}.`);
-    }
-  }
-
-  // await dashboard.close();
-  process.exit(0);
-}
-
-// ---------------------------------------------------------------------------
-// Main loop
-// ---------------------------------------------------------------------------
-
-for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
-  console.log(`\n=== Iteration ${iteration}/${MAX_ITERATIONS} ===\n`);
-
-  // Autonomous mode: re-check for remaining agent-ready issues each iteration.
-  if (!targetIssue && !reviewOnly) {
-    const remaining = parseInt(
-      execSync(
-        `gh issue list --state open --label agent-ready --json number,labels --jq '[.[] | select(.labels | map(.name) | contains(["awaiting-review"]) | not)] | length'`,
-        { encoding: 'utf8' }
-      ).trim(),
-      10
-    );
-    if (remaining === 0) {
-      console.log('No agent-ready issues remaining. Exiting.');
-      break;
-    }
-  }
-
-  let implementBranch: string;
-  let issueDirective: string;
-
-  if (targetIssue) {
-    // Targeted mode: branch and issue were provided by the caller.
-    implementBranch = targetBranch ?? `agent-wip/issue-${targetIssue}`;
-    issueDirective = `Work on issue #${targetIssue}. Do not pick a different issue.`;
-  } else {
-    // Autonomous mode: timestamp-based branch name, agent picks the issue.
-    const timestamp = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '');
-    implementBranch = `agent-wip/implementer-${timestamp}`;
-    issueDirective =
-      'Pick the highest-priority issue from the **Open issues** list per the priority order in the autonomous section below.';
-  }
-  const modeSection = targetIssue ? '' : AUTONOMOUS_SECTION;
-
-  // -------------------------------------------------------------------------
-  // Phase 1: Implement
-  // -------------------------------------------------------------------------
-  const implement = await sandcastle.run({
-    hooks,
-    copyToWorktree,
-    sandbox: docker({ env: botGitEnv }),
-    branchStrategy: { type: 'branch', branch: implementBranch, baseBranch },
-    name: 'implementer',
-    maxIterations: 15,
-    agent: implAgent,
-    promptFile: './.sandcastle/implement-prompt.md',
-    promptArgs: { ISSUE_DIRECTIVE: issueDirective, MODE_SECTION: modeSection, SHARED },
-    logging: {
-      type: 'file',
-      path: `.sandcastle/logs/${implementBranch.replace(/\//g, '-')}.log`,
-      // onAgentStreamEvent: dashboard.collector('implementer'),
-    },
-  });
-  // dashboard.recordResult('implementer', implement);
-
-  let branch = implement.branch;
-
-  // Fix: detect BLOCKED runs — post reason as issue comment and skip review.
-  const blockedMatch = implement.stdout.match(/<blocked-reason>([\s\S]*?)<\/blocked-reason>/);
-  if (blockedMatch) {
-    const reason = blockedMatch[1]!.trim();
-    console.log(`\nImplementer reported BLOCKED:\n${reason}`);
-    const workingOnMatch = implement.stdout.match(/<working-on-issue>(\d+)<\/working-on-issue>/);
-    const blockedIssue = workingOnMatch?.[1] ?? (targetIssue ? String(targetIssue) : null);
-    if (blockedIssue) {
-      try {
-        execSync(
-          `gh issue comment ${blockedIssue} --body ${JSON.stringify(`**Sandcastle blocked:** ${reason}`)}`,
-          { stdio: 'inherit' }
-        );
-      } catch {
-        console.warn(`Could not post blocked comment to issue #${blockedIssue}`);
-      }
-    }
-    continue;
-  }
-
-  // Verify commits independently rather than trusting implement.commits.length
-  // alone — agents have been observed switching branches mid-run, stranding
-  // their commits on a ref the orchestrator doesn't watch. See #213.
-  const expectedCommits = execSync(
-    `git log ${baseBranch}..${implementBranch} --oneline 2>/dev/null || true`,
-    { encoding: 'utf8' }
-  ).trim();
-
-  if (!expectedCommits) {
-    // No commits on the expected branch. Check whether the agent stranded
-    // them on a different agent-* branch in the worktree.
-    const allAgentBranches = execSync(`git branch --format='%(refname:short)' --list 'agent-*'`, {
-      encoding: 'utf8',
-    })
-      .trim()
-      .split('\n')
-      .filter((b) => b && b !== implementBranch);
-
-    const strandedBranches = allAgentBranches
-      .map((b) => {
-        const count = parseInt(
-          execSync(`git rev-list --count ${baseBranch}..${b} 2>/dev/null || echo 0`, {
-            encoding: 'utf8',
-          }).trim(),
-          10
-        );
-        return count > 0 ? `${b} (${count} commits)` : null;
-      })
-      .filter((x): x is string => x !== null)
-      .join('\n');
-
-    const issueRef =
-      targetIssue ??
-      implement.stdout.match(/<working-on-issue>(\d+)<\/working-on-issue>/)?.[1] ??
-      null;
-    const logPath = `.sandcastle/logs/${implementBranch.replace(/\//g, '-')}.log`;
-
-    if (strandedBranches) {
-      console.error(
-        `\n⚠️  Agent committed to a different branch than expected.\n` +
-          `   Expected: ${implementBranch} (0 commits)\n` +
-          `   Found commits on:\n${strandedBranches
-            .split('\n')
-            .map((b) => `     - ${b}`)
-            .join('\n')}\n` +
-          `   Log: ${logPath}\n` +
-          `   Manual recovery required — do not silently skip.`
-      );
-      if (issueRef) {
-        const body = `**Sandcastle: agent committed to wrong branch.**\n\nExpected commits on \`${implementBranch}\` but found them on:\n\`\`\`\n${strandedBranches}\n\`\`\`\nLog: \`${logPath}\`\n\nLikely cause: agent ran a forbidden branch-mutating git command (see #213). Manual recovery needed.`;
-        try {
-          execSync(`gh issue comment ${issueRef} --body ${JSON.stringify(body)}`, {
-            stdio: 'inherit',
-          });
-        } catch {
-          console.warn(`Could not post stranded-branch comment to issue #${issueRef}`);
-        }
-      }
-    } else {
-      console.error(
-        `\n⚠️  Agent emitted COMPLETE but produced no commits on any branch.\n` +
-          `   Log: ${logPath}\n` +
-          `   Likely cause: gate failure rationalized, or no-op completion.`
-      );
-      if (issueRef) {
-        const body = `**Sandcastle: agent reported COMPLETE but produced no commits.**\n\nBranch: \`${implementBranch}\`\nLog: \`${logPath}\`\n\nLikely cause: branch switch, gate failure rationalized as "environment", or no-op completion. See #213.`;
-        try {
-          execSync(`gh issue comment ${issueRef} --body ${JSON.stringify(body)}`, {
-            stdio: 'inherit',
-          });
-        } catch {
-          console.warn(`Could not post zero-commit comment to issue #${issueRef}`);
-        }
-      }
-    }
-    continue;
-  }
-
-  // Fix: in autonomous mode, verify the issue the agent picked carries agent-ready label.
-  if (!targetIssue) {
-    const workingOnMatch = implement.stdout.match(/<working-on-issue>(\d+)<\/working-on-issue>/);
-    const pickedIssue = workingOnMatch?.[1];
-    if (pickedIssue) {
-      const labels: string = execSync(
-        `gh issue view ${pickedIssue} --json labels --jq '[.labels[].name] | join(",")'`,
-        { encoding: 'utf8' }
-      ).trim();
-      if (!labels.split(',').includes('agent-ready')) {
-        console.warn(
-          `Issue #${pickedIssue} does not carry agent-ready label (labels: ${labels || 'none'}). Skipping.`
-        );
-        continue;
-      }
-    }
-  }
-
-  // Rename branch to match the agent's assessed scope — autonomous mode only.
-  // Targeted runs keep the caller-supplied branch name.
-  if (!targetIssue) {
-    const branchNameMatch = implement.stdout.match(/<branch-name>([\s\S]*?)<\/branch-name>/);
-    const suggestedBranch = branchNameMatch?.[1]?.trim();
-    if (suggestedBranch && suggestedBranch !== branch) {
-      try {
-        execSync(`git branch -m ${branch} ${suggestedBranch}`);
-        console.log(`Branch renamed: ${branch} → ${suggestedBranch}`);
-        branch = suggestedBranch;
-      } catch {
-        console.warn(`Could not rename branch to ${suggestedBranch} — keeping ${branch}`);
-      }
-    }
-  }
-
-  console.log(`\nImplementation complete on branch: ${branch}`);
-  console.log(`Commits: ${implement.commits.length}`);
-
-  // -------------------------------------------------------------------------
-  // Phase 2: Review (skipped when --no-review is passed)
-  // -------------------------------------------------------------------------
-  let reviewStdout = '';
-  if (skipReview) {
-    console.log('\nSkipping review phase (--no-review).');
-  } else {
-    const review = await sandcastle.run({
-      hooks,
-      copyToWorktree,
-      sandbox: docker({ env: botGitEnv }),
-      branchStrategy: { type: 'branch', branch },
-      name: 'reviewer',
-      maxIterations: 5,
-      agent: reviewAgent,
-      promptFile: './.sandcastle/review-prompt.md',
-      promptArgs: { BRANCH: branch, SHARED },
-      logging: {
-        type: 'file',
-        path: `.sandcastle/logs/${implementBranch.replace(/\//g, '-')}-review.log`,
-        // onAgentStreamEvent: dashboard.collector('reviewer'),
-      },
-    });
-    // dashboard.recordResult('reviewer', review);
-    reviewStdout = review.stdout;
-    console.log('\nReview complete.');
-  }
-
-  // -------------------------------------------------------------------------
-  // Phase 3: Push & open draft PR for human review
-  //
-  // PR title: conventional commit format from <pr-title> block emitted by
-  //           the reviewer (or implementer when --no-review), falling back
-  //           to a generic branch-based title.
-  // PR body: agent-generated summary extracted from <pr-summary> block,
-  //          falling back to a generic message.
-  // -------------------------------------------------------------------------
-  const titleSource = skipReview ? implement.stdout : reviewStdout;
-  const prTitleMatch = titleSource.match(/<pr-title>([\s\S]*?)<\/pr-title>/);
-  const prTitle = prTitleMatch?.[1]?.trim() ?? `agent: ${branch.replace(/^agent-[^/]+\//, '')}`;
-
-  const prSummaryMatch =
-    implement.stdout.match(/<pr-summary>([\s\S]*?)<\/pr-summary>/) ??
-    reviewStdout.match(/<pr-summary>([\s\S]*?)<\/pr-summary>/);
-  const prBody =
-    prSummaryMatch?.[1]?.trim() ??
-    'Automated implementation by Sandcastle. Please review before merging.';
-
-  const prBodyFile = join(tmpdir(), `sandcastle-pr-${Date.now()}.txt`);
-  writeFileSync(prBodyFile, prBody, 'utf8');
-
-  execSync(`git push origin ${branch}`, { stdio: 'inherit' });
-  execSync(
-    `gh pr create --head ${branch} --base ${baseBranch} --draft --title ${JSON.stringify(prTitle)} --body-file ${JSON.stringify(prBodyFile)}`,
-    { stdio: 'inherit' }
-  );
-
-  console.log(`\nDraft PR opened for branch: ${branch}`);
-
-  // Label the issue awaiting-review so autonomous loops skip it until merged/closed.
-  // Parse from Closes #N in the pr-summary (final message) — early tags may be lost with some providers.
-  const closesMatch = prBody.match(/Closes\s+#(\d+)/i);
-  const issueNumber = closesMatch?.[1] ?? (targetIssue ? String(targetIssue) : null);
-  if (issueNumber) {
-    try {
-      execSync(`gh issue edit ${issueNumber} --add-label awaiting-review`, { stdio: 'inherit' });
-      console.log(`Labelled issue #${issueNumber} as awaiting-review.`);
-    } catch {
-      console.warn(
-        `Could not label issue #${issueNumber} — label may not exist yet. Create it with: gh label create awaiting-review`
-      );
-    }
-  }
-}
-
-// await dashboard.close();
-console.log('\nAll done.');
