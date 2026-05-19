@@ -73,11 +73,12 @@ const { values: cliArgs } = parseArgs({
   options: {
     'dry-run': { type: 'boolean' },
     execute: { type: 'boolean' },
+    only: { type: 'string' },
   },
   strict: false,
 });
 
-const EXECUTE = Boolean(cliArgs.execute);
+const EXECUTE = Boolean(cliArgs.execute) || Boolean(cliArgs.only);
 const DRY_RUN = !EXECUTE && (process.env.SANDCASTLE_DRY_RUN === '1' || Boolean(cliArgs['dry-run']));
 
 if (EXECUTE && cliArgs['dry-run']) {
@@ -525,6 +526,30 @@ writeFileSync(
 );
 console.log(`Structured log written to: ${logPath}`);
 
+
+// Filter actions when --only is specified in execute mode.
+const onlyMode = (cliArgs.only ?? null) as
+  | 'impl'
+  | 'review'
+  | 'address-review'
+  | null;
+
+const filteredActions =
+  EXECUTE && onlyMode !== null
+    ? actions.filter((a) => {
+        if (onlyMode === 'impl') {
+          return a.kind === 'spawn-implementer-fresh' || a.kind === 'spawn-address-review';
+        }
+        if (onlyMode === 'review') {
+          return a.kind === 'spawn-reviewer';
+        }
+        if (onlyMode === 'address-review') {
+          return a.kind === 'spawn-address-review';
+        }
+        return true;
+      })
+    : actions;
+
 if (!EXECUTE) {
   // --dry-run / default path: no side effects beyond the JSON log written above.
   process.exit(0);
@@ -539,7 +564,7 @@ if (!EXECUTE) {
 // - spawn-implementer-fresh: fresh-mode implementer
 // ---------------------------------------------------------------------------
 
-await runExecute(actions);
+await runExecute(filteredActions);
 
 async function runExecute(actions: Action[]): Promise<void> {
   // Escalations are cheap gh calls and idempotent — handle them all first

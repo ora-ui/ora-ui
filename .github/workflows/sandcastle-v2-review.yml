@@ -1,0 +1,39 @@
+name: Sandcastle v2 — Reviewer
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '30 */12 * * *'
+  # pull_request:
+  #   types: [synchronize]
+
+concurrency:
+  group: sandcastle-v2-review-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  review:
+    # if: github.event_name != 'pull_request' || (github.event.pull_request.draft && contains(github.event.pull_request.labels.*.name, 'agent-review-pending'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Run reviewer orchestrator
+        env:
+          GH_TOKEN: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
+          SANDCASTLE_BOT_LOGIN: ora-gh-bot
+          SANDCASTLE_BOT_TOKEN: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          SANDCASTLE_REVIEWER_AGENT: ${{ vars.SANDCASTLE_REVIEWER_AGENT || 'pi:anthropic/claude-sonnet-4-6' }}
+        run: pnpm sandcastle:v2 --execute --only=review
