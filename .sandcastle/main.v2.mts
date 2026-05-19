@@ -778,7 +778,11 @@ async function dispatchAddressReview(prNumber: number): Promise<void> {
     baseRefName: string;
     headSha: string;
   }>(
-    `repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName, baseRefName, headSha}'`
+    // The REST shape returns nested head.ref/base.ref/head.sha — project them
+    // to camelCase here so the TS types match runtime values. Same pattern as
+    // dispatchReviewer; this dispatcher was missing the projection so all
+    // three string fields came through as null and crashed at `.replace()`.
+    `repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName: .head.ref, baseRefName: .base.ref, headSha: .head.sha}'`
   );
 
   // Falls back to the PR number itself — not ideal but avoids leaving a blank.
