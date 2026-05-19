@@ -98,6 +98,7 @@ interface Issue {
 interface PR {
   number: number;
   title: string;
+  body: string | null;
   headRefName: string;
   baseRefName: string;
   state: 'OPEN' | 'CLOSED' | 'MERGED';
@@ -108,6 +109,14 @@ interface PR {
   lastReview: string | null;
   reviewCount: number;
   headSha: string;
+}
+
+// Extracts the issue number from a PR body's closing keyword
+// (`Closes #N`, `Fixes #N`, `Resolves #N`, case-insensitive). First match wins.
+function extractClosingIssue(body: string | null): number | null {
+  if (!body) return null;
+  const m = body.match(/\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b/i);
+  return m ? parseInt(m[1]!, 10) : null;
 }
 
 function ghJson<T>(query: string): T {
@@ -130,18 +139,17 @@ function ghJsonSafe<T>(query: string, fallback: T): T {
   }
 }
 
-// Post-verify the agent's promise actually landed on the PR. Guards against
-// transient gh failures that would otherwise leave the PR in an inconsistent
-// state with no error surfaced. `reviewDecision` is a GraphQL-only field, so
-// route through `gh pr view --json`, not the REST `gh api pulls/N` endpoint.
+// Post-verify the agent's review submission landed. Labels and draft state are
+// orchestrator-managed (see applyReviewStateOps) so we only check reviewDecision
+// here — a GraphQL-only field, hence `gh pr view --json`, not REST.
 function verifyReviewOutcome(
   prNumber: number,
   expected: 'approved' | 'changes_requested'
 ): { ok: true } | { ok: false; reason: string } {
-  let pr: { reviewDecision: string | null; isDraft: boolean; labels: Array<{ name: string }> };
+  let pr: { reviewDecision: string | null };
   try {
     pr = JSON.parse(
-      execSync(`gh pr view ${prNumber} --json reviewDecision,isDraft,labels`, {
+      execSync(`gh pr view ${prNumber} --json reviewDecision`, {
         encoding: 'utf8',
         env: {
           ...process.env,
@@ -153,44 +161,76 @@ function verifyReviewOutcome(
     return { ok: false, reason: `gh pr view failed: ${(err as Error).message}` };
   }
 
-  const labels = new Set(pr.labels.map((l) => l.name));
-
-  if (expected === 'approved') {
-    if (pr.reviewDecision !== 'APPROVED') {
-      return {
-        ok: false,
-        reason: `reviewDecision is ${pr.reviewDecision ?? 'null'}, expected APPROVED`,
-      };
-    }
-    if (!labels.has('agent-approved')) {
-      return {
-        ok: false,
-        reason: 'agent-approved label missing — `gh pr edit --add-label` likely failed',
-      };
-    }
-    if (pr.isDraft) {
-      return { ok: false, reason: 'PR still in draft — `gh pr ready` likely failed' };
-    }
-    return { ok: true };
-  }
-
-  // expected === 'changes_requested'
-  if (pr.reviewDecision !== 'CHANGES_REQUESTED') {
+  const expectedDecision = expected === 'approved' ? 'APPROVED' : 'CHANGES_REQUESTED';
+  if (pr.reviewDecision !== expectedDecision) {
     return {
       ok: false,
-      reason: `reviewDecision is ${pr.reviewDecision ?? 'null'}, expected CHANGES_REQUESTED`,
-    };
-  }
-  if (!labels.has('agent-impl-todo')) {
-    return { ok: false, reason: 'agent-impl-todo label not added' };
-  }
-  if (labels.has('agent-review-pending')) {
-    return {
-      ok: false,
-      reason: 'agent-review-pending label still present — label flip half-landed',
+      reason: `reviewDecision is ${pr.reviewDecision ?? 'null'}, expected ${expectedDecision}`,
     };
   }
   return { ok: true };
+}
+
+// Apply label/draft state mutations after a review outcome. The reviewer prompt
+// only submits content (the formal review + inline comments); the orchestrator
+// owns all state transitions so failures here surface as orchestrator errors
+// rather than half-landed prompt-side gh sequences.
+//
+// Idempotent: removing an already-absent label or adding an already-present one
+// is a no-op in gh.
+function applyReviewStateOps(
+  prNumber: number,
+  outcome: 'approved' | 'changes_requested' | 'escalate',
+  issueNumber: number | null
+): void {
+  const ghEnv = {
+    ...process.env,
+    GITHUB_TOKEN: process.env.GH_TOKEN ?? process.env.SANDCASTLE_BOT_TOKEN ?? '',
+  };
+  const gh = (cmd: string): void => {
+    execSync(cmd, { encoding: 'utf8', env: ghEnv, stdio: 'pipe' });
+  };
+
+  if (outcome === 'approved') {
+    gh(`gh pr edit ${prNumber} --remove-label agent-review-pending --add-label agent-approved`);
+    gh(`gh pr ready ${prNumber}`);
+    return;
+  }
+
+  if (outcome === 'changes_requested') {
+    gh(`gh pr edit ${prNumber} --remove-label agent-review-pending --add-label agent-impl-todo`);
+    return;
+  }
+
+  // outcome === 'escalate'
+  gh(`gh pr edit ${prNumber} --remove-label agent-review-pending --add-label needs-human`);
+  if (issueNumber !== null) {
+    gh(`gh issue edit ${issueNumber} --add-label needs-human`);
+  }
+}
+
+// Rounds-cap escalation: identical to applyReviewStateOps('escalate') except
+// the agent-* label currently on the PR might be either agent-review-pending
+// or agent-impl-todo, depending on which phase the PR was in when it hit the
+// cap. Strip whichever's there and add needs-human.
+function escalateToHuman(
+  prNumber: number,
+  stripLabel: 'agent-review-pending' | 'agent-impl-todo' | undefined,
+  issueNumber: number | null
+): void {
+  const ghEnv = {
+    ...process.env,
+    GITHUB_TOKEN: process.env.GH_TOKEN ?? process.env.SANDCASTLE_BOT_TOKEN ?? '',
+  };
+  const gh = (cmd: string): void => {
+    execSync(cmd, { encoding: 'utf8', env: ghEnv, stdio: 'pipe' });
+  };
+
+  const removeFlag = stripLabel ? `--remove-label ${stripLabel}` : '';
+  gh(`gh pr edit ${prNumber} ${removeFlag} --add-label needs-human`.replace(/\s+/g, ' '));
+  if (issueNumber !== null) {
+    gh(`gh issue edit ${issueNumber} --add-label needs-human`);
+  }
 }
 
 // Fetch open draft PRs authored by the bot.
@@ -201,6 +241,7 @@ function fetchDraftPRs(): PR[] {
     Array<{
       number: number;
       title: string;
+      body: string | null;
       state: string;
       isDraft: boolean;
       headRefName: string;
@@ -210,7 +251,7 @@ function fetchDraftPRs(): PR[] {
       headSha: string;
     }>
   >(
-    `repos/ora-ui/ora-ui/pulls --jq '[.[] | {number, title, state, isDraft: .draft, headRefName: .head.ref, baseRefName: .base.ref, author: {login: .user.login}, labels: [.labels[] | {name}], headSha: .head.sha}]'`
+    `repos/ora-ui/ora-ui/pulls --jq '[.[] | {number, title, body, state, isDraft: .draft, headRefName: .head.ref, baseRefName: .base.ref, author: {login: .user.login}, labels: [.labels[] | {name}], headSha: .head.sha}]'`
   ).filter((pr) => pr.isDraft && pr.author.login === BOT_LOGIN);
 
   return raw.map((pr) => {
@@ -234,6 +275,7 @@ function fetchDraftPRs(): PR[] {
     return {
       number: pr.number,
       title: pr.title,
+      body: pr.body,
       headRefName: pr.headRefName,
       baseRefName: pr.baseRefName,
       state: pr.state as PR['state'],
@@ -302,10 +344,20 @@ function fetchIssuesUnderOpenPR(): Set<number> {
 // ---------------------------------------------------------------------------
 
 interface Action {
-  kind: 'spawn-implementer-fresh' | 'spawn-reviewer' | 'spawn-address-review' | 'skip';
+  kind:
+    | 'spawn-implementer-fresh'
+    | 'spawn-reviewer'
+    | 'spawn-address-review'
+    | 'escalate-to-human'
+    | 'skip';
   target: string; // issue number or PR number
   reason: string;
   detail?: string;
+  // For escalate-to-human: linked issue number (from `Closes #N` in PR body),
+  // and which agent-* label to strip when adding needs-human. Only populated
+  // for that kind; ignored otherwise.
+  issueNumber?: number | null;
+  stripLabel?: 'agent-review-pending' | 'agent-impl-todo';
 }
 
 function computeDecisionTable(): { actions: Action[]; skipped: Action[] } {
@@ -347,13 +399,23 @@ function computeDecisionTable(): { actions: Action[]; skipped: Action[] } {
       continue;
     }
 
-    // Rule 5: flag rounds-cap PRs
+    // Rule 5: at rounds cap → escalate to human (add needs-human to PR + issue,
+    // strip the agent-* label so subsequent sweeps fall through the needs-human
+    // guard at the top of this loop). Idempotent: re-running adds labels that
+    // are already present; gh treats that as a no-op.
     if (pr.reviewCount >= ROUNDS_CAP) {
-      skipped.push({
-        kind: 'skip',
+      const stripLabel = labelSet.has('agent-review-pending')
+        ? ('agent-review-pending' as const)
+        : labelSet.has('agent-impl-todo')
+          ? ('agent-impl-todo' as const)
+          : null;
+      actions.push({
+        kind: 'escalate-to-human',
         target: `#${pr.number}`,
-        reason: `at rounds cap (${pr.reviewCount}/${ROUNDS_CAP} bot reviews)`,
+        reason: `rounds cap reached (${pr.reviewCount}/${ROUNDS_CAP} bot reviews) — adding needs-human`,
         detail: pr.title,
+        issueNumber: extractClosingIssue(pr.body),
+        stripLabel: stripLabel ?? undefined,
       });
       continue;
     }
@@ -508,6 +570,27 @@ if (!EXECUTE) {
 await runExecute(actions);
 
 async function runExecute(actions: Action[]): Promise<void> {
+  // Escalations are cheap gh calls and idempotent — handle them all first
+  // (does not consume the per-invocation docker dispatch budget).
+  for (const a of actions.filter((x) => x.kind === 'escalate-to-human')) {
+    const prNumber = parseInt(a.target.replace(/^#/, ''), 10);
+    if (!Number.isFinite(prNumber)) {
+      console.error(`Could not parse PR number from escalate target "${a.target}".`);
+      continue;
+    }
+    try {
+      escalateToHuman(prNumber, a.stripLabel, a.issueNumber ?? null);
+      console.log(
+        `Escalated PR #${prNumber} to human (rounds cap). needs-human added to PR${
+          a.issueNumber ? ` and issue #${a.issueNumber}` : ''
+        }.`
+      );
+    } catch (err) {
+      console.error(`Escalation failed for PR #${prNumber}: ${(err as Error).message}`);
+      process.exit(1);
+    }
+  }
+
   const freshTargets = actions.filter((a) => a.kind === 'spawn-implementer-fresh');
   const reviewerTargets = actions.filter((a) => a.kind === 'spawn-reviewer');
   const addressReviewTargets = actions.filter((a) => a.kind === 'spawn-address-review');
@@ -537,7 +620,7 @@ async function runExecute(actions: Action[]): Promise<void> {
 
   const target = freshTargets[0];
   if (!target) {
-    console.log('\nNo fresh-implementer work to dispatch. Exiting.');
+    console.log('\nNo agent dispatches needed this invocation. Exiting.');
     process.exit(0);
   }
 
@@ -621,25 +704,49 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
   );
   const escalateMatch = result.stdout.match(/<promise>agent:review:escalate<\/promise>/);
 
+  const issueNumber = extractClosingIssue(prData.body);
+
   if (approveMatch || requestChangesMatch) {
     const expected = approveMatch ? 'approved' : 'changes_requested';
     const verification = verifyReviewOutcome(prNumber, expected);
     if (!verification.ok) {
       console.error(
         `\nVerification failed for PR #${prNumber} (expected ${expected}): ${verification.reason}\n` +
-          `Reviewer emitted a promise but the gh sequence did not fully land. Manual recovery required.\n` +
+          `Reviewer emitted a promise but the formal review submission did not land. Manual recovery required.\n` +
           `Log: ${logPath}`
       );
       process.exit(1);
     }
+    try {
+      applyReviewStateOps(prNumber, expected, issueNumber);
+    } catch (err) {
+      console.error(
+        `\nState ops failed for PR #${prNumber} after verified ${expected} review: ${(err as Error).message}\n` +
+          `Review submission landed but label/draft state did not. Manual recovery required.\n` +
+          `Log: ${logPath}`
+      );
+      process.exit(1);
+    }
+  } else if (escalateMatch) {
+    try {
+      applyReviewStateOps(prNumber, 'escalate', issueNumber);
+    } catch (err) {
+      console.error(
+        `\nState ops failed for PR #${prNumber} during escalate: ${(err as Error).message}\n` +
+          `Manual recovery required. Log: ${logPath}`
+      );
+      process.exit(1);
+    }
+  } else {
+    console.error(
+      `\nReviewer for PR #${prNumber} produced no recognizable promise (approve, request-changes, or escalate).\n` +
+        `Log: ${logPath}`
+    );
+    process.exit(1);
   }
 
   console.log(`\nReviewer completed for PR #${prNumber}.`);
   console.log(`Log: ${logPath}`);
-
-  if (escalateMatch) {
-    console.log('Reviewer escalated. Exiting.');
-  }
   process.exit(0);
 }
 
@@ -663,12 +770,9 @@ async function dispatchAddressReview(prNumber: number): Promise<void> {
     `repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName, baseRefName, headSha}'`
   );
 
-  // Extract the issue number from the PR body (e.g. "Closes #N").
   // Falls back to the PR number itself — not ideal but avoids leaving a blank.
-  const closingMatch = prData.body?.match(
-    /\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b/i
-  );
-  const issueRef = closingMatch ? closingMatch[1]! : String(prNumber);
+  const closingIssue = extractClosingIssue(prData.body);
+  const issueRef = closingIssue !== null ? String(closingIssue) : String(prNumber);
 
   const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
   const implAgent = resolveAgent('SANDCASTLE_IMPL_AGENT', 'pi:anthropic/claude-sonnet-4-6');
