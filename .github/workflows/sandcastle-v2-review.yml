@@ -33,5 +33,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
           SANDCASTLE_BOT_LOGIN: ora-gh-bot
+          # Agent selection — set vars.SANDCASTLE_REVIEWER_AGENT to override
+          # the orchestrator's fallback (pi:anthropic/claude-sonnet-4-6).
+          SANDCASTLE_REVIEWER_AGENT: ${{ vars.SANDCASTLE_REVIEWER_AGENT }}
+          # Provider API keys — only the one matching the active provider is
+          # actually read by resolveAgent. Empty values are harmless.
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: pnpm sandcastle:v2 --execute --only=review
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: pnpm sandcastle --execute --only=review
