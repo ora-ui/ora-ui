@@ -34,6 +34,13 @@ jobs:
       - name: Stub .sandcastle/.env for tsx --env-file
         run: touch .sandcastle/.env
 
+      # Sandcastle resolves the image name from the repo directory name
+      # (defaultImageName in @ai-hero/sandcastle/mountUtils) — for this repo
+      # that is `sandcastle:ora-ui`. Locally the image is cached after the
+      # first build; in CI we rebuild each run. Cache optimization deferred.
+      - name: Build sandcastle Docker image
+        run: docker build -t sandcastle:ora-ui -f .sandcastle/Dockerfile .sandcastle
+
       - name: Run impl dispatch
         env:
           GH_TOKEN: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
