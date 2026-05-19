@@ -25,6 +25,10 @@ review work is clearly warranted.
 
 {{REVIEW_THREAD}}
 
+### Existing inline comments
+
+{{REVIEW_COMMENTS}}
+
 ## Review decision
 
 Evaluate the diff against the acceptance criteria in the issue. Output
