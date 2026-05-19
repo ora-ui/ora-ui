@@ -11,23 +11,18 @@ This repo uses [Sandcastle](https://github.com/mattpocock/sandcastle) to run aut
 ## Running sandcastle
 
 ```bash
-# Targeted (preferred)
+# Orchestrator (runs automatically on schedule; also supports manual invoke)
+# --dry-run (default): computes actions without side effects
+# --execute: acts on the decision table
+pnpm sandcastle
+pnpm sandcastle --dry-run  # same as default (env var SANDCASTLE_DRY_RUN=1)
+pnpm sandcastle --execute  # dispatch agents
+
+# Targeted (preferred via skill)
 pnpm sandcastle --issue 124 --branch agent-fix/button-focus-ring
 
-# Skip the reviewer phase for straightforward tasks
-pnpm sandcastle --issue 124 --branch agent-fix/button-focus-ring --no-review
-
-# Resume a failed run — run reviewer + PR on an existing branch
-pnpm sandcastle --review-only --branch agent-fix/button-focus-ring
-
-# Autonomous (picks highest-priority agent-ready issue)
-pnpm sandcastle
-
-# Cleanup stale worktrees and branches after a session
-pnpm sandcastle:clean
-
-# Test whether the configured provider captures early vs final agent output tags
-pnpm sandcastle --test-propagation
+# Emergency rollback to the pre-cutover implementation
+pnpm sandcastle:legacy
 ```
 
 ## Branch naming
@@ -48,15 +43,13 @@ The PR body is taken from the `<pr-summary>` block emitted by the implementer at
 
 ## Bot identity
 
-All sandcastle commits, PR comments, and reviews are authored by the dedicated bot user **`ora-gh-bot`**. Downstream code (e.g. the v2 orchestrator's rounds-counting layer) filters reviews by `user.login == "ora-gh-bot"` to distinguish agent reviews from human ones.
+All sandcastle commits, PR comments, and reviews are authored by the dedicated bot user **`ora-gh-bot`**. Downstream code (e.g. the orchestrator's rounds-counting layer) filters reviews by `user.login == "ora-gh-bot"` to distinguish agent reviews from human ones.
 
 The bot's PAT is provided to sandcastle via the `GH_TOKEN` env var (local: `.sandcastle/.env`; CI: repo secret `SANDCASTLE_BOT_TOKEN` mapped to `GH_TOKEN`).
 
 ## Rules for agents
 
-- Only work on issues labelled `agent-ready`
+- Only work on issues labelled `agent-ready` (no opt-in label required)
 - One issue per run — do not pick up additional issues
 - Branch naming: `agent-type/scope-description` (provided via `--branch` arg in targeted mode)
 - Commit prefix: `sandcastle-` e.g. `sandcastle-fix(badge): correct href`
-- Package manager is **pnpm** — never use npm or yarn
-- Gates must pass before committing: `pnpm typecheck` and `pnpm lint`

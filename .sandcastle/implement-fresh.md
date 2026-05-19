@@ -25,7 +25,6 @@ Abort with BLOCKED if any of these are true:
 
 - `state` is not `OPEN`
 - `agent-ready` is not present in `labels`
-- `agent-v2` is not present in `labels`
 - `needs-human` is present in `labels`
 
 The orchestrator already filtered on these, but state can change between
