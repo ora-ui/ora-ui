@@ -671,6 +671,26 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
           .join('\n\n')
       : 'No previous reviews.';
 
+  // Fetch existing inline comments (line-anchored) by the bot, grouped by file+line.
+  // REVIEW_COMMENTS is only populated with bot-authored comments — human inline
+  // comments are not part of the reviewer agent loop and would confuse it.
+  const existingComments = ghJsonSafe<
+    Array<{ path: string | null; line: number | null; body: string | null; user: { login: string }; createdAt: string }>
+  >(
+    `repos/ora-ui/ora-ui/pulls/${prNumber}/comments --jq '[.[] | select(.user.login == "${BOT_LOGIN}") | {path: .path, line: .line, body: .body, user: {login: .user.login}, createdAt: .created_at}]'`,
+    []
+  );
+
+  // Group by path then line ascending; render as "path:line — body" lines.
+  const sortedComments = existingComments
+    .filter((c) => c.path !== null && c.line !== null)
+    .sort((a, b) => (a.path! > b.path! ? 1 : a.path! < b.path! ? -1 : a.line! - b.line!));
+
+  const reviewComments =
+    sortedComments.length > 0
+      ? sortedComments.map((c) => `**${c.path}:${c.line}** — ${c.body ?? ''}`).join('\n')
+      : 'No inline comments yet.';
+
   const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
   const reviewerAgent = resolveAgent('SANDCASTLE_REVIEWER_AGENT', 'pi:anthropic/claude-sonnet-4-6');
 
@@ -693,6 +713,7 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
       BRANCH: branch,
       PR_BODY: prData.body ?? '(no description)',
       REVIEW_THREAD: reviewThread,
+      REVIEW_COMMENTS: reviewComments,
       SHARED,
     },
     logging: { type: 'file', path: logPath },
