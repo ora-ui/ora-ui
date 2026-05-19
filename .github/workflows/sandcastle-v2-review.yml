@@ -29,6 +29,14 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # `pnpm sandcastle` invokes `tsx --env-file=.sandcastle/.env`, which
+      # errors on a missing file. The file is gitignored (local secrets);
+      # in CI all env vars come from the workflow env block, so an empty
+      # file is sufficient to satisfy Node. Follow-up: switch to
+      # `--env-file-if-exists` once CI Node bumps to 22+.
+      - name: Stub .sandcastle/.env for tsx --env-file
+        run: touch .sandcastle/.env
+
       - name: Run review dispatch
         env:
           GH_TOKEN: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
