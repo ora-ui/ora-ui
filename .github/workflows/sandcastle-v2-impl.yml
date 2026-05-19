@@ -30,5 +30,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
           SANDCASTLE_BOT_LOGIN: ora-gh-bot
+          # Agent selection — repo Variables override the orchestrator's
+          # built-in fallback (pi:anthropic/claude-sonnet-4-6 in resolveAgent).
+          # Set vars.SANDCASTLE_IMPL_AGENT to e.g. 'claude-code:claude-sonnet-4-6'
+          # to switch providers without editing this file.
+          SANDCASTLE_IMPL_AGENT: ${{ vars.SANDCASTLE_IMPL_AGENT }}
+          # Provider API keys — only the one matching the active provider is
+          # actually read by resolveAgent. Empty values are harmless; the
+          # orchestrator never reads keys for inactive providers.
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: pnpm sandcastle --execute --only=impl
