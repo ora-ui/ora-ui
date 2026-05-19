@@ -1,12 +1,17 @@
 // Sandcastle v2 Orchestrator — implements the ADR-0003 decision table.
 //
 // Usage:
-//   pnpm sandcastle:v2 [--dry-run]
+//   pnpm sandcastle:v2 [--dry-run | --execute]
 //
-// --dry-run (default when env var SANDCASTLE_DRY_RUN=1):
+// --dry-run (default; also active when env var SANDCASTLE_DRY_RUN=1):
 //   Computes intended actions, logs them, exits with code 0.
 //   No gh writes, no Docker spawns, no token spend.
 //   Structured JSON goes to .sandcastle/logs/v2-dry-run.json.
+//
+// --execute (Phase 1+):
+//   Acts on the decision table. For this slice only the fresh-implementer
+//   dispatch is wired: one qualifying issue per invocation. Reviewer and
+//   address-review dispatches print "not yet implemented" and skip.
 //
 // Decision logic (read-only):
 //   1. List agent-ready + agent-v2 issues with no open PR → would spawn fresh implementer
@@ -20,9 +25,11 @@
 //   - Spawn address-review only if last_review > last_commit AND review has unresolved comments
 //   - Neither newer → skip
 
+import * as sandcastle from '@ai-hero/sandcastle';
+import type { AgentProvider } from '@ai-hero/sandcastle';
+import { docker } from '@ai-hero/sandcastle/sandboxes/docker';
 import { execSync } from 'node:child_process';
-import { writeFileSync, mkdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 
 // ---------------------------------------------------------------------------
@@ -31,15 +38,51 @@ import { parseArgs } from 'node:util';
 
 const BOT_LOGIN = process.env.SANDCASTLE_BOT_LOGIN ?? 'ora-ui-sandcastle-bot';
 const ROUNDS_CAP = parseInt(process.env.SANDCASTLE_ROUNDS_CAP ?? '2', 10);
-const DRY_RUN = process.env.SANDCASTLE_DRY_RUN === '1' || dryRunArg();
+const BASE_BRANCH = process.env.SANDCASTLE_BASE_BRANCH ?? 'develop';
 
-function dryRunArg(): boolean {
-  const { values } = parseArgs({
-    args: process.argv.slice(2),
-    options: { 'dry-run': { type: 'boolean' } },
-    strict: false,
-  });
-  return Boolean(values['dry-run']);
+// Canonical bot git env passed into every docker dispatch. All dispatchers
+// (fresh, reviewer, address-review) MUST reuse this verbatim so commits,
+// reviews, and label edits all attribute to the bot user. Do not inline a
+// per-dispatcher copy — drift here breaks the rounds-counter filter in
+// fetchDraftPRs which keys on user.login == BOT_LOGIN.
+const BOT_EMAIL =
+  process.env.SANDCASTLE_BOT_EMAIL ?? '285688469+ora-gh-bot@users.noreply.github.com';
+const BOT_NAME = process.env.SANDCASTLE_BOT_NAME ?? 'ora-gh-bot';
+const botGitEnv = {
+  GIT_AUTHOR_NAME: BOT_NAME,
+  GIT_AUTHOR_EMAIL: BOT_EMAIL,
+  GIT_COMMITTER_NAME: BOT_NAME,
+  GIT_COMMITTER_EMAIL: BOT_EMAIL,
+  GH_TOKEN: process.env.SANDCASTLE_BOT_TOKEN ?? process.env.GH_TOKEN ?? '',
+};
+
+// Token presence check shared by all execute-mode dispatchers. Fail closed
+// rather than spawning a Docker run that cannot push or open a PR.
+function assertBotToken(): void {
+  if (!process.env.SANDCASTLE_BOT_TOKEN && !process.env.GH_TOKEN) {
+    console.error(
+      'Refusing to dispatch: neither SANDCASTLE_BOT_TOKEN nor GH_TOKEN is set. ' +
+        'The agent cannot push or open a PR without one of these.'
+    );
+    process.exit(1);
+  }
+}
+
+const { values: cliArgs } = parseArgs({
+  args: process.argv.slice(2),
+  options: {
+    'dry-run': { type: 'boolean' },
+    execute: { type: 'boolean' },
+  },
+  strict: false,
+});
+
+const EXECUTE = Boolean(cliArgs.execute);
+const DRY_RUN = !EXECUTE && (process.env.SANDCASTLE_DRY_RUN === '1' || Boolean(cliArgs['dry-run']));
+
+if (EXECUTE && cliArgs['dry-run']) {
+  console.error('Cannot pass --execute and --dry-run together.');
+  process.exit(1);
 }
 
 // ---------------------------------------------------------------------------
@@ -159,6 +202,33 @@ function fetchOpenIssues(): Issue[] {
     }));
 }
 
+// Issue numbers referenced by any open PR via a closing keyword in the body
+// (`Closes #N`, `Fixes #N`, `Resolves #N`, case-insensitive). Used to keep
+// fresh-mode dispatch idempotent across sweeps: once a PR exists for an issue,
+// subsequent sweeps must skip it until the PR merges (auto-closing the issue)
+// or is itself closed.
+//
+// LOAD-BEARING: this is issue-level idempotency for Rule 1. It is orthogonal
+// to the PR-level timestamp gate in Rules 2/3 — do not collapse them. After
+// #194 drops the `agent-v2` opt-in filter from fetchOpenIssues, Rule 1's
+// input set widens significantly; this filter becomes the only thing
+// preventing duplicate fresh-mode dispatches per sweep.
+function fetchIssuesUnderOpenPR(): Set<number> {
+  const prs = ghJsonSafe<Array<{ state: string; body: string | null }>>(
+    `repos/ora-ui/ora-ui/pulls --jq '[.[] | select(.state == "open") | {state, body}]'`,
+    []
+  );
+  const closing = /\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b/gi;
+  const taken = new Set<number>();
+  for (const pr of prs) {
+    if (!pr.body) continue;
+    for (const m of pr.body.matchAll(closing)) {
+      taken.add(parseInt(m[1]!, 10));
+    }
+  }
+  return taken;
+}
+
 // ---------------------------------------------------------------------------
 // Decision engine
 // ---------------------------------------------------------------------------
@@ -176,9 +246,19 @@ function computeDecisionTable(): { actions: Action[]; skipped: Action[] } {
 
   // --- Rule 1: agent-ready + agent-v2 issues with no open PR → spawn implementer fresh ---
   const issues = fetchOpenIssues();
+  const issuesUnderOpenPR = fetchIssuesUnderOpenPR();
   for (const issue of issues) {
     if (issue.labels.includes('needs-human')) {
       skipped.push({ kind: 'skip', target: `#${issue.number}`, reason: 'has needs-human label' });
+      continue;
+    }
+    if (issuesUnderOpenPR.has(issue.number)) {
+      skipped.push({
+        kind: 'skip',
+        target: `#${issue.number}`,
+        reason: 'already has an open PR referencing it',
+        detail: issue.title,
+      });
       continue;
     }
     actions.push({
@@ -268,15 +348,18 @@ function computeDecisionTable(): { actions: Action[]; skipped: Action[] } {
 
 function humanReadable(actions: Action[], skipped: Action[]): string {
   const lines: string[] = [];
-  lines.push('\n=== Sandcastle v2 Dry-Run ===\n');
+  lines.push(`\n=== Sandcastle v2 ${EXECUTE ? 'Execute' : 'Dry-Run'} ===\n`);
 
   if (actions.length === 0 && skipped.length === 0) {
     lines.push('No items to process. Exiting.\n');
     return lines.join('\n');
   }
 
+  const spawnVerb = EXECUTE ? 'Spawning' : 'Would spawn';
+  const skipVerb = EXECUTE ? 'Skipping' : 'Would skip';
+
   if (actions.length > 0) {
-    lines.push('Would spawn:\n');
+    lines.push(`${spawnVerb}:\n`);
     lines.push('  TARGET     TYPE                    REASON');
     lines.push('  --------   ---------------------  ----------------------------------------');
     for (const a of actions) {
@@ -284,11 +367,11 @@ function humanReadable(actions: Action[], skipped: Action[]): string {
     }
     lines.push('');
   } else {
-    lines.push('Would spawn: none\n');
+    lines.push(`${spawnVerb}: none\n`);
   }
 
   if (skipped.length > 0) {
-    lines.push('Would skip:\n');
+    lines.push(`${skipVerb}:\n`);
     lines.push('  TARGET     REASON');
     lines.push('  --------   ----------------------------------------');
     for (const s of skipped) {
@@ -296,7 +379,7 @@ function humanReadable(actions: Action[], skipped: Action[]): string {
     }
     lines.push('');
   } else {
-    lines.push('Would skip: none\n');
+    lines.push(`${skipVerb}: none\n`);
   }
 
   lines.push('Bot user: ' + BOT_LOGIN);
@@ -320,7 +403,7 @@ try {
 } catch {
   // dir exists
 }
-const logPath = '.sandcastle/logs/v2-dry-run.json';
+const logPath = EXECUTE ? '.sandcastle/logs/v2-execute.json' : '.sandcastle/logs/v2-dry-run.json';
 writeFileSync(
   logPath,
   JSON.stringify(
@@ -340,11 +423,133 @@ writeFileSync(
 );
 console.log(`Structured log written to: ${logPath}`);
 
-if (!DRY_RUN) {
-  console.error(
-    '\nNon-dry-run mode not yet implemented. Use --dry-run or set SANDCASTLE_DRY_RUN=1.'
-  );
-  process.exit(1);
+if (!EXECUTE) {
+  // --dry-run / default path: no side effects beyond the JSON log written above.
+  process.exit(0);
 }
 
-process.exit(0);
+// ---------------------------------------------------------------------------
+// Execute mode (ADR-0003 Phase 1)
+//
+// Dispatch ONE qualifying spawn-implementer-fresh action per invocation.
+// Reviewer and address-review dispatches print a stub and are skipped —
+// they ship in subsequent slices.
+// ---------------------------------------------------------------------------
+
+await runExecute(actions);
+
+async function runExecute(actions: Action[]): Promise<void> {
+  const freshTargets = actions.filter((a) => a.kind === 'spawn-implementer-fresh');
+  const stubTargets = actions.filter(
+    (a) => a.kind === 'spawn-reviewer' || a.kind === 'spawn-address-review'
+  );
+
+  for (const a of stubTargets) {
+    console.log(`[skip] ${a.kind} for ${a.target} — not yet implemented in v2 execute path.`);
+  }
+
+  const target = freshTargets[0];
+  if (!target) {
+    console.log('\nNo fresh-implementer work to dispatch. Exiting.');
+    process.exit(0);
+  }
+
+  if (freshTargets.length > 1) {
+    console.log(
+      `Found ${freshTargets.length} fresh-implementer candidates; dispatching ${target.target} this invocation. Remaining will be picked up on the next sweep.`
+    );
+  }
+
+  const issueNumber = parseInt(target.target.replace(/^#/, ''), 10);
+  if (!Number.isFinite(issueNumber)) {
+    console.error(`Could not parse issue number from target "${target.target}".`);
+    process.exit(1);
+  }
+
+  await dispatchFreshImplementer(issueNumber);
+}
+
+async function dispatchFreshImplementer(issueNumber: number): Promise<void> {
+  console.log(`\n=== Dispatching fresh implementer for issue #${issueNumber} ===\n`);
+
+  assertBotToken();
+
+  const timestamp = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '');
+  const branch = `agent-wip/issue-${issueNumber}-${timestamp}`;
+
+  const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
+  const implAgent = resolveAgent('SANDCASTLE_IMPL_AGENT', 'pi:anthropic/claude-sonnet-4-6');
+
+  const logPath = `.sandcastle/logs/${branch.replace(/\//g, '-')}-impl-fresh.log`;
+
+  const result = await sandcastle.run({
+    hooks: { sandbox: { onSandboxReady: [{ command: 'pnpm install' }] } },
+    copyToWorktree: ['node_modules'],
+    sandbox: docker({ env: botGitEnv }),
+    branchStrategy: { type: 'branch', branch, baseBranch: BASE_BRANCH },
+    name: 'implementer-fresh',
+    maxIterations: 15,
+    agent: implAgent,
+    promptFile: './.sandcastle/implement-fresh.md',
+    promptArgs: { ISSUE_NUMBER: String(issueNumber), SHARED },
+    logging: { type: 'file', path: logPath },
+  });
+
+  // Handle BLOCKED — post the reason as an issue comment, no PR.
+  const blockedMatch = result.stdout.match(/<blocked-reason>([\s\S]*?)<\/blocked-reason>/);
+  if (blockedMatch) {
+    const reason = blockedMatch[1]!.trim();
+    console.log(`\nImplementer reported BLOCKED on #${issueNumber}:\n${reason}\n`);
+    try {
+      execSync(
+        `gh issue comment ${issueNumber} --body ${JSON.stringify(`**Sandcastle blocked:** ${reason}`)}`,
+        { stdio: 'inherit' }
+      );
+    } catch {
+      console.warn(`Could not post blocked comment to issue #${issueNumber}.`);
+    }
+    process.exit(0);
+  }
+
+  // Parse PR number emitted by the agent.
+  const prMatch = result.stdout.match(/<pr-number>\s*(\d+)\s*<\/pr-number>/);
+  if (!prMatch) {
+    console.error(
+      `\nImplementer did not emit <pr-number> and was not BLOCKED. Manual recovery required.\nLog: ${logPath}`
+    );
+    process.exit(1);
+  }
+
+  const prNumber = parseInt(prMatch[1]!, 10);
+  console.log(`\nFresh implementer landed PR #${prNumber} for issue #${issueNumber}.`);
+  console.log(`Log: ${logPath}`);
+  process.exit(0);
+}
+
+function resolveAgent(envVar: string, fallback: string): AgentProvider {
+  const value = process.env[envVar] ?? fallback;
+  const colonIdx = value.indexOf(':');
+  const provider = colonIdx === -1 ? value : value.slice(0, colonIdx);
+  const model = colonIdx === -1 ? '' : value.slice(colonIdx + 1);
+
+  switch (provider) {
+    case 'pi':
+      return sandcastle.pi(model, {
+        env: { OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY! },
+      });
+    case 'claude-code':
+      return sandcastle.claudeCode(model, {
+        env: { CLAUDE_CODE_OAUTH_TOKEN: process.env.CLAUDE_CODE_OAUTH_TOKEN! },
+      });
+    case 'codex':
+      return sandcastle.codex(model, {
+        env: { OPENAI_API_KEY: process.env.OPENAI_API_KEY! },
+      });
+    case 'opencode':
+      return sandcastle.opencode(model);
+    default:
+      throw new Error(
+        `Unknown agent provider "${provider}" in ${envVar}. Valid options: pi, claude-code, codex, opencode`
+      );
+  }
+}
