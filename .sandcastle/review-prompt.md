@@ -49,10 +49,10 @@ substantive gaps.
 </review-summary>
 ```
 
-Then submit the formal approval review (body is the `<review-summary>` text):
+Then post the review summary as a comment-state review (the bot cannot formally `--approve` its own PRs — that's blocked by GitHub. Final approval is human-only; the `agent-approved` label is the orchestrator's hand-off signal):
 
 ```bash
-gh pr review {{PR_NUMBER}} --approve --body "<review-summary text>"
+gh pr review {{PR_NUMBER}} --comment --body "<review-summary text>"
 ```
 
 ---
@@ -75,10 +75,10 @@ incorrect behavior, incomplete scope.
 </comments>
 ```
 
-Submit the formal request-changes review (body is the `<review-summary>` text):
+Post the review summary as a comment-state review (same self-review constraint as Option A; the `agent-impl-todo` label drives the address-review loop, not GitHub's `reviewDecision`):
 
 ```bash
-gh pr review {{PR_NUMBER}} --request-changes --body "<review-summary text>"
+gh pr review {{PR_NUMBER}} --comment --body "<review-summary text>"
 ```
 
 Then leave line-anchored comments via `gh api`:

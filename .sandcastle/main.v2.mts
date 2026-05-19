@@ -139,42 +139,14 @@ function ghJsonSafe<T>(query: string, fallback: T): T {
   }
 }
 
-// Post-verify the agent's review submission landed. Labels and draft state are
-// orchestrator-managed (see applyReviewStateOps) so we only check reviewDecision
-// here — a GraphQL-only field, hence `gh pr view --json`, not REST.
-function verifyReviewOutcome(
-  prNumber: number,
-  expected: 'approved' | 'changes_requested'
-): { ok: true } | { ok: false; reason: string } {
-  let pr: { reviewDecision: string | null };
-  try {
-    pr = JSON.parse(
-      execSync(`gh pr view ${prNumber} --json reviewDecision`, {
-        encoding: 'utf8',
-        env: {
-          ...process.env,
-          GITHUB_TOKEN: process.env.GH_TOKEN ?? process.env.SANDCASTLE_BOT_TOKEN,
-        },
-      })
-    );
-  } catch (err) {
-    return { ok: false, reason: `gh pr view failed: ${(err as Error).message}` };
-  }
-
-  const expectedDecision = expected === 'approved' ? 'APPROVED' : 'CHANGES_REQUESTED';
-  if (pr.reviewDecision !== expectedDecision) {
-    return {
-      ok: false,
-      reason: `reviewDecision is ${pr.reviewDecision ?? 'null'}, expected ${expectedDecision}`,
-    };
-  }
-  return { ok: true };
-}
-
 // Apply label/draft state mutations after a review outcome. The reviewer prompt
-// only submits content (the formal review + inline comments); the orchestrator
+// only submits content (a comment-state review + inline comments); the orchestrator
 // owns all state transitions so failures here surface as orchestrator errors
 // rather than half-landed prompt-side gh sequences.
+//
+// Note: the bot cannot formally `--approve` its own PRs (GitHub blocks
+// self-approval). The agent-approved label is the canonical hand-off signal —
+// a human approves and merges from there. `reviewDecision` is not consulted.
 //
 // Idempotent: removing an already-absent label or adding an already-present one
 // is a no-op in gh.
@@ -729,22 +701,12 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
 
   if (approveMatch || requestChangesMatch) {
     const expected = approveMatch ? 'approved' : 'changes_requested';
-    const verification = verifyReviewOutcome(prNumber, expected);
-    if (!verification.ok) {
-      console.error(
-        `\nVerification failed for PR #${prNumber} (expected ${expected}): ${verification.reason}\n` +
-          `Reviewer emitted a promise but the formal review submission did not land. Manual recovery required.\n` +
-          `Log: ${logPath}`
-      );
-      process.exit(1);
-    }
     try {
       applyReviewStateOps(prNumber, expected, issueNumber);
     } catch (err) {
       console.error(
-        `\nState ops failed for PR #${prNumber} after verified ${expected} review: ${(err as Error).message}\n` +
-          `Review submission landed but label/draft state did not. Manual recovery required.\n` +
-          `Log: ${logPath}`
+        `\nState ops failed for PR #${prNumber} on ${expected} outcome: ${(err as Error).message}\n` +
+          `Manual recovery required. Log: ${logPath}`
       );
       process.exit(1);
     }
