@@ -34,4 +34,4 @@ jobs:
           GH_TOKEN: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
           SANDCASTLE_BOT_LOGIN: ora-gh-bot
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: pnpm sandcastle:v2 --execute --only=review
+        run: pnpm sandcastle --execute --only=review
