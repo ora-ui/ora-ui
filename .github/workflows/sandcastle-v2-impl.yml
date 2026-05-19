@@ -1,0 +1,34 @@
+name: sandcastle-v2-impl
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 */12 * * *'
+
+concurrency:
+  group: sandcastle-v2-impl-${{ github.event.issue.number || github.event.inputs.issue_number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  impl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Run impl dispatch
+        env:
+          GH_TOKEN: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
+          SANDCASTLE_BOT_LOGIN: ora-gh-bot
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: pnpm sandcastle:v2 --execute --only=impl
