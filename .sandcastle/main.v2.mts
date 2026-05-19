@@ -130,18 +130,22 @@ function ghJsonSafe<T>(query: string, fallback: T): T {
   }
 }
 
-// Post-verify the agent's promise actually landed on the PR. Guards against
-// transient gh failures that would otherwise leave the PR in an inconsistent
-// state with no error surfaced. `reviewDecision` is a GraphQL-only field, so
-// route through `gh pr view --json`, not the REST `gh api pulls/N` endpoint.
+// Post-verify the agent's content (review submission) actually landed on the PR.
+// Guards against transient gh failures that would otherwise leave the PR in an
+// inconsistent state with no error surfaced. `reviewDecision` is a GraphQL-only
+// field, so route through `gh pr view --json`, not the REST `gh api pulls/N`
+// endpoint.
+//
+// Label flips and `gh pr ready` are now orchestrator-managed (work item B of
+// #192) — we only verify the reviewDecision here, not label state.
 function verifyReviewOutcome(
   prNumber: number,
   expected: 'approved' | 'changes_requested'
 ): { ok: true } | { ok: false; reason: string } {
-  let pr: { reviewDecision: string | null; isDraft: boolean; labels: Array<{ name: string }> };
+  let pr: { reviewDecision: string | null };
   try {
     pr = JSON.parse(
-      execSync(`gh pr view ${prNumber} --json reviewDecision,isDraft,labels`, {
+      execSync(`gh pr view ${prNumber} --json reviewDecision`, {
         encoding: 'utf8',
         env: {
           ...process.env,
@@ -153,44 +157,72 @@ function verifyReviewOutcome(
     return { ok: false, reason: `gh pr view failed: ${(err as Error).message}` };
   }
 
-  const labels = new Set(pr.labels.map((l) => l.name));
-
-  if (expected === 'approved') {
-    if (pr.reviewDecision !== 'APPROVED') {
-      return {
-        ok: false,
-        reason: `reviewDecision is ${pr.reviewDecision ?? 'null'}, expected APPROVED`,
-      };
-    }
-    if (!labels.has('agent-approved')) {
-      return {
-        ok: false,
-        reason: 'agent-approved label missing — `gh pr edit --add-label` likely failed',
-      };
-    }
-    if (pr.isDraft) {
-      return { ok: false, reason: 'PR still in draft — `gh pr ready` likely failed' };
-    }
-    return { ok: true };
-  }
-
-  // expected === 'changes_requested'
-  if (pr.reviewDecision !== 'CHANGES_REQUESTED') {
+  const expectedDecision = expected === 'approved' ? 'APPROVED' : 'CHANGES_REQUESTED';
+  if (pr.reviewDecision !== expectedDecision) {
     return {
       ok: false,
-      reason: `reviewDecision is ${pr.reviewDecision ?? 'null'}, expected CHANGES_REQUESTED`,
-    };
-  }
-  if (!labels.has('agent-impl-todo')) {
-    return { ok: false, reason: 'agent-impl-todo label not added' };
-  }
-  if (labels.has('agent-review-pending')) {
-    return {
-      ok: false,
-      reason: 'agent-review-pending label still present — label flip half-landed',
+      reason: `reviewDecision is ${pr.reviewDecision ?? 'null'}, expected ${expectedDecision}`,
     };
   }
   return { ok: true };
+}
+
+// Apply all state mutations that must follow a confirmed review submission.
+// Called from dispatchReviewer only after verifyReviewOutcome returns ok.
+// Performs label flips and (for approve) `gh pr ready` — all with failure
+// handling so inconsistent state is surfaced rather than silently half-landing.
+function applyReviewStateOps(
+  prNumber: number,
+  outcome: 'approved' | 'changes_requested',
+  issueNumber: number | null
+): void {
+  const token = process.env.GH_TOKEN ?? process.env.SANDCASTLE_BOT_TOKEN ?? '';
+  const ghEnv = { ...process.env, GITHUB_TOKEN: token };
+
+  if (outcome === 'approved') {
+    try {
+      execSync(`gh pr edit ${prNumber} --remove-label agent-review-pending --add-label agent-approved`, {
+        encoding: 'utf8',
+        env: ghEnv,
+        stdio: 'pipe',
+      });
+    } catch (err) {
+      throw new Error(`Label flip to agent-approved failed: ${(err as Error).message}`);
+    }
+    try {
+      execSync(`gh pr ready ${prNumber}`, {
+        encoding: 'utf8',
+        env: ghEnv,
+        stdio: 'pipe',
+      });
+    } catch (err) {
+      throw new Error(`gh pr ready failed: ${(err as Error).message}`);
+    }
+  } else {
+    // changes_requested: flip to agent-impl-todo; escalate adds needs-human to PR and issue
+    try {
+      execSync(`gh pr edit ${prNumber} --remove-label agent-review-pending --add-label agent-impl-todo`, {
+        encoding: 'utf8',
+        env: ghEnv,
+        stdio: 'pipe',
+      });
+    } catch (err) {
+      throw new Error(`Label flip to agent-impl-todo failed: ${(err as Error).message}`);
+    }
+
+    // Escalation path: add needs-human to PR and issue (called with escalate=true)
+    if (issueNumber !== null) {
+      try {
+        execSync(`gh issue edit ${issueNumber} --add-label needs-human`, {
+          encoding: 'utf8',
+          env: ghEnv,
+          stdio: 'pipe',
+        });
+      } catch (err) {
+        throw new Error(`Adding needs-human to issue #${issueNumber} failed: ${(err as Error).message}`);
+      }
+    }
+  }
 }
 
 // Fetch open draft PRs authored by the bot.
@@ -625,9 +657,27 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
     const expected = approveMatch ? 'approved' : 'changes_requested';
     const verification = verifyReviewOutcome(prNumber, expected);
     if (!verification.ok) {
+      const reason = verification.reason;
       console.error(
-        `\nVerification failed for PR #${prNumber} (expected ${expected}): ${verification.reason}\n` +
+        `\nVerification failed for PR #${prNumber} (expected ${expected}): ${reason}\n` +
           `Reviewer emitted a promise but the gh sequence did not fully land. Manual recovery required.\n` +
+          `Log: ${logPath}`
+      );
+      process.exit(1);
+    }
+
+    // Extract issue number from PR body for escalation (needs-human on issue)
+    const closingMatch = prData.body?.match(
+      /\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b/i
+    );
+    const issueNum = closingMatch ? parseInt(closingMatch[1]!, 10) : null;
+
+    try {
+      applyReviewStateOps(prNumber, expected, issueNum);
+    } catch (err) {
+      console.error(
+        `\napplyReviewStateOps failed for PR #${prNumber}: ${(err as Error).message}\n` +
+          `Review submission landed but state ops did not. Manual recovery required.\n` +
           `Log: ${logPath}`
       );
       process.exit(1);

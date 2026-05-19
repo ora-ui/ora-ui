@@ -48,10 +48,11 @@ substantive gaps.
 Then execute:
 
 ```bash
-gh pr review {{PR_NUMBER}} --approve
-gh pr edit {{PR_NUMBER}} --remove-label agent-review-pending --add-label agent-approved
-gh pr ready {{PR_NUMBER}}
+gh pr review {{PR_NUMBER}} --approve --body "<review-summary>"
 ```
+
+**Note:** Label flips (`agent-review-pending` → `agent-approved`) and `gh pr ready` are now
+orchestrator-managed. Do not call `gh pr edit --add-label` or `gh pr ready` in the reviewer.
 
 ---
 
@@ -76,6 +77,10 @@ incorrect behavior, incomplete scope.
 Then execute the label flip:
 
 ```bash
+# Formal review submission (required for reviewDecision to become CHANGES_REQUESTED)
+gh pr review {{PR_NUMBER}} --request-changes --body "<review-summary>"
+
+# Label flip
 gh pr edit {{PR_NUMBER}} --remove-label agent-review-pending --add-label agent-impl-todo
 ```
 
@@ -110,7 +115,9 @@ Then execute:
 gh pr edit {{PR_NUMBER}} --remove-label agent-review-pending --add-label needs-human
 ```
 
-Stop here. Do not approve, do not request changes, do not push commits.
+**Note:** The `needs-human` label on the linked issue is added by the orchestrator.
+
+Stop here.
 
 ---
 
