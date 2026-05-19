@@ -73,15 +73,25 @@ const { values: cliArgs } = parseArgs({
   options: {
     'dry-run': { type: 'boolean' },
     execute: { type: 'boolean' },
+    only: { type: 'string' },
   },
   strict: false,
 });
 
+type OnlyMode = 'impl' | 'review' | 'address-review' | undefined;
+
 const EXECUTE = Boolean(cliArgs.execute);
 const DRY_RUN = !EXECUTE && (process.env.SANDCASTLE_DRY_RUN === '1' || Boolean(cliArgs['dry-run']));
+const ONLY_MODE = cliArgs.only as OnlyMode;
 
 if (EXECUTE && cliArgs['dry-run']) {
   console.error('Cannot pass --execute and --dry-run together.');
+  process.exit(1);
+}
+
+// Validate --only argument
+if (ONLY_MODE !== undefined && !['impl', 'review', 'address-review'].includes(ONLY_MODE)) {
+  console.error(`Invalid --only value "${ONLY_MODE}". Valid options: impl, review, address-review`);
   process.exit(1);
 }
 
@@ -575,8 +585,17 @@ async function runExecute(actions: Action[]): Promise<void> {
   const reviewerTargets = actions.filter((a) => a.kind === 'spawn-reviewer');
   const addressReviewTargets = actions.filter((a) => a.kind === 'spawn-address-review');
 
+  // Apply --only filter. 'impl' covers both fresh and address-review (implementer work).
+  // Escalations always run regardless of --only.
+  const filteredFresh = ONLY_MODE === undefined || ONLY_MODE === 'impl' ? freshTargets : [];
+  const filteredReviewer = ONLY_MODE === undefined || ONLY_MODE === 'review' ? reviewerTargets : [];
+  const filteredAddressReview =
+    ONLY_MODE === undefined || ONLY_MODE === 'address-review' || ONLY_MODE === 'impl'
+      ? addressReviewTargets
+      : [];
+
   // Priority: address-review (responding to review feedback) > reviewer > fresh implementer
-  const addressReviewTarget = addressReviewTargets[0];
+  const addressReviewTarget = filteredAddressReview[0];
   if (addressReviewTarget) {
     const prNumber = parseInt(addressReviewTarget.target.replace(/^#/, ''), 10);
     if (!Number.isFinite(prNumber)) {
@@ -587,7 +606,7 @@ async function runExecute(actions: Action[]): Promise<void> {
     process.exit(0);
   }
 
-  const reviewerTarget = reviewerTargets[0];
+  const reviewerTarget = filteredReviewer[0];
   if (reviewerTarget) {
     const prNumber = parseInt(reviewerTarget.target.replace(/^#/, ''), 10);
     if (!Number.isFinite(prNumber)) {
@@ -598,7 +617,7 @@ async function runExecute(actions: Action[]): Promise<void> {
     process.exit(0);
   }
 
-  const target = freshTargets[0];
+  const target = filteredFresh[0];
   if (!target) {
     console.log('\nNo agent dispatches needed this invocation. Exiting.');
     process.exit(0);
