@@ -1,0 +1,30 @@
+name: sandcastle-v2-review
+on:
+  workflow_dispatch: {}
+  # schedule: - cron: '30 */12 * * *'
+  # pull_request:
+  #   types: [synchronize]
+  #   branches:
+  #     - develop
+  #   if: github.event.pull_request.draft == true
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Run reviewer orchestrator
+        env:
+          GH_TOKEN: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
+          SANDCASTLE_BOT_LOGIN: ora-gh-bot
+          SANDCASTLE_BOT_TOKEN: ${{ secrets.SANDCASTLE_BOT_TOKEN }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: pnpm sandcastle:v2 --execute --only=review

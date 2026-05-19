@@ -73,9 +73,17 @@ const { values: cliArgs } = parseArgs({
   options: {
     'dry-run': { type: 'boolean' },
     execute: { type: 'boolean' },
+    only: { type: 'string' },
   },
   strict: false,
 });
+
+type OnlyMode = 'impl' | 'review' | 'address-review' | 'all';
+
+const ONLY_RAW: string = (cliArgs.only as string | undefined) ?? 'all';
+const onlyMode: OnlyMode = (ONLY_RAW === 'impl' || ONLY_RAW === 'review' || ONLY_RAW === 'address-review'
+  ? ONLY_RAW
+  : 'all') as OnlyMode;
 
 const EXECUTE = Boolean(cliArgs.execute);
 const DRY_RUN = !EXECUTE && (process.env.SANDCASTLE_DRY_RUN === '1' || Boolean(cliArgs['dry-run']));
@@ -567,8 +575,20 @@ async function runExecute(actions: Action[]): Promise<void> {
   const reviewerTargets = actions.filter((a) => a.kind === 'spawn-reviewer');
   const addressReviewTargets = actions.filter((a) => a.kind === 'spawn-address-review');
 
+  // Filter actions by --only mode when not "all"
+  const allTargets = [...freshTargets, ...reviewerTargets, ...addressReviewTargets];
+  const filteredTargets =
+    onlyMode === 'all'
+      ? allTargets
+      : allTargets.filter((a) => {
+          if (onlyMode === 'impl') return a.kind === 'spawn-implementer-fresh';
+          if (onlyMode === 'review') return a.kind === 'spawn-reviewer';
+          if (onlyMode === 'address-review') return a.kind === 'spawn-address-review';
+          return false;
+        });
+
   // Priority: address-review (responding to review feedback) > reviewer > fresh implementer
-  const addressReviewTarget = addressReviewTargets[0];
+  const addressReviewTarget = filteredTargets.find((a) => a.kind === 'spawn-address-review');
   if (addressReviewTarget) {
     const prNumber = parseInt(addressReviewTarget.target.replace(/^#/, ''), 10);
     if (!Number.isFinite(prNumber)) {
@@ -579,7 +599,7 @@ async function runExecute(actions: Action[]): Promise<void> {
     process.exit(0);
   }
 
-  const reviewerTarget = reviewerTargets[0];
+  const reviewerTarget = filteredTargets.find((a) => a.kind === 'spawn-reviewer');
   if (reviewerTarget) {
     const prNumber = parseInt(reviewerTarget.target.replace(/^#/, ''), 10);
     if (!Number.isFinite(prNumber)) {
@@ -590,15 +610,16 @@ async function runExecute(actions: Action[]): Promise<void> {
     process.exit(0);
   }
 
-  const target = freshTargets[0];
+  const target = filteredTargets.find((a) => a.kind === 'spawn-implementer-fresh');
   if (!target) {
     console.log('\nNo agent dispatches needed this invocation. Exiting.');
     process.exit(0);
   }
 
-  if (freshTargets.length > 1) {
+  const filteredFresh = filteredTargets.filter((a) => a.kind === 'spawn-implementer-fresh');
+  if (filteredFresh.length > 1) {
     console.log(
-      `Found ${freshTargets.length} fresh-implementer candidates; dispatching ${target.target} this invocation. Remaining will be picked up on the next sweep.`
+      `Found ${filteredFresh.length} fresh-implementer candidates; dispatching ${target.target} this invocation. Remaining will be picked up on the next sweep.`
     );
   }
 
