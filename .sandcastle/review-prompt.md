@@ -68,8 +68,8 @@ incorrect behavior, incomplete scope.
 </review-summary>
 
 <comments>
-- **{{FILE}}:{{LINE}}** — comment text
-- **{{FILE}}:{{LINE}}** — comment text
+- **<FILE>:<LINE>** — comment text
+- **<FILE>:<LINE>** — comment text
 </comments>
 ```
 
@@ -84,10 +84,10 @@ Leave line-anchored comments via `gh api`:
 ```bash
 gh api repos/ora-ui/ora-ui/pulls/{{PR_NUMBER}}/comments \
   --method POST \
-  --field body="**{{FILE}}:{{LINE}}** — comment text" \
+  --field body="**<FILE>:<LINE>** — comment text" \
   --field commit_id="$(git rev-parse origin/{{BRANCH}})" \
-  --field path="{{FILE}}" \
-  --field line={{LINE}}
+  --field path="<FILE>" \
+  --field line=<LINE>
 ```
 
 ---
