@@ -37,7 +37,7 @@ import { parseArgs } from 'node:util';
 // ---------------------------------------------------------------------------
 
 const BOT_LOGIN = process.env.SANDCASTLE_BOT_LOGIN ?? 'ora-gh-bot';
-const ROUNDS_CAP = parseInt(process.env.SANDCASTLE_ROUNDS_CAP ?? '2', 10);
+const ROUNDS_CAP = parseInt(process.env.SANDCASTLE_ROUNDS_CAP ?? '3', 10);
 const BASE_BRANCH = process.env.SANDCASTLE_BASE_BRANCH ?? 'develop';
 
 // Canonical bot git env passed into every docker dispatch. All dispatchers
@@ -228,12 +228,20 @@ function fetchDraftPRs(): PR[] {
 
   return raw.map((pr) => {
     const reviews = ghJsonSafe<
-      Array<{ user: { login: string }; submittedAt: string; state: string }>
+      Array<{ user: { login: string }; submittedAt: string; state: string; body: string | null }>
     >(
-      `repos/ora-ui/ora-ui/pulls/${pr.number}/reviews --jq '[.[] | {user: {login: .user.login}, submittedAt: .submitted_at, state}]'`,
+      `repos/ora-ui/ora-ui/pulls/${pr.number}/reviews --jq '[.[] | {user: {login: .user.login}, submittedAt: .submitted_at, state, body}]'`,
       []
     );
-    const botReviews = reviews.filter((r) => r.user.login === BOT_LOGIN);
+    // Filter to bot-authored reviews with a non-empty body. The line-anchored
+    // comments endpoint (POST /pulls/N/comments) auto-creates a Review record
+    // with empty body when no parent review ID is supplied — those are not
+    // distinct "rounds" of feedback and would otherwise double-count against
+    // ROUNDS_CAP. A real review submitted via `gh pr review --body=…` always
+    // carries the agent's summary text.
+    const botReviews = reviews.filter(
+      (r) => r.user.login === BOT_LOGIN && r.body !== null && r.body.trim() !== ''
+    );
 
     const commits = ghJsonSafe<Array<{ committedDate: string }>>(
       `repos/ora-ui/ora-ui/pulls/${pr.number}/commits --jq '[.[] | {committedDate: .commit.committer.date}]'`,
