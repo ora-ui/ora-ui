@@ -36,7 +36,7 @@ import { parseArgs } from 'node:util';
 // Config
 // ---------------------------------------------------------------------------
 
-const BOT_LOGIN = process.env.SANDCASTLE_BOT_LOGIN ?? 'ora-ui-sandcastle-bot';
+const BOT_LOGIN = process.env.SANDCASTLE_BOT_LOGIN ?? 'ora-gh-bot';
 const ROUNDS_CAP = parseInt(process.env.SANDCASTLE_ROUNDS_CAP ?? '2', 10);
 const BASE_BRANCH = process.env.SANDCASTLE_BASE_BRANCH ?? 'develop';
 
@@ -132,6 +132,8 @@ function ghJsonSafe<T>(query: string, fallback: T): T {
 
 // Fetch open draft PRs authored by the bot.
 function fetchDraftPRs(): PR[] {
+  // gh api returns REST shape (draft, user.login, head.ref, ...). Project to the
+  // camelCase shape we use locally via --jq so the TS types match runtime values.
   const raw = ghJson<
     Array<{
       number: number;
@@ -144,18 +146,21 @@ function fetchDraftPRs(): PR[] {
       labels: Array<{ name: string }>;
       headSha: string;
     }>
-  >(`repos/ora-ui/ora-ui/pulls --jq '.'`).filter(
-    (pr) => pr.isDraft && pr.author.login === BOT_LOGIN
-  );
+  >(
+    `repos/ora-ui/ora-ui/pulls --jq '[.[] | {number, title, state, isDraft: .draft, headRefName: .head.ref, baseRefName: .base.ref, author: {login: .user.login}, labels: [.labels[] | {name}], headSha: .head.sha}]'`
+  ).filter((pr) => pr.isDraft && pr.author.login === BOT_LOGIN);
 
   return raw.map((pr) => {
     const reviews = ghJsonSafe<
       Array<{ user: { login: string }; submittedAt: string; state: string }>
-    >(`repos/ora-ui/ora-ui/pulls/${pr.number}/reviews --jq '.'`, []);
+    >(
+      `repos/ora-ui/ora-ui/pulls/${pr.number}/reviews --jq '[.[] | {user: {login: .user.login}, submittedAt: .submitted_at, state}]'`,
+      []
+    );
     const botReviews = reviews.filter((r) => r.user.login === BOT_LOGIN);
 
     const commits = ghJsonSafe<Array<{ committedDate: string }>>(
-      `repos/ora-ui/ora-ui/pulls/${pr.number}/commits --jq '.'`,
+      `repos/ora-ui/ora-ui/pulls/${pr.number}/commits --jq '[.[] | {committedDate: .commit.committer.date}]'`,
       []
     );
     const lastCommit = commits.length > 0 ? commits[commits.length - 1]!.committedDate : null;
@@ -486,7 +491,7 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
 
   assertBotToken();
 
-  // Fetch PR metadata for the prompt
+  // Fetch PR metadata for the prompt (project REST shape → camelCase via jq).
   const prData = ghJson<{
     number: number;
     title: string;
@@ -494,18 +499,24 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
     headRefName: string;
     baseRefName: string;
     headSha: string;
-  }>(`repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName, baseRefName, headSha}'`);
+  }>(
+    `repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName: .head.ref, baseRefName: .base.ref, headSha: .head.sha}'`
+  );
 
   // Fetch existing review comments for context
   const existingReviews = ghJsonSafe<
     Array<{ id: number; body: string | null; state: string; submittedAt: string }>
-  >(`repos/ora-ui/ora-ui/pulls/${prNumber}/reviews --jq '.'`, []);
+  >(
+    `repos/ora-ui/ora-ui/pulls/${prNumber}/reviews --jq '[.[] | {id, body, state, submittedAt: .submitted_at}]'`,
+    []
+  );
 
-  const reviewThread = existingReviews.length > 0
-    ? existingReviews
-        .map((r) => `[${r.state}] ${r.submittedAt}: ${r.body ?? '(no body)'}`)
-        .join('\n\n')
-    : 'No previous reviews.';
+  const reviewThread =
+    existingReviews.length > 0
+      ? existingReviews
+          .map((r) => `[${r.state}] ${r.submittedAt}: ${r.body ?? '(no body)'}`)
+          .join('\n\n')
+      : 'No previous reviews.';
 
   const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
   const reviewerAgent = resolveAgent('SANDCASTLE_REVIEWER_AGENT', 'pi:anthropic/claude-sonnet-4-6');
