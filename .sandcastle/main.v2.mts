@@ -432,9 +432,9 @@ if (!EXECUTE) {
 // Execute mode (ADR-0003 Phase 1)
 //
 // Dispatch ONE qualifying action per invocation:
+// - spawn-address-review: implementer responding to review feedback (highest priority)
+// - spawn-reviewer: PR reviewer
 // - spawn-implementer-fresh: fresh-mode implementer
-// - spawn-reviewer: PR reviewer (timestamp gate stubbed to always allow)
-// - spawn-address-review: implementer responding to review (not yet wired)
 // ---------------------------------------------------------------------------
 
 await runExecute(actions);
@@ -442,13 +442,20 @@ await runExecute(actions);
 async function runExecute(actions: Action[]): Promise<void> {
   const freshTargets = actions.filter((a) => a.kind === 'spawn-implementer-fresh');
   const reviewerTargets = actions.filter((a) => a.kind === 'spawn-reviewer');
-  const stubTargets = actions.filter((a) => a.kind === 'spawn-address-review');
+  const addressReviewTargets = actions.filter((a) => a.kind === 'spawn-address-review');
 
-  for (const a of stubTargets) {
-    console.log(`[skip] ${a.kind} for ${a.target} — not yet implemented in v2 execute path.`);
+  // Priority: address-review (responding to review feedback) > reviewer > fresh implementer
+  const addressReviewTarget = addressReviewTargets[0];
+  if (addressReviewTarget) {
+    const prNumber = parseInt(addressReviewTarget.target.replace(/^#/, ''), 10);
+    if (!Number.isFinite(prNumber)) {
+      console.error(`Could not parse PR number from target "${addressReviewTarget.target}".`);
+      process.exit(1);
+    }
+    await dispatchAddressReview(prNumber);
+    process.exit(0);
   }
 
-  // Dispatch one reviewer if available (timestamp gate stubbed: always allow)
   const reviewerTarget = reviewerTargets[0];
   if (reviewerTarget) {
     const prNumber = parseInt(reviewerTarget.target.replace(/^#/, ''), 10);
@@ -545,6 +552,70 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
   }
 
   // Reviewer completes after taking action (approve/request-changes/escalate)
+  process.exit(0);
+}
+
+// ---------------------------------------------------------------------------
+// Address-review implementer
+// ---------------------------------------------------------------------------
+
+async function dispatchAddressReview(prNumber: number): Promise<void> {
+  console.log(`\n=== Dispatching address-review implementer for PR #${prNumber} ===\n`);
+
+  assertBotToken();
+
+  const prData = ghJson<{
+    number: number;
+    title: string;
+    body: string | null;
+    headRefName: string;
+    baseRefName: string;
+    headSha: string;
+  }>(`repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName, baseRefName, headSha}'`);
+
+  // Extract the issue number from the PR body (e.g. "Closes #N").
+  // Falls back to the PR number itself — not ideal but avoids leaving a blank.
+  const closingMatch = prData.body?.match(/\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b/i);
+  const issueRef = closingMatch ? closingMatch[1]! : String(prNumber);
+
+  const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
+  const implAgent = resolveAgent('SANDCASTLE_IMPL_AGENT', 'pi:anthropic/claude-sonnet-4-6');
+
+  const branch = prData.headRefName;
+  const logPath = `.sandcastle/logs/${branch.replace(/\//g, '-')}-impl-address-review.log`;
+
+  const result = await sandcastle.run({
+    hooks: { sandbox: { onSandboxReady: [{ command: 'pnpm install' }] } },
+    copyToWorktree: ['node_modules'],
+    sandbox: docker({ env: botGitEnv }),
+    branchStrategy: { type: 'branch', branch, baseBranch: prData.baseRefName },
+    name: 'implementer-address-review',
+    maxIterations: 10,
+    agent: implAgent,
+    promptFile: './.sandcastle/implement-address-review.md',
+    promptArgs: { PR_NUMBER: String(prNumber), ISSUE_REF: issueRef, SHARED },
+    logging: { type: 'file', path: logPath },
+  });
+
+  // Handle BLOCKED — post the reason as a PR comment, no commits.
+  const blockedMatch = result.stdout.match(/<blocked-reason>([\s\S]*?)<\/blocked-reason>/);
+  if (blockedMatch) {
+    const reason = blockedMatch[1]!.trim();
+    console.log(`\nAddress-review reported BLOCKED on PR #${prNumber}:\n${reason}\n`);
+    try {
+      execSync(
+        `gh api repos/ora-ui/ora-ui/issues/${prNumber}/comments ` +
+          `--method POST --field body=${JSON.stringify(`**Sandcastle blocked:** ${reason}`)}`,
+        { stdio: 'inherit' }
+      );
+    } catch {
+      console.warn(`Could not post blocked comment to PR #${prNumber}.`);
+    }
+    process.exit(0);
+  }
+
+  console.log(`\nAddress-review completed for PR #${prNumber}.`);
+  console.log(`Log: ${logPath}`);
   process.exit(0);
 }
 
