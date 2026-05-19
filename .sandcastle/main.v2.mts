@@ -431,21 +431,33 @@ if (!EXECUTE) {
 // ---------------------------------------------------------------------------
 // Execute mode (ADR-0003 Phase 1)
 //
-// Dispatch ONE qualifying spawn-implementer-fresh action per invocation.
-// Reviewer and address-review dispatches print a stub and are skipped —
-// they ship in subsequent slices.
+// Dispatch ONE qualifying action per invocation:
+// - spawn-implementer-fresh: fresh-mode implementer
+// - spawn-reviewer: PR reviewer (timestamp gate stubbed to always allow)
+// - spawn-address-review: implementer responding to review (not yet wired)
 // ---------------------------------------------------------------------------
 
 await runExecute(actions);
 
 async function runExecute(actions: Action[]): Promise<void> {
   const freshTargets = actions.filter((a) => a.kind === 'spawn-implementer-fresh');
-  const stubTargets = actions.filter(
-    (a) => a.kind === 'spawn-reviewer' || a.kind === 'spawn-address-review'
-  );
+  const reviewerTargets = actions.filter((a) => a.kind === 'spawn-reviewer');
+  const stubTargets = actions.filter((a) => a.kind === 'spawn-address-review');
 
   for (const a of stubTargets) {
     console.log(`[skip] ${a.kind} for ${a.target} — not yet implemented in v2 execute path.`);
+  }
+
+  // Dispatch one reviewer if available (timestamp gate stubbed: always allow)
+  const reviewerTarget = reviewerTargets[0];
+  if (reviewerTarget) {
+    const prNumber = parseInt(reviewerTarget.target.replace(/^#/, ''), 10);
+    if (!Number.isFinite(prNumber)) {
+      console.error(`Could not parse PR number from target "${reviewerTarget.target}".`);
+      process.exit(1);
+    }
+    await dispatchReviewer(prNumber);
+    process.exit(0);
   }
 
   const target = freshTargets[0];
@@ -467,6 +479,73 @@ async function runExecute(actions: Action[]): Promise<void> {
   }
 
   await dispatchFreshImplementer(issueNumber);
+}
+
+async function dispatchReviewer(prNumber: number): Promise<void> {
+  console.log(`\n=== Dispatching reviewer for PR #${prNumber} ===\n`);
+
+  assertBotToken();
+
+  // Fetch PR metadata for the prompt
+  const prData = ghJson<{
+    number: number;
+    title: string;
+    body: string | null;
+    headRefName: string;
+    baseRefName: string;
+    headSha: string;
+  }>(`repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName, baseRefName, headSha}'`);
+
+  // Fetch existing review comments for context
+  const existingReviews = ghJsonSafe<
+    Array<{ id: number; body: string | null; state: string; submittedAt: string }>
+  >(`repos/ora-ui/ora-ui/pulls/${prNumber}/reviews --jq '.'`, []);
+
+  const reviewThread = existingReviews.length > 0
+    ? existingReviews
+        .map((r) => `[${r.state}] ${r.submittedAt}: ${r.body ?? '(no body)'}`)
+        .join('\n\n')
+    : 'No previous reviews.';
+
+  const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
+  const reviewerAgent = resolveAgent('SANDCASTLE_REVIEWER_AGENT', 'pi:anthropic/claude-sonnet-4-6');
+
+  const branch = prData.headRefName;
+  const logPath = `.sandcastle/logs/${branch.replace(/\//g, '-')}-reviewer.log`;
+
+  const result = await sandcastle.run({
+    hooks: { sandbox: { onSandboxReady: [{ command: 'pnpm install' }] } },
+    copyToWorktree: ['node_modules'],
+    sandbox: docker({ env: botGitEnv }),
+    branchStrategy: { type: 'branch', branch, baseBranch: prData.baseRefName },
+    name: 'reviewer',
+    maxIterations: 5,
+    agent: reviewerAgent,
+    promptFile: './.sandcastle/review-prompt.md',
+    promptArgs: {
+      PR_NUMBER: String(prNumber),
+      BRANCH: branch,
+      SOURCE_BRANCH: prData.baseRefName,
+      PR_BODY: prData.body ?? '(no description)',
+      REVIEW_THREAD: reviewThread,
+      SHARED,
+    },
+    logging: { type: 'file', path: logPath },
+  });
+
+  // Log result for traceability
+  console.log(`\nReviewer completed for PR #${prNumber}.`);
+  console.log(`Log: ${logPath}`);
+
+  // Check for escalation (needs-human)
+  const escalateMatch = result.stdout.match(/<promise>agent:review:escalate<\/promise>/);
+  if (escalateMatch) {
+    console.log('Reviewer escalated. Exiting.');
+    process.exit(0);
+  }
+
+  // Reviewer completes after taking action (approve/request-changes/escalate)
+  process.exit(0);
 }
 
 async function dispatchFreshImplementer(issueNumber: number): Promise<void> {
