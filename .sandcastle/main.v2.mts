@@ -721,9 +721,19 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
   }
   const transcript = result.stdout + '\n' + logContents;
 
-  const approveMatch = transcript.match(/<promise>agent:review:approve<\/promise>/);
-  const requestChangesMatch = transcript.match(/<promise>agent:review:request-changes<\/promise>/);
-  const escalateMatch = transcript.match(/<promise>agent:review:escalate<\/promise>/);
+  // Whitespace-tolerant matching: agents occasionally emit the promise tag
+  // across multiple lines (e.g. `<promise>agent:review:\n  approve</promise>`)
+  // or with stray padding. \s* between every segment absorbs those without
+  // matching unrelated content.
+  const approveMatch = transcript.match(
+    /<promise>\s*agent\s*:\s*review\s*:\s*approve\s*<\/promise>/
+  );
+  const requestChangesMatch = transcript.match(
+    /<promise>\s*agent\s*:\s*review\s*:\s*request-changes\s*<\/promise>/
+  );
+  const escalateMatch = transcript.match(
+    /<promise>\s*agent\s*:\s*review\s*:\s*escalate\s*<\/promise>/
+  );
 
   const issueNumber = extractClosingIssue(prData.body);
 
