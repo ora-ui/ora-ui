@@ -45,12 +45,10 @@ substantive gaps.
 </review-summary>
 ```
 
-Then execute:
+Then submit the formal approval review (body is the `<review-summary>` text):
 
 ```bash
-gh pr review {{PR_NUMBER}} --approve
-gh pr edit {{PR_NUMBER}} --remove-label agent-review-pending --add-label agent-approved
-gh pr ready {{PR_NUMBER}}
+gh pr review {{PR_NUMBER}} --approve --body "<review-summary text>"
 ```
 
 ---
@@ -73,13 +71,13 @@ incorrect behavior, incomplete scope.
 </comments>
 ```
 
-Then execute the label flip:
+Submit the formal request-changes review (body is the `<review-summary>` text):
 
 ```bash
-gh pr edit {{PR_NUMBER}} --remove-label agent-review-pending --add-label agent-impl-todo
+gh pr review {{PR_NUMBER}} --request-changes --body "<review-summary text>"
 ```
 
-Leave line-anchored comments via `gh api`:
+Then leave line-anchored comments via `gh api`:
 
 ```bash
 gh api repos/ora-ui/ora-ui/pulls/{{PR_NUMBER}}/comments \
@@ -102,12 +100,6 @@ Use when gates are broken, scope is ambiguous, or human judgment is required.
 <escalation-reason>
 One paragraph: why escalation is needed.
 </escalation-reason>
-```
-
-Then execute:
-
-```bash
-gh pr edit {{PR_NUMBER}} --remove-label agent-review-pending --add-label needs-human
 ```
 
 Stop here. Do not approve, do not request changes, do not push commits.
