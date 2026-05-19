@@ -130,6 +130,69 @@ function ghJsonSafe<T>(query: string, fallback: T): T {
   }
 }
 
+// Post-verify the agent's promise actually landed on the PR. Guards against
+// transient gh failures that would otherwise leave the PR in an inconsistent
+// state with no error surfaced. `reviewDecision` is a GraphQL-only field, so
+// route through `gh pr view --json`, not the REST `gh api pulls/N` endpoint.
+function verifyReviewOutcome(
+  prNumber: number,
+  expected: 'approved' | 'changes_requested'
+): { ok: true } | { ok: false; reason: string } {
+  let pr: { reviewDecision: string | null; isDraft: boolean; labels: Array<{ name: string }> };
+  try {
+    pr = JSON.parse(
+      execSync(`gh pr view ${prNumber} --json reviewDecision,isDraft,labels`, {
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          GITHUB_TOKEN: process.env.GH_TOKEN ?? process.env.SANDCASTLE_BOT_TOKEN,
+        },
+      })
+    );
+  } catch (err) {
+    return { ok: false, reason: `gh pr view failed: ${(err as Error).message}` };
+  }
+
+  const labels = new Set(pr.labels.map((l) => l.name));
+
+  if (expected === 'approved') {
+    if (pr.reviewDecision !== 'APPROVED') {
+      return {
+        ok: false,
+        reason: `reviewDecision is ${pr.reviewDecision ?? 'null'}, expected APPROVED`,
+      };
+    }
+    if (!labels.has('agent-approved')) {
+      return {
+        ok: false,
+        reason: 'agent-approved label missing — `gh pr edit --add-label` likely failed',
+      };
+    }
+    if (pr.isDraft) {
+      return { ok: false, reason: 'PR still in draft — `gh pr ready` likely failed' };
+    }
+    return { ok: true };
+  }
+
+  // expected === 'changes_requested'
+  if (pr.reviewDecision !== 'CHANGES_REQUESTED') {
+    return {
+      ok: false,
+      reason: `reviewDecision is ${pr.reviewDecision ?? 'null'}, expected CHANGES_REQUESTED`,
+    };
+  }
+  if (!labels.has('agent-impl-todo')) {
+    return { ok: false, reason: 'agent-impl-todo label not added' };
+  }
+  if (labels.has('agent-review-pending')) {
+    return {
+      ok: false,
+      reason: 'agent-review-pending label still present — label flip half-landed',
+    };
+  }
+  return { ok: true };
+}
+
 // Fetch open draft PRs authored by the bot.
 function fetchDraftPRs(): PR[] {
   // gh api returns REST shape (draft, user.login, head.ref, ...). Project to the
@@ -552,18 +615,31 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
     logging: { type: 'file', path: logPath },
   });
 
-  // Log result for traceability
+  const approveMatch = result.stdout.match(/<promise>agent:review:approve<\/promise>/);
+  const requestChangesMatch = result.stdout.match(
+    /<promise>agent:review:request-changes<\/promise>/
+  );
+  const escalateMatch = result.stdout.match(/<promise>agent:review:escalate<\/promise>/);
+
+  if (approveMatch || requestChangesMatch) {
+    const expected = approveMatch ? 'approved' : 'changes_requested';
+    const verification = verifyReviewOutcome(prNumber, expected);
+    if (!verification.ok) {
+      console.error(
+        `\nVerification failed for PR #${prNumber} (expected ${expected}): ${verification.reason}\n` +
+          `Reviewer emitted a promise but the gh sequence did not fully land. Manual recovery required.\n` +
+          `Log: ${logPath}`
+      );
+      process.exit(1);
+    }
+  }
+
   console.log(`\nReviewer completed for PR #${prNumber}.`);
   console.log(`Log: ${logPath}`);
 
-  // Check for escalation (needs-human)
-  const escalateMatch = result.stdout.match(/<promise>agent:review:escalate<\/promise>/);
   if (escalateMatch) {
     console.log('Reviewer escalated. Exiting.');
-    process.exit(0);
   }
-
-  // Reviewer completes after taking action (approve/request-changes/escalate)
   process.exit(0);
 }
 
@@ -583,11 +659,15 @@ async function dispatchAddressReview(prNumber: number): Promise<void> {
     headRefName: string;
     baseRefName: string;
     headSha: string;
-  }>(`repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName, baseRefName, headSha}'`);
+  }>(
+    `repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName, baseRefName, headSha}'`
+  );
 
   // Extract the issue number from the PR body (e.g. "Closes #N").
   // Falls back to the PR number itself — not ideal but avoids leaving a blank.
-  const closingMatch = prData.body?.match(/\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b/i);
+  const closingMatch = prData.body?.match(
+    /\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b/i
+  );
   const issueRef = closingMatch ? closingMatch[1]! : String(prNumber);
 
   const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
