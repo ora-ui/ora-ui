@@ -29,8 +29,10 @@ RUN existing=$(getent group $AGENT_GID | cut -d: -f1); \
     groupmod -g $AGENT_GID node && \
     usermod -u $AGENT_UID -g $AGENT_GID -d /home/agent -m -l agent node
 
-# Install pnpm and pi coding agent (run as root before USER agent)
-RUN npm install -g pnpm @mariozechner/pi-coding-agent
+# Install pnpm and the coding agent CLIs (run as root before USER agent).
+# Both providers ship as global npm packages; the orchestrator's resolveAgent
+# picks one at dispatch time based on SANDCASTLE_IMPL_AGENT.
+RUN npm install -g pnpm @mariozechner/pi-coding-agent @anthropic-ai/claude-code
 
 # Ensure the home dir is accessible regardless of runtime UID
 RUN chmod -R a+rwX /home/agent
