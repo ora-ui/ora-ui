@@ -647,7 +647,13 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
   // REVIEW_COMMENTS is only populated with bot-authored comments — human inline
   // comments are not part of the reviewer agent loop and would confuse it.
   const existingComments = ghJsonSafe<
-    Array<{ path: string | null; line: number | null; body: string | null; user: { login: string }; createdAt: string }>
+    Array<{
+      path: string | null;
+      line: number | null;
+      body: string | null;
+      user: { login: string };
+      createdAt: string;
+    }>
   >(
     `repos/ora-ui/ora-ui/pulls/${prNumber}/comments --jq '[.[] | select(.user.login == "${BOT_LOGIN}") | {path: .path, line: .line, body: .body, user: {login: .user.login}, createdAt: .created_at}]'`,
     []
@@ -675,7 +681,12 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
     sandbox: docker({ env: botGitEnv }),
     branchStrategy: { type: 'branch', branch, baseBranch: prData.baseRefName },
     name: 'reviewer',
-    maxIterations: 5,
+    // Reviewer is a one-shot decision task — not an iterative build. Each
+    // sandcastle iteration is a fresh agent run with the original prompt args
+    // (REVIEW_THREAD/REVIEW_COMMENTS are snapshotted at dispatch), so retries
+    // don't see prior-iteration work and re-post the same review. If iter 1
+    // doesn't yield a promise tag, escalate instead of looping. See #234.
+    maxIterations: 1,
     agent: reviewerAgent,
     promptFile: './.sandcastle/review-prompt.md',
     // SOURCE_BRANCH/TARGET_BRANCH are sandcastle built-ins injected from
@@ -691,11 +702,20 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
     logging: { type: 'file', path: logPath },
   });
 
-  const approveMatch = result.stdout.match(/<promise>agent:review:approve<\/promise>/);
-  const requestChangesMatch = result.stdout.match(
-    /<promise>agent:review:request-changes<\/promise>/
-  );
-  const escalateMatch = result.stdout.match(/<promise>agent:review:escalate<\/promise>/);
+  // Search both result.stdout AND the on-disk log. result.stdout may be
+  // truncated, only-final-iteration, or otherwise lossy depending on provider;
+  // the log file is the canonical transcript. See #234 (promise-parse miss).
+  let logContents = '';
+  try {
+    logContents = readFileSync(logPath, 'utf8');
+  } catch {
+    // Log file missing is unexpected but non-fatal — fall back to stdout only.
+  }
+  const transcript = result.stdout + '\n' + logContents;
+
+  const approveMatch = transcript.match(/<promise>agent:review:approve<\/promise>/);
+  const requestChangesMatch = transcript.match(/<promise>agent:review:request-changes<\/promise>/);
+  const escalateMatch = transcript.match(/<promise>agent:review:escalate<\/promise>/);
 
   const issueNumber = extractClosingIssue(prData.body);
 

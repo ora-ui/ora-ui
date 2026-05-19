@@ -3,6 +3,17 @@
 Review the implementer's PR. **Default to no-op.** Take no action unless
 review work is clearly warranted.
 
+**This is a one-shot task.** Emit your `<promise>` tag exactly once, run the
+posting commands exactly once, then stop. Do not retry, re-post, or re-emit
+the promise — even if the run feels incomplete. If anything fails, escalate
+(Option C) rather than retrying.
+
+**Do not modify PR labels.** The orchestrator owns all label transitions
+(`agent-review-pending` → `agent-impl-todo`/`agent-approved`/`needs-human`)
+based on the promise tag you emit. Never call `gh pr edit --add-label` or
+`--remove-label`. If you do, the label state becomes inconsistent and the
+next orchestrator sweep will re-spawn this reviewer in a loop.
+
 ## Context
 
 ### PR metadata
