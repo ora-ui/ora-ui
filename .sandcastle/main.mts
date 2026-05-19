@@ -103,7 +103,7 @@ const resolveAgent = (envVar: string, fallback: string): AgentProvider => {
       });
     case 'claude-code':
       return sandcastle.claudeCode(model, {
-        env: { ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY! },
+        env: { CLAUDE_CODE_OAUTH_TOKEN: process.env.CLAUDE_CODE_OAUTH_TOKEN! },
       });
     case 'codex':
       return sandcastle.codex(model, {
@@ -335,8 +335,81 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
     continue;
   }
 
-  if (!implement.commits.length) {
-    console.log('Implementation agent made no commits. Skipping review.');
+  // Verify commits independently rather than trusting implement.commits.length
+  // alone — agents have been observed switching branches mid-run, stranding
+  // their commits on a ref the orchestrator doesn't watch. See #213.
+  const expectedCommits = execSync(
+    `git log ${baseBranch}..${implementBranch} --oneline 2>/dev/null || true`,
+    { encoding: 'utf8' }
+  ).trim();
+
+  if (!expectedCommits) {
+    // No commits on the expected branch. Check whether the agent stranded
+    // them on a different agent-* branch in the worktree.
+    const allAgentBranches = execSync(`git branch --format='%(refname:short)' --list 'agent-*'`, {
+      encoding: 'utf8',
+    })
+      .trim()
+      .split('\n')
+      .filter((b) => b && b !== implementBranch);
+
+    const strandedBranches = allAgentBranches
+      .map((b) => {
+        const count = parseInt(
+          execSync(`git rev-list --count ${baseBranch}..${b} 2>/dev/null || echo 0`, {
+            encoding: 'utf8',
+          }).trim(),
+          10
+        );
+        return count > 0 ? `${b} (${count} commits)` : null;
+      })
+      .filter((x): x is string => x !== null)
+      .join('\n');
+
+    const issueRef =
+      targetIssue ??
+      implement.stdout.match(/<working-on-issue>(\d+)<\/working-on-issue>/)?.[1] ??
+      null;
+    const logPath = `.sandcastle/logs/${implementBranch.replace(/\//g, '-')}.log`;
+
+    if (strandedBranches) {
+      console.error(
+        `\n⚠️  Agent committed to a different branch than expected.\n` +
+          `   Expected: ${implementBranch} (0 commits)\n` +
+          `   Found commits on:\n${strandedBranches
+            .split('\n')
+            .map((b) => `     - ${b}`)
+            .join('\n')}\n` +
+          `   Log: ${logPath}\n` +
+          `   Manual recovery required — do not silently skip.`
+      );
+      if (issueRef) {
+        const body = `**Sandcastle: agent committed to wrong branch.**\n\nExpected commits on \`${implementBranch}\` but found them on:\n\`\`\`\n${strandedBranches}\n\`\`\`\nLog: \`${logPath}\`\n\nLikely cause: agent ran a forbidden branch-mutating git command (see #213). Manual recovery needed.`;
+        try {
+          execSync(`gh issue comment ${issueRef} --body ${JSON.stringify(body)}`, {
+            stdio: 'inherit',
+          });
+        } catch {
+          console.warn(`Could not post stranded-branch comment to issue #${issueRef}`);
+        }
+      }
+    } else {
+      console.error(
+        `\n⚠️  Agent emitted COMPLETE but produced no commits on any branch.\n` +
+          `   Log: ${logPath}\n` +
+          `   Likely cause: gate failure rationalized, or no-op completion.`
+      );
+      if (issueRef) {
+        const body = `**Sandcastle: agent reported COMPLETE but produced no commits.**\n\nBranch: \`${implementBranch}\`\nLog: \`${logPath}\`\n\nLikely cause: branch switch, gate failure rationalized as "environment", or no-op completion. See #213.`;
+        try {
+          execSync(`gh issue comment ${issueRef} --body ${JSON.stringify(body)}`, {
+            stdio: 'inherit',
+          });
+        } catch {
+          console.warn(`Could not post zero-commit comment to issue #${issueRef}`);
+        }
+      }
+    }
     continue;
   }
 
