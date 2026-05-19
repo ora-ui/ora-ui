@@ -533,10 +533,11 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
     maxIterations: 5,
     agent: reviewerAgent,
     promptFile: './.sandcastle/review-prompt.md',
+    // SOURCE_BRANCH/TARGET_BRANCH are sandcastle built-ins injected from
+    // branchStrategy — passing them here errors with PromptError.
     promptArgs: {
       PR_NUMBER: String(prNumber),
       BRANCH: branch,
-      SOURCE_BRANCH: prData.baseRefName,
       PR_BODY: prData.body ?? '(no description)',
       REVIEW_THREAD: reviewThread,
       SHARED,
