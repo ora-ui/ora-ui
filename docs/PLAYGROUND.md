@@ -5,47 +5,43 @@ The playground is a Storybook-like component explorer with fixed layout, sidebar
 ## Structure
 
 ```
-apps/www/src/app/playground/
-├── layout.tsx                    # Fixed shell with sidebar
-├── page.tsx                      # Index redirect to first component
-├── [component]/
-│   └── page.tsx                  # Dynamic route, loads from registry
-├── components/
-│   ├── playground-sidebar.tsx    # Sidebar with groups + filter
-│   ├── preview-shell.tsx         # Preview area + bottom toolbar
-│   ├── global-controls.tsx       # Theme, radius controls
-│   ├── controls.tsx              # Control primitives (text, select, etc.)
-│   ├── component-display.tsx     # DEPRECATED - do not use
-│   ├── *.tsx                     # DEPRECATED - legacy component files
-│   └── constants.ts              # Shared constants
-└── registry/
-    ├── index.ts                  # Registry manifest + types
-    └── entries/                  # ✅ ADD NEW COMPONENTS HERE
-        ├── button.tsx
-        ├── badge.tsx
-        ├── checkbox.tsx
-        ├── checkbox-group.tsx
-        └── ...
+apps/www/playground/
+├── entries/                     # Playground component entries (index.ts is the manifest)
+│   ├── index.ts                 # Registry manifest + types
+│   ├── button.tsx
+│   ├── badge.tsx
+│   ├── checkbox.tsx
+│   └── ...
+└── components/                  # Shell components
+    ├── playground-sidebar.tsx   # Sidebar with groups + filter
+    ├── preview-shell.tsx        # Preview area + bottom toolbar
+    ├── global-controls.tsx      # Theme, radius controls
+    ├── controls.tsx             # Control primitives (text, select, etc.)
+    └── constants.ts             # Shared constants
+
+apps/www/app/playground/         # Route handlers (separate from playground/)
+├── layout.tsx                   # Fixed shell with sidebar
+├── page.tsx                     # Index redirect to first component
+└── [component]/
+    └── page.tsx                 # Dynamic route, loads from registry
 ```
 
 ## IMPORTANT: Where to Add/Update Playground Components
 
-**✅ CORRECT**: Add new playground components to `apps/www/src/app/playground/registry/entries/[component].tsx`
-
-**❌ DEPRECATED**: The old component files in `apps/www/src/app/playground/components/` directory (button.tsx, badge.tsx, checkbox.tsx, etc.) are legacy and should NOT be updated. They are kept for reference only.
+**✅ CORRECT**: Add new playground components to `apps/www/playground/entries/[component].tsx`
 
 When working with playground components:
 
-- Always work in `registry/entries/`
-- Update the registry manifest in `registry/index.ts`
-- Never modify the old component files in `components/` (except constants.ts and control primitives)
+- Add entries in `apps/www/playground/entries/`
+- Update the registry manifest in `apps/www/playground/entries/index.ts`
+- Shell components are in `apps/www/playground/components/` (do not add component files here)
 
 ## Adding a New Component to the Playground
 
-1. Create a new file in `apps/www/src/app/playground/registry/entries/[component].tsx`
+1. Create a new file in `apps/www/playground/entries/[component].tsx`
 2. Export a default object with `{ Preview, Variants, defaults }`
-3. Add the entry to the registry in `apps/www/src/app/playground/registry/index.ts`
-4. Update `apps/www/src/app/playground/components/constants.ts` if new variant/theme/size constants are needed
+3. Add the entry to the registry in `apps/www/playground/entries/index.ts`
+4. Update `apps/www/playground/components/constants.ts` if new variant/theme/size constants are needed
 
 ### Registry Entry Structure
 
@@ -81,11 +77,11 @@ export default {
 
 ## Reference
 
-See `apps/www/src/app/playground/registry/entries/button.tsx` or `apps/www/src/app/playground/registry/entries/checkbox.tsx` as model implementations for new components.
+See `apps/www/playground/entries/button.tsx` or `apps/www/playground/entries/checkbox.tsx` as model implementations for new components.
 
 ## Component Implementation Guidelines
 
-The playground entries in `registry/entries/` should only handle the preview interface, controls, and variants showcase. The actual component implementation lives in `apps/www/src/components/ui/`.
+The playground entries in `apps/www/playground/entries/` should only handle the preview interface, controls, and variants showcase. The actual component implementation lives in `apps/www/src/components/ui/`.
 
 When implementing the actual UI components (not playground entries), follow the patterns in:
 
