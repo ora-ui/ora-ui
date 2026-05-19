@@ -130,53 +130,67 @@ function ghJsonSafe<T>(query: string, fallback: T): T {
   }
 }
 
-// Post-verify the reviewer's action landed correctly. After the reviewer agent
-// emits approve or request-changes, we check the actual PR state to guard
-// against gh transient failures (network, auth blip) that would otherwise leave
-// the PR in a half-approved or half-requested state.
-async function verifyReviewOutcome(
+// Post-verify the agent's promise actually landed on the PR. Guards against
+// transient gh failures that would otherwise leave the PR in an inconsistent
+// state with no error surfaced. `reviewDecision` is a GraphQL-only field, so
+// route through `gh pr view --json`, not the REST `gh api pulls/N` endpoint.
+function verifyReviewOutcome(
   prNumber: number,
-  expectedState: 'approved' | 'changes_requested'
-): Promise<boolean> {
+  expected: 'approved' | 'changes_requested'
+): { ok: true } | { ok: false; reason: string } {
+  let pr: { reviewDecision: string | null; isDraft: boolean; labels: Array<{ name: string }> };
   try {
-    const pr = ghJson<{
-      state: string;
-      reviewDecision: string | null;
-      labels: Array<{ name: string }>;
-    }>(
-      `repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{state, reviewDecision: .review_decision, labels: [.labels[] | {name}]}'`
+    pr = JSON.parse(
+      execSync(`gh pr view ${prNumber} --json reviewDecision,isDraft,labels`, {
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          GITHUB_TOKEN: process.env.GH_TOKEN ?? process.env.SANDCASTLE_BOT_TOKEN,
+        },
+      })
     );
-
-    // GitHub's `review_decision` is null if no reviews have been submitted.
-    // For request-changes, also confirm the label flip to agent-impl-todo happened.
-    if (pr.reviewDecision === null) {
-      return false;
-    }
-
-    const normalizedDecision = pr.reviewDecision.toUpperCase();
-    const expectedDecision = expectedState === 'approved' ? 'APPROVED' : 'CHANGES_REQUESTED';
-
-    const stateMatch = normalizedDecision === expectedDecision;
-    if (!stateMatch) {
-      return false;
-    }
-
-    // For request-changes, additionally verify the label flip landed.
-    // The reviewer prompt flips labels *before* posting inline comments;
-    // if the label flip succeeded but comments failed, the label is still
-    // agent-impl-todo — which is fine for the address-review flow.
-    if (expectedState === 'changes_requested') {
-      const labelNames = pr.labels.map((l) => l.name);
-      if (!labelNames.includes('agent-impl-todo')) {
-        return false;
-      }
-    }
-
-    return true;
-  } catch {
-    // gh api failure — treat as unverified to avoid false positives.
-    return false;
+  } catch (err) {
+    return { ok: false, reason: `gh pr view failed: ${(err as Error).message}` };
   }
+
+  const labels = new Set(pr.labels.map((l) => l.name));
+
+  if (expected === 'approved') {
+    if (pr.reviewDecision !== 'APPROVED') {
+      return {
+        ok: false,
+        reason: `reviewDecision is ${pr.reviewDecision ?? 'null'}, expected APPROVED`,
+      };
+    }
+    if (!labels.has('agent-approved')) {
+      return {
+        ok: false,
+        reason: 'agent-approved label missing — `gh pr edit --add-label` likely failed',
+      };
+    }
+    if (pr.isDraft) {
+      return { ok: false, reason: 'PR still in draft — `gh pr ready` likely failed' };
+    }
+    return { ok: true };
+  }
+
+  // expected === 'changes_requested'
+  if (pr.reviewDecision !== 'CHANGES_REQUESTED') {
+    return {
+      ok: false,
+      reason: `reviewDecision is ${pr.reviewDecision ?? 'null'}, expected CHANGES_REQUESTED`,
+    };
+  }
+  if (!labels.has('agent-impl-todo')) {
+    return { ok: false, reason: 'agent-impl-todo label not added' };
+  }
+  if (labels.has('agent-review-pending')) {
+    return {
+      ok: false,
+      reason: 'agent-review-pending label still present — label flip half-landed',
+    };
+  }
+  return { ok: true };
 }
 
 // Fetch open draft PRs authored by the bot.
@@ -601,21 +615,18 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
     logging: { type: 'file', path: logPath },
   });
 
-  // Parse reviewer outcome from agent output.
-  // All three variants must be detected — the orchestrator relies on post-verification
-  // to confirm approve/request-changes actually landed, not just on the agent's
-  // self-reported intent. Missing a variant would silently skip verification.
   const approveMatch = result.stdout.match(/<promise>agent:review:approve<\/promise>/);
-  const requestChangesMatch = result.stdout.match(/<promise>agent:review:request-changes<\/promise>/);
+  const requestChangesMatch = result.stdout.match(
+    /<promise>agent:review:request-changes<\/promise>/
+  );
   const escalateMatch = result.stdout.match(/<promise>agent:review:escalate<\/promise>/);
 
-  // Post-verify approve and request-changes outcomes.
-  // Fail fast on divergence so the next orchestration sweep retries the action.
   if (approveMatch || requestChangesMatch) {
-    const verified = await verifyReviewOutcome(prNumber, approveMatch ? 'approved' : 'changes_requested');
-    if (!verified) {
+    const expected = approveMatch ? 'approved' : 'changes_requested';
+    const verification = verifyReviewOutcome(prNumber, expected);
+    if (!verification.ok) {
       console.error(
-        `\nVerification failed for PR #${prNumber}: expected review state "${approveMatch ? 'approved' : 'changes_requested'}" but PR is in an inconsistent state. ` +
+        `\nVerification failed for PR #${prNumber} (expected ${expected}): ${verification.reason}\n` +
           `Reviewer emitted a promise but the gh sequence did not fully land. Manual recovery required.\n` +
           `Log: ${logPath}`
       );
@@ -623,16 +634,12 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
     }
   }
 
-  // Log result for traceability
   console.log(`\nReviewer completed for PR #${prNumber}.`);
   console.log(`Log: ${logPath}`);
 
   if (escalateMatch) {
     console.log('Reviewer escalated. Exiting.');
-    process.exit(0);
   }
-
-  // Reviewer completed with approve or request-changes (both verified above).
   process.exit(0);
 }
 
@@ -652,11 +659,15 @@ async function dispatchAddressReview(prNumber: number): Promise<void> {
     headRefName: string;
     baseRefName: string;
     headSha: string;
-  }>(`repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName, baseRefName, headSha}'`);
+  }>(
+    `repos/ora-ui/ora-ui/pulls/${prNumber} --jq '{number, title, body, headRefName, baseRefName, headSha}'`
+  );
 
   // Extract the issue number from the PR body (e.g. "Closes #N").
   // Falls back to the PR number itself — not ideal but avoids leaving a blank.
-  const closingMatch = prData.body?.match(/\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b/i);
+  const closingMatch = prData.body?.match(
+    /\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b/i
+  );
   const issueRef = closingMatch ? closingMatch[1]! : String(prNumber);
 
   const SHARED = readFileSync('./.sandcastle/shared.md', 'utf8');
