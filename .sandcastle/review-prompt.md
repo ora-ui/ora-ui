@@ -49,7 +49,7 @@ Then execute:
 
 ```bash
 gh pr review {{PR_NUMBER}} --approve
-gh pr edit {{PR_NUMBER}} --add-label agent-approved
+gh pr edit {{PR_NUMBER}} --remove-label agent-review-pending --add-label agent-approved
 gh pr ready {{PR_NUMBER}}
 ```
 
@@ -107,7 +107,7 @@ One paragraph: why escalation is needed.
 Then execute:
 
 ```bash
-gh pr edit {{PR_NUMBER}} --add-label needs-human
+gh pr edit {{PR_NUMBER}} --remove-label agent-review-pending --add-label needs-human
 ```
 
 Stop here. Do not approve, do not request changes, do not push commits.
