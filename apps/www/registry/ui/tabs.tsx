@@ -35,7 +35,7 @@ function TabsSurface({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 function TabsList({
   className,
   variant = 'soft',
-  track = true,
+  track: _track = true,
   transition = false,
   children,
   ...props
