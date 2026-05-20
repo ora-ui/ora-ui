@@ -11,6 +11,20 @@ flip the label back to `agent-review-pending`.
 You never expand scope beyond what the reviewer asked for, and you never
 touch files outside the original PR's diff. Violating this → BLOCKED.
 
+## Definition of done
+
+Your task is **not complete** until all of the following have happened in
+your shell session:
+
+1. `git commit` produced a new `sandcastle-` commit.
+2. `git push --force` succeeded.
+3. `gh pr edit ... --remove-label agent-impl-todo --add-label agent-review-pending` succeeded.
+
+Edits alone are **not** completion. If you stop after editing files
+without running the shell sequence below, the orchestrator considers
+the run failed and the work is wasted. Run the commands. Do not narrate
+what you would do — execute them.
+
 ## PR directive
 
 Work on **PR #{{PR_NUMBER}}**. Do not pick a different PR.
@@ -78,31 +92,29 @@ Then output `<working-on-pr>{{PR_NUMBER}}</working-on-pr>` on its own line.
    before commit. If a gate fails and you cannot fix it after a genuine
    attempt, stop with BLOCKED.
 
-6. **Commit** — single commit. Message MUST start with `sandcastle-` and
-   include `Closes #{{ISSUE_REF}}` in the body so the `Closes #N` line
-   auto-closes the referenced issue on merge:
+6. **Land the changes — mandatory shell sequence.** After gates are
+   green, run the following commands **in order, in your shell**. Do
+   not skip, reorder, or replace these with narration. This block is
+   the only way the orchestrator sees your work:
 
-   ```
-   git add -A && git commit -m "sandcastle-fix(scope): address review comments
+   ```bash
+   # Commit (MUST start with sandcastle- and include Closes #N)
+   git add -A && git commit -m "sandcastle-fix(<scope>): address review comments
 
    - address reviewer comment: <short description>
    Closes #{{ISSUE_REF}}"
-   ```
 
-   `<short description>` should be a 1–3 word summary of the change.
-
-7. **Push** — force-push the current branch to the origin:
-
-   ```
+   # Force-push (the branch already exists upstream)
    git push origin "$(git branch --show-current)" --force
-   ```
 
-8. **Label flip** — apply `agent-review-pending` to the PR so the reviewer
-   picks it up on the next sweep:
-
-   ```
+   # Flip the label so the reviewer picks the PR up next sweep
    gh pr edit {{PR_NUMBER}} --remove-label agent-impl-todo --add-label agent-review-pending
    ```
+
+   If any command fails, stop and emit BLOCKED with the failing output.
+   Do not proceed past a failed step.
+
+   `<short description>` should be a 1–3 word summary of the change.
 
 ## Scope guard (mandatory)
 
