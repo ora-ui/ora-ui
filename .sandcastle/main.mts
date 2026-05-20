@@ -707,10 +707,7 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
   const result = await sandcastle.run({
     hooks: {
       sandbox: {
-        onSandboxReady: [
-          { command: 'pnpm install' },
-          { command: 'cd apps/www && pnpm exec fumadocs-mdx' },
-        ],
+        onSandboxReady: [{ command: 'pnpm install && (cd apps/www && pnpm exec fumadocs-mdx)' }],
       },
     },
     copyToWorktree: ['node_modules'],
@@ -836,10 +833,7 @@ async function dispatchAddressReview(prNumber: number): Promise<void> {
   const result = await sandcastle.run({
     hooks: {
       sandbox: {
-        onSandboxReady: [
-          { command: 'pnpm install' },
-          { command: 'cd apps/www && pnpm exec fumadocs-mdx' },
-        ],
+        onSandboxReady: [{ command: 'pnpm install && (cd apps/www && pnpm exec fumadocs-mdx)' }],
       },
     },
     copyToWorktree: ['node_modules'],
@@ -891,10 +885,7 @@ async function dispatchFreshImplementer(issueNumber: number): Promise<void> {
   const result = await sandcastle.run({
     hooks: {
       sandbox: {
-        onSandboxReady: [
-          { command: 'pnpm install' },
-          { command: 'cd apps/www && pnpm exec fumadocs-mdx' },
-        ],
+        onSandboxReady: [{ command: 'pnpm install && (cd apps/www && pnpm exec fumadocs-mdx)' }],
       },
     },
     copyToWorktree: ['node_modules'],
