@@ -54,6 +54,9 @@ const botGitEnv = {
   GIT_COMMITTER_NAME: BOT_NAME,
   GIT_COMMITTER_EMAIL: BOT_EMAIL,
   GH_TOKEN: process.env.SANDCASTLE_BOT_TOKEN ?? process.env.GH_TOKEN ?? '',
+  // Turbo defaults to a cache path derived from the host cwd at build time,
+  // which resolves to a Mac path that doesn't exist inside the Docker container.
+  TURBO_CACHE_DIR: '/tmp/turbo-cache',
 };
 
 // Token presence check shared by all execute-mode dispatchers. Fail closed
@@ -702,7 +705,14 @@ async function dispatchReviewer(prNumber: number): Promise<void> {
   const logPath = `.sandcastle/logs/${branch.replace(/\//g, '-')}-reviewer.log`;
 
   const result = await sandcastle.run({
-    hooks: { sandbox: { onSandboxReady: [{ command: 'pnpm install' }] } },
+    hooks: {
+      sandbox: {
+        onSandboxReady: [
+          { command: 'pnpm install' },
+          { command: 'cd apps/www && pnpm exec fumadocs-mdx' },
+        ],
+      },
+    },
     copyToWorktree: ['node_modules'],
     sandbox: docker({ env: botGitEnv }),
     branchStrategy: { type: 'branch', branch, baseBranch: prData.baseRefName },
@@ -824,7 +834,14 @@ async function dispatchAddressReview(prNumber: number): Promise<void> {
   const logPath = `.sandcastle/logs/${branch.replace(/\//g, '-')}-impl-address-review.log`;
 
   const result = await sandcastle.run({
-    hooks: { sandbox: { onSandboxReady: [{ command: 'pnpm install' }] } },
+    hooks: {
+      sandbox: {
+        onSandboxReady: [
+          { command: 'pnpm install' },
+          { command: 'cd apps/www && pnpm exec fumadocs-mdx' },
+        ],
+      },
+    },
     copyToWorktree: ['node_modules'],
     sandbox: docker({ env: botGitEnv }),
     branchStrategy: { type: 'branch', branch, baseBranch: prData.baseRefName },
@@ -872,7 +889,14 @@ async function dispatchFreshImplementer(issueNumber: number): Promise<void> {
   const logPath = `.sandcastle/logs/${branch.replace(/\//g, '-')}-impl-fresh.log`;
 
   const result = await sandcastle.run({
-    hooks: { sandbox: { onSandboxReady: [{ command: 'pnpm install' }] } },
+    hooks: {
+      sandbox: {
+        onSandboxReady: [
+          { command: 'pnpm install' },
+          { command: 'cd apps/www && pnpm exec fumadocs-mdx' },
+        ],
+      },
+    },
     copyToWorktree: ['node_modules'],
     sandbox: docker({ env: botGitEnv }),
     branchStrategy: { type: 'branch', branch, baseBranch: BASE_BRANCH },
