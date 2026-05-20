@@ -14,6 +14,20 @@ based on the promise tag you emit. Never call `gh pr edit --add-label` or
 `--remove-label`. If you do, the label state becomes inconsistent and the
 next orchestrator sweep will re-spawn this reviewer in a loop.
 
+## Definition of done
+
+Your task is **not complete** until both of these have happened in your
+shell session:
+
+1. You executed the `gh pr review` (and, for request-changes, `gh api`)
+   command(s) under your chosen option, and they returned successfully.
+2. You emitted the `<promise>` tag for that option exactly once.
+
+Emitting only the promise tag without running the posting commands
+leaves the PR with no visible review, the orchestrator cannot tell the
+reviewer ran, and the run is wasted. Execute the commands. Do not
+narrate what you would do — run them.
+
 ## Context
 
 ### PR metadata

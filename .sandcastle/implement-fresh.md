@@ -8,6 +8,22 @@ You are running in **fresh implementer mode** under the v2 orchestrator
 a draft PR, then stop. You never edit existing branches and never address
 review comments — a separate agent owns that path.
 
+## Definition of done
+
+Your task is **not complete** until all of the following have happened in
+your shell session:
+
+1. `git commit` produced a `sandcastle-` commit.
+2. `git push` succeeded.
+3. `gh pr create --draft` returned a PR URL.
+4. `gh pr edit ... --add-label agent-review-pending` succeeded.
+5. You emitted `<pr-number>N</pr-number>` with the integer PR number.
+
+Edits alone are **not** completion. If you stop after editing files
+without running the shell sequence below, the orchestrator considers
+the run failed and the work is wasted. Run the commands. Do not narrate
+what you would do — execute them.
+
 ## Issue directive
 
 Work on issue **#{{ISSUE_NUMBER}}**. Do not pick a different issue and
@@ -48,38 +64,42 @@ its own line.
    attempt, stop with BLOCKED — never emit COMPLETE without a green
    committed build. Do not rationalize a failing gate as
    "environment-related" — emit BLOCKED with the failing output.
-5. **Commit** — single commit, format per shared protocol.
-6. **Push** — push the current branch:
+5. **Land the PR — mandatory shell sequence.** After gates are green,
+   run the following commands **in order, in your shell**. Do not skip,
+   reorder, or replace these with narration. This block is the only way
+   the orchestrator sees your work:
 
-   ```
+   ```bash
+   # Commit (format per shared protocol)
+   git add -A && git commit -m "sandcastle-<type>(<scope>): <short description>
+
+   <body if needed>
+
+   Closes #{{ISSUE_NUMBER}}"
+
+   # Push
    git push -u origin "$(git branch --show-current)"
-   ```
 
-7. **Open draft PR** — open a draft PR against `develop` and capture
-   its number. The PR body must include `Closes #{{ISSUE_NUMBER}}` so
-   merge auto-closes the issue.
-
-   ```
+   # Open draft PR
    gh pr create --draft --base develop \
      --head "$(git branch --show-current)" \
-     --title "agent:type(scope): short description" \
+     --title "agent:<type>(<scope>): <short description>" \
      --body "$(cat <<'EOF'
    <pr-summary content here>
 
    Closes #{{ISSUE_NUMBER}}
    EOF
    )"
+
+   # Capture the PR number
+   PR_NUMBER=$(gh pr view --json number --jq .number)
+
+   # Apply review-pending label
+   gh pr edit "$PR_NUMBER" --add-label agent-review-pending
    ```
 
-   Capture the PR number from the URL `gh pr create` prints
-   (`.../pull/<N>`), or run `gh pr view --json number --jq .number`.
-
-8. **Label** — apply `agent-review-pending` to the PR so the orchestrator
-   picks it up for review on the next sweep:
-
-   ```
-   gh pr edit <PR_NUMBER> --add-label agent-review-pending
-   ```
+   If any command fails, stop and emit BLOCKED with the failing output.
+   Do not proceed past a failed step.
 
 ## Scope ceiling
 
@@ -106,18 +126,16 @@ reviewer cannot safely vet runs larger than this.
 
 # Done
 
-Before declaring COMPLETE, verify all of these:
+Run these verification commands in your shell. If any fails, you have
+not landed the work — emit BLOCKED with the failing output. Do not
+emit `<pr-number>` or COMPLETE in that case.
 
-```
+```bash
 git branch --show-current          # must equal the branch you started on
 git log --oneline --grep="^sandcastle-" -1   # must show your commit
 git rev-parse @{u}                  # must succeed (branch pushed)
 gh pr view --json number,isDraft    # must show isDraft: true
 ```
-
-If any check fails, you have not landed the work the orchestrator
-expects — output BLOCKED per shared protocol with the failing output
-included.
 
 Otherwise, output the PR number, summary, and completion signal in one
 final message (do not split across messages):
