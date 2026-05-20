@@ -54,6 +54,9 @@ const botGitEnv = {
   GIT_COMMITTER_NAME: BOT_NAME,
   GIT_COMMITTER_EMAIL: BOT_EMAIL,
   GH_TOKEN: process.env.SANDCASTLE_BOT_TOKEN ?? process.env.GH_TOKEN ?? '',
+  // Turbo defaults to a cache path derived from the host cwd at build time,
+  // which resolves to a Mac path that doesn't exist inside the Docker container.
+  TURBO_CACHE_DIR: '/tmp/turbo-cache',
 };
 
 // Token presence check shared by all execute-mode dispatchers. Fail closed
