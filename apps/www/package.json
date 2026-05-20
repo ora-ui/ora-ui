@@ -12,7 +12,7 @@
     "test": "pnpm test:unit && pnpm test:e2e",
     "test:watch": "vitest",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "fumadocs-mdx && tsc --noEmit",
     "scaffold": "plop --plopfile scripts/plopfile.mjs",
     "gen:registry": "tsx scripts/gen-registry.cli.ts",
     "gen:registry:check": "tsx scripts/gen-registry.cli.ts --check",
