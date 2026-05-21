@@ -6,7 +6,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --radius: 0.375rem;
+  --radius: 0.5rem;
 
   /* backgrounds */
   --background: var(--gray-background);
@@ -384,4 +384,15 @@ pre.shiki code .line:last-child:empty {
   body {
     @apply bg-background text-primary;
   }
+}
+
+/* Concentric border radius for menu-style items.
+   Containers use rounded-md (--radius capped at 10px), padding is 4px (p-1).
+   Item radius = container radius - padding, clamped to 2px-6px.
+   --radius-md lives in `@theme inline` so its custom property is not emitted
+   at runtime — recompute the formula directly from --radius. */
+[data-slot='dropdown-menu-content'],
+[data-slot='dropdown-menu-sub-content'],
+[data-slot='select-content'] {
+  --menu-item-radius: min(max(calc(min(var(--radius), 10px) - 4px), 2px), 6px);
 }

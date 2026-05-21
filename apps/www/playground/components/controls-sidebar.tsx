@@ -1,6 +1,13 @@
 'use client';
 
 import type { EntrySchema, EntryState, InputSpec } from '@/playground/lib/types';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/registry/ui/select';
 
 export function ControlsSidebar({
   schema,
@@ -22,20 +29,24 @@ export function ControlsSidebar({
       </div>
       <div className="flex flex-col gap-3">
         {Object.entries(schema.variants).map(([key, spec]) => (
-          <label key={key} className="flex flex-col gap-1 text-sm">
+          <div key={key} className="flex flex-col gap-1 text-sm">
             <span className="text-foreground-subtle">{spec.label ?? key}</span>
-            <select
-              className="rounded-dynamic border border-line-ui bg-ui px-2 py-1 text-sm text-foreground"
+            <Select
               value={state.variants[key]}
-              onChange={(e) => setVariant(key, e.target.value)}
+              onValueChange={(value) => setVariant(key, value as string)}
             >
-              {spec.values.map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-          </label>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {spec.values.map((value) => (
+                  <SelectItem key={value} value={value}>
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         ))}
 
         {hasContent && (
@@ -165,20 +176,20 @@ function SelectInput({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="flex flex-col gap-1 text-sm">
+    <div className="flex flex-col gap-1 text-sm">
       <span className="text-foreground-subtle">{label}</span>
-      <select
-        disabled={disabled}
-        className="rounded-dynamic border border-line-ui bg-ui px-2 py-1 text-sm text-foreground disabled:opacity-40"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      >
-        {values.map((v) => (
-          <option key={v} value={v}>
-            {v}
-          </option>
-        ))}
-      </select>
-    </label>
+      <Select value={value} onValueChange={(next) => onChange(next as string)} disabled={disabled}>
+        <SelectTrigger className="w-full disabled:opacity-40">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {values.map((v) => (
+            <SelectItem key={v} value={v}>
+              {v}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
