@@ -41,17 +41,3 @@ export type EntryState = {
   variants: Record<string, string>;
   inputs: Record<string, unknown>;
 };
-
-export function defaultState(schema: EntrySchema): EntryState {
-  const variants: Record<string, string> = {};
-  for (const [key, spec] of Object.entries(schema.variants)) {
-    variants[key] = spec.default;
-  }
-  const inputs: Record<string, unknown> = {};
-  if (schema.content) {
-    for (const [key, spec] of Object.entries(schema.content)) {
-      inputs[key] = spec.default;
-    }
-  }
-  return { variants, inputs };
-}

@@ -35,10 +35,10 @@ several named functions, each shown as a tab.
 
 The interactive surface where a user explores Components before
 installing: pick a Component (or the Introduction page) from the
-sidebar, see it rendered in the center, manipulate its props via a
-right-side toolbar. The toolbar exposes props only — CSS-variable
-knobs and data-slot overrides are not part of the pre-alpha demo
-surface.
+left nav sidebar, see it rendered in the center, manipulate its props
+via the right-side **controls sidebar**. The controls sidebar exposes
+props only — CSS-variable knobs and data-slot overrides are not part
+of the pre-alpha demo surface.
 
 In pre-alpha, the Playground _is_ the site — it lives at `/` and
 replaces both a separate marketing Landing and the `/docs` surface.
@@ -47,9 +47,9 @@ project's intro/install page.
 
 Theme controls (dark/light, accent picker, radius preset) live in the
 **app-level header**, not inside the Playground's per-component
-toolbar. Changing them re-themes the entire site — chrome included —
-intentionally. Placement signals scope: header = global, toolbar =
-this component only. Accent options are a hand-picked set that
+controls sidebar. Changing them re-themes the entire site — chrome
+included — intentionally. Placement signals scope: header = global,
+controls sidebar = this component only. Accent options are a hand-picked set that
 chrome design has been validated against.
 
 Distinct from a Preview (preview = curated inline example,
@@ -64,7 +64,7 @@ Component has Previews and a Playground entry.
 
 A per-Component artifact that drives its Playground page. An Entry is
 a **schema** (declarative description of the Component's variants and
-content shape) — the toolbar renders generic controls from it and the
+content shape) — the controls sidebar renders generic controls from it and the
 code snippet is emitted automatically from current state. No bespoke
 React render escape hatch: anything intrinsic to the Component must be
 expressible via Variants + Content (see those terms). If something
@@ -83,7 +83,7 @@ props is conventionally named `variant`, but the concept covers any
 discrete enum-shaped prop on the primitive — stylistic, structural, or
 contextual. Variants ship in the same registry file as the Component
 (one file per primitive, CVA branches inside); no separate per-variant
-file is generated. Toolbar renders one `<select>` per Variant prop.
+file is generated. Controls sidebar renders one `<select>` per Variant prop.
 
 ### Content
 
@@ -92,7 +92,7 @@ bounds: template choices (e.g. for Button, "text only" vs "leading
 icon + text" vs "icon only") plus inputs the chosen template consumes
 (e.g. label text, icon identifier). Distinct from Variants — Variants
 are props the Component exposes; Content is what gets passed into the
-Component. Toolbar renders a template picker plus inputs.
+Component. Controls sidebar renders a template picker plus inputs.
 
 ### Example
 

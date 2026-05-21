@@ -16,7 +16,7 @@ own `useState` per prop, decides which controls render, and (would, in
 future) hand-roll its code-emission. This works for the existing ~13
 Entries but does not scale to ADR-0004's commitments:
 
-- **"Get code" emits a live snippet from current toolbar state.** With
+- **"Get code" emits a live snippet from current controls state.** With
   hand-authored Entries, every Entry author writes a bespoke
   `toCode()` function. Repetition + drift + bugs.
 - **Composer Phase 2** (per `composer-alpha.md` and
@@ -25,10 +25,10 @@ Entries but does not scale to ADR-0004's commitments:
   and agent consumption. Hand-authored Entries are opaque to all of
   those.
 - **Editorial consistency.** The killer-demo bar (ADR-0004) means
-  every Entry sits on the homepage. Drift in toolbar UX across
+  every Entry sits on the homepage. Drift in controls UX across
   Entries is visible.
 
-A schema-driven model fixes all three: the toolbar renders generically
+A schema-driven model fixes all three: the controls renders generically
 from a per-Component schema, code is emitted from the same schema
 walking current state, and composer Phase 2 inherits the schema as a
 seed for its manifest.
@@ -49,7 +49,7 @@ out of scope for Entries entirely (see ADR-0004 and `CONTEXT.md`).
 
 ### Framework
 
-| Category    | Intrinsic? | What                                                                                                                                                                                                                                                                                                               | Encoded as                                    | Toolbar control                            |
+| Category    | Intrinsic? | What                                                                                                                                                                                                                                                                                                               | Encoded as                                    | Controls control                           |
 | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------- | ------------------------------------------ |
 | **Variant** | yes        | Discrete option exposed by a primitive — stylistic, structural, or contextual. Same DOM file, different CVA branch. Examples: Button `variant=solid\|soft\|outline\|surface\|ghost`, `size=sm\|md\|lg`, `theme=gray\|accent\|destructive`; ButtonGroup `attached=true\|false`, `orientation=horizontal\|vertical`. | CVA prop branch on the primitive              | `<select>` per Variant prop                |
 | **Content** | yes        | What fills the Component's slots/children. Parametric within typed bounds. Template choice + inputs the template consumes. Example: Button's "text only" vs "leading icon + text" vs "icon only", with a `label` input and an icon identifier.                                                                     | Slot fills + template options + typed inputs  | Template picker + per-input control        |
@@ -132,7 +132,7 @@ as final pass.
 
 ADR-0004 commits to a vertical slice on Button. Concretely:
 
-1. Build the schema runtime + toolbar generic against Button's
+1. Build the schema runtime + controls generic against Button's
    schema.
 2. Author Button's Entry as schema.
 3. Ship `/` with Button-only.
@@ -189,7 +189,7 @@ count grows past where hand-authoring is comfortable.
   per-Entry `toCode()` plumbing.
 - Composer Phase 2 inherits the schema as a seed for its manifest.
   Work compounds rather than being thrown away.
-- Toolbar UX is consistent by construction across all Components.
+- Controls UX is consistent by construction across all Components.
 - Schema is the contract that lets agents (composer Phase 3) read and
   manipulate Components without inspecting React code.
 
