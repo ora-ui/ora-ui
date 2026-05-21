@@ -3,6 +3,7 @@
 import { Radio as RadioPrimitive } from '@base-ui/react/radio';
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
 
+import { Button } from '@/registry/ui/button';
 import type { EntrySchema, EntryState, InputSpec } from '@/playground/lib/types';
 import {
   Select,
@@ -26,14 +27,19 @@ export function ControlsSidebar({
   const hasContent = schema.content && Object.keys(schema.content).length > 0;
 
   return (
-    <aside className="w-64 shrink-0 border-l border-line p-4">
-      <div className="mb-3 text-xs font-medium uppercase tracking-wide text-foreground-subtle">
-        {schema.name}
+    <aside className="w-64 shrink-0 divide-y divide-line border-l border-line [--sidebar-pad:--spacing(3)]">
+      <div className="flex items-center justify-between gap-2 bg-surface p-(--sidebar-pad)">
+        <h3 className="text-base font-medium tracking-wide text-foreground-subtle">
+          {schema.name}
+        </h3>
+        <Button>Get code</Button>
       </div>
-      <div className="flex flex-col gap-3">
+
+      <div className="flex flex-col gap-3 p-(--sidebar-pad)">
+        <div className="text-xs font-medium tracking-wide text-foreground-subtle">Variants</div>
         {Object.entries(schema.variants).map(([key, spec]) => (
           <div key={key} className="flex flex-col gap-1 text-sm">
-            <span className="text-foreground-subtle">{spec.label ?? key}</span>
+            <span className="text-xs text-secondary">{spec.label ?? key}</span>
             {key === 'theme' ? (
               <ThemeSwatchInput
                 values={spec.values}
@@ -59,25 +65,23 @@ export function ControlsSidebar({
             )}
           </div>
         ))}
-
-        {hasContent && (
-          <>
-            <div className="border-t border-line pt-3 text-xs font-medium uppercase tracking-wide text-foreground-subtle">
-              Content
-            </div>
-            {Object.entries(schema.content!).map(([key, spec]) => (
-              <InputControl
-                key={key}
-                label={spec.label ?? key}
-                spec={spec}
-                value={state.inputs[key]}
-                disabled={spec.visibleWhen ? !spec.visibleWhen(state.inputs) : false}
-                onChange={(value) => setInput(key, value)}
-              />
-            ))}
-          </>
-        )}
       </div>
+
+      {hasContent && (
+        <div className="flex flex-col gap-3 p-(--sidebar-pad)">
+          <div className="text-xs font-medium tracking-wide text-foreground-subtle">Content</div>
+          {Object.entries(schema.content!).map(([key, spec]) => (
+            <InputControl
+              key={key}
+              label={spec.label ?? key}
+              spec={spec}
+              value={state.inputs[key]}
+              disabled={spec.visibleWhen ? !spec.visibleWhen(state.inputs) : false}
+              onChange={(value) => setInput(key, value)}
+            />
+          ))}
+        </div>
+      )}
     </aside>
   );
 }
@@ -136,7 +140,7 @@ function StringInput({
 }) {
   return (
     <label className="flex flex-col gap-1 text-sm">
-      <span className="text-foreground-subtle">{label}</span>
+      <span className="text-xs text-secondary">{label}</span>
       <input
         type="text"
         disabled={disabled}
@@ -168,7 +172,7 @@ function BooleanInput({
         onChange={(e) => onChange(e.target.checked)}
         className="rounded disabled:opacity-40"
       />
-      <span className="text-foreground-subtle">{label}</span>
+      <span className="text-xs text-secondary">{label}</span>
     </label>
   );
 }
@@ -193,7 +197,7 @@ function ThemeSwatchInput({
           key={v}
           value={v}
           aria-label={v}
-          className="group/swatch flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full outline-none"
+          className="group/swatch flex size-6 shrink-0 items-center justify-center rounded-full outline-none"
         >
           <span
             className="size-5 rounded-full outline outline-transparent outline-offset-2 transition-[outline-color] group-data-checked/swatch:outline-primary group-focus-visible/swatch:outline-focus"
@@ -220,7 +224,7 @@ function SelectInput({
 }) {
   return (
     <div className="flex flex-col gap-1 text-sm">
-      <span className="text-foreground-subtle">{label}</span>
+      <span className="text-xs text-secondary">{label}</span>
       <Select value={value} onValueChange={(next) => onChange(next as string)} disabled={disabled}>
         <SelectTrigger className="w-full disabled:opacity-40">
           <SelectValue />
