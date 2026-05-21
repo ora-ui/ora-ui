@@ -11,11 +11,6 @@ export const buttonEntry: EntrySchema = {
       label: 'Variant',
       default: 'solid',
     },
-    size: {
-      values: ['sm', 'md', 'lg'],
-      label: 'Size',
-      default: 'md',
-    },
     theme: {
       values: ['gray', 'accent', 'destructive'],
       label: 'Theme',
@@ -49,7 +44,6 @@ export const buttonEntry: EntrySchema = {
     return (
       <Button
         variant={variants.variant as 'solid' | 'outline' | 'surface' | 'soft' | 'ghost'}
-        size={variants.size as 'sm' | 'md' | 'lg'}
         theme={variants.theme as 'gray' | 'accent' | 'destructive'}
       >
         {icon && iconPosition === 'leading' && <StarIcon />}
