@@ -43,9 +43,16 @@ export function ControlsSidebar({
             <div className="border-t border-line pt-3 text-xs font-medium uppercase tracking-wide text-foreground-subtle">
               Content
             </div>
-            {Object.entries(schema.content!).map(([key, spec]) =>
-              renderInputControl(key, spec, state.inputs, setInput)
-            )}
+            {Object.entries(schema.content!).map(([key, spec]) => (
+              <InputControl
+                key={key}
+                label={spec.label ?? key}
+                spec={spec}
+                value={state.inputs[key]}
+                disabled={spec.visibleWhen ? !spec.visibleWhen(state.inputs) : false}
+                onChange={(value) => setInput(key, value)}
+              />
+            ))}
           </>
         )}
       </div>
@@ -53,63 +60,125 @@ export function ControlsSidebar({
   );
 }
 
-function renderInputControl(
-  key: string,
-  spec: InputSpec,
-  inputs: Record<string, unknown>,
-  setInput: (key: string, value: unknown) => void
-) {
-  const disabled = spec.visibleWhen ? !spec.visibleWhen(inputs) : false;
+type InputControlProps = {
+  label: string;
+  spec: InputSpec;
+  value: unknown;
+  disabled: boolean;
+  onChange: (value: unknown) => void;
+};
 
-  if (spec.type === 'string') {
-    return (
-      <label key={key} className="flex flex-col gap-1 text-sm">
-        <span className="text-foreground-subtle">{spec.label ?? key}</span>
-        <input
-          type="text"
+function InputControl({ label, spec, value, disabled, onChange }: InputControlProps) {
+  switch (spec.type) {
+    case 'string':
+      return (
+        <StringInput
+          label={label}
+          value={value as string}
           disabled={disabled}
-          className="rounded-dynamic border border-line-ui bg-ui px-2 py-1 text-sm text-foreground disabled:opacity-40"
-          value={inputs[key] as string}
-          onChange={(e) => setInput(key, e.target.value)}
+          onChange={onChange}
         />
-      </label>
-    );
-  }
-
-  if (spec.type === 'boolean') {
-    return (
-      <label key={key} className="flex cursor-pointer items-center gap-2 text-sm">
-        <input
-          type="checkbox"
+      );
+    case 'boolean':
+      return (
+        <BooleanInput
+          label={label}
+          value={value as boolean}
           disabled={disabled}
-          checked={inputs[key] as boolean}
-          onChange={(e) => setInput(key, e.target.checked)}
-          className="rounded disabled:opacity-40"
+          onChange={onChange}
         />
-        <span className="text-foreground-subtle">{spec.label ?? key}</span>
-      </label>
-    );
-  }
-
-  if (spec.type === 'select') {
-    return (
-      <label key={key} className="flex flex-col gap-1 text-sm">
-        <span className="text-foreground-subtle">{spec.label ?? key}</span>
-        <select
+      );
+    case 'select':
+      return (
+        <SelectInput
+          label={label}
+          values={spec.values}
+          value={value as string}
           disabled={disabled}
-          className="rounded-dynamic border border-line-ui bg-ui px-2 py-1 text-sm text-foreground disabled:opacity-40"
-          value={inputs[key] as string}
-          onChange={(e) => setInput(key, e.target.value)}
-        >
-          {spec.values.map((value) => (
-            <option key={value} value={value}>
-              {value}
-            </option>
-          ))}
-        </select>
-      </label>
-    );
+          onChange={onChange}
+        />
+      );
   }
+}
 
-  return null;
+function StringInput({
+  label,
+  value,
+  disabled,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  disabled: boolean;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="flex flex-col gap-1 text-sm">
+      <span className="text-foreground-subtle">{label}</span>
+      <input
+        type="text"
+        disabled={disabled}
+        className="rounded-dynamic border border-line-ui bg-ui px-2 py-1 text-sm text-foreground disabled:opacity-40"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </label>
+  );
+}
+
+function BooleanInput({
+  label,
+  value,
+  disabled,
+  onChange,
+}: {
+  label: string;
+  value: boolean;
+  disabled: boolean;
+  onChange: (value: boolean) => void;
+}) {
+  return (
+    <label className="flex cursor-pointer items-center gap-2 text-sm">
+      <input
+        type="checkbox"
+        disabled={disabled}
+        checked={value}
+        onChange={(e) => onChange(e.target.checked)}
+        className="rounded disabled:opacity-40"
+      />
+      <span className="text-foreground-subtle">{label}</span>
+    </label>
+  );
+}
+
+function SelectInput({
+  label,
+  values,
+  value,
+  disabled,
+  onChange,
+}: {
+  label: string;
+  values: readonly string[];
+  value: string;
+  disabled: boolean;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="flex flex-col gap-1 text-sm">
+      <span className="text-foreground-subtle">{label}</span>
+      <select
+        disabled={disabled}
+        className="rounded-dynamic border border-line-ui bg-ui px-2 py-1 text-sm text-foreground disabled:opacity-40"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      >
+        {values.map((v) => (
+          <option key={v} value={v}>
+            {v}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
 }
