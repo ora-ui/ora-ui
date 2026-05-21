@@ -11,7 +11,7 @@ import { buttonVariants } from '@/registry/ui/button';
 import { Kbd } from '@/registry/ui/kbd';
 import { Link } from '@/registry/ui/link';
 import { Separator } from '@/registry/ui/separator';
-import { MobileNav } from '@/docs/components/mobile-nav';
+import { MobileNav } from './mobile-nav';
 import { ModeSwitcher } from './mode-switcher';
 
 function SearchIcon() {

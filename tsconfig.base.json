@@ -21,6 +21,7 @@
     "declarationMap": true,
     "noEmit": true,
     "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
     "types": ["node"]
   }
 }

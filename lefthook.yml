@@ -10,6 +10,8 @@ pre-commit:
       run: pnpm exec eslint --max-warnings=0 --no-warn-ignored {staged_files}
     typecheck:
       run: pnpm run typecheck
+    secrets:
+      run: npx tsx scripts/run-gitleaks-staged.ts
 
 commit-msg:
   commands:

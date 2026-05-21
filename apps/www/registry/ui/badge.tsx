@@ -4,8 +4,6 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/registry/lib/utils';
 
-type Theme = 'gray' | 'accent' | 'destructive' | (string & {});
-
 /**
  * Slots: badge
  */
