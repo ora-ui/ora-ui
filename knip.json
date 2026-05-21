@@ -1,0 +1,32 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignore": [".sandcastle/**"],
+  "workspaces": {
+    "apps/www": {
+      "entry": [
+        "next.config.mjs",
+        "postcss.config.mjs",
+        "tailwind.config.ts",
+        "source.config.ts",
+        "playwright.config.ts",
+        "vitest.config.ts",
+        "scripts/**/*.{ts,mjs}",
+        "tests/**/*.{test,spec}.{ts,tsx}",
+        "playground/entries/**/*.{ts,tsx}",
+        "registry/**/*.{ts,tsx}"
+      ],
+      "project": [
+        "app/**/*.{ts,tsx}",
+        "docs/**/*.{ts,tsx}",
+        "header/**/*.{ts,tsx}",
+        "lib/**/*.{ts,tsx}",
+        "playground/**/*.{ts,tsx}",
+        "registry/**/*.{ts,tsx}",
+        "scripts/**/*.{ts,mjs}",
+        "templates/**/*.{ts,tsx}",
+        "tests/**/*.{ts,tsx}"
+      ],
+      "ignore": []
+    }
+  }
+}
