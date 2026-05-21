@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { XMarkIcon } from '@heroicons/react/16/solid';
 
-import { source } from '@/docs/lib/source';
+import { source } from '@/docs';
 import { Button } from '@/registry/ui/button';
 import {
   Drawer,
