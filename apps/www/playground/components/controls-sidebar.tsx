@@ -12,6 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/registry/ui/select';
+import { Input } from '@/registry/ui/input';
+import { Label } from '@/registry/ui/label';
 
 export function ControlsSidebar({
   schema,
@@ -29,10 +31,8 @@ export function ControlsSidebar({
   return (
     <aside className="w-64 shrink-0 divide-y divide-line border-l border-line [--sidebar-pad:--spacing(3)]">
       <div className="flex items-center justify-between gap-2 bg-surface p-(--sidebar-pad)">
-        <h3 className="text-base font-medium tracking-wide text-foreground-subtle">
-          {schema.name}
-        </h3>
-        <Button>Get code</Button>
+        <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">{schema.name}</h3>
+        <Button size="sm">Get code</Button>
       </div>
 
       <div className="flex flex-col gap-3 p-(--sidebar-pad)">
@@ -54,7 +54,7 @@ export function ControlsSidebar({
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent variant="solid">
                   {spec.values.map((value) => (
                     <SelectItem key={value} value={value}>
                       {value}
@@ -139,16 +139,15 @@ function StringInput({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="flex flex-col gap-1 text-sm">
+    <Label className="flex flex-col gap-1 text-sm">
       <span className="text-xs text-secondary">{label}</span>
-      <input
+      <Input
         type="text"
         disabled={disabled}
-        className="rounded-dynamic border border-line-ui bg-ui px-2 py-1 text-sm text-foreground disabled:opacity-40"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-    </label>
+    </Label>
   );
 }
 

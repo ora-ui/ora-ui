@@ -10,12 +10,12 @@ import { cn } from '@/registry/lib/utils';
 
 const inputVariants = cva(
   [
-    'h-9 w-full min-w-0 rounded-dynamic px-3 py-1 text-sm text-primary outline-none transition-colors',
+    'h-8 w-full min-w-0 rounded-dynamic px-3 py-1 text-sm text-primary outline-none transition-colors',
     'placeholder:text-muted',
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
     'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-primary',
     'focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-0',
-    'aria-invalid:border-[var(--destructive-fill)] aria-invalid:focus-visible:outline-[var(--destructive-fill)]',
+    'aria-invalid:border-(--destructive-fill) aria-invalid:focus-visible:outline-(--destructive-fill)',
   ],
   {
     variants: {
