@@ -1,98 +1,8 @@
 'use client';
 
-import { useQueryState, parseAsString } from 'nuqs';
-import { cn } from '@/registry/lib/utils';
 import type { EntrySchema, EntryState, InputSpec } from '@/playground/lib/types';
-import { useEntryState } from '@/playground/hooks/use-entry-state';
-import { entries, getEntryBySlug } from '@/playground/entries';
 
-const INTRODUCTION_KEY = '__introduction__';
-
-export function PlaygroundLayout() {
-  const [selected, setSelected] = useQueryState(
-    'c',
-    parseAsString.withDefault(INTRODUCTION_KEY).withOptions({ history: 'replace' })
-  );
-  const schema = getEntryBySlug(selected);
-
-  return (
-    <div className="flex h-[calc(100vh-var(--header-height))] w-full">
-      <NavSidebar selected={selected} onSelect={setSelected} />
-      {schema ? <EntryView schema={schema} /> : <IntroductionView />}
-    </div>
-  );
-}
-
-function NavSidebar({
-  selected,
-  onSelect,
-}: {
-  selected: string;
-  onSelect: (next: string) => void;
-}) {
-  return (
-    <nav className="w-56 shrink-0 border-r border-line p-4">
-      <div className="mb-3 text-xs font-medium uppercase tracking-wide text-foreground-subtle">
-        Components
-      </div>
-      <ul className="flex flex-col gap-0.5">
-        <NavItem
-          label="Introduction"
-          active={selected === INTRODUCTION_KEY}
-          onClick={() => onSelect(INTRODUCTION_KEY)}
-        />
-        {entries.map((entry) => (
-          <NavItem
-            key={entry.component}
-            label={entry.name}
-            active={selected === entry.component}
-            onClick={() => onSelect(entry.component)}
-          />
-        ))}
-      </ul>
-    </nav>
-  );
-}
-
-function NavItem({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <li>
-      <button
-        type="button"
-        onClick={onClick}
-        className={cn(
-          'w-full rounded-dynamic px-2 py-1 text-left text-sm',
-          active
-            ? 'bg-ui text-foreground'
-            : 'text-foreground-subtle hover:bg-hover/30 hover:text-foreground'
-        )}
-      >
-        {label}
-      </button>
-    </li>
-  );
-}
-
-function EntryView({ schema }: { schema: EntrySchema }) {
-  const { state, setVariant, setInput } = useEntryState(schema);
-
-  return (
-    <>
-      <div className="flex flex-1 items-center justify-center p-8">{schema.render(state)}</div>
-      <ControlsSidebar schema={schema} state={state} setVariant={setVariant} setInput={setInput} />
-    </>
-  );
-}
-
-function ControlsSidebar({
+export function ControlsSidebar({
   schema,
   state,
   setVariant,
@@ -202,17 +112,4 @@ function renderInputControl(
   }
 
   return null;
-}
-
-function IntroductionView() {
-  return (
-    <div className="flex flex-1 items-center justify-center p-8">
-      <div className="max-w-md text-center">
-        <h1 className="text-2xl font-semibold text-foreground">Introduction</h1>
-        <p className="mt-2 text-sm text-foreground-subtle">
-          Select a component from the sidebar to start exploring.
-        </p>
-      </div>
-    </div>
-  );
 }
