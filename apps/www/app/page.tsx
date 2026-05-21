@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
-import { PlaygroundHome } from './playground-home';
+import { PlaygroundLayout } from '@/playground/components/layout';
 
 export default function Page() {
   return (
     <Suspense>
-      <PlaygroundHome />
+      <PlaygroundLayout />
     </Suspense>
   );
 }

@@ -60,7 +60,8 @@ Collapse the three surfaces into one: **the Playground is the site**.
 │  Header: brand · theme controls (dark/light · accent · radius) │
 ├──────────┬───────────────────────────────────┬──────────┤
 │          │                                   │          │
-│ Sidebar  │           Preview                 │ Toolbar  │
+│ Nav      │           Preview                 │ Controls │
+│ sidebar  │                                   │ sidebar  │
 │ (flat    │                                   │ (props   │
 │ alpha-   │                                   │  only)   │
 │ betical) │                                   │          │
@@ -68,15 +69,15 @@ Collapse the three surfaces into one: **the Playground is the site**.
 └──────────┴───────────────────────────────────┴──────────┘
 ```
 
-- **Sidebar (left):** Introduction entry + flat alphabetical list of
-  Components. No categorisation in v1 (matches shadcn convention,
+- **Nav sidebar (left):** Introduction entry + flat alphabetical list
+  of Components. No categorisation in v1 (matches shadcn convention,
   avoids bikeshedding category names).
 - **Preview (center):** the selected Component (or the Introduction
   page) renders here.
-- **Toolbar (right):** controls for the Component's Variants and
-  Content. Props only — no CSS-variable knobs, no data-slot
+- **Controls sidebar (right):** controls for the Component's Variants
+  and Content. Props only — no CSS-variable knobs, no data-slot
   overrides. Those layers remain part of Ora's user API but are not
-  part of the demo's toolbar surface.
+  part of the demo's controls surface.
 - **Header (top):** app-level theme controls. Dark/light toggle,
   accent picker (hand-picked colours validated against chrome design),
   radius preset (radio, not slider). Changing these re-themes the
@@ -87,7 +88,7 @@ Collapse the three surfaces into one: **the Playground is the site**.
 The header placement signals scope: "this affects the whole app." The
 demo eats its own dogfood — chrome is built on the system, so the
 same accent and dark-mode token swap that flows through user-rendered
-Components also flows through the sidebar, toolbar, and header.
+Components also flows through the sidebar, controls, and header.
 
 Trade accepted: chrome design must absorb every accent + dark/light
 combo. Bounded by hand-picking the accent set. Accents introduce a
@@ -97,7 +98,7 @@ from scratch.
 
 ### 4. State persistence
 
-- **Component state** (Variants + Content selections in the toolbar)
+- **Component state** (Variants + Content selections in the controls sidebar)
   → URL params. Reload survives. URL is shareable. Aligns with
   composer-alpha.md's permalink direction.
 - **Theme state** (dark/light, accent, radius) → localStorage. Global
@@ -112,7 +113,7 @@ theme is the recipient's environment.
 
 A per-Component action that opens a popover with two tabs:
 
-- **Code** — the source for the current toolbar state (JSX with
+- **Code** — the source for the current controls state (JSX with
   Variants + Content materialised). Emitted automatically from the
   Entry schema.
 - **Install** — sub-tabs for CLI command (`npx shadcn add …`) and
@@ -156,7 +157,7 @@ Vertical slice through one Component first — **Button** — including:
 - Schema runtime
 - Header theme controls
 - Sidebar with one entry
-- Preview + Toolbar layout
+- Preview + Controls sidebar layout
 - "Get code" with both tabs
 
 Ship `/` with Button-only and a "more components coming" affordance.
@@ -195,11 +196,11 @@ chrome dogfood the system. Cheaper to build, stronger demo moment.
 
 ### "Get code" emits only an install command (no live snippet)
 
-Rejected. Snippet of the current toolbar state is the satisfying
+Rejected. Snippet of the current controls state is the satisfying
 loop that makes the playground worth using. Static install command
 alone is a downgrade from the play experience.
 
-### Toolbar exposes CSS-variable and data-slot knobs
+### Controls exposes CSS-variable and data-slot knobs
 
 Rejected for v1. Props alone are enough to demonstrate the system's
 core thesis; CSS-variable knobs require per-Component descriptor
@@ -249,7 +250,7 @@ Component count makes the flat list painful.
 ## Followups
 
 - ADR-0005 — schema-driven Playground entries. Captures how Variants
-  and Content are encoded so the toolbar and code emitter can be
+  and Content are encoded so the controls and code emitter can be
   generic.
 - v1.1 — Examples section in sidebar. Pattern-focused (product
   scenarios), not brand-clone. Single-command install via shadcn

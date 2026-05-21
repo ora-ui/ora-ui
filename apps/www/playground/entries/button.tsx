@@ -1,121 +1,61 @@
-'use client';
-
-import * as React from 'react';
-import { ArrowUpIcon, InfoIcon, SparkleIcon, StarIcon } from '@phosphor-icons/react';
+import { StarIcon } from '@phosphor-icons/react/dist/ssr';
 import { Button } from '@/registry/ui/button';
-import { ToolbarSeparator } from '@/registry/ui/toolbar';
-import { PreviewShell } from '@/playground/components/preview-shell';
-import { TextControl, SelectControl } from '@/playground/components/controls';
-import { BUTTON_VARIANTS, BUTTON_THEMES } from '@/playground/components/constants';
+import type { EntrySchema } from '@/playground/lib/types';
 
-type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
-type ButtonTheme = (typeof BUTTON_THEMES)[number];
-type IconVariant = 'none' | 'leading' | 'trailing' | 'icon-only';
+export const buttonEntry: EntrySchema = {
+  component: 'button',
+  name: 'Button',
+  variants: {
+    variant: {
+      values: ['solid', 'outline', 'surface', 'soft', 'ghost'],
+      label: 'Variant',
+      default: 'solid',
+    },
+    size: {
+      values: ['sm', 'md', 'lg'],
+      label: 'Size',
+      default: 'md',
+    },
+    theme: {
+      values: ['gray', 'accent', 'destructive'],
+      label: 'Theme',
+      default: 'gray',
+    },
+  },
+  content: {
+    label: {
+      type: 'string',
+      label: 'Label',
+      default: 'Button',
+    },
+    icon: {
+      type: 'boolean',
+      label: 'Icon',
+      default: false,
+    },
+    iconPosition: {
+      type: 'select',
+      label: 'Icon Position',
+      values: ['leading', 'trailing'],
+      default: 'leading',
+      visibleWhen: (inputs) => inputs.icon === true && Boolean(inputs.label),
+    },
+  },
+  render: ({ variants, inputs }) => {
+    const label = inputs.label as string;
+    const icon = inputs.icon as boolean;
+    const iconPosition = inputs.iconPosition as 'leading' | 'trailing';
 
-const VARIANT_OPTIONS = BUTTON_VARIANTS.map((v) => ({ label: v, value: v }));
-const THEME_OPTIONS = BUTTON_THEMES.map((t) => ({ label: t, value: t }));
-
-const ICON_OPTIONS = [
-  { label: 'None', value: 'none' },
-  { label: 'Leading', value: 'leading' },
-  { label: 'Trailing', value: 'trailing' },
-  { label: 'Icon only', value: 'icon-only' },
-];
-
-export const defaults = {
-  variant: 'solid',
-  theme: 'gray',
-  label: 'Button',
-  icon: 'none',
+    return (
+      <Button
+        variant={variants.variant as 'solid' | 'outline' | 'surface' | 'soft' | 'ghost'}
+        size={variants.size as 'sm' | 'md' | 'lg'}
+        theme={variants.theme as 'gray' | 'accent' | 'destructive'}
+      >
+        {icon && iconPosition === 'leading' && <StarIcon />}
+        {label}
+        {icon && iconPosition === 'trailing' && <StarIcon />}
+      </Button>
+    );
+  },
 };
-
-function ButtonPreview({ searchParams }: { searchParams: Record<string, string> }) {
-  const [variant, setVariant] = React.useState<ButtonVariant>(
-    (searchParams.variant as ButtonVariant) ?? (defaults.variant as ButtonVariant)
-  );
-  const [theme, setTheme] = React.useState<ButtonTheme>(
-    (searchParams.theme as ButtonTheme) ?? (defaults.theme as ButtonTheme)
-  );
-  const [text, setText] = React.useState(searchParams.label ?? defaults.label);
-  const [icon, setIcon] = React.useState<IconVariant>(
-    (searchParams.icon as IconVariant) ?? (defaults.icon as IconVariant)
-  );
-
-  const isIconOnly = icon === 'icon-only';
-
-  const preview = isIconOnly ? (
-    <Button variant={variant} theme={theme} size="icon">
-      <StarIcon />
-    </Button>
-  ) : (
-    <Button variant={variant} theme={theme}>
-      {icon === 'leading' && <StarIcon />}
-      {text}
-      {icon === 'trailing' && <StarIcon />}
-    </Button>
-  );
-
-  return (
-    <PreviewShell
-      preview={preview}
-      controls={
-        <>
-          <SelectControl
-            label="Variant"
-            value={variant}
-            options={VARIANT_OPTIONS}
-            onChange={(v) => setVariant(v as ButtonVariant)}
-          />
-          <ToolbarSeparator />
-          <SelectControl
-            label="Theme"
-            value={theme}
-            options={THEME_OPTIONS}
-            onChange={(v) => setTheme(v as ButtonTheme)}
-          />
-          <ToolbarSeparator />
-          <TextControl label="Label" value={text} onChange={setText} />
-          <ToolbarSeparator />
-          <SelectControl
-            label="Icon"
-            value={icon}
-            options={ICON_OPTIONS}
-            onChange={(v) => setIcon(v as IconVariant)}
-          />
-        </>
-      }
-      variants={<ButtonVariants />}
-    />
-  );
-}
-
-function ButtonVariants() {
-  return (
-    <div className="flex flex-wrap items-center justify-center gap-3">
-      <Button variant="solid" theme="accent">
-        Get Started
-      </Button>
-      <Button variant="soft">
-        <InfoIcon />
-        Learn more
-      </Button>
-      <Button variant="outline">
-        Ask AI
-        <SparkleIcon />
-      </Button>
-      <Button variant="solid" theme="destructive">
-        Cancel Subscription
-      </Button>
-      <Button variant="solid" size="icon">
-        <ArrowUpIcon />
-      </Button>
-    </div>
-  );
-}
-
-const entry = {
-  Preview: ButtonPreview,
-  Variants: ButtonVariants,
-  defaults,
-};
-export default entry;
