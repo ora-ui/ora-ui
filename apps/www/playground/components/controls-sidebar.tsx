@@ -18,6 +18,7 @@ import { Input } from '@/registry/ui/input';
 import { Label } from '@/registry/ui/label';
 import { Toggle } from '@/registry/ui/toggle';
 import { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/registry/ui/tooltip';
 
 export function ControlsSidebar({
   schema,
@@ -265,17 +266,23 @@ function ThemeSwatchInput({
       className="flex flex-wrap gap-1"
     >
       {values.map((v) => (
-        <RadioPrimitive.Root
-          key={v}
-          value={v}
-          aria-label={v}
-          className="group/swatch flex size-6 shrink-0 items-center justify-center rounded-full outline-none"
-        >
-          <span
-            className="size-5 rounded-full outline outline-transparent outline-offset-2 transition-[outline-color] group-data-checked/swatch:outline-primary group-focus-visible/swatch:outline-focus"
-            style={{ backgroundColor: `var(--${v}-fill)` }}
+        <Tooltip key={v}>
+          <TooltipTrigger
+            render={
+              <RadioPrimitive.Root
+                value={v}
+                aria-label={v}
+                className="group/swatch flex size-6 shrink-0 items-center justify-center rounded-full outline-none"
+              >
+                <span
+                  className="size-5 rounded-full outline outline-transparent outline-offset-2 transition-[outline-color] group-data-checked/swatch:outline-primary group-focus-visible/swatch:outline-focus"
+                  style={{ backgroundColor: `var(--${v}-fill)` }}
+                />
+              </RadioPrimitive.Root>
+            }
           />
-        </RadioPrimitive.Root>
+          <TooltipContent>{v.charAt(0).toUpperCase() + v.slice(1)}</TooltipContent>
+        </Tooltip>
       ))}
     </RadioGroupPrimitive>
   );
