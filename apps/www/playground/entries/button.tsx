@@ -30,12 +30,19 @@ export const buttonEntry: EntrySchema = {
     },
     iconPosition: {
       type: 'select',
-      label: 'Icon Position',
+      label: 'Position',
       values: ['leading', 'trailing'],
       default: 'leading',
       visibleWhen: (inputs) => inputs.icon === true && Boolean(inputs.label),
     },
   },
+  groups: [
+    {
+      label: 'Icon',
+      toggleKey: 'icon',
+      children: ['iconPosition'],
+    },
+  ],
   render: ({ variants, inputs }) => {
     const label = inputs.label as string;
     const icon = inputs.icon as boolean;
