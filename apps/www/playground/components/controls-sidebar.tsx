@@ -266,23 +266,24 @@ function ThemeSwatchInput({
       className="flex flex-wrap gap-1"
     >
       {values.map((v) => (
-        <Tooltip key={v}>
-          <TooltipTrigger
-            render={
-              <RadioPrimitive.Root
-                value={v}
-                aria-label={v}
-                className="group/swatch flex size-6 shrink-0 items-center justify-center rounded-full outline-none"
-              >
+        <RadioPrimitive.Root
+          key={v}
+          value={v}
+          aria-label={v}
+          className="group/swatch flex size-6 shrink-0 items-center justify-center rounded-full outline-none"
+        >
+          <Tooltip>
+            <TooltipTrigger
+              render={
                 <span
                   className="size-5 rounded-full outline outline-transparent outline-offset-2 transition-[outline-color] group-data-checked/swatch:outline-primary group-focus-visible/swatch:outline-focus"
                   style={{ backgroundColor: `var(--${v}-fill)` }}
                 />
-              </RadioPrimitive.Root>
-            }
-          />
-          <TooltipContent>{v.charAt(0).toUpperCase() + v.slice(1)}</TooltipContent>
-        </Tooltip>
+              }
+            />
+            <TooltipContent>{v.charAt(0).toUpperCase() + v.slice(1)}</TooltipContent>
+          </Tooltip>
+        </RadioPrimitive.Root>
       ))}
     </RadioGroupPrimitive>
   );
