@@ -334,6 +334,23 @@
       ]
     },
     {
+      "name": "select",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/select.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
+    },
+    {
       "name": "separator",
       "type": "registry:ui",
       "files": [
