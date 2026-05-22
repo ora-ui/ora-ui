@@ -7,6 +7,7 @@ import './layout.css';
 // import './app.css';
 import { cn } from '@/registry/lib/utils';
 import { Header } from '@/header/components/header';
+import { TooltipProvider } from '@/registry/ui/tooltip';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -30,15 +31,17 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col font-sans antialiased">
         <NuqsAdapter>
           <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
-            <div className="RootLayout">
-              <div className="RootLayoutContainer">
-                <div className="RootLayoutContent">
-                  <Header />
-                  <main>{children}</main>
+            <TooltipProvider>
+              <div className="RootLayout">
+                <div className="RootLayoutContainer">
+                  <div className="RootLayoutContent">
+                    <Header />
+                    <main>{children}</main>
+                  </div>
+                  <span className="AppFooter"></span>
                 </div>
-                <span className="AppFooter"></span>
               </div>
-            </div>
+            </TooltipProvider>
           </ThemeProvider>
         </NuqsAdapter>
       </body>

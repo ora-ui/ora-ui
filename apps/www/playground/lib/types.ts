@@ -29,11 +29,18 @@ export type InputSpec =
 
 export type ContentSpec = Record<string, InputSpec>;
 
+export type ContentGroup = {
+  label: string;
+  toggleKey: string;
+  children: readonly string[];
+};
+
 export type EntrySchema = {
   component: string;
   name: string;
   variants: Record<string, VariantSpec>;
   content?: ContentSpec;
+  groups?: readonly ContentGroup[];
   render: (state: EntryState) => ReactNode;
 };
 

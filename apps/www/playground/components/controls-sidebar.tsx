@@ -1,6 +1,24 @@
 'use client';
 
-import type { EntrySchema, EntryState, InputSpec } from '@/playground/lib/types';
+import { MinusIcon, PlusIcon } from '@phosphor-icons/react';
+import { Collapsible } from '@base-ui/react/collapsible';
+import { Radio as RadioPrimitive } from '@base-ui/react/radio';
+import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
+
+import { Button } from '@/registry/ui/button';
+import type { ContentGroup, EntrySchema, EntryState, InputSpec } from '@/playground/lib/types';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/registry/ui/select';
+import { Input } from '@/registry/ui/input';
+import { Label } from '@/registry/ui/label';
+import { Toggle } from '@/registry/ui/toggle';
+import { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/registry/ui/tooltip';
 
 export function ControlsSidebar({
   schema,
@@ -13,50 +31,131 @@ export function ControlsSidebar({
   setVariant: (key: string, value: string) => void;
   setInput: (key: string, value: unknown) => void;
 }) {
-  const hasContent = schema.content && Object.keys(schema.content).length > 0;
+  const groups = schema.groups ?? [];
+  const groupedKeys = new Set(groups.flatMap((g) => [g.toggleKey, ...g.children]));
+  const ungroupedEntries = Object.entries(schema.content ?? {}).filter(
+    ([key]) => !groupedKeys.has(key)
+  );
+  const hasUngrouped = ungroupedEntries.length > 0;
 
   return (
-    <aside className="w-64 shrink-0 border-l border-line p-4">
-      <div className="mb-3 text-xs font-medium uppercase tracking-wide text-foreground-subtle">
-        {schema.name}
+    <aside className="w-64 shrink-0 border-l border-line [--sidebar-pad:--spacing(3)] *:border-b *:border-line">
+      <div className="flex items-center justify-between gap-2 bg-surface p-(--sidebar-pad)">
+        <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">{schema.name}</h3>
+        <Button size="sm">Get code</Button>
       </div>
-      <div className="flex flex-col gap-3">
-        {Object.entries(schema.variants).map(([key, spec]) => (
-          <label key={key} className="flex flex-col gap-1 text-sm">
-            <span className="text-foreground-subtle">{spec.label ?? key}</span>
-            <select
-              className="rounded-dynamic border border-line-ui bg-ui px-2 py-1 text-sm text-foreground"
-              value={state.variants[key]}
-              onChange={(e) => setVariant(key, e.target.value)}
-            >
-              {spec.values.map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-          </label>
-        ))}
 
-        {hasContent && (
-          <>
-            <div className="border-t border-line pt-3 text-xs font-medium uppercase tracking-wide text-foreground-subtle">
-              Content
-            </div>
-            {Object.entries(schema.content!).map(([key, spec]) => (
-              <InputControl
-                key={key}
-                label={spec.label ?? key}
-                spec={spec}
-                value={state.inputs[key]}
-                disabled={spec.visibleWhen ? !spec.visibleWhen(state.inputs) : false}
-                onChange={(value) => setInput(key, value)}
+      <div className="flex flex-col gap-5 p-(--sidebar-pad)">
+        <div className="text-xs font-medium tracking-wide text-foreground-subtle">Variants</div>
+        {Object.entries(schema.variants).map(([key, spec]) => (
+          <div key={key} className="flex flex-col gap-1 text-sm">
+            <span className="text-xs text-secondary">{spec.label ?? key}</span>
+            {key === 'theme' ? (
+              <ThemeSwatchInput
+                values={spec.values}
+                value={state.variants[key]}
+                onChange={(value) => setVariant(key, value)}
               />
-            ))}
-          </>
-        )}
+            ) : (
+              <Select
+                value={state.variants[key]}
+                onValueChange={(value) => setVariant(key, value as string)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent variant="solid">
+                  {spec.values.map((value) => (
+                    <SelectItem key={value} value={value}>
+                      {value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          </div>
+        ))}
       </div>
+
+      {hasUngrouped && (
+        <div className="flex flex-col gap-5 p-(--sidebar-pad)">
+          <div className="text-xs font-medium tracking-wide text-foreground-subtle">Content</div>
+          {ungroupedEntries.map(([key, spec]) => (
+            <InputControl
+              key={key}
+              label={spec.label ?? key}
+              spec={spec}
+              value={state.inputs[key]}
+              disabled={spec.visibleWhen ? !spec.visibleWhen(state.inputs) : false}
+              onChange={(value) => setInput(key, value)}
+            />
+          ))}
+        </div>
+      )}
+
+      {groups.map((group) => (
+        <GroupSection
+          key={group.toggleKey}
+          group={group}
+          content={schema.content ?? {}}
+          state={state}
+          setInput={setInput}
+        />
+      ))}
     </aside>
+  );
+}
+
+function GroupSection({
+  group,
+  content,
+  state,
+  setInput,
+}: {
+  group: ContentGroup;
+  content: Record<string, InputSpec>;
+  state: EntryState;
+  setInput: (key: string, value: unknown) => void;
+}) {
+  const open = state.inputs[group.toggleKey] === true;
+  const childEntries = group.children
+    .map((key) => [key, content[key]] as const)
+    .filter(([, spec]) => spec !== undefined);
+
+  return (
+    <Collapsible.Root open={open} onOpenChange={(next) => setInput(group.toggleKey, next)}>
+      <Collapsible.Trigger
+        render={
+          <button
+            type="button"
+            className="flex w-full items-center justify-between gap-2 p-(--sidebar-pad) text-sm text-primary outline-none transition-colors hover:bg-hover/30 focus-visible:outline-2 focus-visible:outline-focus focus-visible:-outline-offset-2"
+          >
+            <span className="text-xs font-medium tracking-wide text-foreground-subtle">
+              {group.label}
+            </span>
+            {open ? (
+              <MinusIcon className="size-4 text-muted" />
+            ) : (
+              <PlusIcon className="size-4 text-muted" />
+            )}
+          </button>
+        }
+      />
+      <Collapsible.Panel className="overflow-hidden data-ending-style:h-0 data-starting-style:h-0 transition-[height] duration-150 h-(--collapsible-panel-height)">
+        <div className="flex flex-col gap-5 p-(--sidebar-pad)">
+          {childEntries.map(([key, spec]) => (
+            <InputControl
+              key={key}
+              label={spec.label ?? key}
+              spec={spec}
+              value={state.inputs[key]}
+              disabled={spec.visibleWhen ? !spec.visibleWhen(state.inputs) : false}
+              onChange={(value) => setInput(key, value)}
+            />
+          ))}
+        </div>
+      </Collapsible.Panel>
+    </Collapsible.Root>
   );
 }
 
@@ -113,16 +212,15 @@ function StringInput({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="flex flex-col gap-1 text-sm">
-      <span className="text-foreground-subtle">{label}</span>
-      <input
+    <Label className="flex flex-col gap-1 text-sm">
+      <span className="text-xs text-secondary">{label}</span>
+      <Input
         type="text"
         disabled={disabled}
-        className="rounded-dynamic border border-line-ui bg-ui px-2 py-1 text-sm text-foreground disabled:opacity-40"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-    </label>
+    </Label>
   );
 }
 
@@ -138,16 +236,56 @@ function BooleanInput({
   onChange: (value: boolean) => void;
 }) {
   return (
-    <label className="flex cursor-pointer items-center gap-2 text-sm">
-      <input
-        type="checkbox"
-        disabled={disabled}
-        checked={value}
-        onChange={(e) => onChange(e.target.checked)}
-        className="rounded disabled:opacity-40"
-      />
-      <span className="text-foreground-subtle">{label}</span>
-    </label>
+    <Toggle
+      // variant="outline"
+      // size="sm"
+      pressed={value}
+      disabled={disabled}
+      onPressedChange={onChange}
+      className="w-max justify-start"
+    >
+      {value ? <MinusIcon /> : <PlusIcon />}
+      {value ? `Remove ${label.toLowerCase()}` : `Add ${label.toLowerCase()}`}
+    </Toggle>
+  );
+}
+
+function ThemeSwatchInput({
+  values,
+  value,
+  onChange,
+}: {
+  values: readonly string[];
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <RadioGroupPrimitive
+      value={value}
+      onValueChange={(next) => onChange(next as string)}
+      className="flex flex-wrap gap-1"
+    >
+      {values.map((v) => (
+        <RadioPrimitive.Root
+          key={v}
+          value={v}
+          aria-label={v}
+          className="group/swatch flex size-6 shrink-0 items-center justify-center rounded-full outline-none"
+        >
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <span
+                  className="size-5 rounded-full outline outline-transparent outline-offset-2 transition-[outline-color] group-data-checked/swatch:outline-primary group-focus-visible/swatch:outline-focus"
+                  style={{ backgroundColor: `var(--${v}-fill)` }}
+                />
+              }
+            />
+            <TooltipContent>{v.charAt(0).toUpperCase() + v.slice(1)}</TooltipContent>
+          </Tooltip>
+        </RadioPrimitive.Root>
+      ))}
+    </RadioGroupPrimitive>
   );
 }
 
@@ -165,20 +303,23 @@ function SelectInput({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="flex flex-col gap-1 text-sm">
-      <span className="text-foreground-subtle">{label}</span>
-      <select
+    <div className="flex flex-col gap-1 text-sm">
+      <span className="text-xs text-secondary">{label}</span>
+      <ToggleGroup
+        variant="outline"
+        value={[value]}
+        onValueChange={(next) => {
+          const picked = next.find((v) => v !== value) ?? next[0];
+          if (picked) onChange(picked);
+        }}
         disabled={disabled}
-        className="rounded-dynamic border border-line-ui bg-ui px-2 py-1 text-sm text-foreground disabled:opacity-40"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
       >
         {values.map((v) => (
-          <option key={v} value={v}>
+          <ToggleGroupItem key={v} value={v} className="flex-1 capitalize">
             {v}
-          </option>
+          </ToggleGroupItem>
         ))}
-      </select>
-    </label>
+      </ToggleGroup>
+    </div>
   );
 }

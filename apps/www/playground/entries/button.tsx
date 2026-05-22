@@ -11,11 +11,6 @@ export const buttonEntry: EntrySchema = {
       label: 'Variant',
       default: 'solid',
     },
-    size: {
-      values: ['sm', 'md', 'lg'],
-      label: 'Size',
-      default: 'md',
-    },
     theme: {
       values: ['gray', 'accent', 'destructive'],
       label: 'Theme',
@@ -35,12 +30,19 @@ export const buttonEntry: EntrySchema = {
     },
     iconPosition: {
       type: 'select',
-      label: 'Icon Position',
+      label: 'Position',
       values: ['leading', 'trailing'],
       default: 'leading',
       visibleWhen: (inputs) => inputs.icon === true && Boolean(inputs.label),
     },
   },
+  groups: [
+    {
+      label: 'Icon',
+      toggleKey: 'icon',
+      children: ['iconPosition'],
+    },
+  ],
   render: ({ variants, inputs }) => {
     const label = inputs.label as string;
     const icon = inputs.icon as boolean;
@@ -49,7 +51,6 @@ export const buttonEntry: EntrySchema = {
     return (
       <Button
         variant={variants.variant as 'solid' | 'outline' | 'surface' | 'soft' | 'ghost'}
-        size={variants.size as 'sm' | 'md' | 'lg'}
         theme={variants.theme as 'gray' | 'accent' | 'destructive'}
       >
         {icon && iconPosition === 'leading' && <StarIcon />}
