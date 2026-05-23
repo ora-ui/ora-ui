@@ -137,7 +137,7 @@ function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Prop
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        'relative flex w-full cursor-default items-center gap-1.5 rounded-(--menu-item-radius) h-7.5 pr-8 pl-1.5 text-sm text-primary outline-hidden select-none',
+        'relative flex w-full cursor-default items-center gap-1.5 rounded-(--menu-item-radius) h-7 pr-8 pl-1.5 text-sm text-primary outline-hidden select-none',
         variant === 'solid'
           ? 'data-highlighted:bg-fill data-highlighted:text-on-fill data-highlighted:**:text-on-fill'
           : 'data-highlighted:bg-hover data-highlighted:text-primary',

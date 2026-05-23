@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { CaretDownIcon, MinusIcon, PlusIcon, TrashIcon } from '@phosphor-icons/react';
 import { Collapsible } from '@base-ui/react/collapsible';
 import { Radio as RadioPrimitive } from '@base-ui/react/radio';
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
+import { Select as SelectPrimitive } from '@base-ui/react/select';
 
 import { Button } from '@/registry/ui/button';
 import type {
@@ -17,13 +18,7 @@ import type {
   ListItem,
   VariantSpec,
 } from '@/playground/lib/types';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/registry/ui/select';
+import { Select, SelectContent, SelectItem, SelectValue } from '@/registry/ui/select';
 import { Input } from '@/registry/ui/input';
 import { Label } from '@/registry/ui/label';
 import { Switch } from '@/registry/ui/switch';
@@ -52,7 +47,7 @@ export function ControlsSidebar({
   const hasUngrouped = ungroupedEntries.length > 0;
 
   return (
-    <aside className="w-64 shrink-0 border-l border-line [--sidebar-pad:--spacing(3)] *:border-b *:border-line">
+    <aside className="w-max min-w-60 shrink-0 border-l border-line [--sidebar-pad:--spacing(3)] *:border-b *:border-line">
       <div className="flex items-center justify-between gap-2 bg-surface p-(--sidebar-pad)">
         <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">{schema.name}</h3>
         <Button size="sm">Get code</Button>
@@ -60,7 +55,7 @@ export function ControlsSidebar({
 
       {Object.keys(schema.variants).length > 0 && (
         <div className="flex flex-col gap-5 p-(--sidebar-pad)">
-          <div className="text-xs font-medium tracking-wide text-foreground-subtle">Variants</div>
+          <div className="text-sm font-medium tracking-wide text-foreground-subtle">Variants</div>
           {Object.entries(schema.variants).map(([key, spec]) => (
             <EnumRow
               key={key}
@@ -76,7 +71,7 @@ export function ControlsSidebar({
 
       {schema.behavior && Object.keys(schema.behavior).length > 0 && (
         <div className="flex flex-col gap-5 p-(--sidebar-pad)">
-          <div className="text-xs font-medium tracking-wide text-foreground-subtle">Behavior</div>
+          <div className="text-sm font-medium tracking-wide text-foreground-subtle">Behavior</div>
           {Object.entries(schema.behavior).map(([key, spec]) => (
             <EnumRow
               key={key}
@@ -91,7 +86,7 @@ export function ControlsSidebar({
 
       {hasUngrouped && (
         <div className="flex flex-col gap-5 p-(--sidebar-pad)">
-          <div className="text-xs font-medium tracking-wide text-foreground-subtle">Content</div>
+          <div className="text-sm font-medium tracking-wide text-foreground-subtle">Content</div>
           {ungroupedEntries.map(([key, spec]) => (
             <InputControl
               key={key}
@@ -134,8 +129,8 @@ function EnumRow({
   const label = spec.label ?? controlKey;
   if ('type' in spec) {
     return (
-      <div className="flex items-center justify-between gap-2 text-sm">
-        <span className="text-xs text-secondary">{label}</span>
+      <div className="flex items-center justify-between gap-5 text-sm">
+        <span className="text-sm text-secondary">{label}</span>
         <Switch checked={value === true} onCheckedChange={(next) => onChange(next)} />
       </div>
     );
@@ -145,8 +140,8 @@ function EnumRow({
   const isTwoState = !isThemeSwatch && spec.values.length === 2;
   if (isTwoState) {
     return (
-      <div className="flex items-center justify-between gap-2 text-sm">
-        <span className="text-xs text-secondary">{label}</span>
+      <div className="flex items-center justify-between gap-5 text-sm">
+        <span className="text-sm text-secondary">{label}</span>
         <ToggleGroup
           variant="outline"
           value={[stringValue]}
@@ -164,25 +159,34 @@ function EnumRow({
       </div>
     );
   }
-  return (
-    <div className="flex flex-col gap-1 text-sm">
-      <span className="text-xs text-secondary">{label}</span>
-      {isThemeSwatch ? (
+  if (isThemeSwatch) {
+    return (
+      <div className="flex items-center justify-between gap-5 text-sm">
+        <span className="text-sm text-secondary">{label}</span>
         <ThemeSwatchInput values={spec.values} value={stringValue} onChange={onChange} />
-      ) : (
-        <Select value={stringValue} onValueChange={(v) => onChange(v as string)}>
-          <SelectTrigger className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent variant="solid">
-            {spec.values.map((v) => (
-              <SelectItem key={v} value={v}>
-                {v}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )}
+      </div>
+    );
+  }
+  return (
+    <div className="flex items-center justify-between gap-5 text-sm">
+      <span className="text-sm text-secondary">{label}</span>
+      <Select value={stringValue} onValueChange={(v) => onChange(v as string)}>
+        <SelectPrimitive.Trigger
+          render={
+            <Button variant="surface" size="sm" className="w-35 justify-between">
+              <SelectValue />
+              <CaretDownIcon className="size-4 text-muted" />
+            </Button>
+          }
+        />
+        <SelectContent variant="solid">
+          {spec.values.map((v) => (
+            <SelectItem key={v} value={v}>
+              {v}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }
@@ -209,9 +213,9 @@ function GroupSection({
         render={
           <button
             type="button"
-            className="flex w-full items-center justify-between gap-2 p-(--sidebar-pad) text-sm text-primary outline-none transition-colors hover:bg-hover/30 focus-visible:outline-2 focus-visible:outline-focus focus-visible:-outline-offset-2"
+            className="flex w-full items-center justify-between gap-2 p-(--sidebar-pad) text-sm text-primary outline-none transition-colors hover:bg-hover/30 data-panel-open:bg-hover/30 focus-visible:outline-2 focus-visible:outline-focus focus-visible:-outline-offset-2"
           >
-            <span className="text-xs font-medium tracking-wide text-foreground-subtle">
+            <span className="text-sm font-medium tracking-wide text-foreground-subtle">
               {group.label}
             </span>
             {open ? (
@@ -332,7 +336,7 @@ function ListInput({
 
   return (
     <div className="flex flex-col gap-2 text-sm">
-      <span className="text-xs text-secondary">{label}</span>
+      <span className="text-sm text-secondary">{label}</span>
       <div className="flex flex-col gap-1">
         {value.map((item, index) => {
           const open = openIndex === index;
@@ -416,8 +420,13 @@ function ItemFieldInput({
   }
   return (
     <Label className="flex flex-col gap-1 text-sm">
-      <span className="text-xs text-secondary">{label}</span>
-      <Input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
+      <span className="text-sm text-secondary">{label}</span>
+      <Input
+        type="text"
+        variant="surface"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
     </Label>
   );
 }
@@ -434,13 +443,15 @@ function StringInput({
   onChange: (value: string) => void;
 }) {
   return (
-    <Label className="flex flex-col gap-1 text-sm">
-      <span className="text-xs text-secondary">{label}</span>
+    <Label className="flex items-center justify-between gap-5 text-sm">
+      <span className="text-sm text-secondary">{label}</span>
       <Input
         type="text"
+        variant="surface"
         disabled={disabled}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        className="w-35"
       />
     </Label>
   );
@@ -498,8 +509,13 @@ function ThemeSwatchInput({
             <TooltipTrigger
               render={
                 <span
-                  className="size-5 rounded-full outline outline-transparent outline-offset-2 transition-[outline-color] group-data-checked/swatch:outline-primary group-focus-visible/swatch:outline-focus"
-                  style={{ backgroundColor: `var(--${v}-fill)` }}
+                  className="size-5 rounded-full outline-2 outline-offset-2 outline-transparent transition-[outline-color] group-data-checked/swatch:outline-(--swatch-fill) group-focus-visible/swatch:outline-focus"
+                  style={
+                    {
+                      backgroundColor: `var(--${v}-fill)`,
+                      '--swatch-fill': `var(--${v}-fill)`,
+                    } as CSSProperties
+                  }
                 />
               }
             />
@@ -525,8 +541,8 @@ function SelectInput({
   onChange: (value: string) => void;
 }) {
   return (
-    <div className="flex flex-col gap-1 text-sm">
-      <span className="text-xs text-secondary">{label}</span>
+    <div className="flex items-center justify-between gap-5 text-sm">
+      <span className="text-sm text-secondary">{label}</span>
       <ToggleGroup
         variant="outline"
         value={[value]}
@@ -537,7 +553,7 @@ function SelectInput({
         disabled={disabled}
       >
         {values.map((v) => (
-          <ToggleGroupItem key={v} value={v} className="flex-1 capitalize">
+          <ToggleGroupItem key={v} value={v} className="capitalize">
             {v}
           </ToggleGroupItem>
         ))}

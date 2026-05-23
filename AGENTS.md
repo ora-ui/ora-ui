@@ -2,21 +2,6 @@ Styled primitives and composable patterns for building beautiful, accessible int
 
 This is a typescript monorepo that uses pnpm as package manager.
 
-## Static checks
-
-Run these before declaring a task done. They must exit zero:
-
-- `pnpm lint`—ESLint with strict custom rules
-- `pnpm typecheck`—TypeScript strict mode
-
-If lint fails, read the error message. It names the violation, the
-file, and the fix. Do not add `eslint-disable` comments to bypass. Do
-not change a rule from `error` to `warn`. Fix the code.
-
-If typecheck fails, fix the types. Do not use `any`. Do not use
-`@ts-expect-error`. If you truly cannot type something (rare), ask
-before silencing.
-
 ## Secrets
 
 - Never commit a real API key, access token, password, or private key

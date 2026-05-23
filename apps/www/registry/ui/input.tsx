@@ -20,9 +20,9 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        surface: 'border border-line-ui focus-visible:border-focus-fill',
+        surface: 'bg-ui border border-line-ui focus-visible:border-focus-fill',
         outline: 'border border-line-ui shadow-2xs focus-visible:border-focus-fill',
-        soft: 'border border-transparent focus-visible:border-focus-fill',
+        soft: 'bg-ui border border-transparent focus-visible:border-focus-fill',
       },
     },
     defaultVariants: {
