@@ -543,21 +543,23 @@ function SelectInput({
   return (
     <div className="flex items-center justify-between gap-5 text-sm">
       <span className="text-sm text-secondary">{label}</span>
-      <ToggleGroup
-        variant="outline"
-        value={[value]}
-        onValueChange={(next) => {
-          const picked = next.find((v) => v !== value) ?? next[0];
-          if (picked) onChange(picked);
-        }}
-        disabled={disabled}
-      >
-        {values.map((v) => (
-          <ToggleGroupItem key={v} value={v} className="capitalize">
-            {v}
-          </ToggleGroupItem>
-        ))}
-      </ToggleGroup>
+      <Select value={value} onValueChange={(v) => onChange(v as string)} disabled={disabled}>
+        <SelectPrimitive.Trigger
+          render={
+            <Button variant="surface" size="sm" className="w-35 justify-between">
+              <SelectValue />
+              <CaretDownIcon className="size-4 text-muted" />
+            </Button>
+          }
+        />
+        <SelectContent variant="solid">
+          {values.map((v) => (
+            <SelectItem key={v} value={v}>
+              {v}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }
