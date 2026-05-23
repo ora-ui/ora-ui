@@ -15,6 +15,11 @@ export const accordionEntry: EntrySchema = {
       label: 'Item style',
       default: 'underline',
     },
+    iconPosition: {
+      values: ['start', 'end'],
+      label: 'Icon position',
+      default: 'end',
+    },
   },
   behavior: {
     multiple: {

@@ -63,23 +63,33 @@ function AccordionItem({
   );
 }
 
-function AccordionTrigger({ className, children, ...props }: AccordionPrimitive.Trigger.Props) {
+function AccordionTrigger({
+  className,
+  children,
+  iconPosition = 'end',
+  ...props
+}: AccordionPrimitive.Trigger.Props & { iconPosition?: 'start' | 'end' }) {
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
+        data-icon-position={iconPosition}
         className={cn(
-          'group relative flex w-full items-baseline justify-between gap-4 py-2 pr-1 pl-3 text-left font-normal focus-visible:z-1 focus-visible:outline-2 focus-visible:outline-focus',
+          'group relative flex w-full items-center gap-2 py-2 px-3 text-left font-normal focus-visible:z-1 focus-visible:outline-2 focus-visible:outline-focus',
+          'data-[icon-position=end]:justify-between data-[icon-position=start]:flex-row-reverse data-[icon-position=start]:justify-end',
           'in-data-[variant=underline]:hover:underline in-data-[variant=underline]:hover:decoration-1 in-data-[variant=underline]:underline-offset-2 in-data-[variant=underline]:decoration-secondary',
           'in-data-[variant=soft]:hover:bg-hover/50 in-data-[variant=soft]:aria-expanded:bg-hover/75',
+          'has-data-[slot=accordion-trigger-icon]:**:data-[slot=accordion-trigger-icon-default]:hidden',
+          'aria-expanded:[&_[data-slot=accordion-trigger-icon][data-when=collapsed]]:hidden',
+          'not-aria-expanded:[&_[data-slot=accordion-trigger-icon][data-when=expanded]]:hidden',
           className
         )}
         {...props}
       >
         {children}
         <ChevronDownIcon
-          data-slot="accordion-trigger-icon"
-          className="size-4 shrink-0 text-muted transition-transform duration-200 group-aria-expanded/accordion-trigger:rotate-180"
+          data-slot="accordion-trigger-icon-default"
+          className="size-4 shrink-0 text-muted motion-safe:transition-transform motion-safe:duration-200 group-aria-expanded:rotate-180"
         />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
@@ -90,7 +100,7 @@ function AccordionContent({ className, children, ...props }: AccordionPrimitive.
   return (
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
-      className="h-(--accordion-panel-height) overflow-hidden text-secondary transition-[height] ease-out data-ending-style:h-0 data-starting-style:h-0"
+      className="h-(--accordion-panel-height) overflow-hidden text-secondary motion-safe:transition-[height] motion-safe:ease-out data-ending-style:h-0 data-starting-style:h-0"
       {...props}
     >
       <div className={cn('p-3', className)}>{children}</div>

@@ -14,6 +14,7 @@ export function AccordionRender({ variants, behavior, inputs }: EntryState) {
   const multiple = behavior.multiple === true;
   const bordered = variants.bordered === true;
   const itemVariant = (variants.itemVariant as 'underline' | 'soft') ?? 'underline';
+  const iconPosition = (variants.iconPosition as 'start' | 'end') ?? 'end';
   const items = (inputs.items as ListItem[]) ?? [];
 
   const [prevMultiple, setPrevMultiple] = useState(multiple);
@@ -34,7 +35,7 @@ export function AccordionRender({ variants, behavior, inputs }: EntryState) {
     >
       {items.map((item, index) => (
         <AccordionItem key={index} value={`item-${index}`} variant={itemVariant}>
-          <AccordionTrigger>{item.trigger}</AccordionTrigger>
+          <AccordionTrigger iconPosition={iconPosition}>{item.trigger}</AccordionTrigger>
           <AccordionContent>{item.content}</AccordionContent>
         </AccordionItem>
       ))}
