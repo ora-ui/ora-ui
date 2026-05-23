@@ -1,6 +1,7 @@
 'use client';
 
-import { MinusIcon, PlusIcon, TrashIcon } from '@phosphor-icons/react';
+import { useState } from 'react';
+import { CaretDownIcon, MinusIcon, PlusIcon, TrashIcon } from '@phosphor-icons/react';
 import { Collapsible } from '@base-ui/react/collapsible';
 import { Radio as RadioPrimitive } from '@base-ui/react/radio';
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
@@ -284,12 +285,22 @@ function ListInput({
   value: ListItem[];
   onChange: (next: ListItem[]) => void;
 }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const fieldKeys = Object.keys(itemShape);
+  const summaryKey = fieldKeys[0];
+
   const updateItem = (index: number, key: string, fieldValue: string) => {
     const next = value.map((item, i) => (i === index ? { ...item, [key]: fieldValue } : item));
     onChange(next);
   };
   const removeItem = (index: number) => {
     onChange(value.filter((_, i) => i !== index));
+    setOpenIndex((current) => {
+      if (current === null) return null;
+      if (current === index) return null;
+      if (current > index) return current - 1;
+      return current;
+    });
   };
   const addItem = () => {
     const fresh: ListItem = {};
@@ -297,40 +308,64 @@ function ListInput({
       fresh[key] = spec.default;
     }
     onChange([...value, fresh]);
+    setOpenIndex(value.length);
   };
 
   return (
     <div className="flex flex-col gap-2 text-sm">
       <span className="text-xs text-secondary">{label}</span>
-      <div className="flex flex-col gap-2">
-        {value.map((item, index) => (
-          <div
-            key={index}
-            className="flex flex-col gap-2 rounded-dynamic border border-line bg-surface p-2"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-muted">
-                {itemLabel} {index + 1}
-              </span>
-              <button
-                type="button"
-                aria-label={`Remove ${itemLabel.toLowerCase()} ${index + 1}`}
-                onClick={() => removeItem(index)}
-                className="rounded-dynamic p-1 text-muted outline-none transition-colors hover:bg-hover/30 hover:text-foreground focus-visible:outline-2 focus-visible:outline-focus"
-              >
-                <TrashIcon className="size-3.5" />
-              </button>
-            </div>
-            {Object.entries(itemShape).map(([fieldKey, fieldSpec]) => (
-              <ItemFieldInput
-                key={fieldKey}
-                spec={fieldSpec}
-                value={item[fieldKey] ?? fieldSpec.default}
-                onChange={(next) => updateItem(index, fieldKey, next)}
-              />
-            ))}
-          </div>
-        ))}
+      <div className="flex flex-col gap-1">
+        {value.map((item, index) => {
+          const open = openIndex === index;
+          const summary = summaryKey ? item[summaryKey] : '';
+          const fallback = `${itemLabel} ${index + 1}`;
+          return (
+            <Collapsible.Root
+              key={index}
+              open={open}
+              onOpenChange={(next) => setOpenIndex(next ? index : null)}
+              className="rounded-dynamic border border-line bg-surface"
+            >
+              <div className="flex items-center">
+                <Collapsible.Trigger
+                  render={
+                    <button
+                      type="button"
+                      className="flex flex-1 items-center gap-2 rounded-dynamic px-2 py-1.5 text-left text-xs text-primary outline-none transition-colors hover:bg-hover/30 focus-visible:outline-2 focus-visible:outline-focus focus-visible:-outline-offset-2"
+                    >
+                      <CaretDownIcon
+                        className="size-3 shrink-0 text-muted transition-transform duration-150 group-aria-expanded:rotate-180"
+                        data-rotate={open ? 'true' : undefined}
+                        style={{ transform: open ? 'rotate(0deg)' : 'rotate(-90deg)' }}
+                      />
+                      <span className="flex-1 truncate">{summary || fallback}</span>
+                    </button>
+                  }
+                />
+                <button
+                  type="button"
+                  aria-label={`Remove ${itemLabel.toLowerCase()} ${index + 1}`}
+                  onClick={() => removeItem(index)}
+                  className="mr-1 rounded-dynamic p-1 text-muted outline-none transition-colors hover:bg-hover/30 hover:text-foreground focus-visible:outline-2 focus-visible:outline-focus"
+                >
+                  <TrashIcon className="size-3.5" />
+                </button>
+              </div>
+              <Collapsible.Panel className="overflow-hidden transition-[height] duration-150 data-ending-style:h-0 data-starting-style:h-0 h-(--collapsible-panel-height)">
+                <div className="flex flex-col gap-2 border-t border-line p-2">
+                  {Object.entries(itemShape).map(([fieldKey, fieldSpec]) => (
+                    <ItemFieldInput
+                      key={fieldKey}
+                      spec={fieldSpec}
+                      value={item[fieldKey] ?? fieldSpec.default}
+                      onChange={(next) => updateItem(index, fieldKey, next)}
+                    />
+                  ))}
+                </div>
+              </Collapsible.Panel>
+            </Collapsible.Root>
+          );
+        })}
       </div>
       <Button variant="outline" size="sm" onClick={addItem} className="w-max">
         <PlusIcon /> Add {itemLabel.toLowerCase()}
