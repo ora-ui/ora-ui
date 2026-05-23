@@ -1,12 +1,21 @@
 'use client';
 
-import { MinusIcon, PlusIcon } from '@phosphor-icons/react';
+import { MinusIcon, PlusIcon, TrashIcon } from '@phosphor-icons/react';
 import { Collapsible } from '@base-ui/react/collapsible';
 import { Radio as RadioPrimitive } from '@base-ui/react/radio';
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
 
 import { Button } from '@/registry/ui/button';
-import type { ContentGroup, EntrySchema, EntryState, InputSpec } from '@/playground/lib/types';
+import type {
+  ContentGroup,
+  EntrySchema,
+  EntryState,
+  InputSpec,
+  ItemFieldSpec,
+  ItemShape,
+  ListItem,
+  VariantSpec,
+} from '@/playground/lib/types';
 import {
   Select,
   SelectContent,
@@ -24,11 +33,13 @@ export function ControlsSidebar({
   schema,
   state,
   setVariant,
+  setBehavior,
   setInput,
 }: {
   schema: EntrySchema;
   state: EntryState;
   setVariant: (key: string, value: string) => void;
+  setBehavior: (key: string, value: string) => void;
   setInput: (key: string, value: unknown) => void;
 }) {
   const groups = schema.groups ?? [];
@@ -45,37 +56,36 @@ export function ControlsSidebar({
         <Button size="sm">Get code</Button>
       </div>
 
-      <div className="flex flex-col gap-5 p-(--sidebar-pad)">
-        <div className="text-xs font-medium tracking-wide text-foreground-subtle">Variants</div>
-        {Object.entries(schema.variants).map(([key, spec]) => (
-          <div key={key} className="flex flex-col gap-1 text-sm">
-            <span className="text-xs text-secondary">{spec.label ?? key}</span>
-            {key === 'theme' ? (
-              <ThemeSwatchInput
-                values={spec.values}
-                value={state.variants[key]}
-                onChange={(value) => setVariant(key, value)}
-              />
-            ) : (
-              <Select
-                value={state.variants[key]}
-                onValueChange={(value) => setVariant(key, value as string)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent variant="solid">
-                  {spec.values.map((value) => (
-                    <SelectItem key={value} value={value}>
-                      {value}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          </div>
-        ))}
-      </div>
+      {Object.keys(schema.variants).length > 0 && (
+        <div className="flex flex-col gap-5 p-(--sidebar-pad)">
+          <div className="text-xs font-medium tracking-wide text-foreground-subtle">Variants</div>
+          {Object.entries(schema.variants).map(([key, spec]) => (
+            <EnumRow
+              key={key}
+              controlKey={key}
+              spec={spec}
+              value={state.variants[key]}
+              onChange={(value) => setVariant(key, value)}
+              allowThemeSwatch
+            />
+          ))}
+        </div>
+      )}
+
+      {schema.behavior && Object.keys(schema.behavior).length > 0 && (
+        <div className="flex flex-col gap-5 p-(--sidebar-pad)">
+          <div className="text-xs font-medium tracking-wide text-foreground-subtle">Behavior</div>
+          {Object.entries(schema.behavior).map(([key, spec]) => (
+            <EnumRow
+              key={key}
+              controlKey={key}
+              spec={spec}
+              value={state.behavior[key]}
+              onChange={(value) => setBehavior(key, value)}
+            />
+          ))}
+        </div>
+      )}
 
       {hasUngrouped && (
         <div className="flex flex-col gap-5 p-(--sidebar-pad)">
@@ -103,6 +113,57 @@ export function ControlsSidebar({
         />
       ))}
     </aside>
+  );
+}
+
+function EnumRow({
+  controlKey,
+  spec,
+  value,
+  onChange,
+  allowThemeSwatch = false,
+}: {
+  controlKey: string;
+  spec: VariantSpec;
+  value: string;
+  onChange: (value: string) => void;
+  allowThemeSwatch?: boolean;
+}) {
+  return (
+    <div className="flex flex-col gap-1 text-sm">
+      <span className="text-xs text-secondary">{spec.label ?? controlKey}</span>
+      {allowThemeSwatch && controlKey === 'theme' ? (
+        <ThemeSwatchInput values={spec.values} value={value} onChange={onChange} />
+      ) : spec.values.length === 2 ? (
+        <ToggleGroup
+          variant="outline"
+          value={[value]}
+          onValueChange={(next) => {
+            const picked = next.find((v) => v !== value) ?? next[0];
+            if (picked) onChange(picked);
+          }}
+        >
+          {spec.values.map((v) => (
+            <ToggleGroupItem key={v} value={v} className="flex-1 capitalize">
+              {v}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+      ) : (
+        <Select value={value} onValueChange={(v) => onChange(v as string)}>
+          <SelectTrigger className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent variant="solid">
+            {spec.values.map((v) => (
+              <SelectItem key={v} value={v}>
+                {v}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+    </div>
   );
 }
 
@@ -197,7 +258,114 @@ function InputControl({ label, spec, value, disabled, onChange }: InputControlPr
           onChange={onChange}
         />
       );
+    case 'list':
+      return (
+        <ListInput
+          label={label}
+          itemLabel={spec.itemLabel ?? 'Item'}
+          itemShape={spec.itemShape}
+          value={(value as ListItem[]) ?? []}
+          onChange={(next) => onChange(next)}
+        />
+      );
   }
+}
+
+function ListInput({
+  label,
+  itemLabel,
+  itemShape,
+  value,
+  onChange,
+}: {
+  label: string;
+  itemLabel: string;
+  itemShape: ItemShape;
+  value: ListItem[];
+  onChange: (next: ListItem[]) => void;
+}) {
+  const updateItem = (index: number, key: string, fieldValue: string) => {
+    const next = value.map((item, i) => (i === index ? { ...item, [key]: fieldValue } : item));
+    onChange(next);
+  };
+  const removeItem = (index: number) => {
+    onChange(value.filter((_, i) => i !== index));
+  };
+  const addItem = () => {
+    const fresh: ListItem = {};
+    for (const [key, spec] of Object.entries(itemShape)) {
+      fresh[key] = spec.default;
+    }
+    onChange([...value, fresh]);
+  };
+
+  return (
+    <div className="flex flex-col gap-2 text-sm">
+      <span className="text-xs text-secondary">{label}</span>
+      <div className="flex flex-col gap-2">
+        {value.map((item, index) => (
+          <div
+            key={index}
+            className="flex flex-col gap-2 rounded-dynamic border border-line bg-surface p-2"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-muted">
+                {itemLabel} {index + 1}
+              </span>
+              <button
+                type="button"
+                aria-label={`Remove ${itemLabel.toLowerCase()} ${index + 1}`}
+                onClick={() => removeItem(index)}
+                className="rounded-dynamic p-1 text-muted outline-none transition-colors hover:bg-hover/30 hover:text-foreground focus-visible:outline-2 focus-visible:outline-focus"
+              >
+                <TrashIcon className="size-3.5" />
+              </button>
+            </div>
+            {Object.entries(itemShape).map(([fieldKey, fieldSpec]) => (
+              <ItemFieldInput
+                key={fieldKey}
+                spec={fieldSpec}
+                value={item[fieldKey] ?? fieldSpec.default}
+                onChange={(next) => updateItem(index, fieldKey, next)}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+      <Button variant="outline" size="sm" onClick={addItem} className="w-max">
+        <PlusIcon /> Add {itemLabel.toLowerCase()}
+      </Button>
+    </div>
+  );
+}
+
+function ItemFieldInput({
+  spec,
+  value,
+  onChange,
+}: {
+  spec: ItemFieldSpec;
+  value: string;
+  onChange: (next: string) => void;
+}) {
+  const label = spec.label ?? '';
+  if (spec.type === 'select') {
+    return (
+      <SelectInput
+        label={label}
+        values={spec.values}
+        value={value}
+        disabled={false}
+        onChange={(next) => onChange(next)}
+      />
+    );
+  }
+  return (
+    <Label className="flex flex-col gap-1 text-sm">
+      <span className="text-xs text-secondary">{label}</span>
+      <Input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
+    </Label>
+  );
 }
 
 function StringInput({

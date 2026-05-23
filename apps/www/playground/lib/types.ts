@@ -6,6 +6,12 @@ export type VariantSpec = {
   default: string;
 };
 
+export type ItemShape = Record<string, ItemFieldSpec>;
+
+export type ItemFieldSpec =
+  | { type: 'string'; label?: string; default: string }
+  | { type: 'select'; values: readonly string[]; label?: string; default: string };
+
 export type InputSpec =
   | {
       type: 'string';
@@ -25,7 +31,17 @@ export type InputSpec =
       label?: string;
       default: string;
       visibleWhen?: (inputs: Record<string, unknown>) => boolean;
+    }
+  | {
+      type: 'list';
+      label?: string;
+      itemLabel?: string;
+      itemShape: ItemShape;
+      default: ReadonlyArray<Record<string, string>>;
+      visibleWhen?: (inputs: Record<string, unknown>) => boolean;
     };
+
+export type ListItem = Record<string, string>;
 
 export type ContentSpec = Record<string, InputSpec>;
 
@@ -39,6 +55,7 @@ export type EntrySchema = {
   component: string;
   name: string;
   variants: Record<string, VariantSpec>;
+  behavior?: Record<string, VariantSpec>;
   content?: ContentSpec;
   groups?: readonly ContentGroup[];
   render: (state: EntryState) => ReactNode;
@@ -46,5 +63,6 @@ export type EntrySchema = {
 
 export type EntryState = {
   variants: Record<string, string>;
+  behavior: Record<string, string>;
   inputs: Record<string, unknown>;
 };

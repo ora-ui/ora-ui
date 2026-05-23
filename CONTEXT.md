@@ -85,6 +85,16 @@ contextual. Variants ship in the same registry file as the Component
 (one file per primitive, CVA branches inside); no separate per-variant
 file is generated. Controls sidebar renders one `<select>` per Variant prop.
 
+### Behavior
+
+A discrete prop on a Component that changes its runtime behavior without
+changing its visual appearance — i.e. not a CVA branch. Examples:
+Accordion's `multiple` (single- vs multi-open), DropdownMenu's `modal`,
+form fields' `disabled` when exposed as a demo control. Distinct from
+[[Variant]] (which alters styling via CVA) and [[Content]] (which fills
+slots/children). Controls sidebar renders Behavior props in their own
+section, mechanically similar to Variants (one control per prop).
+
 ### Content
 
 What fills a Component's slots/children. Parametric within typed
