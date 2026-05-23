@@ -13,6 +13,7 @@ import type { EntryState, ListItem } from '@/playground/lib/types';
 export function AccordionRender({ variants, behavior, inputs }: EntryState) {
   const multiple = behavior.multiple === true;
   const bordered = variants.bordered === true;
+  const itemVariant = (variants.itemVariant as 'underline' | 'soft') ?? 'underline';
   const items = (inputs.items as ListItem[]) ?? [];
 
   const [prevMultiple, setPrevMultiple] = useState(multiple);
@@ -32,7 +33,7 @@ export function AccordionRender({ variants, behavior, inputs }: EntryState) {
       className="w-full max-w-sm"
     >
       {items.map((item, index) => (
-        <AccordionItem key={index} value={`item-${index}`}>
+        <AccordionItem key={index} value={`item-${index}`} variant={itemVariant}>
           <AccordionTrigger>{item.trigger}</AccordionTrigger>
           <AccordionContent>{item.content}</AccordionContent>
         </AccordionItem>

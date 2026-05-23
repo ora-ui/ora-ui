@@ -10,6 +10,11 @@ export const accordionEntry: EntrySchema = {
       label: 'Bordered',
       default: false,
     },
+    itemVariant: {
+      values: ['underline', 'soft'],
+      label: 'Item style',
+      default: 'underline',
+    },
   },
   behavior: {
     multiple: {

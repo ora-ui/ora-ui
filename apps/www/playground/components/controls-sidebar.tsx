@@ -141,12 +141,12 @@ function EnumRow({
     );
   }
   const stringValue = value as string;
-  return (
-    <div className="flex flex-col gap-1 text-sm">
-      <span className="text-xs text-secondary">{label}</span>
-      {allowThemeSwatch && controlKey === 'theme' ? (
-        <ThemeSwatchInput values={spec.values} value={stringValue} onChange={onChange} />
-      ) : spec.values.length === 2 ? (
+  const isThemeSwatch = allowThemeSwatch && controlKey === 'theme';
+  const isTwoState = !isThemeSwatch && spec.values.length === 2;
+  if (isTwoState) {
+    return (
+      <div className="flex items-center justify-between gap-2 text-sm">
+        <span className="text-xs text-secondary">{label}</span>
         <ToggleGroup
           variant="outline"
           value={[stringValue]}
@@ -156,11 +156,19 @@ function EnumRow({
           }}
         >
           {spec.values.map((v) => (
-            <ToggleGroupItem key={v} value={v} className="flex-1 capitalize">
+            <ToggleGroupItem key={v} value={v} className="capitalize">
               {v}
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
+      </div>
+    );
+  }
+  return (
+    <div className="flex flex-col gap-1 text-sm">
+      <span className="text-xs text-secondary">{label}</span>
+      {isThemeSwatch ? (
+        <ThemeSwatchInput values={spec.values} value={stringValue} onChange={onChange} />
       ) : (
         <Select value={stringValue} onValueChange={(v) => onChange(v as string)}>
           <SelectTrigger className="w-full">
