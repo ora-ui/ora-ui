@@ -16,12 +16,18 @@ function buildParsers(schema: EntrySchema) {
   const inputKeys: string[] = [];
 
   for (const [key, spec] of Object.entries(schema.variants)) {
-    parsers[key] = parseAsString.withDefault(spec.default);
+    parsers[key] =
+      'type' in spec
+        ? parseAsBoolean.withDefault(spec.default)
+        : parseAsString.withDefault(spec.default);
     variantKeys.push(key);
   }
   if (schema.behavior) {
     for (const [key, spec] of Object.entries(schema.behavior)) {
-      parsers[key] = parseAsString.withDefault(spec.default);
+      parsers[key] =
+        'type' in spec
+          ? parseAsBoolean.withDefault(spec.default)
+          : parseAsString.withDefault(spec.default);
       behaviorKeys.push(key);
     }
   }
@@ -52,13 +58,13 @@ export function useEntryState(schema: EntrySchema) {
   const [urlState, setUrlState] = useQueryStates(parsers, { history: 'replace' });
 
   const state: EntryState = React.useMemo(() => {
-    const variants: Record<string, string> = {};
+    const variants: Record<string, string | boolean> = {};
     for (const key of variantKeys) {
-      variants[key] = urlState[key] as string;
+      variants[key] = urlState[key] as string | boolean;
     }
-    const behavior: Record<string, string> = {};
+    const behavior: Record<string, string | boolean> = {};
     for (const key of behaviorKeys) {
-      behavior[key] = urlState[key] as string;
+      behavior[key] = urlState[key] as string | boolean;
     }
     const inputs: Record<string, unknown> = {};
     for (const key of inputKeys) {
@@ -67,11 +73,11 @@ export function useEntryState(schema: EntrySchema) {
     return { variants, behavior, inputs };
   }, [urlState, variantKeys, behaviorKeys, inputKeys]);
 
-  const setVariant = (key: string, value: string) => {
+  const setVariant = (key: string, value: string | boolean) => {
     setUrlState({ [key]: value });
   };
 
-  const setBehavior = (key: string, value: string) => {
+  const setBehavior = (key: string, value: string | boolean) => {
     setUrlState({ [key]: value });
   };
 

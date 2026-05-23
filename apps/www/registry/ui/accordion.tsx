@@ -2,14 +2,32 @@
 
 import { Accordion as AccordionPrimitive } from '@base-ui/react/accordion';
 import { ChevronDownIcon } from '@heroicons/react/16/solid';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/registry/lib/utils';
 
-function Accordion({ className, ...props }: AccordionPrimitive.Root.Props) {
+const accordionVariants = cva('flex flex-col justify-center text-sm rounded-md', {
+  variants: {
+    bordered: {
+      true: 'outline outline-line-ui',
+      false: '',
+    },
+  },
+  defaultVariants: {
+    bordered: false,
+  },
+});
+
+function Accordion({
+  className,
+  bordered = false,
+  ...props
+}: AccordionPrimitive.Root.Props & VariantProps<typeof accordionVariants>) {
   return (
     <AccordionPrimitive.Root
       data-slot="accordion"
-      className={cn('flex flex-col justify-center text-sm', className)}
+      data-bordered={bordered ? '' : undefined}
+      className={cn(accordionVariants({ bordered }), className)}
       {...props}
     />
   );
@@ -19,7 +37,7 @@ function AccordionItem({ className, ...props }: AccordionPrimitive.Item.Props) {
   return (
     <AccordionPrimitive.Item
       data-slot="accordion-item"
-      className={cn('border-b border-line-ui/50', className)}
+      className={cn('border-b border-line-ui', 'in-data-bordered:last:border-b-0', className)}
       {...props}
     />
   );
@@ -58,4 +76,4 @@ function AccordionContent({ className, children, ...props }: AccordionPrimitive.
   );
 }
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent, accordionVariants };

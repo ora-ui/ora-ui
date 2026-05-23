@@ -26,6 +26,7 @@ import {
 } from '@/registry/ui/select';
 import { Input } from '@/registry/ui/input';
 import { Label } from '@/registry/ui/label';
+import { Switch } from '@/registry/ui/switch';
 import { Toggle } from '@/registry/ui/toggle';
 import { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/registry/ui/tooltip';
@@ -39,8 +40,8 @@ export function ControlsSidebar({
 }: {
   schema: EntrySchema;
   state: EntryState;
-  setVariant: (key: string, value: string) => void;
-  setBehavior: (key: string, value: string) => void;
+  setVariant: (key: string, value: string | boolean) => void;
+  setBehavior: (key: string, value: string | boolean) => void;
   setInput: (key: string, value: unknown) => void;
 }) {
   const groups = schema.groups ?? [];
@@ -126,21 +127,31 @@ function EnumRow({
 }: {
   controlKey: string;
   spec: VariantSpec;
-  value: string;
-  onChange: (value: string) => void;
+  value: string | boolean;
+  onChange: (value: string | boolean) => void;
   allowThemeSwatch?: boolean;
 }) {
+  const label = spec.label ?? controlKey;
+  if ('type' in spec) {
+    return (
+      <div className="flex items-center justify-between gap-2 text-sm">
+        <span className="text-xs text-secondary">{label}</span>
+        <Switch checked={value === true} onCheckedChange={(next) => onChange(next)} />
+      </div>
+    );
+  }
+  const stringValue = value as string;
   return (
     <div className="flex flex-col gap-1 text-sm">
-      <span className="text-xs text-secondary">{spec.label ?? controlKey}</span>
+      <span className="text-xs text-secondary">{label}</span>
       {allowThemeSwatch && controlKey === 'theme' ? (
-        <ThemeSwatchInput values={spec.values} value={value} onChange={onChange} />
+        <ThemeSwatchInput values={spec.values} value={stringValue} onChange={onChange} />
       ) : spec.values.length === 2 ? (
         <ToggleGroup
           variant="outline"
-          value={[value]}
+          value={[stringValue]}
           onValueChange={(next) => {
-            const picked = next.find((v) => v !== value) ?? next[0];
+            const picked = next.find((v) => v !== stringValue) ?? next[0];
             if (picked) onChange(picked);
           }}
         >
@@ -151,7 +162,7 @@ function EnumRow({
           ))}
         </ToggleGroup>
       ) : (
-        <Select value={value} onValueChange={(v) => onChange(v as string)}>
+        <Select value={stringValue} onValueChange={(v) => onChange(v as string)}>
           <SelectTrigger className="w-full">
             <SelectValue />
           </SelectTrigger>

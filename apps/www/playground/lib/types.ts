@@ -1,10 +1,16 @@
-import type { ReactNode } from 'react';
+import type { ComponentType } from 'react';
 
-export type VariantSpec = {
-  values: readonly string[];
-  label?: string;
-  default: string;
-};
+export type VariantSpec =
+  | {
+      values: readonly string[];
+      label?: string;
+      default: string;
+    }
+  | {
+      type: 'boolean';
+      label?: string;
+      default: boolean;
+    };
 
 export type ItemShape = Record<string, ItemFieldSpec>;
 
@@ -58,11 +64,11 @@ export type EntrySchema = {
   behavior?: Record<string, VariantSpec>;
   content?: ContentSpec;
   groups?: readonly ContentGroup[];
-  render: (state: EntryState) => ReactNode;
+  render: ComponentType<EntryState>;
 };
 
 export type EntryState = {
-  variants: Record<string, string>;
-  behavior: Record<string, string>;
+  variants: Record<string, string | boolean>;
+  behavior: Record<string, string | boolean>;
   inputs: Record<string, unknown>;
 };

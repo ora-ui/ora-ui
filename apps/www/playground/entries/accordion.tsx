@@ -1,20 +1,21 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/registry/ui/accordion';
-import type { EntrySchema, ListItem } from '@/playground/lib/types';
+import type { EntrySchema } from '@/playground/lib/types';
+import { AccordionRender } from './accordion-render';
 
 export const accordionEntry: EntrySchema = {
   component: 'accordion',
   name: 'Accordion',
-  variants: {},
+  variants: {
+    bordered: {
+      type: 'boolean',
+      label: 'Bordered',
+      default: false,
+    },
+  },
   behavior: {
-    mode: {
-      values: ['single', 'multiple'],
-      label: 'Mode',
-      default: 'single',
+    multiple: {
+      type: 'boolean',
+      label: 'Multiple',
+      default: false,
     },
   },
   content: {
@@ -33,20 +34,5 @@ export const accordionEntry: EntrySchema = {
       ],
     },
   },
-  render: ({ behavior, inputs }) => {
-    const mode = behavior.mode;
-    const multiple = mode === 'multiple';
-    const items = (inputs.items as ListItem[]) ?? [];
-
-    return (
-      <Accordion key={mode} multiple={multiple} className="w-full max-w-sm">
-        {items.map((item, index) => (
-          <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger>{item.trigger}</AccordionTrigger>
-            <AccordionContent>{item.content}</AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
-    );
-  },
+  render: AccordionRender,
 };
