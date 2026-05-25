@@ -10,7 +10,7 @@ import { cn } from '@/registry/lib/utils';
 
 const inputVariants = cva(
   [
-    'h-7.5 w-full min-w-0 rounded-dynamic px-3 text-sm text-primary',
+    'h-7.5 w-full min-w-32 rounded-dynamic px-3 text-sm text-primary',
     'placeholder:text-muted',
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
     'file:inline-flex file:h-7 file:border-0 file:mr-2 file:bg-transparent file:text-sm file:font-medium file:text-primary',
