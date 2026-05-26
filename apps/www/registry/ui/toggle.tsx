@@ -29,7 +29,7 @@ const toggleVariants = cva(
         // For items sitting inside a filled container (e.g. a ToggleGroup with
         // a bg). Unpressed reads against the container; pressed reveals page bg.
         'on-solid':
-          'bg-transparent text-secondary hover:text-primary aria-pressed:bg-background aria-pressed:text-primary aria-pressed:shadow-xs data-[theme=accent]:aria-pressed:text-secondary group-data-[variant=solid]/toggle-group:text-on-fill/70 group-data-[variant=solid]/toggle-group:hover:text-on-fill',
+          'bg-transparent text-secondary hover:text-primary aria-pressed:bg-background aria-pressed:text-primary aria-pressed:shadow-xs aria-pressed:ring-1 aria-pressed:ring-inset aria-pressed:ring-ring/35 data-[theme=accent]:aria-pressed:text-secondary group-data-[variant=solid]/toggle-group:text-on-fill/70 group-data-[variant=solid]/toggle-group:hover:text-on-fill',
       },
       size: {
         sm: "h-7 min-w-7 gap-1.5 px-2 [&_svg:not([class*='size-'])]:size-3",
