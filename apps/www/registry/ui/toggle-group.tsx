@@ -125,14 +125,15 @@ function ToggleGroupItem({
         'group-data-[attached=true]/toggle-group:group-data-[item-variant=outline]/toggle-group:group-data-vertical/toggle-group:not-first:-mt-px',
         'group-data-[attached=true]/toggle-group:group-data-[item-variant=on-solid]/toggle-group:group-data-horizontal/toggle-group:not-first:-ml-px',
         'group-data-[attached=true]/toggle-group:group-data-[item-variant=on-solid]/toggle-group:group-data-vertical/toggle-group:not-first:-mt-px',
-        // Attached + filled container: items grow on both axes by the would-be
-        // 8px padding so proportions match the detached look.
-        'not-group-data-[variant=none]/toggle-group:group-data-[attached=true]/toggle-group:group-data-[size=sm]/toggle-group:h-9',
-        'not-group-data-[variant=none]/toggle-group:group-data-[attached=true]/toggle-group:group-data-[size=md]/toggle-group:h-9.5',
-        'not-group-data-[variant=none]/toggle-group:group-data-[attached=true]/toggle-group:group-data-[size=lg]/toggle-group:h-10.75',
-        'not-group-data-[variant=none]/toggle-group:group-data-[attached=true]/toggle-group:group-data-[size=sm]/toggle-group:min-w-9',
-        'not-group-data-[variant=none]/toggle-group:group-data-[attached=true]/toggle-group:group-data-[size=md]/toggle-group:min-w-9.5',
-        'not-group-data-[variant=none]/toggle-group:group-data-[attached=true]/toggle-group:group-data-[size=lg]/toggle-group:min-w-11',
+        // Attached: items grow on both axes by the would-be 8px container
+        // padding so proportions match the detached + filled look (and none
+        // stays aligned with the filled variants for visual consistency).
+        'group-data-[attached=true]/toggle-group:group-data-[size=sm]/toggle-group:h-9',
+        'group-data-[attached=true]/toggle-group:group-data-[size=md]/toggle-group:h-9.5',
+        'group-data-[attached=true]/toggle-group:group-data-[size=lg]/toggle-group:h-10.75',
+        'group-data-[attached=true]/toggle-group:group-data-[size=sm]/toggle-group:min-w-9',
+        'group-data-[attached=true]/toggle-group:group-data-[size=md]/toggle-group:min-w-9.5',
+        'group-data-[attached=true]/toggle-group:group-data-[size=lg]/toggle-group:min-w-11',
         className
       )}
       {...props}

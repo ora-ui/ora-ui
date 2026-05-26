@@ -18,7 +18,7 @@ const buttonVariants = cva(
         ghost: 'hover:bg-hover active:bg-active',
       },
       size: {
-        sm: "h-7 gap-1.5 px-2 has-[>svg]:px-2.5 [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-7 gap-1.5 px-2 has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
         md: 'h-7.5 px-3 has-[>svg]:px-2.5',
         lg: 'h-9 px-4.5 has-[>svg]:px-4',
         icon: 'size-7.5',

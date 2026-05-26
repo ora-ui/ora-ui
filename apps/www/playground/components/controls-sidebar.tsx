@@ -48,14 +48,18 @@ export function ControlsSidebar({
 
   return (
     <aside className="w-max min-w-60 shrink-0 border-l border-line [--sidebar-pad:--spacing(3)] *:border-b *:border-line">
-      <div className="flex items-center justify-between gap-2 bg-surface p-(--sidebar-pad)">
+      <div className="flex items-center justify-center bg-surface p-2">
         <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">{schema.name}</h3>
-        <Button size="sm">Get code</Button>
       </div>
 
       {Object.keys(schema.variants).length > 0 && (
         <div className="flex flex-col gap-2 p-(--sidebar-pad)">
-          <div className="text-sm font-medium tracking-wide text-foreground-subtle">Variants</div>
+          <div className="flex flex-row items-center gap-2">
+            <div className="text-xs font-medium tracking-wide text-foreground-subtle uppercase">
+              Props
+            </div>
+            <div className="h-px flex-1 bg-line" />
+          </div>
           {Object.entries(schema.variants).map(([key, spec]) => (
             <EnumRow
               key={key}
@@ -140,11 +144,10 @@ function EnumRow({
   const isTwoState = !isThemeSwatch && spec.values.length === 2;
   if (isTwoState) {
     return (
-      <div className="flex items-center justify-between gap-5 text-sm">
-        <span className="text-sm text-secondary">{label}</span>
+      <div className="flex items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-xs">
+        <span className="text-secondary">{label}</span>
         <ToggleGroup
-          itemVariant="outline"
-          attached
+          size="sm"
           value={[stringValue]}
           onValueChange={(next) => {
             const picked = next.find((v) => v !== stringValue) ?? next[0];
@@ -152,7 +155,7 @@ function EnumRow({
           }}
         >
           {spec.values.map((v) => (
-            <ToggleGroupItem key={v} value={v} className="capitalize">
+            <ToggleGroupItem key={v} value={v}>
               {v}
             </ToggleGroupItem>
           ))}
@@ -169,12 +172,12 @@ function EnumRow({
     );
   }
   return (
-    <div className="flex items-center justify-between gap-5 text-sm">
+    <div className="flex items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-xs">
       <span className="text-sm text-secondary">{label}</span>
       <Select value={stringValue} onValueChange={(v) => onChange(v as string)}>
         <SelectPrimitive.Trigger
           render={
-            <Button variant="surface" size="sm" className="w-35 justify-between">
+            <Button variant="ghost" size="sm" className="justify-between">
               <SelectValue />
               <CaretDownIcon className="size-4 text-muted" />
             </Button>
@@ -470,17 +473,12 @@ function BooleanInput({
   onChange: (value: boolean) => void;
 }) {
   return (
-    <Toggle
-      // variant="outline"
-      // size="sm"
-      pressed={value}
-      disabled={disabled}
-      onPressedChange={onChange}
-      className="w-max justify-start"
-    >
-      {value ? <MinusIcon /> : <PlusIcon />}
-      {value ? `Remove ${label.toLowerCase()}` : `Add ${label.toLowerCase()}`}
-    </Toggle>
+    <div className="flex items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-xs">
+      <span className="text-secondary">{label}</span>
+      <Toggle size="sm" pressed={value} disabled={disabled} onPressedChange={onChange}>
+        {value ? 'On' : 'Off'}
+      </Toggle>
+    </div>
   );
 }
 
@@ -543,11 +541,10 @@ function SelectInput({
 }) {
   if (values.length === 2) {
     return (
-      <div className="flex items-center justify-between gap-5 text-sm">
-        <span className="text-sm text-secondary">{label}</span>
+      <div className="flex items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-xs">
+        <span className="text-secondary">{label}</span>
         <ToggleGroup
-          itemVariant="outline"
-          attached
+          size="sm"
           disabled={disabled}
           value={[value]}
           onValueChange={(next) => {
@@ -556,7 +553,7 @@ function SelectInput({
           }}
         >
           {values.map((v) => (
-            <ToggleGroupItem key={v} value={v} className="capitalize">
+            <ToggleGroupItem key={v} value={v}>
               {v}
             </ToggleGroupItem>
           ))}
@@ -565,12 +562,12 @@ function SelectInput({
     );
   }
   return (
-    <div className="flex items-center justify-between gap-5 text-sm">
+    <div className="flex items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-xs">
       <span className="text-sm text-secondary">{label}</span>
       <Select value={value} onValueChange={(v) => onChange(v as string)} disabled={disabled}>
         <SelectPrimitive.Trigger
           render={
-            <Button variant="surface" size="sm" className="w-35 justify-between">
+            <Button variant="ghost" size="sm" className="justify-between">
               <SelectValue />
               <CaretDownIcon className="size-4 text-muted" />
             </Button>
