@@ -540,6 +540,28 @@ function SelectInput({
   disabled: boolean;
   onChange: (value: string) => void;
 }) {
+  if (values.length === 2) {
+    return (
+      <div className="flex items-center justify-between gap-5 text-sm">
+        <span className="text-sm text-secondary">{label}</span>
+        <ToggleGroup
+          variant="outline"
+          disabled={disabled}
+          value={[value]}
+          onValueChange={(next) => {
+            const picked = next.find((v) => v !== value) ?? next[0];
+            if (picked) onChange(picked);
+          }}
+        >
+          {values.map((v) => (
+            <ToggleGroupItem key={v} value={v} className="capitalize">
+              {v}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+      </div>
+    );
+  }
   return (
     <div className="flex items-center justify-between gap-5 text-sm">
       <span className="text-sm text-secondary">{label}</span>
