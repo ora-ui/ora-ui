@@ -15,6 +15,11 @@ export const toggleGroupEntry: EntrySchema = {
       label: 'Item',
       default: 'soft',
     },
+    theme: {
+      values: ['gray', 'accent'],
+      label: 'Theme',
+      default: 'gray',
+    },
     orientation: {
       values: ['horizontal', 'vertical'],
       label: 'Orientation',
