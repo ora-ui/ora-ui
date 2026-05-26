@@ -17,7 +17,7 @@ const toggleVariants = cva(
   {
     variants: {
       variant: {
-        soft: 'bg-transparent text-secondary hover:bg-hover hover:text-primary aria-pressed:bg-active aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary',
+        soft: 'bg-transparent text-secondary hover:bg-hover hover:text-primary aria-pressed:bg-active aria-pressed:text-primary data-[theme=accent]:aria-pressed:bg-active/50 data-[theme=accent]:aria-pressed:text-secondary',
         outline:
           'border border-ring/50 bg-transparent text-secondary hover:text-primary aria-pressed:bg-transparent aria-pressed:border-ring aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary',
         surface:

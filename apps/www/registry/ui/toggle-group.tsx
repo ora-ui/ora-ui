@@ -37,15 +37,18 @@ const toggleGroupVariants = cva('group/toggle-group flex w-fit', {
 
 type ItemVariant = VariantProps<typeof toggleVariants>['variant'];
 type ItemSize = VariantProps<typeof toggleVariants>['size'];
+type Theme = 'gray' | 'accent' | (string & {});
 
 const ToggleGroupContext = React.createContext<{
   itemVariant?: ItemVariant;
   size?: ItemSize;
+  theme?: Theme;
   attached?: boolean;
   orientation?: 'horizontal' | 'vertical';
 }>({
   itemVariant: 'soft',
   size: 'md',
+  theme: 'gray',
   attached: false,
   orientation: 'horizontal',
 });
@@ -55,6 +58,7 @@ function ToggleGroup({
   variant,
   itemVariant = 'soft',
   size = 'md',
+  theme = 'gray',
   attached = false,
   orientation = 'horizontal',
   children,
@@ -63,6 +67,7 @@ function ToggleGroup({
   VariantProps<typeof toggleGroupVariants> & {
     itemVariant?: ItemVariant;
     size?: ItemSize;
+    theme?: Theme;
   }) {
   return (
     <ToggleGroupPrimitive
@@ -75,7 +80,9 @@ function ToggleGroup({
       className={cn(toggleGroupVariants({ variant, orientation, attached, className }))}
       {...props}
     >
-      <ToggleGroupContext.Provider value={{ itemVariant, size, attached: !!attached, orientation }}>
+      <ToggleGroupContext.Provider
+        value={{ itemVariant, size, theme, attached: !!attached, orientation }}
+      >
         {children}
       </ToggleGroupContext.Provider>
     </ToggleGroupPrimitive>
@@ -87,18 +94,21 @@ function ToggleGroupItem({
   children,
   variant,
   size,
+  theme,
   ...props
 }: React.ComponentProps<typeof Toggle>) {
   const context = React.useContext(ToggleGroupContext);
-  // Local variant wins over the inherited group itemVariant.
+  // Local props win over inherited group values.
   const resolvedVariant = variant ?? context.itemVariant;
   const resolvedSize = size ?? context.size;
+  const resolvedTheme = theme ?? context.theme;
 
   return (
     <Toggle
       data-slot="toggle-group-item"
       variant={resolvedVariant}
       size={resolvedSize}
+      theme={resolvedTheme}
       className={cn(
         'shrink-0 focus:z-10 focus-visible:z-10',
         // Concentric radii (optical, not math): container padding is 4px but
