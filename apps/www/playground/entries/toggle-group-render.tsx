@@ -20,7 +20,14 @@ function ToolIcon({ Icon, fillOnPressed }: { Icon: PhosphorIcon; fillOnPressed: 
   );
 }
 
-export function ToggleGroupRender({ variants, behavior }: EntryState) {
+const TOOLS = [
+  { value: 'move', label: 'Move', Icon: CursorIcon },
+  { value: 'rectangle', label: 'Rectangle', Icon: SquareIcon },
+  { value: 'pen', label: 'Pen', Icon: PenNibIcon },
+  { value: 'wand', label: 'Wand', Icon: MagicWandIcon },
+] as const;
+
+export function ToggleGroupRender({ variants, behavior, inputs }: EntryState) {
   const variant = variants.variant as 'none' | 'outline' | 'surface' | 'soft' | 'solid';
   const itemVariant = variants.itemVariant as
     | 'soft'
@@ -33,10 +40,13 @@ export function ToggleGroupRender({ variants, behavior }: EntryState) {
   const orientation = (variants.orientation as 'horizontal' | 'vertical') ?? 'horizontal';
   const attached = behavior.attached === 'true';
   const multiple = behavior.multiple === 'true';
+  const layout = (inputs.layout as 'icon' | 'text-icon' | 'text') ?? 'icon';
 
   const ghost = itemVariant === 'ghost';
+  const showIcon = layout !== 'text';
+  const showLabel = layout !== 'icon';
 
-  const [value, setValue] = useState<string[]>(['cursor']);
+  const [value, setValue] = useState<string[]>(['move']);
   const themeFor = (v: string) => (theme !== 'gray' && value.includes(v) ? theme : undefined);
 
   return (
@@ -49,18 +59,17 @@ export function ToggleGroupRender({ variants, behavior }: EntryState) {
       value={value}
       onValueChange={setValue}
     >
-      <ToggleGroupItem value="cursor" aria-label="Cursor" data-theme={themeFor('cursor')}>
-        <ToolIcon Icon={CursorIcon} fillOnPressed={ghost} />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="square" aria-label="Square" data-theme={themeFor('square')}>
-        <ToolIcon Icon={SquareIcon} fillOnPressed={ghost} />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="pen" aria-label="Pen" data-theme={themeFor('pen')}>
-        <ToolIcon Icon={PenNibIcon} fillOnPressed={ghost} />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="magic" aria-label="Magic wand" data-theme={themeFor('magic')}>
-        <ToolIcon Icon={MagicWandIcon} fillOnPressed={ghost} />
-      </ToggleGroupItem>
+      {TOOLS.map(({ value: v, label, Icon }) => (
+        <ToggleGroupItem
+          key={v}
+          value={v}
+          aria-label={showLabel ? undefined : label}
+          data-theme={themeFor(v)}
+        >
+          {showIcon && <ToolIcon Icon={Icon} fillOnPressed={ghost} />}
+          {showLabel && label}
+        </ToggleGroupItem>
+      ))}
     </ToggleGroup>
   );
 }

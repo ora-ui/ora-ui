@@ -26,6 +26,14 @@ export const toggleGroupEntry: EntrySchema = {
       default: 'horizontal',
     },
   },
+  content: {
+    layout: {
+      type: 'select',
+      label: 'Content',
+      values: ['icon', 'text-icon', 'text'],
+      default: 'icon',
+    },
+  },
   behavior: {
     attached: {
       values: ['false', 'true'],
