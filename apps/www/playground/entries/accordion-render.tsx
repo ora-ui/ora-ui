@@ -11,8 +11,8 @@ import {
 import type { EntryState, ListItem } from '@/playground/lib/types';
 
 export function AccordionRender({ variants, behavior, inputs }: EntryState) {
-  const multiple = behavior.multiple === true;
-  const bordered = variants.bordered === true;
+  const multiple = behavior.multiple === 'true';
+  const bordered = variants.bordered === 'true';
   const itemVariant = (variants.itemVariant as 'underline' | 'soft') ?? 'underline';
   const iconPosition = (variants.iconPosition as 'start' | 'end') ?? 'end';
   const items = (inputs.items as ListItem[]) ?? [];

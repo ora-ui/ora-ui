@@ -54,7 +54,7 @@ export function ControlsSidebar({
       </div>
 
       {Object.keys(schema.variants).length > 0 && (
-        <div className="flex flex-col gap-5 p-(--sidebar-pad)">
+        <div className="flex flex-col gap-2 p-(--sidebar-pad)">
           <div className="text-sm font-medium tracking-wide text-foreground-subtle">Variants</div>
           {Object.entries(schema.variants).map(([key, spec]) => (
             <EnumRow
@@ -70,7 +70,7 @@ export function ControlsSidebar({
       )}
 
       {schema.behavior && Object.keys(schema.behavior).length > 0 && (
-        <div className="flex flex-col gap-5 p-(--sidebar-pad)">
+        <div className="flex flex-col gap-2 p-(--sidebar-pad)">
           <div className="text-sm font-medium tracking-wide text-foreground-subtle">Behavior</div>
           {Object.entries(schema.behavior).map(([key, spec]) => (
             <EnumRow
@@ -85,7 +85,7 @@ export function ControlsSidebar({
       )}
 
       {hasUngrouped && (
-        <div className="flex flex-col gap-5 p-(--sidebar-pad)">
+        <div className="flex flex-col gap-2 p-(--sidebar-pad)">
           <div className="text-sm font-medium tracking-wide text-foreground-subtle">Content</div>
           {ungroupedEntries.map(([key, spec]) => (
             <InputControl
@@ -227,7 +227,7 @@ function GroupSection({
         }
       />
       <Collapsible.Panel className="overflow-hidden data-ending-style:h-0 data-starting-style:h-0 transition-[height] duration-150 h-(--collapsible-panel-height)">
-        <div className="flex flex-col gap-5 p-(--sidebar-pad)">
+        <div className="flex flex-col gap-2 p-(--sidebar-pad)">
           {childEntries.map(([key, spec]) => (
             <InputControl
               key={key}

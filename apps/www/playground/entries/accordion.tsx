@@ -6,9 +6,9 @@ export const accordionEntry: EntrySchema = {
   name: 'Accordion',
   variants: {
     bordered: {
-      type: 'boolean',
+      values: ['false', 'true'],
       label: 'Bordered',
-      default: false,
+      default: 'false',
     },
     itemVariant: {
       values: ['underline', 'soft'],
@@ -23,9 +23,9 @@ export const accordionEntry: EntrySchema = {
   },
   behavior: {
     multiple: {
-      type: 'boolean',
+      values: ['false', 'true'],
       label: 'Multiple',
-      default: false,
+      default: 'false',
     },
   },
   content: {
