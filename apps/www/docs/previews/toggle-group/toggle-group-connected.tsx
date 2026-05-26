@@ -9,7 +9,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';
 
 export default function ToggleGroupConnected() {
   return (
-    <ToggleGroup variant="outline" spacing={0}>
+    <ToggleGroup itemVariant="outline" attached>
       <ToggleGroupItem value="left" aria-label="Align left">
         <TextAlignLeftIcon />
       </ToggleGroupItem>

@@ -143,7 +143,8 @@ function EnumRow({
       <div className="flex items-center justify-between gap-5 text-sm">
         <span className="text-sm text-secondary">{label}</span>
         <ToggleGroup
-          variant="outline"
+          itemVariant="outline"
+          attached
           value={[stringValue]}
           onValueChange={(next) => {
             const picked = next.find((v) => v !== stringValue) ?? next[0];
@@ -545,7 +546,8 @@ function SelectInput({
       <div className="flex items-center justify-between gap-5 text-sm">
         <span className="text-sm text-secondary">{label}</span>
         <ToggleGroup
-          variant="outline"
+          itemVariant="outline"
+          attached
           disabled={disabled}
           value={[value]}
           onValueChange={(next) => {

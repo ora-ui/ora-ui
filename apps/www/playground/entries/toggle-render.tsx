@@ -20,7 +20,7 @@ export function ToggleRender({ variants, inputs }: EntryState) {
       onPressedChange={setPressed}
     >
       {icon && iconPosition === 'leading' && <HeartIcon weight={pressed ? 'fill' : 'regular'} />}
-      {pressed ? 'Liked' : label}
+      {label && (pressed ? 'Liked' : label)}
       {icon && iconPosition === 'trailing' && <HeartIcon weight={pressed ? 'fill' : 'regular'} />}
     </Toggle>
   );

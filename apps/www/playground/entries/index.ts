@@ -4,6 +4,7 @@ import { alertDialogEntry } from './alert-dialog';
 import { buttonEntry } from './button';
 import { inputEntry } from './input';
 import { toggleEntry } from './toggle';
+import { toggleGroupEntry } from './toggle-group';
 
 export const entries: EntrySchema[] = [
   accordionEntry,
@@ -11,6 +12,7 @@ export const entries: EntrySchema[] = [
   buttonEntry,
   inputEntry,
   toggleEntry,
+  toggleGroupEntry,
 ];
 
 export function getEntryBySlug(slug: string): EntrySchema | undefined {

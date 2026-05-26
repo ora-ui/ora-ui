@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import { Toggle as TogglePrimitive } from '@base-ui/react/toggle';
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -18,7 +17,7 @@ const toggleVariants = cva(
   {
     variants: {
       variant: {
-        soft: 'bg-transparent text-secondary hover:bg-hover hover:text-primary aria-pressed:bg-active/50 aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary',
+        soft: 'bg-transparent text-secondary hover:bg-hover hover:text-primary aria-pressed:bg-active aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary',
         outline:
           'border border-ring/50 bg-transparent text-secondary hover:text-primary aria-pressed:bg-transparent aria-pressed:border-ring aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary',
         surface:
@@ -27,10 +26,14 @@ const toggleVariants = cva(
           'bg-transparent text-secondary hover:text-primary aria-pressed:bg-transparent aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary',
         solid:
           'bg-transparent text-secondary hover:bg-hover hover:text-primary aria-pressed:bg-fill aria-pressed:text-on-fill aria-pressed:focus-visible:outline-focus-fill aria-pressed:focus-visible:outline-offset-2',
+        // For items sitting inside a filled container (e.g. a ToggleGroup with
+        // a bg). Unpressed reads against the container; pressed reveals page bg.
+        'on-solid':
+          'bg-transparent text-secondary hover:text-primary aria-pressed:bg-background aria-pressed:text-primary aria-pressed:shadow-xs data-[theme=accent]:aria-pressed:text-secondary group-data-[variant=solid]/toggle-group:text-on-fill/70 group-data-[variant=solid]/toggle-group:hover:text-on-fill',
       },
       size: {
         sm: "h-7 min-w-7 gap-1.5 px-2 [&_svg:not([class*='size-'])]:size-3",
-        md: 'h-7.5 min-w-7.5 px-2.5',
+        md: 'h-7.5 min-w-7.5 px-2',
         lg: 'h-8.75 min-w-9 px-3.75',
       },
     },

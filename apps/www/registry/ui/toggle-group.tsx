@@ -1,53 +1,81 @@
 'use client';
 
 import * as React from 'react';
-import { Toggle as TogglePrimitive } from '@base-ui/react/toggle';
 import { ToggleGroup as ToggleGroupPrimitive } from '@base-ui/react/toggle-group';
-import { type VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/registry/lib/utils';
-import { toggleVariants } from '@/registry/ui/toggle';
+import { Toggle, toggleVariants } from '@/registry/ui/toggle';
 
-const ToggleGroupContext = React.createContext<
-  VariantProps<typeof toggleVariants> & {
-    spacing?: number;
-    orientation?: 'horizontal' | 'vertical';
-  }
->({
+const toggleGroupVariants = cva('group/toggle-group flex w-fit', {
+  variants: {
+    variant: {
+      none: '',
+      outline: 'rounded-dynamic border border-line-ui',
+      surface: 'rounded-dynamic border border-line-ui bg-ui/50',
+      soft: 'rounded-dynamic bg-ui',
+      solid: 'rounded-dynamic bg-fill',
+    },
+    orientation: {
+      horizontal: 'flex-row items-center',
+      vertical: 'flex-col items-stretch',
+    },
+    attached: {
+      true: 'gap-0',
+      false: 'gap-1',
+    },
+  },
+  compoundVariants: [
+    { variant: ['outline', 'surface', 'soft', 'solid'], attached: false, class: 'p-1' },
+  ],
+  defaultVariants: {
+    variant: 'none',
+    orientation: 'horizontal',
+    attached: false,
+  },
+});
+
+type ItemVariant = VariantProps<typeof toggleVariants>['variant'];
+type ItemSize = VariantProps<typeof toggleVariants>['size'];
+
+const ToggleGroupContext = React.createContext<{
+  itemVariant?: ItemVariant;
+  size?: ItemSize;
+  attached?: boolean;
+  orientation?: 'horizontal' | 'vertical';
+}>({
+  itemVariant: 'soft',
   size: 'md',
-  variant: 'soft',
-  spacing: 0,
+  attached: false,
   orientation: 'horizontal',
 });
 
 function ToggleGroup({
   className,
   variant,
-  size,
-  spacing = 0,
+  itemVariant = 'soft',
+  size = 'md',
+  attached = false,
   orientation = 'horizontal',
   children,
   ...props
 }: ToggleGroupPrimitive.Props &
-  VariantProps<typeof toggleVariants> & {
-    spacing?: number;
-    orientation?: 'horizontal' | 'vertical';
+  VariantProps<typeof toggleGroupVariants> & {
+    itemVariant?: ItemVariant;
+    size?: ItemSize;
   }) {
   return (
     <ToggleGroupPrimitive
       data-slot="toggle-group"
       data-variant={variant}
+      data-item-variant={itemVariant}
       data-size={size}
-      data-spacing={spacing}
+      data-attached={attached}
       data-orientation={orientation}
-      style={{ '--gap': spacing } as React.CSSProperties}
-      className={cn(
-        'group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-[spacing=0]:data-[variant=outline]:rounded-md data-vertical:flex-col data-vertical:items-stretch',
-        className
-      )}
+      className={cn(toggleGroupVariants({ variant, orientation, attached, className }))}
       {...props}
     >
-      <ToggleGroupContext.Provider value={{ variant, size, spacing, orientation }}>
+      <ToggleGroupContext.Provider value={{ itemVariant, size, attached: !!attached, orientation }}>
         {children}
       </ToggleGroupContext.Provider>
     </ToggleGroupPrimitive>
@@ -57,31 +85,41 @@ function ToggleGroup({
 function ToggleGroupItem({
   className,
   children,
-  variant = 'soft',
-  size = 'md',
+  variant,
+  size,
   ...props
-}: TogglePrimitive.Props & VariantProps<typeof toggleVariants>) {
+}: React.ComponentProps<typeof Toggle>) {
   const context = React.useContext(ToggleGroupContext);
+  // Local variant wins over the inherited group itemVariant.
+  const resolvedVariant = variant ?? context.itemVariant;
+  const resolvedSize = size ?? context.size;
 
   return (
-    <TogglePrimitive
+    <Toggle
       data-slot="toggle-group-item"
-      data-variant={context.variant || variant}
-      data-size={context.size || size}
-      data-spacing={context.spacing}
+      variant={resolvedVariant}
+      size={resolvedSize}
       className={cn(
-        'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-3 group-data-[spacing=0]/toggle-group:shadow-none focus:z-10 focus-visible:z-10 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-l-md group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-md group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-r-md group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-md group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-l-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t',
-        toggleVariants({
-          variant: context.variant || variant,
-          size: context.size || size,
-        }),
+        'shrink-0 focus:z-10 focus-visible:z-10',
+        // Concentric radii (optical, not math): container padding is 4px but
+        // pure (outer - 4px) reads pinched at small radii. Subtract 3px so
+        // curves enter at a tangent the eye reads as parallel.
+        'not-group-data-[variant=none]/toggle-group:group-data-[attached=false]/toggle-group:rounded-[max(0px,calc(var(--radius-dynamic)-3px))]',
+        // Attached: kill inner corners, ends match the container exactly.
+        'group-data-[attached=true]/toggle-group:rounded-none',
+        'group-data-[attached=true]/toggle-group:group-data-horizontal/toggle-group:first:rounded-l-dynamic',
+        'group-data-[attached=true]/toggle-group:group-data-horizontal/toggle-group:last:rounded-r-dynamic',
+        'group-data-[attached=true]/toggle-group:group-data-vertical/toggle-group:first:rounded-t-dynamic',
+        'group-data-[attached=true]/toggle-group:group-data-vertical/toggle-group:last:rounded-b-dynamic',
+        'group-data-[attached=true]/toggle-group:group-data-[item-variant=outline]/toggle-group:group-data-horizontal/toggle-group:not-first:-ml-px',
+        'group-data-[attached=true]/toggle-group:group-data-[item-variant=outline]/toggle-group:group-data-vertical/toggle-group:not-first:-mt-px',
         className
       )}
       {...props}
     >
       {children}
-    </TogglePrimitive>
+    </Toggle>
   );
 }
 
-export { ToggleGroup, ToggleGroupItem };
+export { ToggleGroup, ToggleGroupItem, toggleGroupVariants };
