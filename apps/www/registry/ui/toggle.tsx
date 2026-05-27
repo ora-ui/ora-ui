@@ -19,9 +19,9 @@ const toggleVariants = cva(
       variant: {
         soft: 'bg-transparent text-secondary hover:bg-hover hover:text-primary aria-pressed:bg-active aria-pressed:text-primary data-[theme=accent]:aria-pressed:bg-active/50 data-[theme=accent]:aria-pressed:text-secondary',
         outline:
-          'border border-ring/50 bg-transparent text-secondary hover:text-primary aria-pressed:bg-transparent aria-pressed:border-ring aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary',
+          'border border-ring/50 bg-transparent text-secondary hover:text-primary aria-pressed:bg-transparent aria-pressed:border-ring aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary in-data-[slot=toggle-group]:border-transparent',
         surface:
-          'border border-ring/50 bg-ui/50 text-secondary hover:border-ring hover:bg-hover/50 hover:text-primary aria-pressed:bg-active/50 data-[theme=accent]:aria-pressed:bg-active/40 aria-pressed:border-ring aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary',
+          'border border-ring/50 bg-ui/50 text-secondary hover:border-ring hover:bg-hover/50 hover:text-primary aria-pressed:bg-active/50 data-[theme=accent]:aria-pressed:bg-active/40 aria-pressed:border-ring aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary in-data-[slot=toggle-group]:bg-transparent in-data-[slot=toggle-group]:border-transparent in-data-[slot=toggle-group]:hover:border-transparent in-data-[slot=toggle-group]:hover:bg-transparent',
         ghost:
           'bg-transparent text-secondary hover:text-primary aria-pressed:bg-transparent aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary',
         solid:
