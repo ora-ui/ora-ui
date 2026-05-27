@@ -7,12 +7,12 @@ export const toggleGroupEntry: EntrySchema = {
   variants: {
     variant: {
       values: ['none', 'outline', 'surface', 'soft', 'solid'],
-      label: 'Container',
+      label: 'Variant',
       default: 'none',
     },
     itemVariant: {
       values: ['soft', 'outline', 'surface', 'ghost', 'solid', 'on-solid'],
-      label: 'Item',
+      label: 'Item variant',
       default: 'soft',
     },
     theme: {
@@ -34,7 +34,7 @@ export const toggleGroupEntry: EntrySchema = {
   content: {
     layout: {
       type: 'select',
-      label: 'Content',
+      label: 'Type',
       values: ['icon', 'text-icon', 'text'],
       default: 'icon',
     },
