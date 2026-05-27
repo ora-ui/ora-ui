@@ -25,6 +25,11 @@ export const toggleGroupEntry: EntrySchema = {
       label: 'Orientation',
       default: 'horizontal',
     },
+    density: {
+      values: ['none', 'compact', 'comfortable'],
+      label: 'Density',
+      default: 'comfortable',
+    },
   },
   content: {
     layout: {

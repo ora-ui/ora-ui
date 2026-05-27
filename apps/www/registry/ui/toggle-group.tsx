@@ -7,7 +7,10 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/registry/lib/utils';
 import { Toggle, toggleVariants } from '@/registry/ui/toggle';
 
-const toggleGroupVariants = cva('group/toggle-group flex w-fit', {
+// --item-radius is set inline on the parent (see ToggleGroup body) since
+// conditional Tailwind selectors compete with the item's base radius.
+// Density sets --group-pad (container padding) and --item-rad-cut.
+const toggleGroupVariants = cva(['group/toggle-group flex w-fit p-(--group-pad)'], {
   variants: {
     variant: {
       none: '',
@@ -24,14 +27,24 @@ const toggleGroupVariants = cva('group/toggle-group flex w-fit', {
       true: 'gap-0',
       false: 'gap-1',
     },
+    density: {
+      none: '[--group-pad:0px] [--item-rad-cut:0px]',
+      compact: '[--group-pad:--spacing(0.5)] [--item-rad-cut:2px]',
+      comfortable: '[--group-pad:--spacing(1)] [--item-rad-cut:3px]',
+    },
   },
   compoundVariants: [
-    { variant: ['outline', 'surface', 'soft', 'solid'], attached: false, class: 'p-1' },
+    { variant: 'none', class: '[--group-pad:0px]' },
+    { attached: true, class: '[--group-pad:0px]' },
+    // density=none has no padding, but bordered containers still need a
+    // 1px cut so items inscribe inside the container border.
+    { variant: ['outline', 'surface'], density: 'none', class: '[--item-rad-cut:1px]' },
   ],
   defaultVariants: {
     variant: 'none',
     orientation: 'horizontal',
     attached: false,
+    density: 'comfortable',
   },
 });
 
@@ -55,12 +68,13 @@ const ToggleGroupContext = React.createContext<{
 
 function ToggleGroup({
   className,
-  variant,
+  variant = 'none',
   itemVariant = 'soft',
   size = 'md',
   theme = 'gray',
   attached = false,
   orientation = 'horizontal',
+  density = 'comfortable',
   children,
   ...props
 }: ToggleGroupPrimitive.Props &
@@ -69,6 +83,11 @@ function ToggleGroup({
     size?: ItemSize;
     theme?: Theme;
   }) {
+  const itemRadiusClass = attached
+    ? '[--item-radius:0px]'
+    : variant === 'none'
+      ? '[--item-radius:var(--radius-dynamic)]'
+      : '[--item-radius:calc(var(--radius-dynamic)-var(--item-rad-cut))]';
   return (
     <ToggleGroupPrimitive
       data-slot="toggle-group"
@@ -77,7 +96,11 @@ function ToggleGroup({
       data-size={size}
       data-attached={attached}
       data-orientation={orientation}
-      className={cn(toggleGroupVariants({ variant, orientation, attached, className }))}
+      data-density={density}
+      className={cn(
+        toggleGroupVariants({ variant, orientation, attached, density, className }),
+        itemRadiusClass
+      )}
       {...props}
     >
       <ToggleGroupContext.Provider
@@ -111,16 +134,14 @@ function ToggleGroupItem({
       theme={resolvedTheme}
       className={cn(
         'shrink-0 focus:z-10 focus-visible:z-10',
-        // Concentric radii (optical, not math): container padding is 4px but
-        // pure (outer - 4px) reads pinched at small radii. Subtract 3px so
-        // curves enter at a tangent the eye reads as parallel.
-        'not-group-data-[variant=none]/toggle-group:group-data-[attached=false]/toggle-group:rounded-[max(0px,calc(var(--radius-dynamic)-3px))]',
-        // Attached: kill inner corners, ends match the container exactly.
-        'group-data-[attached=true]/toggle-group:rounded-none',
-        'group-data-[attached=true]/toggle-group:group-data-horizontal/toggle-group:first:rounded-l-dynamic',
-        'group-data-[attached=true]/toggle-group:group-data-horizontal/toggle-group:last:rounded-r-dynamic',
-        'group-data-[attached=true]/toggle-group:group-data-vertical/toggle-group:first:rounded-t-dynamic',
-        'group-data-[attached=true]/toggle-group:group-data-vertical/toggle-group:last:rounded-b-dynamic',
+        // --item-radius is set by the parent (see ToggleGroup body).
+        // ! ensures we override Toggle's base rounded-dynamic.
+        'rounded-(--item-radius)!',
+        // Attached ends match the container exactly. ! beats our base above.
+        'group-data-[attached=true]/toggle-group:group-data-horizontal/toggle-group:first:rounded-l-dynamic!',
+        'group-data-[attached=true]/toggle-group:group-data-horizontal/toggle-group:last:rounded-r-dynamic!',
+        'group-data-[attached=true]/toggle-group:group-data-vertical/toggle-group:first:rounded-t-dynamic!',
+        'group-data-[attached=true]/toggle-group:group-data-vertical/toggle-group:last:rounded-b-dynamic!',
         'group-data-[attached=true]/toggle-group:group-data-[item-variant=outline]/toggle-group:group-data-horizontal/toggle-group:not-first:-ml-px',
         'group-data-[attached=true]/toggle-group:group-data-[item-variant=outline]/toggle-group:group-data-vertical/toggle-group:not-first:-mt-px',
         'group-data-[attached=true]/toggle-group:group-data-[item-variant=on-solid]/toggle-group:group-data-horizontal/toggle-group:not-first:-ml-px',

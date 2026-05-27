@@ -38,6 +38,7 @@ export function ToggleGroupRender({ variants, behavior, inputs }: EntryState) {
     | 'on-solid';
   const theme = variants.theme as 'gray' | 'accent';
   const orientation = (variants.orientation as 'horizontal' | 'vertical') ?? 'horizontal';
+  const density = (variants.density as 'none' | 'compact' | 'comfortable') ?? 'comfortable';
   const attached = behavior.attached === 'true';
   const multiple = behavior.multiple === 'true';
   const layout = (inputs.layout as 'icon' | 'text-icon' | 'text') ?? 'icon';
@@ -54,6 +55,7 @@ export function ToggleGroupRender({ variants, behavior, inputs }: EntryState) {
       variant={variant}
       itemVariant={itemVariant}
       orientation={orientation}
+      density={density}
       attached={attached}
       multiple={multiple}
       value={value}
