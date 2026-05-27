@@ -55,8 +55,8 @@ export function ControlsSidebar({
   const hasUngrouped = ungroupedEntries.length > 0;
 
   return (
-    <aside className="w-80 shrink-0 border-l border-line [--sidebar-pad:--spacing(3)] *:border-b *:border-line">
-      <div className="flex items-center justify-center bg-surface p-2">
+    <aside className="w-80 shrink-0 border-l border-line [--sidebar-pad:--spacing(3)]">
+      <div className="flex items-center justify-center border-b border-separator/50 bg-surface p-2">
         <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">{schema.name}</h3>
       </div>
 
@@ -64,9 +64,7 @@ export function ControlsSidebar({
         Object.keys(schema.behavior ?? {}).length > 0) && (
         <div className="flex flex-col gap-2 p-(--sidebar-pad)">
           <div className="flex flex-row items-center gap-2">
-            <div className="text-sm font-medium tracking-wide text-foreground-subtle">
-              Properties
-            </div>
+            <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">Properties</h3>
             <div className="h-px flex-1 bg-line" />
           </div>
           {Object.entries(schema.variants).map(([key, spec]) => (
@@ -93,7 +91,10 @@ export function ControlsSidebar({
 
       {hasUngrouped && (
         <div className="flex flex-col gap-2 p-(--sidebar-pad)">
-          <div className="text-sm font-medium tracking-wide text-foreground-subtle">Content</div>
+          <div className="flex flex-row items-center gap-2">
+            <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">Content</h3>
+            <div className="h-px flex-1 bg-line" />
+          </div>
           {ungroupedEntries.map(([key, spec]) => (
             <InputControl
               key={key}
