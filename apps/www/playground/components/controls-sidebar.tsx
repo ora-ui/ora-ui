@@ -1,7 +1,15 @@
 'use client';
 
-import { useState, type CSSProperties } from 'react';
-import { CaretDownIcon, MinusIcon, PlusIcon, TrashIcon } from '@phosphor-icons/react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
+import {
+  ArrowsHorizontalIcon,
+  ArrowsVerticalIcon,
+  CaretDownIcon,
+  CaretUpDownIcon,
+  MinusIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@phosphor-icons/react';
 import { Collapsible } from '@base-ui/react/collapsible';
 import { Radio as RadioPrimitive } from '@base-ui/react/radio';
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
@@ -47,22 +55,23 @@ export function ControlsSidebar({
   const hasUngrouped = ungroupedEntries.length > 0;
 
   return (
-    <aside className="w-max min-w-60 shrink-0 border-l border-line [--sidebar-pad:--spacing(3)] *:border-b *:border-line">
+    <aside className="w-80 shrink-0 border-l border-line [--sidebar-pad:--spacing(3)] *:border-b *:border-line">
       <div className="flex items-center justify-center bg-surface p-2">
         <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">{schema.name}</h3>
       </div>
 
-      {Object.keys(schema.variants).length > 0 && (
+      {(Object.keys(schema.variants).length > 0 ||
+        Object.keys(schema.behavior ?? {}).length > 0) && (
         <div className="flex flex-col gap-2 p-(--sidebar-pad)">
           <div className="flex flex-row items-center gap-2">
-            <div className="text-xs font-medium tracking-wide text-foreground-subtle uppercase">
-              Props
+            <div className="text-sm font-medium tracking-wide text-foreground-subtle">
+              Properties
             </div>
             <div className="h-px flex-1 bg-line" />
           </div>
           {Object.entries(schema.variants).map(([key, spec]) => (
             <EnumRow
-              key={key}
+              key={`v:${key}`}
               controlKey={key}
               spec={spec}
               value={state.variants[key]}
@@ -70,15 +79,9 @@ export function ControlsSidebar({
               allowThemeSwatch
             />
           ))}
-        </div>
-      )}
-
-      {schema.behavior && Object.keys(schema.behavior).length > 0 && (
-        <div className="flex flex-col gap-2 p-(--sidebar-pad)">
-          <div className="text-sm font-medium tracking-wide text-foreground-subtle">Behavior</div>
-          {Object.entries(schema.behavior).map(([key, spec]) => (
+          {Object.entries(schema.behavior ?? {}).map(([key, spec]) => (
             <EnumRow
-              key={key}
+              key={`b:${key}`}
               controlKey={key}
               spec={spec}
               value={state.behavior[key]}
@@ -117,6 +120,39 @@ export function ControlsSidebar({
   );
 }
 
+function ControlRow({
+  label,
+  asLabel = false,
+  endPad = false,
+  children,
+}: {
+  label: string;
+  asLabel?: boolean;
+  endPad?: boolean;
+  children: ReactNode;
+}) {
+  const className = `flex h-9 items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-sm ${endPad ? 'pr-2' : ''}`;
+  if (asLabel) {
+    return (
+      <Label className={className}>
+        <span className="text-secondary">{label}</span>
+        {children}
+      </Label>
+    );
+  }
+  return (
+    <div className={className}>
+      <span className="text-secondary">{label}</span>
+      {children}
+    </div>
+  );
+}
+
+const ORIENTATION_ICONS: Record<string, typeof ArrowsHorizontalIcon> = {
+  horizontal: ArrowsHorizontalIcon,
+  vertical: ArrowsVerticalIcon,
+};
+
 function EnumRow({
   controlKey,
   spec,
@@ -133,19 +169,30 @@ function EnumRow({
   const label = spec.label ?? controlKey;
   if ('type' in spec) {
     return (
-      <div className="flex items-center justify-between gap-5 text-sm">
-        <span className="text-sm text-secondary">{label}</span>
+      <ControlRow label={label} endPad>
         <Switch checked={value === true} onCheckedChange={(next) => onChange(next)} />
-      </div>
+      </ControlRow>
     );
   }
   const stringValue = value as string;
   const isThemeSwatch = allowThemeSwatch && controlKey === 'theme';
   const isTwoState = !isThemeSwatch && spec.values.length === 2;
-  if (isTwoState) {
+  const isBooleanPair =
+    isTwoState && [...spec.values].sort().join(',') === ['false', 'true'].join(',');
+  if (isBooleanPair) {
     return (
-      <div className="flex items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-xs">
-        <span className="text-secondary">{label}</span>
+      <ControlRow label={label} endPad>
+        <Switch
+          checked={stringValue === 'true'}
+          onCheckedChange={(next) => onChange(next ? 'true' : 'false')}
+        />
+      </ControlRow>
+    );
+  }
+  if (isTwoState) {
+    const iconFor = controlKey === 'orientation' ? ORIENTATION_ICONS : null;
+    return (
+      <ControlRow label={label}>
         <ToggleGroup
           size="sm"
           value={[stringValue]}
@@ -154,32 +201,48 @@ function EnumRow({
             if (picked) onChange(picked);
           }}
         >
-          {spec.values.map((v) => (
-            <ToggleGroupItem key={v} value={v}>
-              {v}
-            </ToggleGroupItem>
-          ))}
+          {spec.values.map((v) => {
+            const Icon = iconFor?.[v];
+            const labelText = v.charAt(0).toUpperCase() + v.slice(1);
+            if (Icon) {
+              return (
+                <Tooltip key={v}>
+                  <TooltipTrigger
+                    render={
+                      <ToggleGroupItem value={v} aria-label={labelText}>
+                        <Icon />
+                      </ToggleGroupItem>
+                    }
+                  />
+                  <TooltipContent>{labelText}</TooltipContent>
+                </Tooltip>
+              );
+            }
+            return (
+              <ToggleGroupItem key={v} value={v}>
+                {v}
+              </ToggleGroupItem>
+            );
+          })}
         </ToggleGroup>
-      </div>
+      </ControlRow>
     );
   }
   if (isThemeSwatch) {
     return (
-      <div className="flex items-center justify-between gap-5 text-sm">
-        <span className="text-sm text-secondary">{label}</span>
+      <ControlRow label={label} endPad>
         <ThemeSwatchInput values={spec.values} value={stringValue} onChange={onChange} />
-      </div>
+      </ControlRow>
     );
   }
   return (
-    <div className="flex items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-xs">
-      <span className="text-sm text-secondary">{label}</span>
+    <ControlRow label={label}>
       <Select value={stringValue} onValueChange={(v) => onChange(v as string)}>
         <SelectPrimitive.Trigger
           render={
             <Button variant="ghost" size="sm" className="justify-between">
               <SelectValue />
-              <CaretDownIcon className="size-4 text-muted" />
+              <CaretUpDownIcon className="size-4 text-muted" />
             </Button>
           }
         />
@@ -191,7 +254,7 @@ function EnumRow({
           ))}
         </SelectContent>
       </Select>
-    </div>
+    </ControlRow>
   );
 }
 
@@ -358,7 +421,7 @@ function ListInput({
                   render={
                     <button
                       type="button"
-                      className="flex flex-1 items-center gap-2 rounded-dynamic px-2 py-1.5 text-left text-xs text-primary outline-none transition-colors hover:bg-hover/30 focus-visible:outline-2 focus-visible:outline-focus focus-visible:-outline-offset-2"
+                      className="flex flex-1 items-center gap-2 rounded-dynamic px-2 py-1.5 text-left text-sm text-primary outline-none transition-colors hover:bg-hover/30 focus-visible:outline-2 focus-visible:outline-focus focus-visible:-outline-offset-2"
                     >
                       <CaretDownIcon
                         className="size-3 shrink-0 text-muted transition-transform duration-150 group-aria-expanded:rotate-180"
@@ -447,8 +510,7 @@ function StringInput({
   onChange: (value: string) => void;
 }) {
   return (
-    <Label className="flex items-center justify-between gap-5 text-sm">
-      <span className="text-sm text-secondary">{label}</span>
+    <ControlRow label={label} asLabel>
       <Input
         type="text"
         variant="surface"
@@ -457,7 +519,7 @@ function StringInput({
         onChange={(e) => onChange(e.target.value)}
         className="w-35"
       />
-    </Label>
+    </ControlRow>
   );
 }
 
@@ -473,12 +535,11 @@ function BooleanInput({
   onChange: (value: boolean) => void;
 }) {
   return (
-    <div className="flex items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-xs">
-      <span className="text-secondary">{label}</span>
+    <ControlRow label={label}>
       <Toggle size="sm" pressed={value} disabled={disabled} onPressedChange={onChange}>
         {value ? 'On' : 'Off'}
       </Toggle>
-    </div>
+    </ControlRow>
   );
 }
 
@@ -541,8 +602,7 @@ function SelectInput({
 }) {
   if (values.length === 2) {
     return (
-      <div className="flex items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-xs">
-        <span className="text-secondary">{label}</span>
+      <ControlRow label={label}>
         <ToggleGroup
           size="sm"
           disabled={disabled}
@@ -558,18 +618,17 @@ function SelectInput({
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
-      </div>
+      </ControlRow>
     );
   }
   return (
-    <div className="flex items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-xs">
-      <span className="text-sm text-secondary">{label}</span>
+    <ControlRow label={label}>
       <Select value={value} onValueChange={(v) => onChange(v as string)} disabled={disabled}>
         <SelectPrimitive.Trigger
           render={
             <Button variant="ghost" size="sm" className="justify-between">
               <SelectValue />
-              <CaretDownIcon className="size-4 text-muted" />
+              <CaretUpDownIcon className="size-4 text-muted" />
             </Button>
           }
         />
@@ -581,6 +640,6 @@ function SelectInput({
           ))}
         </SelectContent>
       </Select>
-    </div>
+    </ControlRow>
   );
 }

@@ -163,7 +163,7 @@
   --gray-ui: oklch(1 0 0 / 0.05);
   --gray-fill: oklch(0.949 0 0);
   --gray-hover: oklch(1 0 0 / 0.075);
-  --gray-active: oklch(1 0 0 / 0.105);
+  --gray-active: oklch(1 0 0 / 0.115);
   --gray-focus: oklch(0.489 0 0);
   --gray-focus-fill: oklch(0.586 0 0);
   --gray-line: oklch(0.258 0 0);
