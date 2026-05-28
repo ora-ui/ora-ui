@@ -34,8 +34,6 @@ const toggleGroupVariants = cva(['group/toggle-group flex w-fit p-(--group-pad)'
     },
   },
   compoundVariants: [
-    { variant: 'none', class: '[--group-pad:0px]' },
-    { attached: true, class: '[--group-pad:0px]' },
     // density=none has no padding, but bordered containers still need a
     // 1px cut so items inscribe inside the container border.
     { variant: ['outline', 'surface'], density: 'none', class: '[--item-rad-cut:1px]' },
@@ -83,9 +81,8 @@ function ToggleGroup({
     size?: ItemSize;
     theme?: Theme;
   }) {
-  const itemRadiusClass = attached
-    ? '[--item-radius:0px]'
-    : variant === 'none'
+  const itemRadiusClass =
+    variant === 'none'
       ? '[--item-radius:var(--radius-dynamic)]'
       : '[--item-radius:calc(var(--radius-dynamic)-var(--item-rad-cut))]';
   return (
@@ -137,24 +134,16 @@ function ToggleGroupItem({
         // --item-radius is set by the parent (see ToggleGroup body).
         // ! ensures we override Toggle's base rounded-dynamic.
         'rounded-(--item-radius)!',
-        // Attached ends match the container exactly. ! beats our base above.
-        'group-data-[attached=true]/toggle-group:group-data-horizontal/toggle-group:first:rounded-l-dynamic!',
-        'group-data-[attached=true]/toggle-group:group-data-horizontal/toggle-group:last:rounded-r-dynamic!',
-        'group-data-[attached=true]/toggle-group:group-data-vertical/toggle-group:first:rounded-t-dynamic!',
-        'group-data-[attached=true]/toggle-group:group-data-vertical/toggle-group:last:rounded-b-dynamic!',
+        // Attached: middle items lose their inner-side radius so they butt
+        // up against neighbors; first/last keep --item-radius on outer corners.
+        'group-data-[attached=true]/toggle-group:group-data-horizontal/toggle-group:not-first:rounded-l-none!',
+        'group-data-[attached=true]/toggle-group:group-data-horizontal/toggle-group:not-last:rounded-r-none!',
+        'group-data-[attached=true]/toggle-group:group-data-vertical/toggle-group:not-first:rounded-t-none!',
+        'group-data-[attached=true]/toggle-group:group-data-vertical/toggle-group:not-last:rounded-b-none!',
         'group-data-[attached=true]/toggle-group:group-data-[item-variant=outline]/toggle-group:group-data-horizontal/toggle-group:not-first:-ml-px',
         'group-data-[attached=true]/toggle-group:group-data-[item-variant=outline]/toggle-group:group-data-vertical/toggle-group:not-first:-mt-px',
         'group-data-[attached=true]/toggle-group:group-data-[item-variant=on-solid]/toggle-group:group-data-horizontal/toggle-group:not-first:-ml-px',
         'group-data-[attached=true]/toggle-group:group-data-[item-variant=on-solid]/toggle-group:group-data-vertical/toggle-group:not-first:-mt-px',
-        // Attached: items grow on both axes by the would-be 8px container
-        // padding so proportions match the detached + filled look (and none
-        // stays aligned with the filled variants for visual consistency).
-        'group-data-[attached=true]/toggle-group:group-data-[size=sm]/toggle-group:h-9',
-        'group-data-[attached=true]/toggle-group:group-data-[size=md]/toggle-group:h-9.5',
-        'group-data-[attached=true]/toggle-group:group-data-[size=lg]/toggle-group:h-10.75',
-        'group-data-[attached=true]/toggle-group:group-data-[size=sm]/toggle-group:min-w-9',
-        'group-data-[attached=true]/toggle-group:group-data-[size=md]/toggle-group:min-w-9.5',
-        'group-data-[attached=true]/toggle-group:group-data-[size=lg]/toggle-group:min-w-11',
         className
       )}
       {...props}
