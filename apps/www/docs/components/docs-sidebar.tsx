@@ -23,7 +23,7 @@ export function DocsSidebar({ tree }: DocsSidebarProps) {
   const folders = tree.children.filter((item) => item.type === 'folder');
 
   return (
-    <nav className="hidden lg:flex flex-col sticky top-0 max-h-dvh overflow-y-auto mr-10">
+    <nav className="hidden lg:flex flex-col sticky top-(--header-height) max-h-dvh overflow-y-auto mr-10">
       <SidebarContent>
         {topLevelPages.length > 0 && (
           <SidebarGroup>

@@ -1,8 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { AnchorProvider, useActiveAnchor, type TOCItemType } from 'fumadocs-core/toc';
+import {
+  AnchorProvider,
+  ScrollProvider,
+  useActiveAnchor,
+  type TOCItemType,
+} from 'fumadocs-core/toc';
 import { cn } from '@/registry/lib/utils';
+import { useRef } from 'react';
 
 interface TableOfContentsProps {
   toc: TOCItemType[];
@@ -31,13 +37,18 @@ function TOCItems({ toc }: { toc: TOCItemType[] }) {
 }
 
 export function TableOfContents({ toc }: TableOfContentsProps) {
+  const viewRef = useRef<HTMLDivElement>(null);
   if (!toc.length) return null;
 
   return (
     <AnchorProvider toc={toc}>
-      <div className="sticky top-0 flex w-56 shrink-0 flex-col gap-3 py-8 pl-8">
+      <div className="sticky top-(--header-height) flex w-56 shrink-0 flex-col gap-3 py-8 pl-8">
         <p className="text-xs font-medium uppercase tracking-wider text-secondary">On this page</p>
-        <TOCItems toc={toc} />
+        <div ref={viewRef} className="overflow-auto">
+          <ScrollProvider containerRef={viewRef}>
+            <TOCItems toc={toc} />
+          </ScrollProvider>
+        </div>
       </div>
     </AnchorProvider>
   );
