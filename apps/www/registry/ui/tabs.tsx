@@ -59,7 +59,6 @@ function TabsList({
         )}
         {...props}
       >
-        {children}
         <TabsPrimitive.Indicator
           data-slot="tabs-indicator"
           data-variant={variant}
@@ -69,13 +68,14 @@ function TabsList({
               'motion-safe:transition-[translate,width,height] motion-safe:duration-200 motion-safe:ease-in-out',
             [
               // Anchor to bottom-left; translate to exact tab position for both orientations
-              'bottom-0 left-0 z-0 rounded-sm',
+              'bottom-0 left-0 rounded-sm',
               'h-(--active-tab-height) w-(--active-tab-width)',
               'translate-x-(--active-tab-left) -translate-y-(--active-tab-bottom)',
               isSoft ? 'bg-active' : 'bg-fill',
             ]
           )}
         />
+        {children}
       </TabsPrimitive.List>
     </TabsContext.Provider>
   );
@@ -89,7 +89,7 @@ function TabsTab({ className, ...props }: TabsPrimitive.Tab.Props) {
       data-slot="tabs-tab"
       data-variant={variant}
       className={cn(
-        'relative z-10 inline-flex cursor-default select-none items-center justify-center rounded-sm',
+        'relative inline-flex cursor-default select-none items-center justify-center rounded-sm',
         'data-[orientation=vertical]:w-full data-[orientation=vertical]:justify-start',
         'whitespace-nowrap px-2 py-1 text-sm font-medium',
         'text-secondary hover:not-data-active:text-primary data-active:transition-colors',
