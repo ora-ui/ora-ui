@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import '@/registry/theme/globals.css';
-import './layout.css';
-// import './app.css';
+import './app.css';
 import { cn } from '@/registry/lib/utils';
 import { Header } from '@/header/components/header';
 import { TooltipProvider } from '@/registry/ui/tooltip';
@@ -32,13 +31,10 @@ export default function RootLayout({
         <NuqsAdapter>
           <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
             <TooltipProvider>
-              <div className="RootLayout">
-                <div className="RootLayoutContainer">
-                  <div className="RootLayoutContent">
-                    <Header />
-                    <main>{children}</main>
-                  </div>
-                  <span className="AppFooter"></span>
+              <div>
+                <div>
+                  <Header />
+                  <main>{children}</main>
                 </div>
               </div>
             </TooltipProvider>
