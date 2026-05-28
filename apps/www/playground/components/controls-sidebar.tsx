@@ -30,7 +30,6 @@ import { Select, SelectContent, SelectItem, SelectValue } from '@/registry/ui/se
 import { Input } from '@/registry/ui/input';
 import { Label } from '@/registry/ui/label';
 import { Switch } from '@/registry/ui/switch';
-import { Toggle } from '@/registry/ui/toggle';
 import { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/registry/ui/tooltip';
 
@@ -177,7 +176,8 @@ function EnumRow({
   }
   const stringValue = value as string;
   const isThemeSwatch = allowThemeSwatch && controlKey === 'theme';
-  const isTwoState = !isThemeSwatch && spec.values.length === 2;
+  const forceSelect = controlKey === 'variant';
+  const isTwoState = !isThemeSwatch && !forceSelect && spec.values.length === 2;
   const isBooleanPair =
     isTwoState && [...spec.values].sort().join(',') === ['false', 'true'].join(',');
   if (isBooleanPair) {
@@ -536,10 +536,8 @@ function BooleanInput({
   onChange: (value: boolean) => void;
 }) {
   return (
-    <ControlRow label={label}>
-      <Toggle size="sm" pressed={value} disabled={disabled} onPressedChange={onChange}>
-        {value ? 'On' : 'Off'}
-      </Toggle>
+    <ControlRow label={label} endPad>
+      <Switch checked={value} disabled={disabled} onCheckedChange={onChange} />
     </ControlRow>
   );
 }

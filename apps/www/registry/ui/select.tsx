@@ -8,15 +8,18 @@ import { cn } from '@/registry/lib/utils';
 
 type SelectVariant = 'soft' | 'solid';
 type SelectTheme = 'gray' | 'accent';
+type SelectIconPosition = 'start' | 'end';
 
 interface SelectContextValue {
   variant: SelectVariant;
   theme: SelectTheme;
+  iconPosition: SelectIconPosition;
 }
 
 const SelectContext = React.createContext<SelectContextValue>({
   variant: 'soft',
   theme: 'gray',
+  iconPosition: 'end',
 });
 
 const Select = SelectPrimitive.Root;
@@ -41,27 +44,17 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
   );
 }
 
-function SelectTrigger({ className, children, ...props }: SelectPrimitive.Trigger.Props) {
+function SelectTrigger(props: SelectPrimitive.Trigger.Props) {
+  return <SelectPrimitive.Trigger data-slot="select-trigger" {...props} />;
+}
+
+function SelectIcon(props: React.ComponentProps<typeof SelectPrimitive.Icon>) {
   return (
-    <SelectPrimitive.Trigger
-      data-slot="select-trigger"
-      className={cn(
-        'flex h-7.5 w-fit items-center justify-between gap-1.5 rounded-dynamic border border-line-ui bg-transparent px-3 text-sm whitespace-nowrap text-primary transition-colors outline-none select-none',
-        'hover:bg-hover/30',
-        'focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-0',
-        'disabled:cursor-not-allowed disabled:opacity-50',
-        'aria-invalid:border-(--destructive-ring) aria-invalid:focus-visible:outline-(--destructive-ring)',
-        'data-placeholder:text-muted',
-        "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className
-      )}
+    <SelectPrimitive.Icon
+      data-slot="select-icon"
+      render={<CaretDownIcon className="pointer-events-none" />}
       {...props}
-    >
-      {children}
-      <SelectPrimitive.Icon
-        render={<CaretDownIcon className="pointer-events-none size-4 text-muted" />}
-      />
-    </SelectPrimitive.Trigger>
+    />
   );
 }
 
@@ -82,6 +75,7 @@ function SelectContent({
   alignItemWithTrigger = true,
   variant = 'soft',
   theme = 'gray',
+  iconPosition = 'end',
   ...props
 }: SelectPrimitive.Popup.Props &
   Pick<
@@ -90,9 +84,10 @@ function SelectContent({
   > & {
     variant?: SelectVariant;
     theme?: SelectTheme;
+    iconPosition?: SelectIconPosition;
   }) {
   return (
-    <SelectContext.Provider value={{ variant, theme }}>
+    <SelectContext.Provider value={{ variant, theme, iconPosition }}>
       <SelectPrimitive.Portal>
         <SelectPrimitive.Positioner
           side={side}
@@ -131,16 +126,21 @@ function SelectLabel({ className, ...props }: SelectPrimitive.GroupLabel.Props) 
 }
 
 function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Props) {
-  const { variant } = React.useContext(SelectContext);
+  const { variant, theme, iconPosition } = React.useContext(SelectContext);
+  const iconStart = iconPosition === 'start';
+  const accent = theme === 'accent';
 
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        'relative flex w-full cursor-default items-center gap-1.5 rounded-(--menu-item-radius) h-7 pr-8 pl-1.5 text-sm text-primary outline-hidden select-none',
+        'relative flex w-full cursor-default items-center gap-1.5 rounded-(--menu-item-radius) h-7 text-sm text-gray-primary outline-hidden select-none',
+        iconStart ? 'pl-7 pr-2' : 'pl-1.5 pr-8',
         variant === 'solid'
           ? 'data-highlighted:bg-fill data-highlighted:text-on-fill data-highlighted:**:text-on-fill'
-          : 'data-highlighted:bg-hover data-highlighted:text-primary',
+          : accent
+            ? 'data-highlighted:bg-hover/50 data-highlighted:text-secondary'
+            : 'data-highlighted:bg-hover data-highlighted:text-gray-primary',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className
@@ -152,7 +152,12 @@ function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Prop
       </SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator
         render={
-          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">
+          <span
+            className={cn(
+              'pointer-events-none absolute flex size-4 items-center justify-center',
+              iconStart ? 'left-1.5' : 'right-2'
+            )}
+          >
             <CheckIcon className="pointer-events-none" />
           </span>
         }
@@ -211,6 +216,7 @@ export {
   Select,
   SelectContent,
   SelectGroup,
+  SelectIcon,
   SelectItem,
   SelectLabel,
   SelectScrollDownButton,

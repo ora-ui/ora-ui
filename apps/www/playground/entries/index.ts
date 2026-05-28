@@ -3,6 +3,7 @@ import { accordionEntry } from './accordion';
 import { alertDialogEntry } from './alert-dialog';
 import { buttonEntry } from './button';
 import { inputEntry } from './input';
+import { selectEntry } from './select';
 import { toggleEntry } from './toggle';
 import { toggleGroupEntry } from './toggle-group';
 
@@ -11,6 +12,7 @@ export const entries: EntrySchema[] = [
   alertDialogEntry,
   buttonEntry,
   inputEntry,
+  selectEntry,
   toggleEntry,
   toggleGroupEntry,
 ];
