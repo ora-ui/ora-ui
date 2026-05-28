@@ -243,11 +243,11 @@ function EnumRow({
           render={
             <Button variant="ghost" size="sm" className="justify-between">
               <SelectValue />
-              <CaretUpDownIcon className="size-4 text-muted" />
+              <CaretUpDownIcon />
             </Button>
           }
         />
-        <SelectContent variant="solid">
+        <SelectContent>
           {spec.values.map((v) => (
             <SelectItem key={v} value={v}>
               {v}
