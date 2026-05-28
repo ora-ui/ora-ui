@@ -9,26 +9,36 @@ import { cn } from '@/registry/lib/utils';
 type SelectVariant = 'soft' | 'solid';
 type SelectTheme = 'gray' | 'accent';
 type SelectIconPosition = 'start' | 'end';
+type SelectDensity = 'none' | 'compact' | 'comfortable';
 
 interface SelectContextValue {
   variant: SelectVariant;
   theme: SelectTheme;
   iconPosition: SelectIconPosition;
+  density: SelectDensity;
 }
 
 const SelectContext = React.createContext<SelectContextValue>({
   variant: 'soft',
   theme: 'gray',
   iconPosition: 'end',
+  density: 'comfortable',
 });
+
+const densityPad: Record<SelectDensity, string> = {
+  none: 'p-0',
+  compact: 'p-0.5',
+  comfortable: 'p-1',
+};
 
 const Select = SelectPrimitive.Root;
 
 function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
+  const { density } = React.useContext(SelectContext);
   return (
     <SelectPrimitive.Group
       data-slot="select-group"
-      className={cn('scroll-my-1 p-1', className)}
+      className={cn('scroll-my-1', densityPad[density], className)}
       {...props}
     />
   );
@@ -59,7 +69,7 @@ function SelectIcon(props: React.ComponentProps<typeof SelectPrimitive.Icon>) {
 }
 
 const selectContentBaseStyles = [
-  'relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md bg-overlay p-1 text-primary shadow-md ring-1 ring-line duration-100',
+  'relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md bg-overlay text-primary shadow-md ring-1 ring-line duration-100',
   'data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
   'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95',
   'data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
@@ -76,6 +86,7 @@ function SelectContent({
   variant = 'soft',
   theme = 'gray',
   iconPosition = 'end',
+  density = 'comfortable',
   ...props
 }: SelectPrimitive.Popup.Props &
   Pick<
@@ -85,9 +96,10 @@ function SelectContent({
     variant?: SelectVariant;
     theme?: SelectTheme;
     iconPosition?: SelectIconPosition;
+    density?: SelectDensity;
   }) {
   return (
-    <SelectContext.Provider value={{ variant, theme, iconPosition }}>
+    <SelectContext.Provider value={{ variant, theme, iconPosition, density }}>
       <SelectPrimitive.Portal>
         <SelectPrimitive.Positioner
           side={side}
@@ -101,8 +113,9 @@ function SelectContent({
             data-slot="select-content"
             data-variant={variant}
             data-theme={theme !== 'gray' ? theme : undefined}
+            data-density={density}
             data-align-trigger={alignItemWithTrigger}
-            className={cn(selectContentBaseStyles, className)}
+            className={cn(selectContentBaseStyles, densityPad[density], className)}
             {...props}
           >
             <SelectScrollUpButton />
@@ -126,15 +139,17 @@ function SelectLabel({ className, ...props }: SelectPrimitive.GroupLabel.Props) 
 }
 
 function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Props) {
-  const { variant, theme, iconPosition } = React.useContext(SelectContext);
+  const { variant, theme, iconPosition, density } = React.useContext(SelectContext);
   const iconStart = iconPosition === 'start';
   const accent = theme === 'accent';
+  const flushRadius = density === 'none';
 
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        'relative flex w-full cursor-default items-center gap-1.5 rounded-(--menu-item-radius) h-7 text-sm text-gray-primary outline-hidden select-none',
+        'relative flex w-full cursor-default items-center gap-1.5 h-7 text-sm text-gray-primary outline-hidden select-none',
+        flushRadius ? 'rounded-none' : 'rounded-(--menu-item-radius)',
         iconStart ? 'pl-7 pr-2' : 'pl-1.5 pr-8',
         variant === 'solid'
           ? 'data-highlighted:bg-fill data-highlighted:text-on-fill data-highlighted:**:text-on-fill'

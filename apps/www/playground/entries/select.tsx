@@ -47,6 +47,11 @@ export const selectEntry: EntrySchema = {
       label: 'Icon position',
       default: 'end',
     },
+    density: {
+      values: ['none', 'compact', 'comfortable'],
+      label: 'Density',
+      default: 'comfortable',
+    },
   },
   behavior: {
     alignItemWithTrigger: {
@@ -88,6 +93,7 @@ export const selectEntry: EntrySchema = {
       | 'solid';
     const theme = variants.theme as 'gray' | 'accent';
     const iconPosition = variants.iconPosition as 'start' | 'end';
+    const density = variants.density as 'none' | 'compact' | 'comfortable';
     const alignItemWithTrigger = behavior.alignItemWithTrigger === 'true';
     const multiple = behavior.multiple === 'true';
     const placeholder = inputs.placeholder as string;
@@ -123,6 +129,7 @@ export const selectEntry: EntrySchema = {
         side={side}
         alignItemWithTrigger={alignItemWithTrigger}
         iconPosition={iconPosition}
+        density={density}
       >
         {groups ? (
           <>
