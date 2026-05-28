@@ -103,7 +103,13 @@ export const selectEntry: EntrySchema = {
     const trigger = (
       <SelectTrigger
         render={
-          <Button variant={triggerVariant} className="w-56 justify-between">
+          <Button
+            variant={triggerVariant}
+            className="w-56 justify-between"
+            data-icon={
+              iconPosition === 'start' && alignItemWithTrigger ? 'inline-start' : undefined
+            }
+          >
             <SelectValue placeholder={placeholder}>
               {(value) => {
                 if (Array.isArray(value)) {

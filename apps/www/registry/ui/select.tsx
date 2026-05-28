@@ -31,6 +31,23 @@ const densityPad: Record<SelectDensity, string> = {
   comfortable: 'p-1',
 };
 
+// alignItemWithTrigger aligns ItemText.left with SelectValue.left. Total item
+// text offset = popup_pad + group_pad + item_pl. Trigger value offset =
+// button px (12). Density shifts that balance; compensate on positioner.
+const iconStartPositionerShift: Record<SelectDensity, string> = {
+  none: '',
+  compact: 'translate-x-1',
+  comfortable: 'translate-x-2',
+};
+
+// For iconEnd, item pl-1.5 (6) vs trigger px-3 (12) leaves a -6 base
+// difference. Density adds to text offset symmetrically around compact.
+const iconEndPositionerShift: Record<SelectDensity, string> = {
+  none: '-translate-x-1',
+  compact: '',
+  comfortable: 'translate-x-1',
+};
+
 const Select = SelectPrimitive.Root;
 
 function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
@@ -69,7 +86,7 @@ function SelectIcon(props: React.ComponentProps<typeof SelectPrimitive.Icon>) {
 }
 
 const selectContentBaseStyles = [
-  'relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md bg-overlay text-primary shadow-md ring-1 ring-line duration-100',
+  'relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md bg-white text-primary shadow-md ring-1 ring-line duration-100',
   'data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
   'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95',
   'data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
@@ -107,7 +124,12 @@ function SelectContent({
           align={align}
           alignOffset={alignOffset}
           alignItemWithTrigger={alignItemWithTrigger}
-          className="isolate z-50"
+          className={cn(
+            'isolate z-50',
+            iconPosition === 'start'
+              ? iconStartPositionerShift[density]
+              : iconEndPositionerShift[density]
+          )}
         >
           <SelectPrimitive.Popup
             data-slot="select-content"
