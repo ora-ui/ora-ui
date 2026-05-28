@@ -50,8 +50,8 @@
   --gray-overlay: oklch(1 0 0);
   --gray-ui: oklch(0 0 0 / 0.035);
   --gray-fill: oklch(0.244 0 0);
-  --gray-hover: oklch(0 0 0 / 0.045);
-  --gray-active: oklch(0 0 0 / 0.085);
+  --gray-hover: oklch(0 0 0 / 0.055);
+  --gray-active: oklch(0 0 0 / 0.08);
   --gray-focus: oklch(0.792 0 0);
   --gray-focus-fill: oklch(0.61 0 0);
   --gray-line: oklch(0.925 0 0);

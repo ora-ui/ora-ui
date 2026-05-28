@@ -2,42 +2,42 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/registry/lib/utils';
 import { entries } from '@/playground/entries';
+import { ScrollArea } from '@/registry/ui/scroll-area';
+import {
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarItem,
+} from '@/registry/ui/sidebar';
 
 export function NavSidebar() {
   const pathname = usePathname();
-  const items = [
-    { href: '/', label: 'Introduction' },
-    ...entries.map((e) => ({ href: `/${e.component}`, label: e.name })),
-  ];
 
   return (
-    <nav className="w-56 shrink-0 border-r border-line p-4">
-      <div className="mb-3 text-xs font-medium uppercase tracking-wide text-foreground-subtle">
-        Components
+    <nav className="hidden lg:flex flex-col w-(--sidebar-width) shrink-0 border-r border-line mr-10">
+      <div className="relative flex-1 min-h-0">
+        <div className="pointer-events-none absolute inset-x-0 -top-7 h-16 z-10 bg-linear-to-b from-background from-40% to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 -bottom-7 h-16 z-10 bg-linear-to-t from-background from-40% to-transparent" />
+        <ScrollArea className="h-full **:data-[slot=scroll-area-scrollbar]:py-[calc(var(--sidebar-padding-block)+6px)]">
+          <SidebarContent className="py-(--sidebar-padding-block)">
+            <SidebarGroup>
+              <SidebarGroupLabel>Components</SidebarGroupLabel>
+              <SidebarGroupContent>
+                {entries.map((e) => {
+                  const href = `/${e.component}`;
+                  return (
+                    <SidebarItem key={href} asChild active={pathname === href}>
+                      <Link href={href}>{e.name}</Link>
+                    </SidebarItem>
+                  );
+                })}
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+        </ScrollArea>
       </div>
-      <ul className="flex flex-col gap-0.5">
-        {items.map(({ href, label }) => {
-          const active = pathname === href;
-          return (
-            <li key={href}>
-              <Link
-                href={href}
-                aria-current={active ? 'page' : undefined}
-                className={cn(
-                  'block w-full rounded-dynamic px-2 py-1 text-left text-sm',
-                  active
-                    ? 'bg-ui text-foreground'
-                    : 'text-foreground-subtle hover:bg-hover/30 hover:text-foreground'
-                )}
-              >
-                {label}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
     </nav>
   );
 }
