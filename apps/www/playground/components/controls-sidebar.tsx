@@ -54,7 +54,7 @@ export function ControlsSidebar({
   const hasUngrouped = ungroupedEntries.length > 0;
 
   return (
-    <aside className="w-80 shrink-0 border-l border-line [--sidebar-pad:--spacing(3)]">
+    <aside className="w-80 shrink-0 m-3 rounded-md border border-separator/50 bg-surface overflow-hidden [--sidebar-pad:--spacing(3)]">
       <div className="flex items-center justify-center border-b border-separator/50 bg-surface p-2">
         <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">{schema.name}</h3>
       </div>

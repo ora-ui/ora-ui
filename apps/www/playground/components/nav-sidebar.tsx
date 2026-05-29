@@ -16,7 +16,7 @@ export function NavSidebar() {
   const pathname = usePathname();
 
   return (
-    <nav className="hidden lg:flex flex-col w-(--sidebar-width) shrink-0 border-r border-line mr-10">
+    <nav className="hidden lg:flex flex-col w-(--sidebar-width) shrink-0 border-r border-dashed border-separator/50 mr-10">
       <div className="relative flex-1 min-h-0">
         <div className="pointer-events-none absolute inset-x-0 -top-7 h-16 z-10 bg-linear-to-b from-background from-40% to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 -bottom-7 h-16 z-10 bg-linear-to-t from-background from-40% to-transparent" />
