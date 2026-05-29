@@ -12,7 +12,7 @@ export const accordionEntry: EntrySchema = {
     },
     itemVariant: {
       values: ['underline', 'soft'],
-      label: 'Item style',
+      label: 'Variant',
       default: 'underline',
     },
     iconPosition: {

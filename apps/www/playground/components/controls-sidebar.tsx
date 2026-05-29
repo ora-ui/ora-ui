@@ -6,8 +6,10 @@ import {
   ArrowsVerticalIcon,
   CaretDownIcon,
   CaretUpDownIcon,
+  FadersIcon,
   MinusIcon,
   PlusIcon,
+  SwatchesIcon,
   TrashIcon,
 } from '@phosphor-icons/react';
 import { Collapsible } from '@base-ui/react/collapsible';
@@ -30,6 +32,7 @@ import { Select, SelectContent, SelectItem, SelectValue } from '@/registry/ui/se
 import { Input } from '@/registry/ui/input';
 import { Label } from '@/registry/ui/label';
 import { Switch } from '@/registry/ui/switch';
+import { Tabs, TabsList, TabsPanel, TabsTab } from '@/registry/ui/tabs';
 import { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/registry/ui/tooltip';
 
@@ -52,70 +55,87 @@ export function ControlsSidebar({
     ([key]) => !groupedKeys.has(key)
   );
   const hasUngrouped = ungroupedEntries.length > 0;
+  const SHOW_CONTENT = false;
 
   return (
-    <aside className="w-80 shrink-0 m-3 rounded-md border border-separator/50 bg-surface overflow-hidden [--sidebar-pad:--spacing(3)]">
-      <div className="flex items-center justify-center border-b border-separator/50 bg-surface p-2">
-        <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">{schema.name}</h3>
-      </div>
+    <aside className="w-80 shrink-0 m-3 rounded-md border border-separator/50 overflow-hidden [--sidebar-pad:--spacing(3)]">
+      <Tabs defaultValue="controls">
+        <TabsList className="w-full gap-2 border-b border-separator/50 p-1">
+          <TabsTab value="controls" className="gap-1.5">
+            <FadersIcon />
+            Controls
+          </TabsTab>
+          <TabsTab value="theme" className="gap-1.5">
+            <SwatchesIcon />
+            Theming
+          </TabsTab>
+        </TabsList>
+        <TabsPanel value="controls">
+          {(Object.keys(schema.variants).length > 0 ||
+            Object.keys(schema.behavior ?? {}).length > 0) && (
+            <div className="flex flex-col gap-2 p-(--sidebar-pad)">
+              <div className="flex flex-row items-center gap-2">
+                <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">
+                  Properties
+                </h3>
+                <div className="h-px flex-1 bg-line" />
+              </div>
+              {Object.entries(schema.variants).map(([key, spec]) => (
+                <EnumRow
+                  key={`v:${key}`}
+                  controlKey={key}
+                  spec={spec}
+                  value={state.variants[key]}
+                  onChange={(value) => setVariant(key, value)}
+                  allowThemeSwatch
+                />
+              ))}
+              {Object.entries(schema.behavior ?? {}).map(([key, spec]) => (
+                <EnumRow
+                  key={`b:${key}`}
+                  controlKey={key}
+                  spec={spec}
+                  value={state.behavior[key]}
+                  onChange={(value) => setBehavior(key, value)}
+                />
+              ))}
+            </div>
+          )}
 
-      {(Object.keys(schema.variants).length > 0 ||
-        Object.keys(schema.behavior ?? {}).length > 0) && (
-        <div className="flex flex-col gap-2 p-(--sidebar-pad)">
-          <div className="flex flex-row items-center gap-2">
-            <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">Properties</h3>
-            <div className="h-px flex-1 bg-line" />
-          </div>
-          {Object.entries(schema.variants).map(([key, spec]) => (
-            <EnumRow
-              key={`v:${key}`}
-              controlKey={key}
-              spec={spec}
-              value={state.variants[key]}
-              onChange={(value) => setVariant(key, value)}
-              allowThemeSwatch
-            />
-          ))}
-          {Object.entries(schema.behavior ?? {}).map(([key, spec]) => (
-            <EnumRow
-              key={`b:${key}`}
-              controlKey={key}
-              spec={spec}
-              value={state.behavior[key]}
-              onChange={(value) => setBehavior(key, value)}
-            />
-          ))}
-        </div>
-      )}
+          {SHOW_CONTENT && hasUngrouped && (
+            <div className="flex flex-col gap-2 p-(--sidebar-pad)">
+              <div className="flex flex-row items-center gap-2">
+                <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">
+                  Content
+                </h3>
+                <div className="h-px flex-1 bg-line" />
+              </div>
+              {ungroupedEntries.map(([key, spec]) => (
+                <InputControl
+                  key={key}
+                  label={spec.label ?? key}
+                  spec={spec}
+                  value={state.inputs[key]}
+                  disabled={spec.visibleWhen ? !spec.visibleWhen(state.inputs) : false}
+                  onChange={(value) => setInput(key, value)}
+                />
+              ))}
+            </div>
+          )}
 
-      {hasUngrouped && (
-        <div className="flex flex-col gap-2 p-(--sidebar-pad)">
-          <div className="flex flex-row items-center gap-2">
-            <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">Content</h3>
-            <div className="h-px flex-1 bg-line" />
-          </div>
-          {ungroupedEntries.map(([key, spec]) => (
-            <InputControl
-              key={key}
-              label={spec.label ?? key}
-              spec={spec}
-              value={state.inputs[key]}
-              disabled={spec.visibleWhen ? !spec.visibleWhen(state.inputs) : false}
-              onChange={(value) => setInput(key, value)}
-            />
-          ))}
-        </div>
-      )}
-
-      {groups.map((group) => (
-        <GroupSection
-          key={group.toggleKey}
-          group={group}
-          content={schema.content ?? {}}
-          state={state}
-          setInput={setInput}
-        />
-      ))}
+          {SHOW_CONTENT &&
+            groups.map((group) => (
+              <GroupSection
+                key={group.toggleKey}
+                group={group}
+                content={schema.content ?? {}}
+                state={state}
+                setInput={setInput}
+              />
+            ))}
+        </TabsPanel>
+        <TabsPanel value="theme" />
+      </Tabs>
     </aside>
   );
 }

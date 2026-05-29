@@ -71,7 +71,7 @@ function TabsList({
               'bottom-0 left-0 rounded-sm',
               'h-(--active-tab-height) w-(--active-tab-width)',
               'translate-x-(--active-tab-left) -translate-y-(--active-tab-bottom)',
-              isSoft ? 'bg-active' : 'bg-fill',
+              isSoft ? 'bg-active/75' : 'bg-fill',
             ]
           )}
         />
