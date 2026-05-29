@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import {
   ArrowsHorizontalIcon,
   ArrowsVerticalIcon,
@@ -8,10 +8,13 @@ import {
   CaretUpDownIcon,
   FadersIcon,
   MinusIcon,
+  MoonIcon,
   PlusIcon,
+  SunIcon,
   SwatchesIcon,
   TrashIcon,
 } from '@phosphor-icons/react';
+import { useTheme } from 'next-themes';
 import { Collapsible } from '@base-ui/react/collapsible';
 import { Radio as RadioPrimitive } from '@base-ui/react/radio';
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
@@ -58,7 +61,7 @@ export function ControlsSidebar({
   const SHOW_CONTENT = false;
 
   return (
-    <aside className="w-80 shrink-0 m-3 rounded-md border border-separator/50 overflow-hidden [--sidebar-pad:--spacing(3)]">
+    <aside className="w-85 shrink-0 m-3 rounded-md border border-separator/50 overflow-hidden [--sidebar-pad:--spacing(3)]">
       <Tabs defaultValue="controls">
         <TabsList className="w-full gap-2 border-b border-separator/50 p-1">
           <TabsTab value="controls" className="gap-1.5">
@@ -75,7 +78,7 @@ export function ControlsSidebar({
             Object.keys(schema.behavior ?? {}).length > 0) && (
             <div className="flex flex-col gap-2 p-(--sidebar-pad)">
               <div className="flex flex-row items-center gap-2">
-                <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">
+                <h3 className="text-xs font-medium tracking-wide text-foreground-subtle">
                   Properties
                 </h3>
                 <div className="h-px flex-1 bg-line" />
@@ -105,7 +108,7 @@ export function ControlsSidebar({
           {SHOW_CONTENT && hasUngrouped && (
             <div className="flex flex-col gap-2 p-(--sidebar-pad)">
               <div className="flex flex-row items-center gap-2">
-                <h3 className="text-sm font-medium tracking-wide text-foreground-subtle">
+                <h3 className="text-xs font-medium tracking-wide text-foreground-subtle">
                   Content
                 </h3>
                 <div className="h-px flex-1 bg-line" />
@@ -134,7 +137,9 @@ export function ControlsSidebar({
               />
             ))}
         </TabsPanel>
-        <TabsPanel value="theme" />
+        <TabsPanel value="theme" keepMounted>
+          <ThemingPanel />
+        </TabsPanel>
       </Tabs>
     </aside>
   );
@@ -151,7 +156,7 @@ function ControlRow({
   endPad?: boolean;
   children: ReactNode;
 }) {
-  const className = `flex h-9 items-center justify-between gap-5 rounded-[10px] bg-ui p-1 pl-2 text-sm ${endPad ? 'pr-2' : ''}`;
+  const className = `flex h-9 items-center justify-between gap-5 rounded-[min(calc(var(--radius)*1.2),14px)] bg-ui p-1 pl-2 text-sm ${endPad ? 'pr-2' : ''}`;
   if (asLabel) {
     return (
       <Label className={className}>
@@ -303,7 +308,7 @@ function GroupSection({
             type="button"
             className="flex w-full items-center justify-between gap-2 p-(--sidebar-pad) text-sm text-primary outline-none transition-colors hover:bg-hover/30 data-panel-open:bg-hover/30 focus-visible:outline-2 focus-visible:outline-focus focus-visible:-outline-offset-2"
           >
-            <span className="text-sm font-medium tracking-wide text-foreground-subtle">
+            <span className="text-xs font-medium tracking-wide text-foreground-subtle">
               {group.label}
             </span>
             {open ? (
@@ -575,26 +580,22 @@ function ThemeSwatchInput({
     <RadioGroupPrimitive
       value={value}
       onValueChange={(next) => onChange(next as string)}
-      className="flex flex-wrap gap-1"
+      className="-mr-1 flex flex-wrap gap-1"
     >
       {values.map((v) => (
         <RadioPrimitive.Root
           key={v}
           value={v}
           aria-label={v}
-          className="group/swatch flex size-6 shrink-0 items-center justify-center rounded-full outline-none"
+          data-theme={v}
+          className="group/swatch flex size-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ring-gray-ring/50 data-checked:ring-0 data-checked:outline-2 data-checked:outline-focus"
         >
           <Tooltip>
             <TooltipTrigger
               render={
                 <span
-                  className="size-5 rounded-full outline-2 outline-offset-2 outline-transparent transition-[outline-color] group-data-checked/swatch:outline-(--swatch-fill) group-focus-visible/swatch:outline-focus"
-                  style={
-                    {
-                      backgroundColor: `var(--${v}-fill)`,
-                      '--swatch-fill': `var(--${v}-fill)`,
-                    } as CSSProperties
-                  }
+                  className="size-2 rounded-full"
+                  style={{ backgroundColor: `var(--${v}-fill)` } as CSSProperties}
                 />
               }
             />
@@ -660,5 +661,137 @@ function SelectInput({
         </SelectContent>
       </Select>
     </ControlRow>
+  );
+}
+
+const RADIUS_STEPS = [
+  { value: 'none', label: 'None', radius: '0px' },
+  { value: 'sm', label: 'Small', radius: '0.25rem' },
+  { value: 'md', label: 'Medium', radius: '0.375rem' },
+  { value: 'lg', label: 'Large', radius: '0.75rem' },
+  { value: 'xl', label: 'Extra Large', radius: '1rem' },
+  { value: 'full', label: 'Full', radius: '9999px' },
+] as const;
+
+function SectionHeader({ label }: { label: string }) {
+  return <h3 className="text-xs tracking-wide text-foreground-subtle">{label}</h3>;
+}
+
+function ColorSwatch({ name }: { name: string }) {
+  return (
+    <RadioPrimitive.Root
+      value={name}
+      aria-label={name}
+      data-theme={name}
+      className="group/swatch flex size-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ring-gray-ring/50 data-checked:ring-0 data-checked:outline-2 data-checked:outline-focus"
+    >
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <span
+              className="size-2 rounded-full"
+              style={{ backgroundColor: `var(--${name}-fill)` } as CSSProperties}
+            />
+          }
+        />
+        <TooltipContent>{name.charAt(0).toUpperCase() + name.slice(1)}</TooltipContent>
+      </Tooltip>
+    </RadioPrimitive.Root>
+  );
+}
+
+function ThemingPanel() {
+  const { resolvedTheme, setTheme } = useTheme();
+  const [gray, setGray] = useState('gray');
+  const [accent, setAccent] = useState('accent');
+  const [radius, setRadius] = useState<string>('md');
+  const mode = resolvedTheme === 'dark' ? 'dark' : 'light';
+
+  useEffect(() => {
+    const step = RADIUS_STEPS.find((s) => s.value === radius);
+    if (!step) return;
+    document.documentElement.style.setProperty('--radius', step.radius);
+    return () => {
+      document.documentElement.style.removeProperty('--radius');
+    };
+  }, [radius]);
+
+  return (
+    <div className="flex flex-col p-(--sidebar-pad) gap-6 font-normal">
+      <section className="flex flex-col gap-2">
+        <SectionHeader label="Accent color" />
+        <RadioGroupPrimitive
+          value={accent}
+          onValueChange={(next) => setAccent(next as string)}
+          className="flex flex-wrap gap-1"
+        >
+          <ColorSwatch name="accent" />
+        </RadioGroupPrimitive>
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <SectionHeader label="Gray color" />
+        <RadioGroupPrimitive
+          value={gray}
+          onValueChange={(next) => setGray(next as string)}
+          className="flex flex-wrap gap-1"
+        >
+          <ColorSwatch name="gray" />
+        </RadioGroupPrimitive>
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <SectionHeader label="Appearance" />
+        <RadioGroupPrimitive
+          value={mode}
+          onValueChange={(next) => setTheme(next as string)}
+          className="grid grid-cols-[1fr_1fr] gap-1"
+        >
+          {(
+            [
+              { value: 'light', label: 'Light', Icon: SunIcon },
+              { value: 'dark', label: 'Dark', Icon: MoonIcon },
+            ] as const
+          ).map(({ value, label, Icon }) => (
+            <RadioPrimitive.Root
+              key={value}
+              value={value}
+              aria-label={label}
+              className="group/appearance flex h-8 cursor-default items-center justify-center gap-1 rounded-sm text-sm text-secondary ring-1 ring-inset ring-gray-ring/50 data-checked:ring-0 data-checked:outline-2 data-checked:outline-primary data-checked:text-primary"
+            >
+              <Icon className="size-4" />
+              {label}
+            </RadioPrimitive.Root>
+          ))}
+        </RadioGroupPrimitive>
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <SectionHeader label="Radius" />
+        <RadioGroupPrimitive
+          value={radius}
+          onValueChange={(next) => setRadius(next as string)}
+          className="flex justify-between"
+        >
+          {RADIUS_STEPS.map(({ value, label, radius: r }) => (
+            <RadioPrimitive.Root
+              key={value}
+              value={value}
+              aria-label={label}
+              className="group/radius flex cursor-default flex-col items-center gap-1 outline-none"
+            >
+              <span className="flex size-10 items-center justify-center rounded-sm p-2 ring-1 ring-inset ring-gray-ring/50 group-data-checked/radius:ring-0 group-data-checked/radius:outline-2 group-data-checked/radius:outline-primary">
+                <span
+                  data-theme="accent"
+                  className="size-full border-l-2 border-t-2 border-focus bg-ui"
+                  style={{ borderTopLeftRadius: r }}
+                />
+              </span>
+              <span className="text-[11px] capitalize text-primary">{label}</span>
+            </RadioPrimitive.Root>
+          ))}
+        </RadioGroupPrimitive>
+      </section>
+    </div>
   );
 }
