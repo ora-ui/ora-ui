@@ -4,6 +4,7 @@ import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import {
   ArrowsHorizontalIcon,
   ArrowsVerticalIcon,
+  ArticleIcon,
   CaretDownIcon,
   CaretUpDownIcon,
   FadersIcon,
@@ -58,7 +59,9 @@ export function ControlsSidebar({
     ([key]) => !groupedKeys.has(key)
   );
   const hasUngrouped = ungroupedEntries.length > 0;
-  const SHOW_CONTENT = false;
+  const hasContent = hasUngrouped || groups.length > 0;
+  const hasControls =
+    Object.keys(schema.variants).length > 0 || Object.keys(schema.behavior ?? {}).length > 0;
 
   return (
     <aside className="w-85 shrink-0 m-3 rounded-md border border-separator/50 overflow-hidden [--sidebar-pad:--spacing(3)]">
@@ -68,14 +71,17 @@ export function ControlsSidebar({
             <FadersIcon />
             Controls
           </TabsTab>
+          <TabsTab value="content" className="gap-1.5">
+            <ArticleIcon />
+            Content
+          </TabsTab>
           <TabsTab value="theme" className="gap-1.5">
             <SwatchesIcon />
             Theming
           </TabsTab>
         </TabsList>
         <TabsPanel value="controls">
-          {(Object.keys(schema.variants).length > 0 ||
-            Object.keys(schema.behavior ?? {}).length > 0) && (
+          {hasControls ? (
             <div className="flex flex-col gap-2 p-(--sidebar-pad)">
               <div className="flex flex-row items-center gap-2">
                 <h3 className="text-xs font-medium tracking-wide text-foreground-subtle">
@@ -103,39 +109,40 @@ export function ControlsSidebar({
                 />
               ))}
             </div>
+          ) : (
+            <EmptyState message="No controls for this component." />
           )}
-
-          {SHOW_CONTENT && hasUngrouped && (
-            <div className="flex flex-col gap-2 p-(--sidebar-pad)">
-              <div className="flex flex-row items-center gap-2">
-                <h3 className="text-xs font-medium tracking-wide text-foreground-subtle">
-                  Content
-                </h3>
-                <div className="h-px flex-1 bg-line" />
-              </div>
-              {ungroupedEntries.map(([key, spec]) => (
-                <InputControl
-                  key={key}
-                  label={spec.label ?? key}
-                  spec={spec}
-                  value={state.inputs[key]}
-                  disabled={spec.visibleWhen ? !spec.visibleWhen(state.inputs) : false}
-                  onChange={(value) => setInput(key, value)}
+        </TabsPanel>
+        <TabsPanel value="content">
+          {hasContent ? (
+            <>
+              {hasUngrouped && (
+                <div className="flex flex-col gap-2 p-(--sidebar-pad)">
+                  {ungroupedEntries.map(([key, spec]) => (
+                    <InputControl
+                      key={key}
+                      label={spec.label ?? key}
+                      spec={spec}
+                      value={state.inputs[key]}
+                      disabled={spec.visibleWhen ? !spec.visibleWhen(state.inputs) : false}
+                      onChange={(value) => setInput(key, value)}
+                    />
+                  ))}
+                </div>
+              )}
+              {groups.map((group) => (
+                <GroupSection
+                  key={group.toggleKey}
+                  group={group}
+                  content={schema.content ?? {}}
+                  state={state}
+                  setInput={setInput}
                 />
               ))}
-            </div>
+            </>
+          ) : (
+            <EmptyState message="No content for this component." />
           )}
-
-          {SHOW_CONTENT &&
-            groups.map((group) => (
-              <GroupSection
-                key={group.toggleKey}
-                group={group}
-                content={schema.content ?? {}}
-                state={state}
-                setInput={setInput}
-              />
-            ))}
         </TabsPanel>
         <TabsPanel value="theme" keepMounted>
           <ThemingPanel />
@@ -583,25 +590,24 @@ function ThemeSwatchInput({
       className="-mr-1 flex flex-wrap gap-1"
     >
       {values.map((v) => (
-        <RadioPrimitive.Root
-          key={v}
-          value={v}
-          aria-label={v}
-          data-theme={v}
-          className="group/swatch flex size-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ring-gray-ring/50 data-checked:ring-0 data-checked:outline-2 data-checked:outline-focus"
-        >
-          <Tooltip>
-            <TooltipTrigger
-              render={
+        <Tooltip key={v}>
+          <TooltipTrigger
+            render={
+              <RadioPrimitive.Root
+                value={v}
+                aria-label={v}
+                data-theme={v}
+                className="group/swatch flex size-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ring-gray-ring/50 data-checked:ring-0 data-checked:outline-2 data-checked:outline-focus"
+              >
                 <span
                   className="size-2 rounded-full"
                   style={{ backgroundColor: `var(--${v}-fill)` } as CSSProperties}
                 />
-              }
-            />
-            <TooltipContent>{v.charAt(0).toUpperCase() + v.slice(1)}</TooltipContent>
-          </Tooltip>
-        </RadioPrimitive.Root>
+              </RadioPrimitive.Root>
+            }
+          />
+          <TooltipContent>{v.charAt(0).toUpperCase() + v.slice(1)}</TooltipContent>
+        </Tooltip>
       ))}
     </RadioGroupPrimitive>
   );
@@ -664,6 +670,8 @@ function SelectInput({
   );
 }
 
+const RADIUS_STORAGE_KEY = 'playground:radius';
+
 const RADIUS_STEPS = [
   { value: 'none', label: 'None', radius: '0px' },
   { value: 'sm', label: 'Small', radius: '0.25rem' },
@@ -673,30 +681,38 @@ const RADIUS_STEPS = [
   { value: 'full', label: 'Full', radius: '9999px' },
 ] as const;
 
+function EmptyState({ message }: { message: string }) {
+  return (
+    <div className="flex items-center justify-center p-(--sidebar-pad) py-8 text-center text-xs text-muted">
+      {message}
+    </div>
+  );
+}
+
 function SectionHeader({ label }: { label: string }) {
   return <h3 className="text-xs tracking-wide text-foreground-subtle">{label}</h3>;
 }
 
 function ColorSwatch({ name }: { name: string }) {
   return (
-    <RadioPrimitive.Root
-      value={name}
-      aria-label={name}
-      data-theme={name}
-      className="group/swatch flex size-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ring-gray-ring/50 data-checked:ring-0 data-checked:outline-2 data-checked:outline-focus"
-    >
-      <Tooltip>
-        <TooltipTrigger
-          render={
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <RadioPrimitive.Root
+            value={name}
+            aria-label={name}
+            data-theme={name}
+            className="group/swatch flex size-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ring-gray-ring/50 data-checked:ring-0 data-checked:outline-2 data-checked:outline-focus"
+          >
             <span
               className="size-2 rounded-full"
               style={{ backgroundColor: `var(--${name}-fill)` } as CSSProperties}
             />
-          }
-        />
-        <TooltipContent>{name.charAt(0).toUpperCase() + name.slice(1)}</TooltipContent>
-      </Tooltip>
-    </RadioPrimitive.Root>
+          </RadioPrimitive.Root>
+        }
+      />
+      <TooltipContent>{name.charAt(0).toUpperCase() + name.slice(1)}</TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -705,16 +721,22 @@ function ThemingPanel() {
   const [gray, setGray] = useState('gray');
   const [accent, setAccent] = useState('accent');
   const [radius, setRadius] = useState<string>('md');
-  const mode = resolvedTheme === 'dark' ? 'dark' : 'light';
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-detection + post-hydration read of persisted radius
+    setMounted(true);
+    const stored = localStorage.getItem(RADIUS_STORAGE_KEY);
+    if (stored && RADIUS_STEPS.some((s) => s.value === stored)) setRadius(stored);
+  }, []);
+  const mode = mounted && resolvedTheme === 'dark' ? 'dark' : 'light';
 
   useEffect(() => {
+    if (!mounted) return;
     const step = RADIUS_STEPS.find((s) => s.value === radius);
     if (!step) return;
     document.documentElement.style.setProperty('--radius', step.radius);
-    return () => {
-      document.documentElement.style.removeProperty('--radius');
-    };
-  }, [radius]);
+    localStorage.setItem(RADIUS_STORAGE_KEY, radius);
+  }, [radius, mounted]);
 
   return (
     <div className="flex flex-col p-(--sidebar-pad) gap-6 font-normal">
