@@ -86,7 +86,7 @@ function SelectIcon(props: React.ComponentProps<typeof SelectPrimitive.Icon>) {
 }
 
 const selectContentBaseStyles = [
-  'relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md bg-white text-primary shadow-md ring-1 ring-line duration-100',
+  'relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md bg-overlay text-primary shadow-md ring-1 ring-line duration-100',
   'data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
   'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95',
   'data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
@@ -176,7 +176,7 @@ function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Prop
         variant === 'solid'
           ? 'data-highlighted:bg-fill data-highlighted:text-on-fill data-highlighted:**:text-on-fill'
           : accent
-            ? 'data-highlighted:bg-hover/50 data-highlighted:text-secondary'
+            ? 'data-highlighted:bg-hover/40 data-highlighted:text-secondary'
             : 'data-highlighted:bg-hover data-highlighted:text-gray-primary',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
