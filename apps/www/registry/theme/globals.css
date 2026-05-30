@@ -48,10 +48,10 @@
   --gray-background: oklch(1 0 0);
   --gray-surface: oklch(0.982 0 0);
   --gray-overlay: oklch(1 0 0);
-  --gray-ui: oklch(0 0 0 / 0.063);
+  --gray-ui: oklch(0 0 0 / 0.035);
   --gray-fill: oklch(0.244 0 0);
-  --gray-hover: oklch(0 0 0 / 0.091);
-  --gray-active: oklch(0 0 0 / 0.123);
+  --gray-hover: oklch(0 0 0 / 0.055);
+  --gray-active: oklch(0 0 0 / 0.08);
   --gray-focus: oklch(0.792 0 0);
   --gray-focus-fill: oklch(0.61 0 0);
   --gray-line: oklch(0.925 0 0);
@@ -160,10 +160,10 @@
   --gray-background: oklch(0.105 0 0);
   --gray-surface: oklch(0.145 0 0);
   --gray-overlay: oklch(0.178 0 0);
-  --gray-ui: oklch(1 0 0 / 0.075);
+  --gray-ui: oklch(1 0 0 / 0.05);
   --gray-fill: oklch(0.949 0 0);
-  --gray-hover: oklch(1 0 0 / 0.106);
-  --gray-active: oklch(1 0 0 / 0.133);
+  --gray-hover: oklch(1 0 0 / 0.075);
+  --gray-active: oklch(1 0 0 / 0.115);
   --gray-focus: oklch(0.489 0 0);
   --gray-focus-fill: oklch(0.586 0 0);
   --gray-line: oklch(0.258 0 0);
@@ -394,5 +394,5 @@ pre.shiki code .line:last-child:empty {
 [data-slot='dropdown-menu-content'],
 [data-slot='dropdown-menu-sub-content'],
 [data-slot='select-content'] {
-  --menu-item-radius: min(max(calc(min(var(--radius), 10px) - 4px), 2px), 6px);
+  --menu-item-radius: min(max(calc(min(var(--radius), 10px) - 3px), 2px), 6px);
 }

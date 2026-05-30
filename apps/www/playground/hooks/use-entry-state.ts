@@ -1,59 +1,89 @@
 'use client';
 
 import * as React from 'react';
-import { useQueryStates, parseAsString, parseAsBoolean } from 'nuqs';
-import type { EntrySchema, EntryState } from '@/playground/lib/types';
+import { useQueryStates, parseAsString, parseAsBoolean, parseAsJson } from 'nuqs';
+import type { EntrySchema, EntryState, ListItem } from '@/playground/lib/types';
 
 type EntryParser =
   | ReturnType<typeof parseAsString.withDefault>
-  | ReturnType<typeof parseAsBoolean.withDefault>;
+  | ReturnType<typeof parseAsBoolean.withDefault>
+  | ReturnType<ReturnType<typeof parseAsJson<ListItem[]>>['withDefault']>;
 
 function buildParsers(schema: EntrySchema) {
   const parsers: Record<string, EntryParser> = {};
   const variantKeys: string[] = [];
+  const behaviorKeys: string[] = [];
   const inputKeys: string[] = [];
 
   for (const [key, spec] of Object.entries(schema.variants)) {
-    parsers[key] = parseAsString.withDefault(spec.default);
+    parsers[key] =
+      'type' in spec
+        ? parseAsBoolean.withDefault(spec.default)
+        : parseAsString.withDefault(spec.default);
     variantKeys.push(key);
+  }
+  if (schema.behavior) {
+    for (const [key, spec] of Object.entries(schema.behavior)) {
+      parsers[key] =
+        'type' in spec
+          ? parseAsBoolean.withDefault(spec.default)
+          : parseAsString.withDefault(spec.default);
+      behaviorKeys.push(key);
+    }
   }
   if (schema.content) {
     for (const [key, spec] of Object.entries(schema.content)) {
-      parsers[key] =
-        spec.type === 'boolean'
-          ? parseAsBoolean.withDefault(spec.default)
-          : parseAsString.withDefault(spec.default);
+      if (spec.type === 'boolean') {
+        parsers[key] = parseAsBoolean.withDefault(spec.default);
+      } else if (spec.type === 'list') {
+        parsers[key] = parseAsJson<ListItem[]>((v) => v as ListItem[]).withDefault(
+          spec.default as ListItem[]
+        );
+      } else {
+        parsers[key] = parseAsString.withDefault(spec.default);
+      }
       inputKeys.push(key);
     }
   }
 
-  return { parsers, variantKeys, inputKeys };
+  return { parsers, variantKeys, behaviorKeys, inputKeys };
 }
 
 export function useEntryState(schema: EntrySchema) {
-  const { parsers, variantKeys, inputKeys } = React.useMemo(() => buildParsers(schema), [schema]);
+  const { parsers, variantKeys, behaviorKeys, inputKeys } = React.useMemo(
+    () => buildParsers(schema),
+    [schema]
+  );
 
   const [urlState, setUrlState] = useQueryStates(parsers, { history: 'replace' });
 
   const state: EntryState = React.useMemo(() => {
-    const variants: Record<string, string> = {};
+    const variants: Record<string, string | boolean> = {};
     for (const key of variantKeys) {
-      variants[key] = urlState[key] as string;
+      variants[key] = urlState[key] as string | boolean;
+    }
+    const behavior: Record<string, string | boolean> = {};
+    for (const key of behaviorKeys) {
+      behavior[key] = urlState[key] as string | boolean;
     }
     const inputs: Record<string, unknown> = {};
     for (const key of inputKeys) {
       inputs[key] = urlState[key];
     }
-    return { variants, inputs };
-  }, [urlState, variantKeys, inputKeys]);
+    return { variants, behavior, inputs };
+  }, [urlState, variantKeys, behaviorKeys, inputKeys]);
 
-  const setVariant = (key: string, value: string) => {
+  const setVariant = (key: string, value: string | boolean) => {
+    setUrlState({ [key]: value });
+  };
+
+  const setBehavior = (key: string, value: string | boolean) => {
     setUrlState({ [key]: value });
   };
 
   const setInput = (key: string, value: unknown) => {
-    setUrlState({ [key]: value as string | boolean });
+    setUrlState({ [key]: value as string | boolean | ListItem[] });
   };
 
-  return { state, setVariant, setInput };
+  return { state, setVariant, setBehavior, setInput };
 }

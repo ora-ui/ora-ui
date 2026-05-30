@@ -109,7 +109,7 @@ export function Header() {
   }, [showSearch]);
 
   return (
-    <header className="absolute left-0 top-0 flex justify-between h-(--header-height) items-center w-full pl-4 lg:pl-7">
+    <header className="sticky top-0 flex justify-between h-(--header-height) items-center w-full pl-4 lg:pl-7 z-50 bg-background border-b border-dashed border-separator/50">
       <NextLink href="/">
         <Logo />
       </NextLink>

@@ -43,7 +43,7 @@ export const buttonEntry: EntrySchema = {
       children: ['iconPosition'],
     },
   ],
-  render: ({ variants, inputs }) => {
+  render: function ButtonRender({ variants, inputs }) {
     const label = inputs.label as string;
     const icon = inputs.icon as boolean;
     const iconPosition = inputs.iconPosition as 'leading' | 'trailing';

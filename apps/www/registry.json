@@ -28,7 +28,8 @@
       ],
       "dependencies": [
         "@base-ui/react",
-        "@heroicons/react"
+        "@heroicons/react",
+        "class-variance-authority"
       ],
       "registryDependencies": [
         "utils"
@@ -328,6 +329,22 @@
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
+    },
+    {
+      "name": "scroll-area",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/scroll-area.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react"
       ],
       "registryDependencies": [
         "utils"

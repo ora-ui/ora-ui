@@ -16,7 +16,7 @@ export default function ToggleGroupHero() {
           <TextAlignRightIcon />
         </ToggleGroupItem>
       </ToggleGroup>
-      <ToggleGroup variant="outline" spacing={0}>
+      <ToggleGroup itemVariant="outline" attached>
         <ToggleGroupItem value="left" aria-label="Align left">
           <TextAlignLeftIcon />
         </ToggleGroupItem>

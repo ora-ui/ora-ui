@@ -34,7 +34,7 @@ function Switch({
         onCheckedChange?.(value, event);
       }}
       className={cn(
-        'peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent outline-none transition-all after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus data-checked:focus-visible:outline-focus-fill aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 data-[size=default]:h-[18.4px] data-[size=default]:w-8 data-[size=sm]:h-3.5 data-[size=sm]:w-6 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:bg-fill data-unchecked:bg-line data-disabled:cursor-not-allowed data-disabled:opacity-50',
+        'peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent transition-all after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus data-checked:focus-visible:outline-focus-fill aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 data-[size=default]:h-[18.4px] data-[size=default]:w-8 data-[size=sm]:h-3.5 data-[size=sm]:w-6 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:bg-fill data-unchecked:bg-line data-disabled:cursor-not-allowed data-disabled:opacity-50',
         className
       )}
       {...props}
