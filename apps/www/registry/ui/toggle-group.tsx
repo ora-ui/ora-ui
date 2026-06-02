@@ -9,8 +9,7 @@ import { Toggle, toggleVariants } from '@/registry/ui/toggle';
 
 // --item-radius is set inline on the parent (see ToggleGroup body) since
 // conditional Tailwind selectors compete with the item's base radius.
-// Density sets --group-pad (container padding) and --item-rad-cut.
-const toggleGroupVariants = cva(['group/toggle-group flex w-fit p-(--group-pad)'], {
+const toggleGroupVariants = cva(['group/toggle-group flex w-fit'], {
   variants: {
     variant: {
       none: '',
@@ -28,15 +27,16 @@ const toggleGroupVariants = cva(['group/toggle-group flex w-fit p-(--group-pad)'
       false: 'gap-1',
     },
     density: {
-      none: '[--group-pad:0px] [--item-rad-cut:0px]',
-      compact: '[--group-pad:--spacing(0.5)] [--item-rad-cut:2px]',
-      comfortable: '[--group-pad:--spacing(1)] [--item-rad-cut:3px]',
+      none: 'p-0 [--item-rad-cut:0px]',
+      compact: 'p-0.5 [--item-rad-cut:2px]',
+      comfortable: 'p-1 [--item-rad-cut:3px]',
     },
   },
   compoundVariants: [
     // density=none has no padding, but bordered containers still need a
     // 1px cut so items inscribe inside the container border.
     { variant: ['outline', 'surface'], density: 'none', class: '[--item-rad-cut:1px]' },
+    { density: ['compact', 'comfortable'], attached: true, class: 'p-0' },
   ],
   defaultVariants: {
     variant: 'none',
