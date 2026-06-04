@@ -43,17 +43,22 @@ gated.
 
 Entries are **schema-only**. No render escape hatch.
 
-The schema models two intrinsic categories of variation: **Variants**
-and **Content**. A third category, **Examples**, is extrinsic and
-out of scope for Entries entirely (see ADR-0004 and `CONTEXT.md`).
+The schema models four intrinsic categories of variation: **Appearance**,
+**Structure**, **Behavior**, and **Content**. A fifth category,
+**Examples**, is extrinsic and out of scope for Entries entirely (see
+ADR-0004 and `CONTEXT.md`). The Appearance / Structure / Behavior /
+Content taxonomy is defined in ADR-0007 — this ADR's original single
+"Variant" umbrella was retired there.
 
 ### Framework
 
-| Category    | Intrinsic? | What                                                                                                                                                                                                                                                                                                               | Encoded as                                    | Controls control                           |
-| ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------- | ------------------------------------------ |
-| **Variant** | yes        | Discrete option exposed by a primitive — stylistic, structural, or contextual. Same DOM file, different CVA branch. Examples: Button `variant=solid\|soft\|outline\|surface\|ghost`, `size=sm\|md\|lg`, `theme=gray\|accent\|destructive`; ButtonGroup `attached=true\|false`, `orientation=horizontal\|vertical`. | CVA prop branch on the primitive              | `<select>` per Variant prop                |
-| **Content** | yes        | What fills the Component's slots/children. Parametric within typed bounds. Template choice + inputs the template consumes. Example: Button's "text only" vs "leading icon + text" vs "icon only", with a `label` input and an icon identifier.                                                                     | Slot fills + template options + typed inputs  | Template picker + per-input control        |
-| **Example** | no         | Showcase composition demonstrating a product scenario. Built by composing several Components.                                                                                                                                                                                                                      | Hand-authored React (when introduced in v1.1) | Not part of an Entry — own sidebar section |
+| Category       | Intrinsic? | What                                                                                                                                                       | Encoded as                                         | Controls control                                                               |
+| -------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **Appearance** | yes        | Stylistic CVA branch — decorates a surface. Examples: Button `variant=solid\|soft\|outline\|surface\|ghost`, `size=sm\|md\|lg`, `theme=gray\|accent\|...`. | CVA prop branch on the primitive                   | `<select>` per prop, grouped under "Appearance" in the Controls tab            |
+| **Structure**  | yes        | Structural CVA branch — arranges parts. Examples: ToggleGroup `orientation=horizontal\|vertical`, `attached=true\|false`.                                  | CVA prop branch on the primitive                   | `<select>` (or toggle) per prop, grouped under "Structure" in the Controls tab |
+| **Behavior**   | yes        | Runtime, non-visual prop — changes behavior without changing CVA. Examples: Accordion `multiple`, DropdownMenu `modal`, exposed `disabled`.                | Plain prop, often forwarded to a Base UI primitive | Switch / select per prop, grouped under "Behavior" in the Controls tab         |
+| **Content**    | yes        | What fills the Component's slots/children. Template choice + inputs the template consumes.                                                                 | Slot fills + template options + typed inputs       | Template picker + per-input controls, rendered in a **separate Content tab**   |
+| **Example**    | no         | Showcase composition demonstrating a product scenario. Built by composing several Components.                                                              | Hand-authored React (when introduced in v1.1)      | Not part of an Entry — own sidebar section                                     |
 
 ### Why no render override
 

@@ -73,17 +73,28 @@ forks into hand-authored React.
 
 Lives in `apps/www/playground/entries/`.
 
-### Variant
+### Appearance
 
-An intrinsic, discrete option exposed by a Component, encoded as a CVA
-prop branch on the primitive (e.g. Button's `variant=solid|soft|...`,
-`size=sm|md|lg`, `theme=gray|accent|...`; ButtonGroup's
-`attached=true|false`, `orientation=horizontal|vertical`). One of these
-props is conventionally named `variant`, but the concept covers any
-discrete enum-shaped prop on the primitive — stylistic, structural, or
-contextual. Variants ship in the same registry file as the Component
-(one file per primitive, CVA branches inside); no separate per-variant
-file is generated. Controls sidebar renders one `<select>` per Variant prop.
+A stylistic CVA prop branch — changes how a Component looks without
+changing its structure or behavior. Examples: Button's
+`variant=solid|soft|...`, `size=sm|md|lg`, `theme=gray|accent|...`.
+The conventionally-named `variant` prop is always an Appearance prop,
+but Appearance covers any stylistic enum (size, theme, tone, etc.).
+Controls sidebar groups Appearance props together.
+
+### Structure
+
+A structural CVA prop branch — changes a Component's shape, layout, or
+arrangement without changing what it is. Examples: ToggleGroup's
+`orientation=horizontal|vertical` and `attached=true|false`; ButtonGroup's
+`orientation`. Mechanically identical to Appearance (CVA branch,
+`<select>` in the controls sidebar) but conceptually distinct: Structure
+props alter form, Appearance props alter finish. Grouped separately in
+the controls sidebar.
+
+Together, Appearance + Structure replace the older umbrella term
+"Variant" as a props category. The word "variant" survives only as the
+conventional prop _name_ for a Component's primary Appearance branch.
 
 ### Behavior
 
