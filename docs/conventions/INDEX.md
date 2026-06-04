@@ -146,11 +146,29 @@ This section covers the conventions for each layer.
 
 ### Props
 
-Use props for finite, named options (2–3 choices) that change the
-component's behavior or structural mode. These are defined through CVA
-variants and component-specific props. If you find yourself reaching for
-a fourth or fifth value, that's a signal the long tail belongs to CSS
-custom properties, not props.
+Use props for finite, named options (2–3 choices). If you find yourself
+reaching for a fourth or fifth value, that's a signal the long tail
+belongs to CSS custom properties, not props.
+
+Props on Ora components fall into one of four categories (see
+[ADR-0007](../adr/0007-component-prop-taxonomy.md) for the full
+taxonomy and the Appearance vs Structure test):
+
+- **Appearance** — stylistic CVA branch (`variant`, `size`, `theme`).
+  Decorates a surface.
+- **Structure** — structural CVA branch (`orientation`, `attached`).
+  Arranges parts.
+- **Behavior** — runtime, non-visual prop (`multiple`, `modal`,
+  exposed `disabled`). Often forwarded to a Base UI primitive.
+- **Content** — what fills the component's slots/children. Template
+  - inputs.
+
+The taxonomy is the single source of truth for: Entry schema
+categorisation, Controls sidebar grouping, and the docs API Reference
+table grouping. Forwarded passthrough props (`className`, `ref`,
+`aria-*`, generic Base UI forwards) are intentionally not categorised
+— the "all other props are forwarded" footer in component docs covers
+them.
 
 ### CSS custom properties
 
@@ -190,22 +208,14 @@ properties don't cover.
 
 ### Documenting the interface
 
-Each component file should include a brief comment block listing its
-CSS custom properties and slots. This makes the interface discoverable
-without reading through the Tailwind classes:
+Component source files do **not** carry header JSDoc blocks listing
+CSS custom properties or slots. Users own the source after installing
+via the shadcn registry; comment blocks become clutter in the
+consumer's codebase.
 
-```tsx
-/**
- * CSS custom properties:
- * --indicator-size    Thickness of the active indicator (default: 2px)
- *
- * Slots: tabs, tabs-list, tabs-tab, tabs-indicator, tabs-panel
- */
-```
-
-This block also serves as the basis for documentation pages and is
-useful regardless of distribution model — copy-paste users see it in
-the file, package users see it in the docs.
+Document CSS custom properties and slots on the component's docs page
+instead. The exact placement within the docs page is open — revisit
+when a richer surface is needed.
 
 ---
 

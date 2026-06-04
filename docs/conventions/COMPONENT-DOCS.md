@@ -89,22 +89,42 @@ For more information, see the Base UI [Accordion API Reference](https://base-ui.
 
 ### Components with own props
 
-Components that define CVA variants, custom props, or non-trivial logic get a full table. If there are multiple sub-components, use `### SubComponentName` headings. End with a forwarding note:
+Components that define CVA variants, custom props, or non-trivial logic
+get a full table. If there are multiple sub-components, use
+`### SubComponentName` headings. Within a sub-component, group props by
+the [taxonomy categories](../adr/0007-component-prop-taxonomy.md)
+(Appearance / Structure / Behavior) using `####` subheadings. Skip the
+subheadings when the sub-component has ≤2 own props — overkill at that
+size; a single flat table is fine.
+
+End with a forwarding note:
 
 ```mdx
 ## API Reference
 
 ### ToggleGroup
 
-| Prop          | Type                             | Default        |
-| ------------- | -------------------------------- | -------------- |
-| `variant`     | `"soft" \| "outline" \| "solid"` | `"soft"`       |
-| `orientation` | `"horizontal" \| "vertical"`     | `"horizontal"` |
+#### Appearance
+
+| Prop      | Type                             | Default  |
+| --------- | -------------------------------- | -------- |
+| `variant` | `"soft" \| "outline" \| "solid"` | `"soft"` |
+
+#### Structure
+
+| Prop          | Type                         | Default        |
+| ------------- | ---------------------------- | -------------- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
 
 ### ToggleGroupItem
 
 All other props are forwarded to the underlying [Base UI Toggle](https://base-ui.com/components/toggle) primitive.
 ```
+
+Categories come from the component's Playground Entry schema — when a
+schema declares a prop's `category`, the docs table follows. Content
+props are not in the API table (they're a Playground concern, not a
+prop the consumer passes); they're shown via examples on the docs page.
 
 ---
 
