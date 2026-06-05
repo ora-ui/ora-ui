@@ -7,174 +7,213 @@ Reference for the Ora token architecture. Update as the system evolves.
 ## Philosophy
 
 - Tokens express intent, not scale position.
-- Tokens resolve to the same level of visual contrast in both light and dark mode. Mode-specific behavior belongs in components.
-- Alpha values for interactive states so they adapt to any surface.
+- Tokens resolve to the same level of visual contrast in both light and
+  dark mode. Mode-specific behavior belongs in components.
+- Alpha values for interactive surfaces so they adapt to any background.
 - Define the fewest tokens that cover real use cases.
+
+---
+
+## Three-tier model
+
+Tokens live in three tiers. Each tier has a distinct job and a distinct
+contract with the tier above it.
+
+1. **Scale (palette)** — palette steps per hue (`--gray-*`,
+   `--accent-*`). Pure values, no intent. A theme _is_ a scale
+   implementation: it provides the step values.
+
+2. **Semantic layer** — a small, fixed-shape set of named roles
+   (18 tokens), mapped onto scale steps. **This is what components
+   read.** Components never reference the scale directly. Themes
+   reimplement this layer to swap aesthetics; the role names and their
+   intent stay constant.
+
+3. **Component vars** — opt-in, per-component CSS custom properties for
+   expression the semantic layer doesn't cover (shadows, blurs,
+   decoration). Default to semantic roles; override in isolation. See
+   [Component interface — CSS custom properties](INDEX.md#css-custom-properties).
+
+The semantic layer is the contract everything else is built around:
+components read it, themes implement it, and the 18-token shape is fixed
+so every theme covers the same slots. See
+[ADR-0008](../adr/0008-interim-role-layer-for-tokens.md) for the
+decision record.
 
 ---
 
 ## Domains
 
+The 18 semantic tokens group into six domains.
+
 ### Background & Surfaces
 
 ```css
 --background   /* page/app floor */
---surface      /* panels, sidebars, elevated containers */
+--surface-1    /* subtle raised container */
+--surface-2    /* more raised */
+--surface-3    /* most raised */
 --overlay      /* modals, popovers, floating elements */
---ui           /* component backgrounds (alpha-based for layering) */
 ```
 
-Surfaces establish visual hierarchy. `--ui` is alpha-based so it adapts to any background surface.
+`--surface-N` is an ordinal ladder: 1 is the most subtle raise, 3 the
+most raised. `--overlay` is distinct from the surface ladder — it
+matches `--background` in light mode and steps up to the first solid
+surface in dark mode, so floating elements read correctly against the
+page in both.
 
-**Current values:**
+### UI
+
+Soft interactive container backgrounds. Alpha-based so they layer over
+any surface, in three strength levels.
 
 ```css
-:root {
-  --background: oklch(0.985 0 0);
-  --surface: oklch(0.97 0 0);
-  --overlay: oklch(0.985 0 0);
-  --ui: oklch(0 0 0 / 0.059);
-}
+--ui-1   /* resting soft container */
+--ui-2   /* one step stronger */
+--ui-3   /* strongest */
 ```
 
----
+A component maps interaction states onto these levels by visual intent,
+not by a fixed state→token rule (see
+[Naming convention](#naming-convention-ordinal-strength-not-interaction-state)).
 
-### Interactive States
+### Solid
 
-Interactive state tokens use alpha values so they work on any background.
+Emphatic fill, for solid buttons, badges, and similar high-emphasis
+surfaces. Two strength levels.
 
 ```css
---ui           /* component resting background */
---hover        /* hover state background */
---active       /* active/pressed state background */
---fill         /* solid filled backgrounds (buttons, badges) */
+--solid-1   /* resting solid fill */
+--solid-2   /* stronger solid fill */
 ```
 
-**Current values:**
+Hover/active modulation on a solid surface is done with alpha against
+`--solid-2`, not with additional tokens.
+
+### Borders
+
+Two kinds, and the value type _is_ the distinction.
 
 ```css
-:root {
-  --ui: oklch(0 0 0 / 0.059);
-  --hover: oklch(0 0 0 / 0.091);
-  --active: oklch(0 0 0 / 0.123);
-  --fill: oklch(0.14 0 0);
-}
+--separator   /* layout/structural lines — solid */
+--border-1    /* ui-element border — alpha */
+--border-2    /* stronger ui-element border — alpha */
 ```
 
-**Component-scoped gradients:**
+- `--separator` is **solid**. Use it for layout/structural lines:
+  between sections, panel edges, table rows. These belong to the page
+  chrome and don't tint with theme.
+- `--border-N` are **alpha**. Use them for interactive ui-element
+  borders: inputs, outline buttons, hairlines on themed surfaces. They
+  tint correctly when an ancestor sets `data-theme`.
 
-Variants can have gradients applied via CSS using `[data-slot]` and `[data-variant]` selectors. These layer on top of the semantic token backgrounds:
+### Outline
 
 ```css
-[data-slot='button'][data-variant='soft'] {
-  background-color: transparent;
-  background-image: linear-gradient(
-    to top,
-    color-mix(in oklch, var(--ui) 100%, transparent),
-    color-mix(in oklch, var(--ui) 50%, transparent)
-  );
-}
+--ring   /* focus ring and decorative outlines */
 ```
 
-Inputs use the same tokens but without interaction gradients (static background only).
-
----
-
-### Lines
-
-```css
---line          /* standard dividers, solid */
---line-subtle   /* decorative separators, lighter */
---line-ui       /* interactive component borders (alpha-based) */
-```
-
-**Current values:**
-
-```css
-:root {
-  --line: oklch(0.925 0 0);
-  --line-subtle: oklch(0.945 0 0);
-  --line-ui: oklch(0 0 0 / 0.112);
-}
-```
-
----
+One value covers both standard and solid backgrounds — `outline-offset`
+handles the difference, so there's no separate on-solid ring token.
 
 ### Foreground
 
-```css
---primary      /* primary text */
---secondary    /* secondary/muted text */
---muted        /* tertiary/disabled text */
---disabled     /* disabled state text */
---on-fill      /* text on solid/filled backgrounds */
---ui-label     /* component label text (theme-aware) */
-```
-
-Foreground tokens are solid (not alpha) to guarantee contrast. `--ui-label` adapts per theme via `[data-theme]` selectors.
-
-**Current values:**
+Text and icon fills. All four foreground roles live here — the
+contextual companions (`--ui-label`, `--on-solid`) are foreground
+values used in the same situations as the text tiers, so they belong in
+Foreground rather than under their paired surface domain.
 
 ```css
-:root {
-  --primary: oklch(0.07 0 0);
-  --secondary: oklch(0.45 0 0);
-  --muted: oklch(0.556 0 0);
-  --disabled: oklch(0.7 0 0);
-  --on-fill: oklch(0.985 0 0);
-}
+--primary     /* first-tier text/icon */
+--secondary   /* second-tier text/icon */
+--ui-label    /* foreground when painting on a --ui-N surface */
+--on-solid    /* foreground when painting on a --solid-N surface */
 ```
+
+`--primary` / `--secondary` are the two-tier hierarchy. `--ui-label`
+and `--on-solid` are contextual — reach for them when the surface
+underneath is a ui or solid token respectively. All four remap honestly
+under `[data-theme]`.
 
 ---
 
-### Focus
+## Naming convention: ordinal strength, not interaction state
 
-```css
---focus         /* focus ring on standard backgrounds */
---focus-fill    /* focus ring on solid/filled backgrounds */
+Tokens in a strength ladder (`--ui-N`, `--solid-N`, `--surface-N`,
+`--border-N`) are named by **intensity**, not by the interaction state
+they "belong to". A component maps any interaction state to any strength
+level based on visual intent.
+
+```tsx
+// Button: default mapping — hover steps up one, active steps up two
+'bg-ui-1 hover:bg-ui-2 active:bg-ui-3';
+
+// Toggle: pressed wants the hover weight, not a deeper one
+'data-[pressed]:bg-ui-2';
+
+// Tabs: selected wants the strongest weight this component has
+'data-[selected]:bg-ui-3';
 ```
 
-**Current values:**
-
-```css
-:root {
-  --focus: oklch(0.85 0 0);
-  --focus-fill: oklch(0.35 0 0);
-}
-```
+The strength ladder is the contract; the state→strength mapping is a
+component decision. This is the explicit fix for the old `active/75`,
+`hover/50` escape-hatch family, where alpha was used to wrong-name a
+tone into a different state.
 
 ---
 
-### Theme Palettes
+## Escape hatches: alpha modifiers
 
-Each theme (accent, destructive) defines a full palette of semantic tokens:
+Components may use alpha modifiers (`bg-ui-1/50`, `bg-ui-2/50`,
+`border-border-1/80`) for **subtle contextual modulation of the same
+role**. This is sanctioned, not a smell.
+
+The canonical case: a surface button variant has a border, so its
+container fill wants slightly less weight than a soft button's container
+fill — same role, contextually softer. Adding a fourth strength level
+for "border-compensated" would inflate the contract; alpha modulation is
+honest.
+
+The line between sanctioned modulation and a missing token is **intent**:
+
+- **Sanctioned** — same role, contextually softer/stronger because of
+  an adjacent affordance.
+- **Missing token** — reaching for a value that conceptually wants its
+  own name. (The old `bg-fill/90` for solid-button hover was this; the
+  fix was to add `--solid-2`, not normalise the hack.)
+
+Reviewers call out ambiguous cases during PR review.
+
+---
+
+## Theme remapping
+
+`[data-theme="X"]` remaps the semantic layer onto a themed scale.
+Components read semantic roles everywhere and automatically adapt to the
+current theme — no runtime style calculation, no per-component theme
+code.
 
 ```css
-/* Accent palette */
---accent-ui           /* component backgrounds */
---accent-fill         /* solid fills */
---accent-hover        /* hover state */
---accent-active       /* active state */
---accent-focus        /* focus ring */
---accent-focus-fill   /* focus ring on fills */
---accent-line-ui      /* borders */
---accent-secondary    /* secondary text */
---accent-primary      /* primary text */
---accent-on-fill      /* text on fills */
-```
+/* Default (gray) theme — no attribute needed */
+:root {
+  --ui-1: /* gray scale step */;
+  --solid-1: /* gray scale step */;
+  /* ...the full 18-token set... */
+}
 
-When `data-theme="accent"` is set, the base tokens (`--ui`, `--fill`, etc.) are remapped to the accent variants:
-
-```css
+/* Accent theme — same 18 slots, themed scale */
 [data-theme='accent'] {
-  --ui: var(--accent-ui);
-  --fill: var(--accent-fill);
-  --hover: var(--accent-hover);
+  --ui-1: /* accent scale step */;
+  --solid-1: /* accent scale step */;
   /* ... */
 }
 ```
 
-This allows components to use semantic tokens everywhere while automatically adapting to the current theme.
+The fixed 18-token shape is what makes this work: every themed palette
+implements the **same** set of slots, so there's no asymmetric coverage
+and no silent fallback to gray. New themes — success, warning, a brand
+palette, or an entirely different aesthetic (game UI, expressive sites)
+— drop into the same shape by providing scale values for all 18 roles.
 
 ---
 
@@ -186,6 +225,13 @@ Radius tokens enable a UI that moves uniformly in response to a single
 dynamic value — `--radius`. Changing this one property reshapes every
 component that subscribes to it, giving end users full control over the
 feel of their interface with no per-component work.
+
+> **Don't animate `--radius`.** Radius tokens carry `calc()` / `min()`
+> in their chain; putting `--radius` on a transition,
+> `requestAnimationFrame` loop, or `mousemove` handler triggers a
+> full-tree style recalculation per frame. Treat it as static in
+> production — set it once and leave it. (Color-token reassignment for
+> mode switching is fine: a single, infrequent recalculation.)
 
 The system has three layers:
 
@@ -246,27 +292,9 @@ className = 'rounded-full';
 
 ---
 
-## Performance Contract
-
-Tokens are designed for **static or infrequent changes** — set a value and
-leave it. Changing a `:root`-scoped token triggers a style recalculation
-across every element that subscribes to it.
-
-- **Do not animate or continuously toggle root-scoped tokens.** Putting
-  `--radius` on a `transition`, `requestAnimationFrame` loop, or
-  `mousemove` handler causes a full-tree recalculation per frame.
-- **Color token reassignment (e.g. mode switching) is fine** — it's a
-  single, infrequent recalculation that browsers handle well.
-- **Radius tokens carry higher cost** than color tokens due to `calc()` /
-  `min()` in the chain. Treat them as static in production.
-
-The dynamic variable chain is a **development-time affordance** — useful for
-exploring how the UI looks at different configurations. For production, set
-your values once and leave them.
-
----
-
 ## Open Questions
 
-- Whether additional surface levels are needed — deferred until concrete use cases arise.
-- Whether to add more theme palettes (success, warning, info) or keep minimal set.
+- Whether additional surface levels beyond `--surface-3` are needed —
+  deferred until concrete use cases arise.
+- Whether to add more theme palettes (success, warning, info) or keep a
+  minimal set.

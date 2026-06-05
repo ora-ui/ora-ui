@@ -27,7 +27,7 @@ our effort on the styling and design layer.
 ## Tokens express intent, not scale
 
 Token names describe what they do, not where they sit on a scale.
-`--hover` tells you when to use it. `--gray-200` does not. This means
+`--separator` tells you when to use it. `--gray-400` does not. This means
 the same token produces the correct visual contrast in both light and
 dark modes without any conditional logic.
 
