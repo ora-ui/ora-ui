@@ -171,3 +171,28 @@ One special entry exists outside `registry/ui/`:
 
 Token/theme distribution is documented, not enforced via registryDependencies,
 to allow incremental adoption without requiring consumers to adopt Ora's token system.
+
+### Semantic layer
+
+The middle tier of Ora's three-tier token architecture ([[Scale]] →
+Semantic layer → component vars). A small, fixed-shape set of named
+roles — backgrounds, surfaces, ui strengths, solids, borders, ring,
+foregrounds — that components actually read. Components never reach
+into the Scale directly; they read semantic roles, and the roles map
+onto Scale steps. A theme reimplements this layer to swap aesthetics
+while the role names and their intent stay constant.
+
+See `docs/conventions/TOKEN-SYSTEM.md` for the full role list and
+naming convention.
+
+### Scale
+
+The palette tier of the three-tier token architecture — raw step
+values per hue (e.g. `--gray-*`, `--accent-*`). Pure values, no
+intent. A theme is a Scale implementation: it supplies the step values
+that the [[Semantic layer]] maps onto. New themes plug in by providing
+Scale values for the same set of roles rather than forking the
+component set.
+
+See `docs/conventions/TOKEN-SYSTEM.md` for how Scales back the
+semantic roles.
