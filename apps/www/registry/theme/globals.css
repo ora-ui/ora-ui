@@ -45,6 +45,39 @@
   --on-fill: var(--gray-on-fill);
   --ui-label: var(--primary);
 
+  /* ------------------------------------------------
+     Semantic layer (ADR-0008) — 18-token contract.
+     Additive: legacy tokens (--surface, --hover, --active,
+     --fill, --line-ui …) stay in place; the layer below is
+     what ported components read. Default (gray) values live
+     on --gray-* role tokens; themed palettes override via
+     [data-theme] reading their own --<palette>-* tokens.
+     Bare aliases (--border, --interactive) map to step 1.
+     ------------------------------------------------ */
+  /* Surfaces — --background, --surface-1, --surface-2, --overlay defined above */
+  --subtle: var(--gray-surface); /* solid, subtler than --background */
+  /* UI — soft interactive container (single) */
+  --ui: var(--gray-ui);
+  /* Interactive — container interaction states, ordinal strength */
+  --interactive-1: var(--gray-interactive-1);
+  --interactive-2: var(--gray-interactive-2);
+  --interactive: var(--interactive-1);
+  /* Solid — emphatic fill + its interaction state */
+  --solid: var(--gray-fill);
+  --solid-interactive: var(--gray-solid-interactive);
+  /* Borders — separator (solid, above) + alpha ui borders */
+  --border-1: var(--gray-line-ui);
+  --border-2: var(--gray-border-2);
+  --border: var(--border-1);
+  /* Foreground — --primary, --secondary, --ui-label defined above */
+  --on-solid: var(--gray-on-fill);
+
+  /* gray role tokens for the new semantic slots */
+  --gray-interactive-1: oklch(0 0 0 / 0.055);
+  --gray-interactive-2: oklch(0 0 0 / 0.08);
+  --gray-solid-interactive: color-mix(in oklab, var(--gray-950), var(--gray-900));
+  --gray-border-2: oklch(0 0 0 / 0.153);
+
   --gray-background: oklch(1 0 0);
   --gray-surface: oklch(0.982 0 0);
   --gray-overlay: oklch(1 0 0);
@@ -77,6 +110,8 @@
   --accent-secondary: oklch(0.556 0.162 252.2);
   --accent-primary: oklch(0.324 0.096 258.8);
   --accent-on-fill: white;
+  --accent-solid-interactive: oklch(0.622 0.183 251.7); /* blue-800 */
+  --accent-border-2: oklch(0.564 0.204 257.51 / 0.569); /* blue-a600 */
 
   --success-ui: oklch(0.631 0.212 142.843 / 0.09);
   --success-fill: oklch(0.651 0.147 147.392);
@@ -89,6 +124,8 @@
   --success-secondary: oklch(0.526 0.13 147.36);
   --success-primary: oklch(0.327 0.054 146.815);
   --success-on-fill: white;
+  --success-solid-interactive: oklch(0.612 0.141 147.431); /* green-800 */
+  --success-border-2: oklch(0.55 0.181 143.51 / 0.596); /* green-a600 */
 
   --warning-ui: oklch(0.879 0.18 93.577 / 0.247);
   --warning-fill: oklch(0.867 0.176 90.669);
@@ -101,6 +138,8 @@
   --warning-secondary: oklch(0.572 0.117 86.53);
   --warning-primary: oklch(0.352 0.045 90.33);
   --warning-on-fill: black;
+  --warning-solid-interactive: oklch(0.838 0.165 90.363); /* yellow-800 */
+  --warning-border-2: oklch(0.696 0.143 85.473 / 0.773); /* yellow-a600 */
 
   /* destructive palette */
   --destructive-ui: oklch(0.65 0.237 33.432 / 0.106);
@@ -114,6 +153,8 @@
   --destructive-secondary: oklch(0.532 0.199 32.458 / 0.839);
   --destructive-primary: oklch(0.243 0.081 37.215 / 0.867);
   --destructive-on-fill: white;
+  --destructive-solid-interactive: oklch(0.625 0.181 34.021); /* red-800 */
+  --destructive-border-2: oklch(0.577 0.214 32.719 / 0.522); /* red-a600 */
 
   /* --primary-foreground: oklch(0.985 0 0); */
   /* --secondary-foreground: oklch(0.205 0 0); */
@@ -157,6 +198,24 @@
   --disabled: var(--gray-disabled);
   --on-fill: var(--gray-on-fill);
 
+  /* Semantic layer (ADR-0008) — same 18 slots, dark values */
+  --subtle: var(--gray-surface);
+  --ui: var(--gray-ui);
+  --interactive-1: var(--gray-interactive-1);
+  --interactive-2: var(--gray-interactive-2);
+  --interactive: var(--interactive-1);
+  --solid: var(--gray-fill);
+  --solid-interactive: var(--gray-solid-interactive);
+  --border-1: var(--gray-line-ui);
+  --border-2: var(--gray-border-2);
+  --border: var(--border-1);
+  --on-solid: var(--gray-on-fill);
+
+  --gray-interactive-1: oklch(1 0 0 / 0.075);
+  --gray-interactive-2: oklch(1 0 0 / 0.115);
+  --gray-solid-interactive: color-mix(in oklab, var(--gray-950), var(--gray-900));
+  --gray-border-2: oklch(1 0 0 / 0.173);
+
   --gray-background: oklch(0.105 0 0);
   --gray-surface: oklch(0.145 0 0);
   --gray-overlay: oklch(0.178 0 0);
@@ -187,6 +246,8 @@
   --accent-ring: oklch(0.662 0.184 252.588 / 0.588);
   --accent-secondary: oklch(0.746 0.16 251.5);
   --accent-primary: oklch(0.905 0.048 249.319);
+  --accent-solid-interactive: oklch(0.612 0.19 253.269); /* blue-800 */
+  --accent-border-2: oklch(0.664 0.181 252.459 / 0.725); /* blue-a600 */
 
   --success-ui: oklch(0.894 0.202 145.082 / 0.106);
   --success-fill: oklch(0.651 0.147 147.392);
@@ -199,6 +260,8 @@
   --success-secondary: oklch(0.78 0.143 147.473);
   --success-primary: oklch(0.91 0.077 147.124);
   --success-on-fill: white;
+  --success-solid-interactive: oklch(0.61 0.146 147.408); /* green-800 */
+  --success-border-2: oklch(0.895 0.189 146.676 / 0.439); /* green-a600 */
 
   --warning-ui: oklch(0.804 0.17 74.67 / 0.11);
   --warning-fill: oklch(0.82 0.165 90.325);
@@ -211,6 +274,8 @@
   --warning-secondary: oklch(0.871 0.162 90.498);
   --warning-primary: oklch(0.936 0.067 91.506);
   --warning-on-fill: black;
+  --warning-solid-interactive: oklch(0.787 0.161 89.593); /* yellow-800 */
+  --warning-border-2: oklch(0.877 0.16 90.2 / 0.471); /* yellow-a600 */
 
   --destructive-ui: oklch(0.647 0.238 32.438 / 0.165);
   --destructive-fill: oklch(0.664 0.179 34.086);
@@ -223,6 +288,8 @@
   --destructive-secondary: oklch(0.77 0.138 35.323);
   --destructive-primary: oklch(0.898 0.047 32.8);
   --destructive-on-fill: white;
+  --destructive-solid-interactive: oklch(0.625 0.179 34.149); /* red-800 */
+  --destructive-border-2: oklch(0.708 0.184 33.964 / 0.655); /* red-a600 */
 }
 
 /* ------------------------------------------------
@@ -245,6 +312,18 @@
   --primary: var(--accent-primary);
   --on-fill: var(--accent-on-fill);
   --ui-label: var(--accent-secondary);
+
+  /* semantic layer (ADR-0008) */
+  --ui: var(--accent-ui);
+  --interactive-1: var(--accent-hover);
+  --interactive-2: var(--accent-active);
+  --interactive: var(--interactive-1);
+  --solid: var(--accent-fill);
+  --solid-interactive: var(--accent-solid-interactive);
+  --border-1: var(--accent-line-ui);
+  --border-2: var(--accent-border-2);
+  --border: var(--border-1);
+  --on-solid: var(--accent-on-fill);
 }
 
 [data-theme='destructive'] {
@@ -260,6 +339,18 @@
   --primary: var(--destructive-primary);
   --on-fill: var(--destructive-on-fill);
   --ui-label: var(--destructive-secondary);
+
+  /* semantic layer (ADR-0008) */
+  --ui: var(--destructive-ui);
+  --interactive-1: var(--destructive-hover);
+  --interactive-2: var(--destructive-active);
+  --interactive: var(--interactive-1);
+  --solid: var(--destructive-fill);
+  --solid-interactive: var(--destructive-solid-interactive);
+  --border-1: var(--destructive-line-ui);
+  --border-2: var(--destructive-border-2);
+  --border: var(--border-1);
+  --on-solid: var(--destructive-on-fill);
 }
 
 [data-theme='warning'] {
@@ -275,6 +366,18 @@
   --primary: var(--warning-primary);
   --on-fill: var(--warning-on-fill);
   --ui-label: var(--warning-secondary);
+
+  /* semantic layer (ADR-0008) */
+  --ui: var(--warning-ui);
+  --interactive-1: var(--warning-hover);
+  --interactive-2: var(--warning-active);
+  --interactive: var(--interactive-1);
+  --solid: var(--warning-fill);
+  --solid-interactive: var(--warning-solid-interactive);
+  --border-1: var(--warning-line-ui);
+  --border-2: var(--warning-border-2);
+  --border: var(--border-1);
+  --on-solid: var(--warning-on-fill);
 }
 
 [data-theme='success'] {
@@ -290,6 +393,18 @@
   --primary: var(--success-primary);
   --on-fill: var(--success-on-fill);
   --ui-label: var(--success-secondary);
+
+  /* semantic layer (ADR-0008) */
+  --ui: var(--success-ui);
+  --interactive-1: var(--success-hover);
+  --interactive-2: var(--success-active);
+  --interactive: var(--interactive-1);
+  --solid: var(--success-fill);
+  --solid-interactive: var(--success-solid-interactive);
+  --border-1: var(--success-line-ui);
+  --border-2: var(--success-border-2);
+  --border: var(--border-1);
+  --on-solid: var(--success-on-fill);
 }
 
 @theme inline {
@@ -323,6 +438,20 @@
   --color-disabled: var(--disabled);
   --color-on-fill: var(--on-fill);
   --color-ui-label: var(--ui-label);
+
+  /* semantic layer (ADR-0008) */
+  --color-subtle: var(--subtle);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-interactive-1: var(--interactive-1);
+  --color-interactive-2: var(--interactive-2);
+  --color-interactive: var(--interactive);
+  --color-solid: var(--solid);
+  --color-solid-interactive: var(--solid-interactive);
+  --color-border-1: var(--border-1);
+  --color-border-2: var(--border-2);
+  --color-border: var(--border);
+  --color-on-solid: var(--on-solid);
 
   --color-gray-background: var(--gray-background);
   --color-gray-surface: var(--gray-surface);

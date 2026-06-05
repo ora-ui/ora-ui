@@ -71,33 +71,46 @@ semantic layer in the middle:
    isolation. Out of scope for this ADR; covered case-by-case as
    components grow.
 
-### The semantic layer — 17 tokens
+### The semantic layer — 18 tokens
 
-| Domain                | Tokens                                                                   | Notes                                                                                                                                                                                                            |
-| --------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Background & Surfaces | `--background`, `--surface-1`, `--surface-2`, `--surface-3`, `--overlay` | Ordinal ladder (1 = subtle raised → 3 = most raised). `--overlay` is distinct: matches `--background` in light mode, steps up to the first solid surface in dark.                                                |
-| UI                    | `--ui-1`, `--ui-2`, `--ui-3`                                             | Soft interactive container, alpha-based, three strength levels.                                                                                                                                                  |
-| Solid                 | `--solid-1`, `--solid-2`                                                 | Emphatic fill, two strength levels. Hover/active modulation via alpha against `--solid-2`.                                                                                                                       |
-| Borders               | `--separator`, `--border-1`, `--border-2`                                | `--separator` is solid (layout/structural). `--border-N` are alpha (ui-element borders that tint with theme).                                                                                                    |
-| Outline               | `--ring`                                                                 | Focus ring and decorative outlines. One value works for solid backgrounds via outline-offset.                                                                                                                    |
-| Foreground            | `--primary`, `--secondary`, `--ui-label`, `--on-solid`                   | Covers text and icon fills. `--primary`/`--secondary` are the two-tier hierarchy. `--ui-label` and `--on-solid` are contextual companions, used when painting on `--ui-N` and `--solid-N` surfaces respectively. |
+| Domain                | Tokens                                                                | Notes                                                                                                                                                                                                                        |
+| --------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Background & Surfaces | `--background`, `--subtle`, `--surface-1`, `--surface-2`, `--overlay` | `--subtle` is a solid surface one notch above the floor. `--surface-N` is an ordinal ladder (1 = subtle raised → 2 = most raised). `--overlay` matches `--background` in light, steps up to the first solid surface in dark. |
+| UI                    | `--ui`, `--interactive-1`, `--interactive-2`                          | Soft interactive container, alpha-based. `--ui` rests; `--interactive-N` are its interaction weights. Bare `--interactive` aliases step 1.                                                                                   |
+| Solid                 | `--solid`, `--solid-interactive`                                      | Emphatic fill: a resting fill plus its interaction weight. Replaces the `bg-fill/90` hover hack. Deeper states handled per-component.                                                                                        |
+| Borders               | `--separator`, `--border-1`, `--border-2`                             | `--separator` is solid (layout/structural). `--border-N` are alpha (ui-element borders that tint with theme). Bare `--border` aliases step 1.                                                                                |
+| Outline               | `--ring`                                                              | Focus ring and decorative outlines. One value works for solid backgrounds via outline-offset.                                                                                                                                |
+| Foreground            | `--primary`, `--secondary`, `--ui-label`, `--on-solid`                | Covers text and icon fills. `--primary`/`--secondary` are the two-tier hierarchy. `--ui-label` and `--on-solid` are contextual companions, used when painting on `--ui` and `--solid` surfaces respectively.                 |
 
-### Naming convention: ordinal strength, not interaction state
+(Bare aliases `--interactive`, `--border` are ergonomic duplicates of step 1, not counted in the 18.)
 
-Tokens in a strength ladder (`--ui-N`, `--solid-N`, `--surface-N`,
-`--border-N`) are named by intensity, not by which interaction
-state they "belong to". A component is free to map any interaction
-state to any strength level based on visual intent:
+### Naming convention: ordinal ladders + a rest/interactive split
 
-- Button `:hover` reads `--ui-2`; `:active` reads `--ui-3`. Default
-  mapping.
-- Toggle `[data-pressed]` reads `--ui-2` because pressed wants that
-  weight, not deeper. Correct usage, not a workaround.
-- Tabs `[data-selected]` reads `--ui-3`. Selected wants the strongest
-  weight in this component.
+Two shapes, each applied where it is honest:
 
-The strength ladder is the contract; the state→strength mapping is a
-component decision. This is the explicit fix for the `active/75`
+- **Ordinal strength** where a true intensity ladder exists
+  (`--surface-N`, `--border-N`): named by intensity, not by which
+  state they "belong to". A component maps any state to any level by
+  visual intent.
+- **Rest / interactive split** where the meaningful distinction is
+  interaction rather than raw intensity (`--ui` vs `--interactive-N`,
+  `--solid` vs `--solid-interactive`): the resting token is where a
+  control sits, the interactive token(s) where it goes when touched.
+
+The original draft made everything a pure ordinal ladder (`--ui-N`,
+`--solid-N`). In practice the soft-container and solid families have a
+clear rest state plus one or two interaction weights, and naming them
+`--ui` / `--interactive-N`, `--solid` / `--solid-interactive` reads
+truer than `--ui-1/2/3`. The interaction problem the ordinal scheme
+was solving lived in the old `--hover` / `--active` _state_ tokens, not
+in `--ui` itself — so `--ui` returns as the single resting container,
+and the interaction weights become an ordinal `--interactive-N`
+sub-ladder.
+
+Which state reads which token stays a component decision (e.g. a
+Toggle's pressed state may read `--interactive-1` rather than the
+deeper weight). States past what the tokens name are handled via alpha
+or component vars. This is the fix for the `active/75`, `bg-fill/90`
 escape-hatch family.
 
 ### Layout vs ui borders: solid vs alpha
@@ -117,7 +130,7 @@ not new tokens.
 
 ### Alpha modifiers as a sanctioned escape hatch
 
-Components are free to use `bg-ui-1/50`, `bg-ui-2/50`, `border-border-1/80`
+Components are free to use `bg-ui/50`, `bg-interactive-1/50`, `border-border-1/80`
 etc. for **subtle contextual modulation of the same role**. The
 canonical case: a surface button variant has a border, so its
 container fill wants less weight than a soft button's container fill
@@ -131,15 +144,15 @@ The line between sanctioned modulation and "missing token" is intent:
   adjacent affordance.
 - Missing token: reaching for a value that conceptually wants its own
   name (e.g. `bg-fill/90` for solid button hover — the fix was to add
-  `--solid-2`, not normalise the hack).
+  `--solid-interactive`, not normalise the hack).
 
 ### Theme remapping
 
 `[data-theme="X"]` continues to remap the semantic layer onto themed
-scales. The 17-token contract means each themed palette must
+scales. The 18-token contract means each themed palette must
 implement the same set of slots — no more asymmetric coverage. New
 themes (success, warning, a brand palette, an entire alternative
-aesthetic) implement the same 17 slots.
+aesthetic) implement the same 18 slots.
 
 ## Alternatives considered
 
@@ -158,7 +171,7 @@ Rejected. Three problems:
    to override `--button-*`, `--input-*`, `--card-*`, … even when the
    intent is "same change everywhere". The semantic layer collapses
    that into one or two lines.
-3. Tailwind ergonomics suffer. `bg-ui-2 hover:bg-ui-3` reads
+3. Tailwind ergonomics suffer. `bg-ui hover:bg-interactive-1` reads
    beautifully; `bg-[--button-bg] hover:bg-[--button-bg-hover]`
    doesn't. The semantic layer lets utility classes stay terse.
 4. The "shared interfaces" rescue recreates the role layer at a less
@@ -170,11 +183,18 @@ Rejected. Three problems:
 Keep `--ui-hover`/`--ui-active`, document that components may map any
 interaction state to any level by intent.
 
-Rejected. Too clever for a contract layer 30+ contributors will
-touch. The token name encodes a contract, and "name says hover but
-component uses it for pressed" requires reading docs to use
-correctly. Ordinal naming is honest: the contract is intensity, and
-the name describes intensity.
+Rejected as the _wholesale_ scheme. Naming every level after a
+specific interaction state (`--ui-hover` used for a pressed state) is
+too clever for a contract layer 30+ contributors touch. But the final
+design is not pure-ordinal either: it keeps ordinal where a real
+intensity ladder exists (`--surface-N`, `--border-N`) and uses a
+rest/interactive split where interaction is the actual distinction
+(`--ui`/`--interactive-N`, `--solid`/`--solid-interactive`).
+`--interactive` is not a specific-state name — it's "the interacted
+weight", with the exact state→token mapping left to the component.
+That keeps the honesty (the name describes what the value is) without
+forcing soft-container and solid fills through an awkward `-1/2/3`
+ladder.
 
 ### Radix-12 ramp as the contract
 
@@ -231,16 +251,17 @@ mental model.
 
 **Positive:**
 
-- 17 semantic tokens, down from ~25. Less to remember, fewer
+- 18 semantic tokens, down from ~25. Less to remember, fewer
   ambiguous reaches.
-- Symmetric strength ladders for `--ui-N` and `--solid-N` kill the
-  `bg-fill/90` / `bg-ui/25` opacity-hatch family.
-- Components are free to map any interaction state to any strength
-  level by visual intent. No more state-name mismatch hacks.
+- A rest/interactive split (`--ui`/`--interactive-N`,
+  `--solid`/`--solid-interactive`) plus ordinal border/surface ladders
+  kill the `bg-fill/90` / `bg-ui/25` opacity-hatch family.
+- Components are free to map any interaction state to any interactive
+  weight by visual intent. No more state-name mismatch hacks.
 - Layout vs ui distinction encoded in `--separator` (solid) vs
   `--border-N` (alpha). The value type _is_ the role.
 - Theme remapping contract is uniform — every themed palette
-  implements the same 17 slots. New themes (game, expressive,
+  implements the same 18 slots. New themes (game, expressive,
   RYBitten-style) drop into the same shape.
 - Alpha modulation becomes a sanctioned, documented escape hatch for
   same-role contextual softening, rather than a smell.
@@ -262,7 +283,7 @@ mental model.
 ## Followups
 
 - Full rewrite of `docs/conventions/TOKEN-SYSTEM.md` against the
-  three-tier model, the 17-token contract, the naming convention,
+  three-tier model, the 18-token contract, the naming convention,
   and the alpha-modifier policy. Absorbs the existing
   `Performance Contract` section's radius warning as a one-liner
   inside the Radius section; drops the rest.

@@ -77,7 +77,7 @@ Build in this order:
 1. **Types** — define the variant, theme, and prop types
 2. **CVA definition** — structural styles using semantic tokens
    (see [Conventions — CVA variant definition](conventions/INDEX.md#cva-variant-definition))
-   - Use semantic token classes: `bg-ui-1`, `text-primary`, `border-border-1`
+   - Use semantic token classes: `bg-ui`, `text-primary`, `border-border-1`
    - Variants define visual hierarchy: solid, outline, surface, soft, ghost
    - Each variant uses appropriate semantic tokens for its background/text/border
 3. **CSS custom properties** — define component-scoped custom properties

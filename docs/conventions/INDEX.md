@@ -27,14 +27,16 @@ whether it supports theming.
 
 ### Theming via semantic tokens and data-theme
 
-Components use semantic tokens (--ui-1, --solid-1, --separator, --primary, etc.) that automatically adapt to the current theme. Theme switching happens at the CSS level through `[data-theme]` selectors, not through runtime JavaScript.
+Components use semantic tokens (--ui, --solid, --separator, --primary, etc.) that automatically adapt to the current theme. Theme switching happens at the CSS level through `[data-theme]` selectors, not through runtime JavaScript.
 
 **The pattern:**
 
 1. **Component uses semantic tokens** in Tailwind classes:
 
 ```tsx
-const buttonVariants = cva('text-ui-label bg-ui-1 hover:bg-ui-2 active:bg-ui-3 border-border-1');
+const buttonVariants = cva(
+  'text-ui-label bg-ui hover:bg-interactive-1 active:bg-interactive-2 border-border-1'
+);
 ```
 
 2. **Component sets data-theme attribute** (not style prop):
@@ -51,17 +53,17 @@ const buttonVariants = cva('text-ui-label bg-ui-1 hover:bg-ui-2 active:bg-ui-3 b
 ```css
 /* Default (gray) theme - no attribute needed */
 :root {
-  --ui-1: /* gray scale step */;
-  --solid-1: /* gray scale step */;
-  --ui-2: /* gray scale step */;
+  --ui: /* gray role token */;
+  --solid: /* gray role token */;
+  --interactive-1: /* gray role token */;
   /* ...the full 18-token set... */
 }
 
-/* Accent theme — same 18 slots, themed scale */
+/* Accent theme — same 18 slots, themed values */
 [data-theme='accent'] {
-  --ui-1: /* accent scale step */;
-  --solid-1: /* accent scale step */;
-  --ui-2: /* accent scale step */;
+  --ui: /* accent role token */;
+  --solid: /* accent role token */;
+  --interactive-1: /* accent role token */;
   /* ... */
 }
 ```
@@ -83,7 +85,7 @@ this pattern should be migrated to semantic tokens + data-theme.
 ### CVA variant definition
 
 CVA handles variant styles using semantic tokens — layout, sizing,
-spacing, and colors via token classes (bg-ui-1, text-primary, border-border-1).
+spacing, and colors via token classes (bg-ui, text-primary, border-border-1).
 
 Each component defines its own variant landscape. There is no global set —
 a button may offer solid/outline/surface/soft/ghost while a dropdown only
@@ -93,10 +95,10 @@ offers solid/soft. This is determined per component based on its needs.
 const buttonVariants = cva('text-ui-label rounded-dynamic focus-visible:outline-ring', {
   variants: {
     variant: {
-      solid: 'bg-solid-1 text-on-solid hover:bg-solid-2 active:bg-solid-2/90',
-      outline: 'border border-border-1 bg-transparent hover:bg-ui-1/30',
-      soft: 'bg-ui-1 hover:bg-ui-2 active:bg-ui-3',
-      ghost: 'hover:bg-ui-2 active:bg-ui-3',
+      solid: 'bg-solid text-on-solid hover:bg-solid-interactive active:bg-solid-interactive/90',
+      outline: 'border border-border-1 bg-transparent hover:bg-ui/30',
+      soft: 'bg-ui hover:bg-interactive-1 active:bg-interactive-2',
+      ghost: 'hover:bg-interactive-1 active:bg-interactive-2',
     },
     size: {
       sm: 'h-8 px-3 text-xs',
@@ -176,7 +178,7 @@ Use component-scoped CSS custom properties for open-ended visual
 customisation — values a user is likely to want to tweak but that don't
 warrant a named prop.
 
-Semantic tokens (`--ui-1`, `--solid-1`, `--primary`, etc.) already provide theme
+Semantic tokens (`--ui`, `--solid`, `--primary`, etc.) already provide theme
 customisation. Component-specific properties handle structural overrides:
 
 ```tsx
@@ -225,7 +227,7 @@ Tokens express intent. Use semantic tokens, never raw scale values.
 
 ```tsx
 // Good: semantic token — adapts to light/dark automatically
-className = 'bg-ui-2';
+className = 'bg-interactive-1';
 
 // Bad: raw scale value — breaks across themes
 className = 'bg-gray-100 dark:bg-gray-800';
