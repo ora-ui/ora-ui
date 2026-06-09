@@ -83,11 +83,15 @@ as components grow.
 
 Concrete color scales. For Ora's base theme:
 
-- **Gray**: track Radix's step semantics. Eleven steps,
-  `--gray-1`..`--gray-11`, plus alpha variants `--gray-a1`..`--gray-a11`.
+- **Gray**: track Radix's step _semantics_ (which step plays which
+  role) while keeping Ora's existing Tailwind-style scale names —
+  `--gray-50`..`--gray-950`, plus alpha variants
+  `--gray-a50`..`--gray-a950`. The `colors.css` comments
+  (`/* radix-step-2 */` etc.) record the Radix step each value maps to.
   Radix's step 1 (the app-background floor) is omitted at the scale
-  layer — that role is held by the semantic `--background` token, not
-  re-exposed as a scale step. The old `--gray-base` retires.
+  layer — that role is held by the
+  semantic `--background` token, not re-exposed as a scale step. The
+  old `--gray-base` retires.
 - **Accent palettes** (blue, indigo, etc.): custom values authored
   in Ora's codebase via Radix's color generator as a sketching tool,
   then vendored as Ora's values. No runtime dependency on
@@ -128,17 +132,17 @@ These read from the gray scale by default:
 
 ```css
 :root {
-  --ui-subtle: var(--gray-a2);
-  --ui: var(--gray-a3);
-  --interactive-subtle: var(--gray-a3);
-  --interactive: var(--gray-a4);
-  --interactive-strong: var(--gray-a5);
-  --solid: var(--gray-11);
-  --solid-interactive: var(--gray-10);
-  --border-subtle: var(--gray-a6);
-  --border: var(--gray-a7);
-  --border-strong: var(--gray-a8);
-  --ui-label: var(--gray-11);
+  --ui-subtle: var(--gray-a50);
+  --ui: var(--gray-a100);
+  --interactive-subtle: var(--gray-a100);
+  --interactive: var(--gray-a200);
+  --interactive-strong: var(--gray-a300);
+  --solid: var(--gray-900);
+  --solid-interactive: var(--gray-800);
+  --border-subtle: var(--gray-a400);
+  --border: var(--gray-a500);
+  --border-strong: var(--gray-a600);
+  --ui-label: var(--gray-900);
   /* …etc */
 }
 ```
@@ -184,17 +188,17 @@ accent's scale, without an intermediate role-binding token like
 
 ```css
 [data-theme='accent'] {
-  --ui-subtle: var(--blue-a2);
-  --ui: var(--blue-a3);
-  --interactive-subtle: var(--blue-a3);
-  --interactive: var(--blue-a4);
-  --interactive-strong: var(--blue-a5);
-  --solid: var(--blue-9);
-  --solid-interactive: var(--blue-10);
-  --border-subtle: var(--blue-a6);
-  --border: var(--blue-a7);
-  --border-strong: var(--blue-a8);
-  --ui-label: var(--blue-a11);
+  --ui-subtle: var(--blue-a50);
+  --ui: var(--blue-a100);
+  --interactive-subtle: var(--blue-a100);
+  --interactive: var(--blue-a200);
+  --interactive-strong: var(--blue-a300);
+  --solid: var(--blue-700);
+  --solid-interactive: var(--blue-800);
+  --border-subtle: var(--blue-a400);
+  --border: var(--blue-a500);
+  --border-strong: var(--blue-a600);
+  --ui-label: var(--blue-a900);
   /* …etc */
 }
 ```
@@ -211,7 +215,7 @@ surface tokens (`--background`, `--subtle`, `--surface-1`,
 appear under `:root` only and are absent from theme blocks
 intentionally.
 
-Dark mode is handled at the scale layer (`.dark { --gray-3: ...; }`)
+Dark mode is handled at the scale layer (`.dark { --gray-100: ...; }`)
 per Radix's standard. Semantic tokens and `[data-theme]` blocks are
 mode-agnostic — they read scale token names that self-swap.
 
@@ -289,12 +293,13 @@ directly.
 
 ### Pure scale exposure (no semantic layer)
 
-Rejected. Components reading `bg-gray-a3` / `bg-blue-a3` directly
+Rejected. Components reading `bg-gray-a100` / `bg-blue-a100` directly
 loses the semantic naming layer that makes intent legible at the read
-site. `bg-ui` says "this is a ui surface"; `bg-gray-a3` says "this is
-gray-3" and requires the reader to know that gray-3 is the ui-surface
-step. Worse, it forces theme-awareness into every component (each one
-would need to know which scale to read from per theme).
+site. `bg-ui` says "this is a ui surface"; `bg-gray-a100` says "this is
+gray-a100" and requires the reader to know that it maps to the
+ui-surface step (Radix step 3). Worse, it forces theme-awareness into
+every component (each one would need to know which scale to read from
+per theme).
 
 ### Drift detection script with CSS-inline waivers
 
@@ -344,18 +349,20 @@ intentional exceptions without polluting consumer-owned CSS.
 
 ## Followups
 
-- **Phase 1 (additive prep, can ship anytime):** rename scale tokens
-  in `colors.css` from Tailwind-style (`--gray-50`/`--gray-100`/...) to
-  Radix step style (`--gray-1`..`--gray-11`, `--gray-a1`..`--gray-a11`).
-  Drop `--gray-base` and the Radix step-1 floor; the `--background`
-  semantic token holds that role instead. Verify Tailwind `@theme
-inline` block + colors.css consumers are updated in lockstep so no
-  utility class breaks.
+- **Phase 1 (additive prep, done):** drop `--gray-base` (the Radix
+  step-1 / app-background floor) from `colors.css`; the `--background`
+  semantic token holds that role instead. Scale tokens keep their
+  existing Tailwind-style names (`--gray-50`..`--gray-950`,
+  `--gray-a50`..`--gray-a950`); the Radix-step _rename_ originally
+  scoped here was dropped — the cost of a breaking rename across
+  utilities (`bg-gray-50`) and `var()` consumers wasn't worth it, and
+  Radix-step semantics are already captured by the
+  `/* radix-step-N */` comments in `colors.css`.
 - **Phase 2 (cut-over, one focused diff):** rewrite semantic tokens to
   read from scale directly, retire `--gray-ui` / `--accent-ui` / etc.
   role-binding variables, rewrite `[data-theme]` blocks to retarget
-  inline against scale. Promote `--ui-subtle` (reads `--gray-a2` in
-  base, `--blue-a2` under `[data-theme=accent]`) — the canonical
+  inline against scale. Promote `--ui-subtle` (reads `--gray-a50` in
+  base, `--blue-a50` under `[data-theme=accent]`) — the canonical
   example of an alpha-modifier escape hatch becoming a real semantic
   token. Apply the naming refinement: replace any
   `--interactive-1/--interactive-2` (interim ADR shape) with
