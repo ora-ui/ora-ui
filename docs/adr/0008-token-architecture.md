@@ -2,7 +2,29 @@
 
 ## Status
 
-Proposed — 2026-06-08
+Proposed — 2026-06-09
+
+## Relationship to ADR-0008 (interim role layer)
+
+This ADR sits alongside `0008-interim-role-layer-for-tokens.md`. The
+two share a number; they cover different cuts of the same decision:
+
+- **The interim ADR is the contract**: the 18-token semantic layer
+  shape, naming convention (rest/interactive split + ordinal ladders
+  - adjective triads, refined below), the layout-vs-ui borders
+    distinction, the alpha-modifier escape-hatch policy, and the
+    rejection of Radix-12 as a _cross-theme_ contract.
+- **This ADR is the implementation strategy** for Ora's base theme:
+  how the scale layer is sourced (Radix step semantics for gray and
+  custom accents), how `[data-theme]` retargeting works without an
+  intermediate role-binding layer, how docs serve as the spec, how
+  promotion of new semantic tokens is governed, and how migration
+  sequences.
+
+Read both. Where they appear to disagree, the interim ADR wins on
+contract questions (token names, naming convention, theming model);
+this ADR wins on implementation questions (how the scale layer is
+authored, how `[data-theme]` blocks resolve, migration sequencing).
 
 ## Context
 
@@ -51,74 +73,155 @@ _from_.
 
 ## Decision
 
-Restructure tokens into two layers, with theme switching happening at
-the semantic-token site via inline retargeting under `[data-theme]`.
+Adopt the three-tier architecture established in the interim ADR
+(Scale → Semantic → Component vars), with theme switching happening
+at the semantic-token site via inline retargeting under `[data-theme]`.
+Component vars are out of scope for this ADR and covered case-by-case
+as components grow.
 
 ### Layer 1 — Scale (foundation)
 
-Concrete color scales using Radix's step semantics:
+Concrete color scales. For Ora's base theme:
 
-- **Gray**: track Radix's gray scales directly (`--gray-1` through
-  `--gray-12`, plus alpha variants `--gray-a1`..`--gray-a12`).
+- **Gray**: track Radix's step semantics. Eleven steps,
+  `--gray-1`..`--gray-11`, plus alpha variants `--gray-a1`..`--gray-a11`.
+  Radix's step 1 (the app-background floor) is omitted at the scale
+  layer — that role is held by the semantic `--background` token, not
+  re-exposed as a scale step. The old `--gray-base` retires.
 - **Accent palettes** (blue, indigo, etc.): custom values authored
-  via Radix's color generator, holding the same step semantics as
-  the Radix scales. This preserves brand identity while keeping the
-  step contract.
+  in Ora's codebase via Radix's color generator as a sketching tool,
+  then vendored as Ora's values. No runtime dependency on
+  `@radix-ui/colors`.
 
-Scale tokens are intentionally exposed — components and consumers can
-reach for them when no semantic token fits, as a documented escape
-hatch (see "Semantic-first rule" below).
+Scale tokens are intentionally exposed. Components and consumers can
+reach for them as a documented escape hatch when no semantic token
+fits (see "Semantic-first rule" below). The previous concern about
+scale-token bloat in the consumer interface is treated as something
+that earns its keep through real complaints, not something hidden
+preemptively.
+
+**Cross-theme note:** Radix step semantics are _Ora's base-theme
+implementation_, not the contract. Per the interim ADR, the 18 token
+roles are the cross-theme contract; other themes (game UI, brutalist,
+RYBitten-style) may map those roles to their own scale shapes that
+don't follow a lightness ramp at all.
 
 ### Layer 2 — Semantic (API)
 
-Semantic tokens (`--ui`, `--hover`, `--fill`, `--line-ui`, etc.)
-defined once under `:root`, reading from the gray scale by default:
+The 18-token semantic layer defined in the interim ADR. This is the
+consumer-facing API; components reach for these first when authoring
+styles.
+
+The current set, with naming refinements landed alongside this ADR:
+
+```
+Backgrounds & Surfaces:  --background, --subtle, --surface-1, --surface-2, --overlay
+UI:                      --ui-subtle, --ui
+Interactive:             --interactive-subtle, --interactive, --interactive-strong
+Solid:                   --solid, --solid-interactive
+Borders:                 --separator, --border-subtle, --border, --border-strong
+Focus:                   --ring
+Foreground:              --primary, --secondary, --ui-label, --on-solid
+```
+
+These read from the gray scale by default:
 
 ```css
 :root {
+  --ui-subtle: var(--gray-a2);
   --ui: var(--gray-a3);
-  --hover: var(--gray-a4);
-  --active: var(--gray-a5);
-  --fill: var(--gray-12);
-  --ui-label: var(--gray-12);
+  --interactive-subtle: var(--gray-a3);
+  --interactive: var(--gray-a4);
+  --interactive-strong: var(--gray-a5);
+  --solid: var(--gray-11);
+  --solid-interactive: var(--gray-10);
+  --border-subtle: var(--gray-a6);
+  --border: var(--gray-a7);
+  --border-strong: var(--gray-a8);
+  --ui-label: var(--gray-11);
+  /* …etc */
 }
 ```
 
-These are the consumer-facing API. Components should reach for these
-first when authoring styles.
+### Naming convention (refinement on the interim ADR)
 
-### Theme switching — inline retargeting, no alias layer
+The interim ADR established "ordinal ladders + rest/interactive split."
+Continued work surfaced a sharper underlying rule that absorbs both
+patterns and resolves what to do when a family has more than two steps:
+
+- **Bare name = the token to reach for by default.** Most call sites
+  get the short name; specialised cases pay the suffix cost.
+- **Capped family with a default** → adjective triad
+  (`-subtle`, bare, `-strong`). Suffixes mark deviations from the
+  default. Used where steps represent qualitatively different intents
+  at the same role: `--ui-subtle/--ui`, `--interactive-subtle
+/--interactive/--interactive-strong`, `--border-subtle/--border
+/--border-strong`.
+- **Elastic family** → ordinal. Used where elevation, weight, or
+  other axes are intrinsically extensible:
+  `--surface-1/--surface-2/--surface-N`. (No member of the elastic
+  family currently exceeds 2; the ordinal pattern leaves room.)
+- **Rest + single interaction weight pair** → bare + `-interactive`
+  suffix: `--solid/--solid-interactive`.
+
+The honest test for adjective vs ordinal: do the steps represent
+_different intents_ or _different intensities of the same intent_?
+Different intents → adjective triad. Different intensities → ordinal.
+
+Borders use adjective because Radix's documented step roles (6 =
+decorative line, 7 = ui element border, 8 = hovered/emphasised
+border) are qualitatively distinct. Interactive uses adjective
+because the bare-name-as-default property genuinely matters here —
+step 4 is the typical hover weight; ordinal naming (`--interactive-1`
+at step 3) would mislead users into treating the edge-case weight as
+the default.
+
+### Theme switching — inline retargeting, no role-binding layer
 
 `[data-theme]` blocks retarget semantic tokens directly to the chosen
-accent's scale, without an intermediate alias:
+accent's scale, without an intermediate role-binding token like
+`--gray-ui` or `--accent-ui`:
 
 ```css
 [data-theme='accent'] {
+  --ui-subtle: var(--blue-a2);
   --ui: var(--blue-a3);
-  --hover: var(--blue-a4);
-  --active: var(--blue-a5);
-  --fill: var(--blue-9);
+  --interactive-subtle: var(--blue-a3);
+  --interactive: var(--blue-a4);
+  --interactive-strong: var(--blue-a5);
+  --solid: var(--blue-9);
+  --solid-interactive: var(--blue-10);
+  --border-subtle: var(--blue-a6);
+  --border: var(--blue-a7);
+  --border-strong: var(--blue-a8);
   --ui-label: var(--blue-a11);
+  /* …etc */
 }
 ```
 
-The `--accent-ui` / `--accent-hover` / `--accent-fill` alias-layer
-tokens are retired. Adding a new themed semantic token means: define
-it under `:root` reading from the gray scale, add a line per
-`[data-theme]` block reading from that theme's scale. No third
-definition step.
+The `--gray-ui` / `--accent-ui` / etc. role-binding tokens currently
+in `globals.css` retire as part of the migration. Adding a new themed
+semantic token means: define it under `:root` reading from the gray
+scale, add a line per `[data-theme]` block reading from that theme's
+scale. No third definition step.
 
 Not every semantic token belongs in `[data-theme]`. Chrome-level
-surface tokens (`--background`, `--surface`, `--overlay`) stay neutral
-regardless of accent — they appear under `:root` only and are absent
-from theme blocks intentionally.
+surface tokens (`--background`, `--subtle`, `--surface-1`,
+`--surface-2`, `--overlay`) stay neutral regardless of accent — they
+appear under `:root` only and are absent from theme blocks
+intentionally.
+
+Dark mode is handled at the scale layer (`.dark { --gray-3: ...; }`)
+per Radix's standard. Semantic tokens and `[data-theme]` blocks are
+mode-agnostic — they read scale token names that self-swap.
 
 ### Step-parity is the default, not a rule
 
 Most semantic tokens read the same step number across base and theme
 blocks (`--ui` reads step 3 everywhere). Some do not, by design:
-`--ui-label` reads step 12 in base but step 11 in accent themes,
-because colored accents at step 12 oversaturate as label text.
+`--ui-label` reads step 11 in base but reads a different step (often
+the alpha variant of step 11) in accent themes, because colored
+accents at the deepest step oversaturate as label text.
 
 These intentional step shifts are documented in TOKEN-SYSTEM.md, not
 encoded in CSS. The CSS expresses what each token _is_; the docs
@@ -241,16 +344,26 @@ intentional exceptions without polluting consumer-owned CSS.
 
 ## Followups
 
-- **Phase 1 (additive prep, can ship anytime):** introduce scale tokens
-  in `globals.css` alongside the existing semantic + role-binding
-  setup. No behavior change; lets value choices be spot-checked in
-  isolation.
+- **Phase 1 (additive prep, can ship anytime):** rename scale tokens
+  in `colors.css` from Tailwind-style (`--gray-50`/`--gray-100`/...) to
+  Radix step style (`--gray-1`..`--gray-11`, `--gray-a1`..`--gray-a11`).
+  Drop `--gray-base` and the Radix step-1 floor; the `--background`
+  semantic token holds that role instead. Verify Tailwind `@theme
+inline` block + colors.css consumers are updated in lockstep so no
+  utility class breaks.
 - **Phase 2 (cut-over, one focused diff):** rewrite semantic tokens to
-  read from scale, retire the `--gray-ui` / `--accent-ui` / etc.
+  read from scale directly, retire `--gray-ui` / `--accent-ui` / etc.
   role-binding variables, rewrite `[data-theme]` blocks to retarget
-  inline. Phase 2 also promotes `--ui-subtle` (reads `--gray-a2` in
-  base, accent-2 under `[data-theme=accent]`) — the canonical example
-  of an alpha-modifier escape hatch becoming a real semantic token.
+  inline against scale. Promote `--ui-subtle` (reads `--gray-a2` in
+  base, `--blue-a2` under `[data-theme=accent]`) — the canonical
+  example of an alpha-modifier escape hatch becoming a real semantic
+  token. Apply the naming refinement: replace any
+  `--interactive-1/--interactive-2` (interim ADR shape) with
+  `--interactive-subtle/--interactive/--interactive-strong`; replace
+  `--border-1/--border-2` with `--border-subtle/--border/--border-strong`.
+- **Button as canary:** before sweeping other components, port Button
+  to the new system and validate behaviour in light/dark, gray/accent
+  contexts. Other components follow once Button confirms the system.
 - **Migration is independent of the eager Entry-schema migration
   (ADR-0007).** They share no risk surface and should not be batched —
   coupling them lets either's iteration block the other.
@@ -267,8 +380,3 @@ intentional exceptions without polluting consumer-owned CSS.
 - Build a drift detection script if drift between docs and CSS
   becomes felt pain. The table format is designed to support this
   without restructuring.
-- **Scale source:** all scale values are custom-authored in Ora's
-  codebase. The Radix color generator is used as a sketching tool;
-  its output is vendored into Ora's `colors.css` as Ora's values, not
-  imported from `@radix-ui/colors`. Keeps full control over the
-  scale and avoids a runtime dependency.
