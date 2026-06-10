@@ -1,4 +1,7 @@
 :root {
   --sidebar-width: 16rem;
   --sidebar-padding-block: 32px;
+  --header-height: 48px;
+  --breakpoint-max-layout-width: 89rem;
+  --root-layout-padding: 3rem;
 }
