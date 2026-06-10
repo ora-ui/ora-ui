@@ -44,19 +44,23 @@ decision record.
 
 ## Domains
 
-The 18 semantic tokens group into six domains.
+The 18 semantic tokens group into six domains. Bare aliases
+(`--border`, `--interactive`) point at step 1 of their ladder for
+ergonomics and are not counted as separate slots.
 
 ### Background & Surfaces
 
 ```css
 --background   /* page/app floor */
+--subtle       /* solid, one notch above the floor */
 --surface-1    /* subtle raised container */
---surface-2    /* more raised */
---surface-3    /* most raised */
+--surface-2    /* most raised */
 --overlay      /* modals, popovers, floating elements */
 ```
 
-`--surface-N` is an ordinal ladder: 1 is the most subtle raise, 3 the
+`--subtle` is a solid surface a touch above `--background` — quieter
+than the raised `--surface-N` ladder (think code blocks, inset panels).
+`--surface-N` is an ordinal ladder: 1 is the most subtle raise, 2 the
 most raised. `--overlay` is distinct from the surface ladder — it
 matches `--background` in light mode and steps up to the first solid
 surface in dark mode, so floating elements read correctly against the
@@ -64,31 +68,37 @@ page in both.
 
 ### UI
 
-Soft interactive container backgrounds. Alpha-based so they layer over
-any surface, in three strength levels.
+Soft interactive container backgrounds, alpha-based so they layer over
+any surface. `--ui` is the resting container; `--interactive-N` are its
+interaction-state weights.
 
 ```css
---ui-1   /* resting soft container */
---ui-2   /* one step stronger */
---ui-3   /* strongest */
+--ui              /* resting soft container */
+--interactive-1   /* first interaction weight (e.g. hover) */
+--interactive-2   /* stronger interaction weight (e.g. active) */
+--interactive     /* alias → --interactive-1 */
 ```
 
-A component maps interaction states onto these levels by visual intent,
-not by a fixed state→token rule (see
-[Naming convention](#naming-convention-ordinal-strength-not-interaction-state)).
+The split is rest-vs-interaction, not a pure strength ladder: `--ui`
+is where a control sits, `--interactive-N` is where it goes when
+touched. Which state reads which level is a component decision (see
+[Naming convention](#naming-convention)).
 
 ### Solid
 
 Emphatic fill, for solid buttons, badges, and similar high-emphasis
-surfaces. Two strength levels.
+surfaces. A resting fill plus its interaction weight.
 
 ```css
---solid-1   /* resting solid fill */
---solid-2   /* stronger solid fill */
+--solid               /* resting solid fill */
+--solid-interactive   /* fill when interacted (e.g. hover) */
 ```
 
-Hover/active modulation on a solid surface is done with alpha against
-`--solid-2`, not with additional tokens.
+`--solid-interactive` replaces the old `bg-fill/90` hover hack. For the
+default (gray) palette it is a `color-mix` between the top two scale
+steps; themed palettes step up one scale step. Deeper states (active)
+are handled per-component via alpha or component vars, not a third
+token.
 
 ### Borders
 
@@ -98,6 +108,7 @@ Two kinds, and the value type _is_ the distinction.
 --separator   /* layout/structural lines — solid */
 --border-1    /* ui-element border — alpha */
 --border-2    /* stronger ui-element border — alpha */
+--border      /* alias → --border-1 */
 ```
 
 - `--separator` is **solid**. Use it for layout/structural lines:
@@ -126,8 +137,8 @@ Foreground rather than under their paired surface domain.
 ```css
 --primary     /* first-tier text/icon */
 --secondary   /* second-tier text/icon */
---ui-label    /* foreground when painting on a --ui-N surface */
---on-solid    /* foreground when painting on a --solid-N surface */
+--ui-label    /* foreground when painting on a --ui surface */
+--on-solid    /* foreground when painting on a --solid surface */
 ```
 
 `--primary` / `--secondary` are the two-tier hierarchy. `--ui-label`
@@ -137,34 +148,42 @@ under `[data-theme]`.
 
 ---
 
-## Naming convention: ordinal strength, not interaction state
+## Naming convention
 
-Tokens in a strength ladder (`--ui-N`, `--solid-N`, `--surface-N`,
-`--border-N`) are named by **intensity**, not by the interaction state
-they "belong to". A component maps any interaction state to any strength
-level based on visual intent.
+Two shapes, applied where each is honest:
+
+- **Ordinal strength** where a true intensity ladder exists:
+  `--surface-N`, `--border-N`. Named by intensity, not by the state
+  they "belong to" — a component maps any state to any level by visual
+  intent.
+- **Rest / interactive split** where the meaningful distinction is
+  interaction, not raw intensity: `--ui` vs `--interactive-N`, `--solid`
+  vs `--solid-interactive`. The resting token is where a control sits;
+  the interactive token(s) are where it goes when touched.
 
 ```tsx
-// Button: default mapping — hover steps up one, active steps up two
-'bg-ui-1 hover:bg-ui-2 active:bg-ui-3';
+// Soft container: rest, then interaction weights
+'bg-ui hover:bg-interactive-1 active:bg-interactive-2';
 
-// Toggle: pressed wants the hover weight, not a deeper one
-'data-[pressed]:bg-ui-2';
+// Toggle: pressed wants the first interaction weight, not the deepest
+'data-[pressed]:bg-interactive-1';
 
-// Tabs: selected wants the strongest weight this component has
-'data-[selected]:bg-ui-3';
+// Solid button: rest fill, hover steps to the interactive fill
+'bg-solid hover:bg-solid-interactive';
 ```
 
-The strength ladder is the contract; the state→strength mapping is a
-component decision. This is the explicit fix for the old `active/75`,
-`hover/50` escape-hatch family, where alpha was used to wrong-name a
-tone into a different state.
+Which state reads which token is a component decision. This replaces
+the old `active/75`, `hover/50`, `bg-fill/90` escape-hatch family, where
+alpha was used to wrong-name a tone into a different state. States
+beyond what the tokens name (e.g. a distinct `active` on a solid fill)
+are a component concern — handled via alpha modulation or component
+vars, not new system tokens.
 
 ---
 
 ## Escape hatches: alpha modifiers
 
-Components may use alpha modifiers (`bg-ui-1/50`, `bg-ui-2/50`,
+Components may use alpha modifiers (`bg-ui/50`, `bg-interactive-1/50`,
 `border-border-1/80`) for **subtle contextual modulation of the same
 role**. This is sanctioned, not a smell.
 
@@ -180,7 +199,7 @@ The line between sanctioned modulation and a missing token is **intent**:
   an adjacent affordance.
 - **Missing token** — reaching for a value that conceptually wants its
   own name. (The old `bg-fill/90` for solid-button hover was this; the
-  fix was to add `--solid-2`, not normalise the hack.)
+  fix was to add `--solid-interactive`, not normalise the hack.)
 
 Reviewers call out ambiguous cases during PR review.
 
@@ -196,15 +215,15 @@ code.
 ```css
 /* Default (gray) theme — no attribute needed */
 :root {
-  --ui-1: /* gray scale step */;
-  --solid-1: /* gray scale step */;
+  --ui: /* gray role token */;
+  --solid: /* gray role token */;
   /* ...the full 18-token set... */
 }
 
-/* Accent theme — same 18 slots, themed scale */
+/* Accent theme — same 18 slots, themed values */
 [data-theme='accent'] {
-  --ui-1: /* accent scale step */;
-  --solid-1: /* accent scale step */;
+  --ui: /* accent role token */;
+  --solid: /* accent role token */;
   /* ... */
 }
 ```
@@ -213,7 +232,7 @@ The fixed 18-token shape is what makes this work: every themed palette
 implements the **same** set of slots, so there's no asymmetric coverage
 and no silent fallback to gray. New themes — success, warning, a brand
 palette, or an entirely different aesthetic (game UI, expressive sites)
-— drop into the same shape by providing scale values for all 18 roles.
+— drop into the same shape by providing values for all 18 roles.
 
 ---
 
@@ -294,7 +313,7 @@ className = 'rounded-full';
 
 ## Open Questions
 
-- Whether additional surface levels beyond `--surface-3` are needed —
+- Whether additional surface levels beyond `--surface-2` are needed —
   deferred until concrete use cases arise.
 - Whether to add more theme palettes (success, warning, info) or keep a
   minimal set.
