@@ -26,7 +26,7 @@ export function NavSidebar() {
               <SidebarGroupLabel>Components</SidebarGroupLabel>
               <SidebarGroupContent>
                 {entries.map((e) => {
-                  const href = `/${e.component}`;
+                  const href = `/playground/${e.component}`;
                   return (
                     <SidebarItem key={href} asChild active={pathname === href}>
                       <Link href={href}>{e.name}</Link>
