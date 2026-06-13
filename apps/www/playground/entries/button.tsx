@@ -1,4 +1,4 @@
-import { StarIcon } from '@phosphor-icons/react/dist/ssr';
+import { LogoMark } from '@/header/assets/logo';
 import { Button } from '@/registry/ui/button';
 import type { EntrySchema } from '@/playground/lib/types';
 
@@ -21,12 +21,12 @@ export const buttonEntry: EntrySchema = {
     label: {
       type: 'string',
       label: 'Label',
-      default: 'Button',
+      default: 'Try Ora',
     },
     icon: {
       type: 'boolean',
       label: 'Icon',
-      default: false,
+      default: true,
     },
     iconPosition: {
       type: 'select',
@@ -53,9 +53,9 @@ export const buttonEntry: EntrySchema = {
         variant={variants.variant as 'solid' | 'outline' | 'surface' | 'soft' | 'ghost'}
         theme={variants.theme as 'gray' | 'accent' | 'destructive'}
       >
-        {icon && iconPosition === 'leading' && <StarIcon />}
+        {icon && iconPosition === 'leading' && <LogoMark />}
         {label}
-        {icon && iconPosition === 'trailing' && <StarIcon />}
+        {icon && iconPosition === 'trailing' && <LogoMark />}
       </Button>
     );
   },
