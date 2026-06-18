@@ -32,13 +32,15 @@ export class NamingViolationError extends Error {
   }
 }
 
-function dirToPascal(dirName: string): string {
-  return dirName
+/** Converts a kebab-case string to PascalCase, e.g. "button-group" → "ButtonGroup". */
+function kebabToPascal(str: string): string {
+  return str
     .split('-')
     .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
     .join('');
 }
 
+/** Converts PascalCase to kebab-case, e.g. "URLParser" → "url-parser". */
 function pascalToKebab(pascal: string): string {
   return pascal
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
@@ -46,6 +48,7 @@ function pascalToKebab(pascal: string): string {
     .toLowerCase();
 }
 
+/** Splits PascalCase at word boundaries, e.g. "URLParser" → "URL Parser". */
 function splitPascal(pascal: string): string {
   return pascal.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
 }
@@ -59,6 +62,15 @@ interface NamedFn {
   defaultOnly: boolean;
 }
 
+/**
+ * Parses all exported functions from a TypeScript source file.
+ *
+ * Handles two default-export shapes:
+ * - `export default function X() {}`
+ * - `export default X` (assignment, where `X` is a separately-declared exported fn)
+ *
+ * Both populate `defaultName` with the declared function name.
+ */
 function collectExports(sourceFile: ts.SourceFile): {
   named: NamedFn[];
   defaultName: string | null;
@@ -92,12 +104,20 @@ function collectExports(sourceFile: ts.SourceFile): {
   return { named, defaultName };
 }
 
+/**
+ * Parses a single preview file and validates structural invariants:
+ * - At least one named export starting with `<DirPascal>` prefix
+ * - A default export exists
+ * - The default export resolves to one of the named exports
+ *
+ * Throws if any invariant is violated.
+ */
 export function parsePreviewFile(filePath: string): PreviewEntry {
   const source = fs.readFileSync(filePath, 'utf-8');
   const fileName = path.basename(filePath);
   const slug = fileName.replace(/\.tsx?$/, '');
   const dirName = path.basename(path.dirname(filePath));
-  const dirPascal = dirToPascal(dirName);
+  const dirPascal = kebabToPascal(dirName);
 
   const sourceFile = ts.createSourceFile(
     fileName,
@@ -152,13 +172,6 @@ interface ParsedPreview extends PreviewEntry {
   componentDir: string;
 }
 
-function slugToPascal(slug: string): string {
-  return slug
-    .split('-')
-    .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
-    .join('');
-}
-
 export function parsePreviewsDir(previewsDir: string): ParsedPreview[] {
   const entries: ParsedPreview[] = [];
   const subdirs = fs
@@ -193,7 +206,7 @@ export function renderRegistryModule(entries: ParsedPreview[]): string {
   }
 
   for (const entry of entries) {
-    const moduleAlias = `${slugToPascal(entry.slug)}Module`;
+    const moduleAlias = `${kebabToPascal(entry.slug)}Module`;
     importLines.push(`import * as ${moduleAlias} from './${entry.componentDir}/${entry.slug}';`);
 
     const exportLines = entry.exports.map((e) => {
