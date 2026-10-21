@@ -6,18 +6,18 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/registry/lib/utils';
 
 const buttonVariants = cva(
-  "group/button inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-dynamic text-sm text-ui-label font-medium select-none bg-clip-padding disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3 shrink-0 [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-focus aria-expanded:data-[icon=inline-start]:pl-7! data-[slot=select-trigger]:font-normal",
+  "group/button inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-dynamic text-sm text-ui-label font-medium select-none bg-clip-padding disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3 shrink-0 [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-ring aria-expanded:data-[icon=inline-start]:pl-7! data-[slot=select-trigger]:font-normal",
   {
     variants: {
       variant: {
         solid:
-          'bg-fill text-on-fill hover:bg-fill/90 active:bg-fill/80 aria-expanded:bg-fill/80 focus-visible:outline-focus-fill focus-visible:outline-offset-2',
+          'bg-solid text-on-solid hover:bg-solid-interactive active:bg-solid-interactive aria-expanded:bg-solid-interactive focus-visible:outline-ring focus-visible:outline-offset-2',
         outline:
-          'border border-line-ui bg-transparent hover:bg-hover/30 active:bg-active/40 aria-expanded:bg-active/40',
+          'border border-border bg-transparent hover:bg-ui-subtle active:bg-interactive-subtle aria-expanded:bg-ui-subtle',
         surface:
-          'border border-line-ui bg-ui hover:border-line-ui hover:bg-hover active:bg-active aria-expanded:bg-active',
-        soft: 'bg-ui hover:bg-hover active:bg-active aria-expanded:bg-active',
-        ghost: 'hover:bg-hover active:bg-active aria-expanded:bg-active',
+          'border border-border bg-ui-subtle hover:border-border-strong active:bg-interactive-subtle aria-expanded:border-border-strong',
+        soft: 'bg-ui hover:bg-interactive active:bg-interactive-strong aria-expanded:bg-interactive',
+        ghost: 'hover:bg-interactive-subtle active:bg-interactive aria-expanded:bg-interactive',
       },
       size: {
         sm: "h-7 gap-1.5 px-2 has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",

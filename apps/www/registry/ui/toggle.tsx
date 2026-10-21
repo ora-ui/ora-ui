@@ -11,25 +11,25 @@ const toggleVariants = cva(
   [
     'group/toggle inline-flex items-center justify-center gap-1 rounded-dynamic text-sm font-medium text-ui-label whitespace-nowrap select-none bg-clip-padding disabled:pointer-events-none disabled:opacity-50',
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-    'focus-visible:outline-2 focus-visible:outline-focus',
-    'aria-invalid:border-(--destructive-ring) aria-invalid:focus-visible:outline-(--destructive-ring)',
+    'focus-visible:outline-2 focus-visible:outline-ring',
+    'aria-invalid:border-destructive-a500 aria-invalid:focus-visible:outline-destructive-a500',
   ],
   {
     variants: {
       variant: {
-        soft: 'bg-transparent text-secondary hover:bg-hover hover:text-primary aria-pressed:bg-active aria-pressed:text-primary data-[theme=accent]:aria-pressed:bg-active/50 data-[theme=accent]:aria-pressed:text-secondary in-data-[slot=toggle-group]:hover:bg-transparent',
+        soft: 'bg-transparent text-secondary hover:bg-interactive-subtle hover:text-ui-label aria-pressed:bg-interactive aria-pressed:hover:bg-interactive-strong aria-pressed:text-ui-label in-data-[slot=toggle-group]:hover:bg-transparent',
         outline:
-          'border border-ring/50 bg-transparent text-secondary hover:text-primary aria-pressed:bg-transparent aria-pressed:border-ring aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary in-data-[slot=toggle-group]:border-transparent',
+          'border border-border bg-transparent text-secondary hover:text-primary hover:bg-ui-subtle aria-pressed:bg-transparent aria-pressed:hover:bg-ui-subtle aria-pressed:border-ring aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary in-data-[slot=toggle-group]:border-transparent',
         surface:
-          'border border-ring/50 bg-ui/50 text-secondary hover:border-ring hover:bg-hover/50 hover:text-primary aria-pressed:bg-active/50 data-[theme=accent]:aria-pressed:bg-active/40 aria-pressed:border-ring aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary in-data-[slot=toggle-group]:bg-transparent in-data-[slot=toggle-group]:border-transparent in-data-[slot=toggle-group]:hover:border-transparent in-data-[slot=toggle-group]:hover:bg-transparent',
+          'border border-border bg-ui-subtle text-secondary hover:border-border-strong hover:text-primary aria-pressed:bg-interactive-subtle aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary in-data-[slot=toggle-group]:bg-transparent in-data-[slot=toggle-group]:border-transparent in-data-[slot=toggle-group]:hover:border-transparent in-data-[slot=toggle-group]:hover:bg-transparent',
         ghost:
           'bg-transparent text-secondary hover:text-primary aria-pressed:bg-transparent aria-pressed:text-primary data-[theme=accent]:aria-pressed:text-secondary',
         solid:
-          'bg-transparent text-secondary hover:bg-hover hover:text-primary aria-pressed:bg-fill aria-pressed:text-on-fill aria-pressed:focus-visible:outline-focus-fill aria-pressed:focus-visible:outline-offset-2 in-data-[slot=toggle-group]:hover:bg-transparent',
+          'bg-transparent text-secondary hover:bg-interactive-subtle hover:text-primary aria-pressed:bg-solid aria-pressed:text-on-solid aria-pressed:focus-visible:outline-ring aria-pressed:focus-visible:outline-offset-2 in-data-[slot=toggle-group]:hover:bg-transparent',
         // For items sitting inside a filled container (e.g. a ToggleGroup with
         // a bg). Unpressed reads against the container; pressed reveals page bg.
         'on-solid':
-          'bg-transparent text-secondary hover:text-primary aria-pressed:bg-background aria-pressed:text-primary aria-pressed:shadow-xs aria-pressed:ring-1 aria-pressed:ring-inset aria-pressed:ring-ring/30 data-[theme=accent]:aria-pressed:text-secondary group-data-[variant=solid]/toggle-group:text-on-fill/70 group-data-[variant=solid]/toggle-group:not-aria-pressed:hover:text-on-fill',
+          'bg-transparent text-secondary hover:text-primary aria-pressed:bg-background aria-pressed:text-primary aria-pressed:shadow-xs aria-pressed:ring-1 aria-pressed:ring-inset aria-pressed:ring-ring/30 data-[theme=accent]:aria-pressed:text-secondary group-data-[variant=solid]/toggle-group:text-on-solid/70 group-data-[variant=solid]/toggle-group:not-aria-pressed:hover:text-on-solid',
       },
       size: {
         sm: "h-7 min-w-7 gap-1.5 px-2 [&_svg:not([class*='size-'])]:size-3",

@@ -19,9 +19,9 @@ const checkboxVariants = cva(
     variants: {
       variant: {
         solid:
-          'border-gray-ring bg-gray-ui text-ui-label data-checked:border-none data-checked:bg-fill data-checked:text-on-fill',
+          'border-gray-a500 bg-gray-a100 text-ui-label data-checked:border-none data-checked:bg-fill data-checked:text-on-fill',
         surface:
-          'border-gray-ring bg-gray-ui text-ui-label data-checked:text-secondary data-checked:data-[theme=gray]:text-primary data-indeterminate:text-secondary data-indeterminate:data-[theme="gray]:text-primary',
+          'border-gray-a500 bg-gray-a100 text-ui-label data-checked:text-secondary data-checked:data-[theme=gray]:text-primary data-indeterminate:text-secondary data-indeterminate:data-[theme="gray]:text-primary',
       },
       theme: {
         gray: '',
