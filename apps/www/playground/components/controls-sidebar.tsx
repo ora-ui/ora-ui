@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import {
   ArrowsHorizontalIcon,
   ArrowsVerticalIcon,
@@ -84,10 +84,8 @@ export function ControlsSidebar({
           {hasControls ? (
             <div className="flex flex-col gap-2 p-(--sidebar-pad)">
               <div className="flex flex-row items-center gap-2">
-                <h3 className="text-xs font-medium tracking-wide text-foreground-subtle">
-                  Properties
-                </h3>
-                <div className="h-px flex-1 bg-line" />
+                <h3 className="text-xs font-medium tracking-wide text-secondary">Properties</h3>
+                <div className="h-px flex-1 bg-separator" />
               </div>
               {Object.entries(schema.variants).map(([key, spec]) => (
                 <EnumRow
@@ -163,7 +161,7 @@ function ControlRow({
   endPad?: boolean;
   children: ReactNode;
 }) {
-  const className = `flex h-9 items-center justify-between gap-5 rounded-[min(calc(var(--radius)*1.2),14px)] bg-ui p-1 pl-2 text-sm ${endPad ? 'pr-2' : ''}`;
+  const className = `flex h-9 items-center justify-between gap-5 rounded-[min(calc(var(--radius)*1.2),14px)] bg-ui-subtle p-1 pl-2 text-sm ${endPad ? 'pr-2' : ''}`;
   if (asLabel) {
     return (
       <Label className={className}>
@@ -313,15 +311,13 @@ function GroupSection({
         render={
           <button
             type="button"
-            className="flex w-full items-center justify-between gap-2 p-(--sidebar-pad) text-sm text-primary outline-none transition-colors hover:bg-hover/30 data-panel-open:bg-hover/30 focus-visible:outline-2 focus-visible:outline-focus focus-visible:-outline-offset-2"
+            className="flex w-full items-center justify-between gap-2 p-(--sidebar-pad) text-sm text-primary outline-none transition-colors hover:bg-ui-subtle data-panel-open:bg-ui-subtle focus-visible:outline-2 focus-visible:outline-ring focus-visible:-outline-offset-2"
           >
-            <span className="text-xs font-medium tracking-wide text-foreground-subtle">
-              {group.label}
-            </span>
+            <span className="text-xs font-medium tracking-wide text-secondary">{group.label}</span>
             {open ? (
-              <MinusIcon className="size-4 text-muted" />
+              <MinusIcon className="size-4 text-secondary" />
             ) : (
-              <PlusIcon className="size-4 text-muted" />
+              <PlusIcon className="size-4 text-secondary" />
             )}
           </button>
         }
@@ -447,17 +443,17 @@ function ListInput({
               key={index}
               open={open}
               onOpenChange={(next) => setOpenIndex(next ? index : null)}
-              className="rounded-dynamic border border-line bg-surface"
+              className="rounded-dynamic border border-border-subtle bg-background"
             >
               <div className="flex items-center">
                 <Collapsible.Trigger
                   render={
                     <button
                       type="button"
-                      className="flex flex-1 items-center gap-2 rounded-dynamic px-2 py-1.5 text-left text-sm text-primary outline-none transition-colors hover:bg-hover/30 focus-visible:outline-2 focus-visible:outline-focus focus-visible:-outline-offset-2"
+                      className="flex flex-1 items-center gap-2 rounded-dynamic px-2 py-1.5 text-left text-sm text-primary outline-none transition-colors hover:bg-ui-subtle focus-visible:outline-2 focus-visible:outline-ring focus-visible:-outline-offset-2"
                     >
                       <CaretDownIcon
-                        className="size-3 shrink-0 text-muted transition-transform duration-150 group-aria-expanded:rotate-180"
+                        className="size-3 shrink-0 text-secondary transition-transform duration-150 group-aria-expanded:rotate-180"
                         data-rotate={open ? 'true' : undefined}
                         style={{ transform: open ? 'rotate(0deg)' : 'rotate(-90deg)' }}
                       />
@@ -469,13 +465,13 @@ function ListInput({
                   type="button"
                   aria-label={`Remove ${itemLabel.toLowerCase()} ${index + 1}`}
                   onClick={() => removeItem(index)}
-                  className="mr-1 rounded-dynamic p-1 text-muted outline-none transition-colors hover:bg-hover/30 hover:text-foreground focus-visible:outline-2 focus-visible:outline-focus"
+                  className="mr-1 rounded-dynamic p-1 text-secondary outline-none transition-colors hover:bg-ui-subtle hover:text-primary focus-visible:outline-2 focus-visible:outline-ring"
                 >
                   <TrashIcon className="size-3.5" />
                 </button>
               </div>
               <Collapsible.Panel className="overflow-hidden transition-[height] duration-150 data-ending-style:h-0 data-starting-style:h-0 h-(--collapsible-panel-height)">
-                <div className="flex flex-col gap-2 border-t border-line p-2">
+                <div className="flex flex-col gap-2 border-t border-separator p-2">
                   {Object.entries(itemShape).map(([fieldKey, fieldSpec]) => (
                     <ItemFieldInput
                       key={fieldKey}
@@ -587,27 +583,28 @@ function ThemeSwatchInput({
     <RadioGroupPrimitive
       value={value}
       onValueChange={(next) => onChange(next as string)}
-      className="-mr-1 flex flex-wrap gap-1"
+      className="flex flex-wrap justify-end gap-2"
     >
       {values.map((v) => (
-        <Tooltip key={v}>
-          <TooltipTrigger
-            render={
-              <RadioPrimitive.Root
-                value={v}
-                aria-label={v}
-                data-theme={v}
-                className="group/swatch flex size-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ring-gray-ring/50 data-checked:ring-0 data-checked:outline-2 data-checked:outline-focus"
-              >
+        <RadioPrimitive.Root
+          key={v}
+          value={v}
+          aria-label={v}
+          data-theme={v}
+          className="group/swatch flex size-5 shrink-0 items-center justify-center rounded-(--swatch-radius) outline-2 outline-offset-2 outline-transparent ring-1 ring-inset ring-gray-a500/50 data-checked:ring-0 data-checked:outline-ring focus-visible:outline-ring [--swatch-radius:min(var(--radius),max(8px,calc(var(--radius)-100px)))]"
+        >
+          <Tooltip>
+            <TooltipTrigger
+              render={
                 <span
-                  className="size-2 rounded-full"
-                  style={{ backgroundColor: `var(--${v}-fill)` } as CSSProperties}
+                  className="size-full rounded-(--swatch-radius)"
+                  style={{ backgroundColor: 'var(--solid)' }}
                 />
-              </RadioPrimitive.Root>
-            }
-          />
-          <TooltipContent>{v.charAt(0).toUpperCase() + v.slice(1)}</TooltipContent>
-        </Tooltip>
+              }
+            />
+            <TooltipContent>{v.charAt(0).toUpperCase() + v.slice(1)}</TooltipContent>
+          </Tooltip>
+        </RadioPrimitive.Root>
       ))}
     </RadioGroupPrimitive>
   );
@@ -654,7 +651,7 @@ function SelectInput({
           render={
             <Button variant="ghost" size="sm" className="justify-between">
               <SelectValue />
-              <CaretUpDownIcon className="size-4 text-muted" />
+              <CaretUpDownIcon className="size-4 text-secondary" />
             </Button>
           }
         />
@@ -677,42 +674,41 @@ const RADIUS_STEPS = [
   { value: 'sm', label: 'Small', radius: '0.25rem' },
   { value: 'md', label: 'Medium', radius: '0.375rem' },
   { value: 'lg', label: 'Large', radius: '0.75rem' },
-  { value: 'xl', label: 'Extra Large', radius: '1rem' },
   { value: 'full', label: 'Full', radius: '9999px' },
 ] as const;
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="flex items-center justify-center p-(--sidebar-pad) py-8 text-center text-xs text-muted">
+    <div className="flex items-center justify-center p-(--sidebar-pad) py-8 text-center text-xs text-secondary">
       {message}
     </div>
   );
 }
 
 function SectionHeader({ label }: { label: string }) {
-  return <h3 className="text-xs tracking-wide text-foreground-subtle">{label}</h3>;
+  return <h3 className="text-xs tracking-wide text-secondary">{label}</h3>;
 }
 
 function ColorSwatch({ name }: { name: string }) {
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <RadioPrimitive.Root
-            value={name}
-            aria-label={name}
-            data-theme={name}
-            className="group/swatch flex size-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ring-gray-ring/50 data-checked:ring-0 data-checked:outline-2 data-checked:outline-focus"
-          >
+    <RadioPrimitive.Root
+      value={name}
+      aria-label={name}
+      data-theme={name}
+      className="group/swatch flex size-5 shrink-0 items-center justify-center rounded-(--swatch-radius) outline-2 outline-offset-2 outline-transparent ring-1 ring-inset ring-gray-a500/50 data-checked:ring-0 data-checked:outline-ring focus-visible:outline-ring [--swatch-radius:min(var(--radius),max(8px,calc(var(--radius)-100px)))]"
+    >
+      <Tooltip>
+        <TooltipTrigger
+          render={
             <span
-              className="size-2 rounded-full"
-              style={{ backgroundColor: `var(--${name}-fill)` } as CSSProperties}
+              className="size-full rounded-(--swatch-radius)"
+              style={{ backgroundColor: 'var(--solid)' }}
             />
-          </RadioPrimitive.Root>
-        }
-      />
-      <TooltipContent>{name.charAt(0).toUpperCase() + name.slice(1)}</TooltipContent>
-    </Tooltip>
+          }
+        />
+        <TooltipContent>{name.charAt(0).toUpperCase() + name.slice(1)}</TooltipContent>
+      </Tooltip>
+    </RadioPrimitive.Root>
   );
 }
 
@@ -779,7 +775,7 @@ function ThemingPanel() {
               key={value}
               value={value}
               aria-label={label}
-              className="group/appearance flex h-8 cursor-default items-center justify-center gap-1 rounded-sm text-sm text-secondary ring-1 ring-inset ring-gray-ring/50 data-checked:ring-0 data-checked:outline-2 data-checked:outline-primary data-checked:text-primary"
+              className="group/appearance flex h-8 cursor-default items-center justify-center gap-1 rounded-sm text-sm text-secondary ring-1 ring-inset ring-gray-a500/50 data-checked:ring-0 data-checked:outline-2 data-checked:outline-primary data-checked:text-primary"
             >
               <Icon className="size-4" />
               {label}
@@ -802,10 +798,10 @@ function ThemingPanel() {
               aria-label={label}
               className="group/radius flex cursor-default flex-col items-center gap-1 outline-none"
             >
-              <span className="flex size-10 items-center justify-center rounded-sm p-2 ring-1 ring-inset ring-gray-ring/50 group-data-checked/radius:ring-0 group-data-checked/radius:outline-2 group-data-checked/radius:outline-primary">
+              <span className="flex size-10 items-center justify-center rounded-sm p-2 ring-1 ring-inset ring-gray-a500/50 group-data-checked/radius:ring-0 group-data-checked/radius:outline-2 group-data-checked/radius:outline-primary">
                 <span
                   data-theme="accent"
-                  className="size-full border-l-2 border-t-2 border-focus bg-ui"
+                  className="size-full border-l-2 border-t-2 border-ring bg-ui"
                   style={{ borderTopLeftRadius: r }}
                 />
               </span>

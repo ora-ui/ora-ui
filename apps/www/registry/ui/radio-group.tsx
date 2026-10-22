@@ -49,7 +49,7 @@ function RadioGroupItem({
         radioVariants({ variant }),
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
         'data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
-        'aria-invalid:border-[var(--destructive-line-ui)] aria-invalid:data-checked:bg-[var(--destructive-fill)]',
+        'aria-invalid:border-destructive-a500 aria-invalid:data-checked:bg-destructive-700',
         variant === 'solid' && 'data-checked:focus-visible:outline-focus-fill',
         className
       )}

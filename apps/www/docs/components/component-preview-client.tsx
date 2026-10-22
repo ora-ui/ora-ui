@@ -34,7 +34,7 @@ export function ComponentPreviewClient({
       <div className="relative flex min-h-50 items-center justify-center p-6">
         {variants.length > 1 && (
           <select
-            className="absolute top-3 right-3 cursor-pointer rounded-md border border-line bg-surface px-2 py-1 text-sm text-secondary"
+            className="absolute top-3 right-3 cursor-pointer rounded-md border border-line bg-background px-2 py-1 text-sm text-secondary"
             value={activeValue}
             onChange={(e) => setActiveValue(e.target.value)}
           >

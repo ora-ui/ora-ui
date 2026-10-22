@@ -22,7 +22,7 @@ export function CodeBlockRoot({
 export function CodeBlock({ className, style, children, ...props }: React.ComponentProps<'pre'>) {
   return (
     <pre
-      className={cn('overflow-x-auto bg-surface py-4 text-sm', className)}
+      className={cn('overflow-x-auto bg-background py-4 text-sm', className)}
       style={style}
       {...props}
     >

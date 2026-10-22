@@ -22,7 +22,7 @@ function Step({ className, ...props }: React.ComponentProps<'h3'>) {
         'mt-8 text-lg font-medium tracking-tight text-primary',
         'before:[counter-increment:step] before:absolute before:-left-8.25 before:-translate-x-1/2',
         'before:flex before:size-7 before:items-center before:justify-center',
-        'before:rounded-full before:border before:border-line-ui before:bg-surface',
+        'before:rounded-full before:border before:border-line-ui before:bg-background',
         'before:font-mono before:text-sm before:font-semibold before:text-secondary',
         'before:content-[counter(step)]',
         className

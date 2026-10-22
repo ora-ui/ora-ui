@@ -89,7 +89,7 @@ export function CodeCollapsibleWrapper({
         <div ref={triggerRef} className={cn('bottom-0 z-10', open && 'sticky')}>
           <Collapsible.Trigger
             className={cn(
-              'w-full h-9 cursor-pointer rounded-b-lg border-t border-line bg-surface text-sm text-muted transition-colors hover:text-primary',
+              'w-full h-9 cursor-pointer rounded-b-lg border-t border-line bg-background text-sm text-muted transition-colors hover:text-primary',
               triggerClassName
             )}
           >

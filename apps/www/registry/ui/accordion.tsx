@@ -6,11 +6,10 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/registry/lib/utils';
 
-const accordionVariants = cva('flex flex-col justify-center text-sm overflow-hidden', {
+const accordionVariants = cva('flex flex-col justify-center text-sm', {
   variants: {
     bordered: {
-      true: 'outline outline-line-ui rounded-md',
-      false: '',
+      true: 'outline outline-border-subtle rounded-md',
     },
   },
   defaultVariants: {
@@ -19,7 +18,7 @@ const accordionVariants = cva('flex flex-col justify-center text-sm overflow-hid
 });
 
 const accordionItemVariants = cva(
-  'group/accordion-item border-b border-line-ui in-data-bordered:last:border-b-0',
+  'group/accordion-item border-b border-border-subtle in-data-bordered:last:border-b-0',
   {
     variants: {
       variant: {
@@ -75,10 +74,16 @@ function AccordionTrigger({
         data-slot="accordion-trigger"
         data-icon-position={iconPosition}
         className={cn(
-          'group relative flex w-full items-center gap-2 py-2 px-3 text-left font-normal focus-visible:z-1 focus-visible:outline-2 focus-visible:outline-focus',
+          'group relative flex w-full items-center gap-2 py-2 px-3 text-left font-normal focus-visible:z-1 focus-visible:outline-2 focus-visible:outline-ring',
           'data-[icon-position=end]:justify-between data-[icon-position=start]:flex-row-reverse data-[icon-position=start]:justify-end',
           'in-data-[variant=underline]:hover:underline in-data-[variant=underline]:hover:decoration-1 in-data-[variant=underline]:underline-offset-2 in-data-[variant=underline]:decoration-secondary',
-          'in-data-[variant=soft]:hover:bg-hover/50 in-data-[variant=soft]:aria-expanded:bg-hover/75',
+          'in-data-[variant=soft]:hover:bg-interactive-subtle in-data-[variant=soft]:aria-expanded:bg-interactive',
+          // soft variant paints a square bg into the bordered root's rounded
+          // corners; round the trigger to inscribe inside the outline. last item's
+          // bottom only rounds while collapsed (open, the panel is the bottom edge).
+          // --radius-md lives in @theme inline (not emitted), so recompute from --radius.
+          'in-data-bordered:group-first/accordion-item:rounded-t-[calc(min(var(--radius),10px)-1px)]',
+          'in-data-bordered:group-last/accordion-item:not-aria-expanded:rounded-b-[calc(min(var(--radius),10px)-1px)]',
           'has-data-[slot=accordion-trigger-icon]:**:data-[slot=accordion-trigger-icon-default]:hidden',
           'aria-expanded:[&_[data-slot=accordion-trigger-icon][data-when=collapsed]]:hidden',
           'not-aria-expanded:[&_[data-slot=accordion-trigger-icon][data-when=expanded]]:hidden',
@@ -89,7 +94,7 @@ function AccordionTrigger({
         {children}
         <ChevronDownIcon
           data-slot="accordion-trigger-icon-default"
-          className="size-4 shrink-0 text-muted motion-safe:transition-transform motion-safe:duration-200 group-aria-expanded:rotate-180"
+          className="size-4 shrink-0 text-secondary motion-safe:transition-transform motion-safe:duration-200 group-aria-expanded:rotate-180"
         />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>

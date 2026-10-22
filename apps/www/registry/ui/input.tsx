@@ -11,17 +11,17 @@ import { cn } from '@/registry/lib/utils';
 const inputVariants = cva(
   [
     'h-7.5 w-full min-w-32 rounded-dynamic px-3 text-sm text-primary',
-    'placeholder:text-muted',
+    'placeholder:text-secondary',
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
     'file:inline-flex file:h-7 file:border-0 file:mr-2 file:bg-transparent file:text-sm file:font-medium file:text-primary',
-    'focus-visible:outline-3 focus-visible:outline-focus/40 focus-visible:outline-offset-0',
-    'aria-invalid:border-(--destructive-fill) aria-invalid:focus-visible:outline-(--destructive-fill)',
+    'focus-visible:outline-3 focus-visible:outline-ring/50 focus-visible:outline-offset-0',
+    'aria-invalid:border-destructive-700 aria-invalid:focus-visible:outline-destructive-700',
   ],
   {
     variants: {
       variant: {
-        surface: 'bg-ui border border-line-ui',
-        outline: 'border border-line-ui shadow-2xs',
+        surface: 'bg-ui-subtle border border-border',
+        outline: 'border border-border shadow-2xs',
         soft: 'bg-ui border border-transparent',
       },
     },
