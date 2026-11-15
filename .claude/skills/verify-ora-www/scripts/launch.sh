@@ -22,6 +22,8 @@ fi
 
 [[ -d "$WWW/node_modules/next" ]] || pnpm -C "$ROOT" install --frozen-lockfile
 
+pnpm -C "$WWW" gen:lists
+
 # next dev rewrites the gitignored next-env.d.ts to point at its distDir; cleanup.sh restores this copy.
 [[ -f "$WWW/next-env.d.ts" ]] && cp "$WWW/next-env.d.ts" "$STATE/next-env.d.ts.bak"
 echo "$PORT" > "$STATE/port"
