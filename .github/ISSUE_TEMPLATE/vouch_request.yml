@@ -1,0 +1,34 @@
+name: '👋 Vouch request'
+description: 'Introduce yourself so you can open pull requests'
+title: 'Vouch request: @'
+labels: ['vouch-request']
+body:
+  - type: 'markdown'
+    attributes:
+      value: |
+        Pull requests from people who are not vouched for are closed
+        automatically. Tell us a bit about yourself and what you'd like to
+        work on, in your own words, and a maintainer will vouch for you.
+  - type: 'textarea'
+    id: 'about'
+    attributes:
+      label: 'Who are you?'
+      description: 'A few sentences. Links to your GitHub, site or past work are welcome.'
+    validations:
+      required: true
+  - type: 'textarea'
+    id: 'plan'
+    attributes:
+      label: 'What do you want to work on?'
+      description: 'Link an existing issue if there is one. For new components or patterns, open a feature request too.'
+    validations:
+      required: true
+  - type: 'checkboxes'
+    id: 'ack'
+    attributes:
+      label: 'Before you submit'
+      options:
+        - label: 'I wrote this request myself.'
+          required: true
+        - label: 'I have read [CONTRIBUTING.md](https://github.com/ora-ui/ora-ui/blob/develop/CONTRIBUTING.md).'
+          required: true
