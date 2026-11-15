@@ -14,7 +14,8 @@ accessible, composable UI primitives. Package manager: **pnpm**.
 1. **Announce** — output `<working-on-issue>NUMBER</working-on-issue>` on its
    own line before writing any code.
 2. **Explore** — read the issue body and comments fully. Read the source
-   files involved. Skim `docs/conventions/` if the change touches a component.
+   files involved. If the change touches a component, skim
+   `docs/patterns/archetypes.md` and the relevant ADRs.
 3. **Plan** — decide the smallest change that satisfies the issue.
 4. **Execute** — keep edits tightly scoped. No refactoring of surrounding
    code. No commented-out code, no `TODO`s, no new `any` casts.

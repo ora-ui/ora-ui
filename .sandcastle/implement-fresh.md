@@ -52,8 +52,8 @@ its own line.
 ## Workflow
 
 1. **Explore** — read the issue body and comments fully. Read the source
-   files involved. Skim `docs/conventions/` if the change touches a
-   component.
+   files involved. If the change touches a
+   component, skim `docs/patterns/archetypes.md` and the relevant ADRs.
 2. **Plan** — decide the smallest change that satisfies the issue.
 3. **Execute** — keep edits tightly scoped. No refactoring of surrounding
    code. No commented-out code, no `TODO`s, no new `any` casts.
