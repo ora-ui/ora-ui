@@ -1,23 +1,3 @@
-/**
- * Docs Component Scaffolder
- *
- * Usage:
- *   pnpm --filter www scaffold component <name> ["<description>"] ["<variants>"]
- *
- * Examples:
- *   # All values via positional args (non-interactive)
- *   pnpm --filter www scaffold component test "A test component" "default,alt"
- *
- *   # Only name required -- prompts for description + variants
- *   pnpm --filter www scaffold component accordion
- *
- * Test + cleanup:
- *   pnpm --filter www scaffold component test "A test component" "default,alt"
- *   # Then revert:
- *   git checkout -- apps/www/docs/content/components/meta.json
- *   git clean -fd apps/www/docs/previews/test/ apps/www/docs/content/components/test.mdx
- */
-
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -102,8 +82,6 @@ export default function (plop) {
           data: { variant },
           skipIfExists: true,
         })),
-        // Preview + source registries are generated from the files above by
-        // `pnpm gen:registry` (also runs in `pnpm dev`); nothing to modify here.
         {
           type: 'add',
           path: join(DOC_ROOT, 'docs/content/components/{{name}}.mdx'),

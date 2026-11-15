@@ -5,8 +5,6 @@ import { Slot } from '@radix-ui/react-slot';
 
 import { cn } from '@/registry/lib/utils';
 
-/* ---------- Context ---------- */
-
 interface SidebarContextValue {
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
@@ -22,8 +20,6 @@ function useSidebar() {
   return context;
 }
 
-/* ---------- Provider ---------- */
-
 interface SidebarProviderProps {
   children: React.ReactNode;
   defaultCollapsed?: boolean;
@@ -38,8 +34,6 @@ function SidebarProvider({ children, defaultCollapsed = false }: SidebarProvider
     </SidebarContext.Provider>
   );
 }
-
-/* ---------- Sidebar ---------- */
 
 interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
@@ -64,8 +58,6 @@ function Sidebar({ className, children, ...props }: SidebarProps) {
   );
 }
 
-/* ---------- SidebarHeader ---------- */
-
 function SidebarHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
@@ -76,8 +68,6 @@ function SidebarHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElem
   );
 }
 
-/* ---------- SidebarContent ---------- */
-
 function SidebarContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
@@ -87,8 +77,6 @@ function SidebarContent({ className, ...props }: React.HTMLAttributes<HTMLDivEle
     />
   );
 }
-
-/* ---------- SidebarFooter ---------- */
 
 function SidebarFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
@@ -103,8 +91,6 @@ function SidebarFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElem
   );
 }
 
-/* ---------- SidebarGroup ---------- */
-
 interface SidebarGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
@@ -116,8 +102,6 @@ function SidebarGroup({ children, className, ...props }: SidebarGroupProps) {
     </div>
   );
 }
-
-/* ---------- SidebarGroupLabel ---------- */
 
 function SidebarGroupLabel({
   className,
@@ -135,8 +119,6 @@ function SidebarGroupLabel({
   );
 }
 
-/* ---------- SidebarGroupContent ---------- */
-
 function SidebarGroupContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
@@ -146,8 +128,6 @@ function SidebarGroupContent({ className, ...props }: React.HTMLAttributes<HTMLD
     />
   );
 }
-
-/* ---------- SidebarItem ---------- */
 
 interface SidebarItemProps extends React.ComponentPropsWithoutRef<'a'> {
   asChild?: boolean;

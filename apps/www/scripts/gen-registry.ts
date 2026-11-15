@@ -7,7 +7,6 @@ export interface ExportMeta {
   value: string;
   label: string;
   snippet: string;
-  /** True when the only declaration of this export is `export default function X()`. */
   defaultOnly: boolean;
 }
 
@@ -55,7 +54,6 @@ interface NamedFn {
   start: number;
   end: number;
   line: number;
-  /** True when this is `export default function X()` (no separate named export). */
   defaultOnly: boolean;
 }
 

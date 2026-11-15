@@ -1,5 +1,3 @@
-// Feature: features/docs-search.md — header Search button and ⌘K open the dialog; query,
-// keyboard navigation, empty state, and opening a result.
 export default async ({ page, step, shot, aria, check, expect }) => {
   const banner = page.getByRole('banner');
   const dialog = page.getByRole('dialog');

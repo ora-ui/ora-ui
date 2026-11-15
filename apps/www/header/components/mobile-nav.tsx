@@ -59,7 +59,6 @@ export function MobileNav() {
         <DrawerViewport>
           <DrawerPopup>
             <DrawerContent className="flex flex-col max-h-[90dvh]">
-              {/* Header row: drag handle + title + close */}
               <div className="flex items-center justify-between px-4 pt-4 pb-2 shrink-0">
                 <div className="absolute left-1/2 top-3 h-1 w-10 -translate-x-1/2 rounded-full bg-line" />
                 <DrawerTitle>Navigation</DrawerTitle>
@@ -72,7 +71,6 @@ export function MobileNav() {
                 </DrawerClose>
               </div>
 
-              {/* Scrollable nav tree */}
               <div className="overflow-y-auto pb-safe pb-6">
                 <SidebarContent>
                   {tree.children.map((item) => {

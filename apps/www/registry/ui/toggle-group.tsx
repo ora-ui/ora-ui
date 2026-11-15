@@ -118,7 +118,6 @@ function ToggleGroupItem({
   ...props
 }: React.ComponentProps<typeof Toggle>) {
   const context = React.useContext(ToggleGroupContext);
-  // Local props win over inherited group values.
   const resolvedVariant = variant ?? context.itemVariant;
   const resolvedSize = size ?? context.size;
   const resolvedTheme = theme ?? context.theme;

@@ -1,5 +1,3 @@
-// Feature: features/playground-theming.md — Theming tab: radius and appearance apply to the
-// whole page and persist across reload.
 export default async ({ page, step, shot, aria, check, expect }) => {
   const controls = page.getByRole('complementary');
   const theming = async () => {

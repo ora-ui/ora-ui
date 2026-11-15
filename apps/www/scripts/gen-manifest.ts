@@ -8,21 +8,16 @@ const WWW_DIR = path.resolve(SCRIPT_DIR, '..');
 const UI_DIR = path.join(WWW_DIR, 'registry', 'ui');
 const OUT_FILE = path.join(WWW_DIR, 'registry.json');
 
-const DEP_SKIP_LIST = [
-  /^(react|react-dom|next)(\/.*)?$/, // peer deps
-  /^(node|jsr|npm):.*$/, // protocol prefixes
-];
+const DEP_SKIP_LIST = [/^(react|react-dom|next)(\/.*)?$/, /^(node|jsr|npm):.*$/];
 
 function resolveNpmDep(specifier: string): string | null {
   if (DEP_SKIP_LIST.some((p) => p.test(specifier))) return null;
 
-  // @scope/pkg/sub-path → @scope/pkg
   if (specifier.startsWith('@')) {
     const parts = specifier.split('/');
     return parts.length > 2 ? parts.slice(0, 2).join('/') : specifier;
   }
 
-  // pkg/sub-path → pkg
   if (specifier.includes('/')) return specifier.split('/')[0];
 
   return specifier;
@@ -65,7 +60,6 @@ function parseImports(filePath: string): { deps: string[]; registryDeps: string[
     } else if (specifier.startsWith('@/registry/ui/')) {
       registryDeps.add(specifier.replace('@/registry/ui/', ''));
     } else if (specifier.startsWith('./') || specifier.startsWith('../')) {
-      // relative imports within same component dir → registryDep
       const name = path.basename(specifier);
       registryDeps.add(name);
     } else {

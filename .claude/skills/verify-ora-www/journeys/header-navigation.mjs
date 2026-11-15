@@ -1,5 +1,3 @@
-// Feature: features/header-navigation.md — primary nav, theme toggle, GitHub link, and the
-// mobile navigation drawer.
 export default async ({ page, step, shot, aria, check, expect }) => {
   const banner = page.getByRole('banner');
   const htmlIsDark = () => page.evaluate(() => document.documentElement.classList.contains('dark'));

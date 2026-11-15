@@ -147,7 +147,6 @@ describe('drift round-trip', () => {
     const opts = setupGenFixture();
     generate(opts);
 
-    // mutate the preview file after generation
     const previewFile = path.join(opts.previewsDir, 'button', 'button-default.tsx');
     fs.writeFileSync(
       previewFile,

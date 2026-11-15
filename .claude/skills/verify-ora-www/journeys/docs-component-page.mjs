@@ -1,5 +1,3 @@
-// Feature: features/docs-component-page.md — reach a component page from the docs sidebar,
-// see the live preview, switch install package managers, and copy the command.
 export default async ({ page, step, shot, aria, check, expect }) => {
   const sidebar = page.getByRole('main').getByRole('navigation').first();
 
@@ -26,7 +24,6 @@ export default async ({ page, step, shot, aria, check, expect }) => {
   });
 
   await step('Copy puts the npm command on the clipboard', async () => {
-    // The preview's code block has its own Copy; scope to the bar that holds the npm tab.
     const bar = page
       .locator('div')
       .filter({ has: page.getByRole('tab', { name: 'npm', exact: true }) })

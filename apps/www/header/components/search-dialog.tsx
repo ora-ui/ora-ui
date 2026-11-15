@@ -175,7 +175,6 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
             if (open) inputRef.current?.focus();
           }}
         >
-          {/* Input row */}
           <div className="flex items-center gap-3 border-b border-line-subtle px-3.5">
             <SearchInputIcon />
             <input
@@ -191,7 +190,6 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
             {query.isLoading && <SpinnerIcon />}
           </div>
 
-          {/* Results / empty states */}
           <div className="max-h-80 overflow-y-auto py-2">
             {results.length > 0 ? (
               <ul className="m-0 list-none p-0">
@@ -219,7 +217,6 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
             )}
           </div>
 
-          {/* Footer hint */}
           <div className="flex items-center gap-3 border-t border-line-subtle px-4 py-2.5">
             <span className="text-xs text-muted">
               <kbd className="font-sans">↑↓</kbd> navigate
