@@ -11,6 +11,15 @@ it does on purpose, note it here (small exceptions) or in an ADR
 (anything that changes the rule). The reference file for each archetype
 is the source of truth: read it before copying anything from this page.
 
+Four rules are enforced. `pnpm --filter www check:conventions` runs in the
+pre-commit hook and in CI, and fails on a new break of
+[Data attributes](#data-attributes) (every part sets `data-slot`),
+[Theme](#theme) (the `data-theme` formula and an open `theme` type) or
+[Docs page, playground entry and install file](#docs-page-playground-entry-and-install-file).
+Known breaks are listed in `apps/www/scripts/conventions-baseline.json`.
+That list only shrinks: fixing a break fails the check until its entry is
+deleted.
+
 Related: [Group](group.md), [Item](item.md),
 [ADR-0010 radius tiers](../adr/0010-radius-tiers-by-role.md),
 [ADR-0011 styling API](../adr/0011-component-styling-api.md),
@@ -64,8 +73,17 @@ parts. If it fits none, say so and ask.
 
 ### Theme
 
-Default to `theme?: 'gray' | 'accent'` with `gray` as the default when
-unsure. Then:
+Default to `gray | accent` with `gray` as the default when unsure. Type
+it as a local alias that also accepts custom strings, so a user's own
+`[data-theme='brand']` block works and the known values still
+autocomplete:
+
+```tsx
+type Theme = 'gray' | 'accent' | (string & {});
+```
+
+Plain `string` drops the autocomplete, so the check requires
+`(string & {})`. Then:
 
 - Can represent a destructive action (Button, menu items) → add
   `destructive`.
@@ -163,6 +181,16 @@ their appearance and structure as `data-variant`, `data-size`,
 `data-orientation`, `data-density`, `data-attached` where they apply,
 so outside CSS can target them.
 
+### Docs page, playground entry and install file
+
+Every `registry/ui` component ships with three files beside it:
+
+- a docs page at `docs/content/components/<name>.mdx`
+  (`pnpm --filter www scaffold component <name>` creates it),
+- a playground entry at `playground/entries/<name>.tsx`,
+- a published install file at `public/r/<name>.json`
+  (`pnpm --filter www build:registry` writes it).
+
 ### Field integration
 
 Text fields and selection controls should work inside Base UI's `Field`
@@ -180,7 +208,8 @@ render Ora's `Button` (see `alert-dialog.tsx`).
   Link, Toggle, ToggleGroup, Switch, Avatar), some don't (Badge,
   Checkbox, CheckboxGroup, Select, DropdownMenu). The desired state is that all themed
   components accept them. That is not reached yet. Tracked in
-  [#283](https://github.com/ora-ui/ora-ui/issues/283).
+  [#283](https://github.com/ora-ui/ora-ui/issues/283). The conventions
+  check baselines these as `theme-open`.
 - Invalid-state styling reaches the destructive scale directly. It may
   become a semantic remap (like `[data-theme]`) once the pattern settles.
 - Toast's theme surface (full semantic set vs `type`) is undecided.
