@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 # Start an isolated Ora www dev server for verification.
-# Usage: launch.sh [port]   (default 3117, or $VERIFY_PORT)
+# Usage: launch.sh [port]   (default: $VERIFY_PORT, else a free port)
 # Uses distDir .next-verify so it never collides with a `pnpm dev` you already run on :3000.
 set -euo pipefail
 
 ROOT="$(git -C "$(dirname "$0")" rev-parse --show-toplevel)"
 WWW="$ROOT/apps/www"
 STATE="$WWW/.verify"
-PORT="${1:-${VERIFY_PORT:-3117}}"
 mkdir -p "$STATE/evidence"
 
 if [[ -f "$STATE/server.pid" ]] && kill -0 "$(cat "$STATE/server.pid")" 2>/dev/null; then
@@ -15,6 +14,8 @@ if [[ -f "$STATE/server.pid" ]] && kill -0 "$(cat "$STATE/server.pid")" 2>/dev/n
   echo "launch: run doctor.sh to reuse it, or cleanup.sh to stop it." >&2
   exit 1
 fi
+PORT="${1:-${VERIFY_PORT:-$(node "$WWW/scripts/free-port.mjs")}}"
+echo "launch: using http://localhost:$PORT"
 if lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; then
   echo "launch: port $PORT is held by a process this skill did not start. Pick another: launch.sh <port>" >&2
   exit 1

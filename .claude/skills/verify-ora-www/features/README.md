@@ -4,7 +4,7 @@ This directory is the maintained source for verifying the user-facing behavior o
 
 ## Baseline preconditions
 
-- A verify instance started by `scripts/launch.sh` (default `http://localhost:3117`, dist dir `apps/www/.next-verify`).
+- A verify instance started by `scripts/launch.sh` (free port printed by `launch.sh`, dist dir `apps/www/.next-verify`).
 - `scripts/doctor.sh` exits 0: our process group owns the port, `/playground/button` serves Ora UI, search API answers.
 - Fresh browser context per journey (`drive.mjs` makes one): dark theme, radius `Medium`, empty URL query, no `localStorage`.
 - Never drive the user's `pnpm dev` on :3000 or any instance this run did not start.

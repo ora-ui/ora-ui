@@ -3,6 +3,7 @@ node_modules
 coverage
 .next
 .next-verify
+.next-e2e
 .verify
 build
 *.hbs

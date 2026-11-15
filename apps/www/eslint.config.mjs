@@ -20,6 +20,7 @@ const eslintConfig = defineConfig([
   globalIgnores([
     '.next/**',
     '.next-verify/**',
+    '.next-e2e/**',
     '**/.source/**',
     'out/**',
     'build/**',

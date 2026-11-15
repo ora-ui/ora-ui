@@ -19,20 +19,20 @@ All helpers live in `.claude/skills/verify-ora-www/scripts/` and resolve the rep
 
 The user usually has `pnpm dev` running on :3000. Never drive, restart, or kill it. Next 16 allows one `next dev` per dist dir, so the verify instance uses its own:
 
-- `NEXT_DIST_DIR=.next-verify` (read by `apps/www/next.config.mjs`) on port **3117** by default.
+- `NEXT_DIST_DIR=.next-verify` (read by `apps/www/next.config.mjs`) on a free port that `launch.sh` picks and prints (pass a port to choose one).
 - Run state lives in `apps/www/.verify/` (gitignored): `server.pid`, `port`, `server.log`, `next-env.d.ts.bak`, and `evidence/`.
 - Starting `next dev` rewrites the gitignored `apps/www/next-env.d.ts` to point at `.next-verify`; `cleanup.sh` restores the original.
 - Shared on purpose: `apps/www/.source/` (fumadocs-mdx output). Both servers regenerate it identically from `docs/content`.
-- Two verify instances at once: pass a different port to `launch.sh`, but they share `.next-verify` and the state dir, so the second refuses to start. One verify instance per checkout.
+- The state dir and `.next-verify` are per checkout, so the second `launch.sh` in a checkout refuses to start. One verify instance per checkout; separate worktrees each get their own.
 
 ## Launch
 
 ```bash
-$V/scripts/launch.sh          # port 3117
-$V/scripts/launch.sh 3200     # another port if 3117 is taken
+$V/scripts/launch.sh          # picks a free port, prints it
+$V/scripts/launch.sh 3200     # explicit port
 ```
 
-It refuses if a verify server is already running or the port is held by anything else. It installs deps if `apps/www/node_modules/next` is missing, starts `pnpm exec next dev -p <port>` in its own process group, waits for `Ready in` in the log, then warms `/playground/button`, `/docs`, `/docs/components/button` and `/api/search?query=button` until each returns 200 (first compile takes ~5s per route). Ready = it prints `launch: ready at http://localhost:<port>`. No database, auth, env vars, or seed data exist; content is the MDX in `apps/www/docs/content` and the entries in `apps/www/playground/entries`.
+It records the port in `apps/www/.verify/port`, which `drive.mjs` and `doctor.sh` read. It refuses if a verify server is already running or the port is held by anything else. It installs deps if `apps/www/node_modules/next` is missing, starts `pnpm exec next dev -p <port>` in its own process group, waits for `Ready in` in the log, then warms `/playground/button`, `/docs`, `/docs/components/button` and `/api/search?query=button` until each returns 200 (first compile takes ~5s per route). Ready = it prints `launch: ready at http://localhost:<port>`. No database, auth, env vars, or seed data exist; content is the MDX in `apps/www/docs/content` and the entries in `apps/www/playground/entries`.
 
 Expected noise in `server.log` (not failures): `Unrecognized key(s) in object: 'turbopack' at "experimental"` and the "inferred your workspace root" lockfile warning.
 
