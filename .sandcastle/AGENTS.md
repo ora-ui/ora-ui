@@ -25,9 +25,6 @@ pnpm sandcastle --execute --only=impl
 pnpm sandcastle --execute --only=review
 pnpm sandcastle --execute --only=address-review
 
-# Emergency rollback to the pre-cutover implementation
-pnpm sandcastle:legacy
-
 # Cleanup stale worktrees and branches
 pnpm sandcastle:clean
 ```
