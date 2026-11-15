@@ -2,19 +2,19 @@
  * Docs Component Scaffolder
  *
  * Usage:
- *   pnpm --filter docs scaffold component <name> ["<description>"] ["<variants>"]
+ *   pnpm --filter www scaffold component <name> ["<description>"] ["<variants>"]
  *
  * Examples:
  *   # All values via positional args (non-interactive)
- *   pnpm --filter docs scaffold component test "A test component" "default,alt"
+ *   pnpm --filter www scaffold component test "A test component" "default,alt"
  *
  *   # Only name required -- prompts for description + variants
- *   pnpm --filter docs scaffold component accordion
+ *   pnpm --filter www scaffold component accordion
  *
  * Test + cleanup:
- *   pnpm --filter docs scaffold component test "A test component" "default,alt"
+ *   pnpm --filter www scaffold component test "A test component" "default,alt"
  *   # Then revert:
- *   git checkout -- apps/www/docs/previews/registry.ts apps/www/registry/lib/sources.ts apps/www/docs/content/components/meta.json
+ *   git checkout -- apps/www/docs/content/components/meta.json
  *   git clean -fd apps/www/docs/previews/test/ apps/www/docs/content/components/test.mdx
  */
 
@@ -102,52 +102,8 @@ export default function (plop) {
           data: { variant },
           skipIfExists: true,
         })),
-        {
-          type: 'modify',
-          path: join(DOC_ROOT, 'docs/previews/registry.ts'),
-          transform(content) {
-            const newImports = [];
-            const heroImport = `import ${pascalCase(name)}Hero from './${name}/${name}-hero';`;
-            if (!content.includes(heroImport)) newImports.push(heroImport);
-            for (const v of variants) {
-              const line = `import ${pascalCase(name)}${pascalCase(v)} from './${name}/${name}-${v}';`;
-              if (!content.includes(line)) newImports.push(line);
-            }
-            if (!newImports.length) return content;
-            const block = newImports.join('\n');
-            return content.replace(/(\n)(\s*\/\/ @scaffold:imports)/, `$1${block}\n$2`);
-          },
-        },
-        {
-          type: 'modify',
-          path: join(DOC_ROOT, 'docs/previews/registry.ts'),
-          transform(content) {
-            const newEntries = [];
-            const heroEntry = `  '${name}-hero': {\n    component: ${pascalCase(name)}Hero,\n    source: readSource('${name}/${name}-hero.tsx'),\n  },`;
-            if (!content.includes(heroEntry)) newEntries.push(heroEntry);
-            for (const v of variants) {
-              const entry = `  '${name}-${v}': {\n    component: ${pascalCase(name)}${pascalCase(v)},\n    source: readSource('${name}/${name}-${v}.tsx'),\n  },`;
-              if (!content.includes(entry)) newEntries.push(entry);
-            }
-            if (!newEntries.length) return content;
-            const block = newEntries.join('\n');
-            return content.replace(/(\n)(\s*\/\/ @scaffold:entries)/, `$1${block}\n$2`);
-          },
-        },
-        {
-          type: 'modify',
-          path: join(DOC_ROOT, 'registry/lib/sources.ts'),
-          transform(content) {
-            const needsQuotes = name.includes('-');
-            const sourceKey = needsQuotes ? `"${name}"` : name;
-            const sourceEntry = `  ${sourceKey}: readSource('${name}.tsx'),`;
-            if (content.includes(sourceEntry)) return content;
-            return content.replace(
-              /(\n)(\s*\/\/ @scaffold:component-entries)/,
-              `$1${sourceEntry}\n$2`
-            );
-          },
-        },
+        // Preview + source registries are generated from the files above by
+        // `pnpm gen:registry` (also runs in `pnpm dev`); nothing to modify here.
         {
           type: 'add',
           path: join(DOC_ROOT, 'docs/content/components/{{name}}.mdx'),
