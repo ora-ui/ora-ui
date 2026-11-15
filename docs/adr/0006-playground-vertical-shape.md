@@ -176,8 +176,8 @@ issue #256.
   "controls sidebar", "nav sidebar". No folder named after a domain
   term, no domain term hidden behind a non-domain name like
   "runtime".
-- Adding a Component is one file (`entries/<name>.tsx`) + one
-  import in `entries/index.ts`. No edits to `lib/` or `components/`.
+- Adding a Component is one file (`entries/<name>.tsx`). The index is
+  generated ([ADR-0013](0013-generated-lists-are-not-committed.md)). No edits to `lib/` or `components/`.
 - Schema shape evolution touches `lib/types.ts`,
   `hooks/use-entry-state.ts`, and `components/layout.tsx` —
   bounded set, all in this slice.

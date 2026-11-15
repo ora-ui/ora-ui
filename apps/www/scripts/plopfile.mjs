@@ -88,18 +88,6 @@ export default function (plop) {
           templateFile: join(TPL_ROOT, 'component.mdx.hbs'),
           skipIfExists: true,
         },
-        {
-          type: 'modify',
-          path: join(DOC_ROOT, 'docs/content/components/meta.json'),
-          transform(content) {
-            const meta = JSON.parse(content);
-            if (!meta.pages.includes(name)) {
-              meta.pages.push(name);
-              meta.pages.sort((a, b) => a.localeCompare(b));
-            }
-            return JSON.stringify(meta, null, 2) + '\n';
-          },
-        },
       ];
     },
   });

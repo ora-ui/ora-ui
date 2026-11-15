@@ -37,8 +37,9 @@ All paths are relative to `apps/www/`.
    pnpm --filter www scaffold component <name> "<description>" "<example1,example2>"
    ```
 
-   This creates the hero and example preview files, the MDX page and the
-   `meta.json` entry. It doesn't touch any registry file; those are
+   This creates the hero and example preview files and the MDX page. The
+   docs `meta.json` is generated from the MDX files (`pnpm gen:lists`,
+   gitignored), so don't edit it. It doesn't touch any registry file; those are
    generated (step 8).
 
 6. **Fill the previews** in `docs/previews/<name>/`. Replace each TODO
