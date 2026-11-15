@@ -1,0 +1,16 @@
+{
+  "button-group-default/default": ["button-name"],
+  "button-group-icon-buttons/icon-buttons": ["button-name"],
+  "button-group-vertical/vertical": ["button-name"],
+  "button-theme/accent": ["color-contrast"],
+  "button-theme/destructive": ["color-contrast"],
+  "switch-hero/hero": ["aria-toggle-field-name"],
+  "switch-theme/accent": ["aria-toggle-field-name"],
+  "switch-theme/gray": ["aria-toggle-field-name"],
+  "toggle-group-connected/connected": ["aria-allowed-attr"],
+  "toggle-group-hero/hero": ["aria-allowed-attr"],
+  "toggle-group-variants/outline": ["aria-allowed-attr"],
+  "toggle-group-variants/soft": ["aria-allowed-attr"],
+  "toggle-group-variants/solid": ["aria-allowed-attr"],
+  "toggle-group-vertical/vertical": ["aria-allowed-attr"]
+}
