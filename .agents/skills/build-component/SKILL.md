@@ -109,7 +109,7 @@ pnpm --filter www scaffold component <name> "<description>" "<variants|none>" <a
 
 `<name>` is kebab-case. `<variants>` is a comma-separated list of
 variant values, or the literal `none` for archetypes without variants
-(`layout`). `<archetype>` is one of: `action`, `selection-control`,
+(`plain-overlay`, `layout`). `<archetype>` is one of: `action`, `selection-control`,
 `text-field`, `list-popup`, `plain-overlay`, `group`, `disclosure`,
 `status-display`, `layout`. A missing argument prints usage; an unknown
 archetype lists the valid ones. It aborts if `registry/ui/<name>.tsx`

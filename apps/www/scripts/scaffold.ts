@@ -186,9 +186,6 @@ export function scaffoldComponent(
   args: Extract<ScaffoldArgs, { command: 'component' }>
 ): string[] {
   const { name, description, variants, archetype } = args;
-  if (fs.existsSync(path.join(wwwRoot, `registry/ui/${name}.tsx`))) {
-    throw new ScaffoldError(`registry/ui/${name}.tsx already exists. Nothing was written.`);
-  }
   const base = baseContext(name, description);
   const ctx = {
     ...base,
