@@ -1,0 +1,20 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "playground/entries/entries.generated.ts",
+        "docs/content/components/meta.json"
+      ]
+    },
+    "typecheck": {
+      "outputs": ["playground/entries/entries.generated.ts", "docs/content/components/meta.json"]
+    },
+    "test": {
+      "outputs": ["playground/entries/entries.generated.ts", "docs/content/components/meta.json"]
+    }
+  }
+}
