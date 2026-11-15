@@ -21,7 +21,7 @@ function FieldLabel({ className, ...props }: FieldPrimitive.Label.Props) {
     <FieldPrimitive.Label
       data-slot="field-label"
       className={cn(
-        'text-sm font-medium text-primary data-invalid:text-(--destructive-secondary)',
+        'text-sm font-medium text-primary data-invalid:text-destructive-900',
         className
       )}
       {...props}
@@ -51,7 +51,7 @@ function FieldError({ className, ...props }: FieldPrimitive.Error.Props) {
   return (
     <FieldPrimitive.Error
       data-slot="field-error"
-      className={cn('text-xs text-(--destructive-secondary)', className)}
+      className={cn('text-xs text-destructive-900', className)}
       {...props}
     />
   );

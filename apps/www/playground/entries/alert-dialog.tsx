@@ -78,7 +78,7 @@ export const alertDialogEntry: EntrySchema = {
               <AlertDialogMedia
                 className={
                   mediaTheme === 'destructive'
-                    ? 'bg-(--destructive-ui) text-destructive-700'
+                    ? 'bg-destructive-a100 text-destructive-700'
                     : undefined
                 }
               >

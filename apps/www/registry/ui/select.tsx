@@ -161,23 +161,20 @@ function SelectLabel({ className, ...props }: SelectPrimitive.GroupLabel.Props) 
 }
 
 function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Props) {
-  const { variant, theme, iconPosition, density } = React.useContext(SelectContext);
+  const { variant, iconPosition, density } = React.useContext(SelectContext);
   const iconStart = iconPosition === 'start';
-  const accent = theme === 'accent';
   const flushRadius = density === 'none';
 
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        'relative flex w-full cursor-default items-center gap-1.5 h-7 text-sm text-gray-primary outline-hidden select-none',
+        'relative flex w-full cursor-default items-center gap-1.5 h-7 text-sm text-gray-950 outline-hidden select-none',
         flushRadius ? 'rounded-none' : 'rounded-(--menu-item-radius)',
         iconStart ? 'pl-7 pr-2' : 'pl-1.5 pr-8',
         variant === 'solid'
-          ? 'data-highlighted:bg-fill data-highlighted:text-on-fill data-highlighted:**:text-on-fill'
-          : accent
-            ? 'data-highlighted:bg-hover/40 data-highlighted:text-secondary'
-            : 'data-highlighted:bg-hover data-highlighted:text-gray-primary',
+          ? 'data-highlighted:bg-solid data-highlighted:text-on-solid data-highlighted:**:text-on-solid'
+          : 'data-highlighted:bg-interactive data-highlighted:text-(--menu-item-highlight-text)',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className

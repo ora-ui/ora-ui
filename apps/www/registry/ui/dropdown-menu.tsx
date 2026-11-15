@@ -78,10 +78,7 @@ function DropdownMenuLabel({
     <MenuPrimitive.GroupLabel
       data-slot="dropdown-menu-label"
       data-inset={inset}
-      className={cn(
-        'px-1.5 py-1 text-xs font-medium text-(--menu-item-text-muted) data-inset:pl-7',
-        className
-      )}
+      className={cn('px-1.5 py-1 text-xs text-secondary data-inset:pl-7', className)}
       {...props}
     />
   );
@@ -94,7 +91,7 @@ const menuContentBaseStyles = [
 ] as const;
 
 const menuItemBaseStyles = [
-  'relative flex cursor-default items-center gap-1.5 rounded-(--menu-item-radius) px-3 py-0.75 text-sm text-[var(--menu-item-text)] outline-hidden select-none',
+  'relative flex cursor-default items-center gap-1.5 rounded-(--menu-item-radius) px-3 py-0.75 text-sm text-gray-950 outline-hidden select-none',
   'data-inset:pl-7',
   'data-disabled:pointer-events-none data-disabled:opacity-50',
   "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
@@ -121,8 +118,8 @@ function DropdownMenuItem({
         'group/dropdown-menu-item',
         menuItemBaseStyles,
         menuVariant === 'solid'
-          ? 'focus:bg-fill focus:text-on-fill focus:**:text-on-fill'
-          : 'focus:bg-hover  focus:text-(--menu-item-text) focus:**:text-(--menu-item-text)',
+          ? 'focus:bg-solid focus:text-on-solid focus:**:text-on-solid'
+          : 'focus:bg-interactive focus:text-(--menu-item-highlight-text) focus:**:text-(--menu-item-highlight-text)',
         className
       )}
       {...props}
@@ -149,8 +146,8 @@ function DropdownMenuSubTrigger({
       className={cn(
         menuItemBaseStyles,
         menuVariant === 'solid'
-          ? 'focus:bg-fill focus:text-on-fill data-popup-open:bg-fill data-popup-open:text-on-fill data-open:bg-fill data-open:text-on-fill'
-          : 'focus:bg-active focus:text-(--menu-item-text) data-popup-open:bg-active data-popup-open:text-(--menu-item-text) data-open:bg-active data-open:text-(--menu-item-text)',
+          ? 'focus:bg-solid focus:text-on-solid data-popup-open:bg-solid data-popup-open:text-on-solid data-open:bg-solid data-open:text-on-solid'
+          : 'focus:bg-interactive-strong focus:text-(--menu-item-highlight-text) data-popup-open:bg-interactive-strong data-popup-open:text-(--menu-item-highlight-text) data-open:bg-interactive-strong data-open:text-(--menu-item-highlight-text)',
         className
       )}
       {...props}
@@ -199,10 +196,10 @@ function DropdownMenuCheckboxItem({
       data-slot="dropdown-menu-checkbox-item"
       data-inset={inset}
       className={cn(
-        'relative flex cursor-default items-center gap-1.5 rounded-(--menu-item-radius) py-1 pr-8 pl-1.5 text-sm text-(--menu-item-text) outline-hidden select-none data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+        'relative flex cursor-default items-center gap-1.5 rounded-(--menu-item-radius) py-1 pr-8 pl-1.5 text-sm text-gray-950 outline-hidden select-none data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
         menuVariant === 'solid'
-          ? 'focus:bg-fill focus:text-on-fill focus:**:text-on-fill'
-          : 'focus:bg-active focus:text-(--menu-item-text) focus:**:text-(--menu-item-text)',
+          ? 'focus:bg-solid focus:text-on-solid focus:**:text-on-solid'
+          : 'focus:bg-interactive-strong focus:text-(--menu-item-highlight-text) focus:**:text-(--menu-item-highlight-text)',
         className
       )}
       checked={checked}
@@ -238,10 +235,10 @@ function DropdownMenuRadioItem({
       data-slot="dropdown-menu-radio-item"
       data-inset={inset}
       className={cn(
-        'relative flex cursor-default items-center gap-1.5 rounded-(--menu-item-radius) py-1 pr-8 pl-1.5 text-sm text-(--menu-item-text) outline-hidden select-none data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+        'relative flex cursor-default items-center gap-1.5 rounded-(--menu-item-radius) py-1 pr-8 pl-1.5 text-sm text-gray-950 outline-hidden select-none data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
         menuVariant === 'solid'
-          ? 'focus:bg-fill focus:text-on-fill focus:**:text-on-fill'
-          : 'focus:bg-active focus:text-(--menu-item-text) focus:**:text-(--menu-item-text)',
+          ? 'focus:bg-solid focus:text-on-solid focus:**:text-on-solid'
+          : 'focus:bg-interactive-strong focus:text-(--menu-item-highlight-text) focus:**:text-(--menu-item-highlight-text)',
         className
       )}
       {...props}
@@ -279,7 +276,7 @@ function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<'spa
     <span
       data-slot="dropdown-menu-shortcut"
       className={cn(
-        'ml-auto pl-4 text-xs tracking-widest text-(--menu-item-text-secondary) group-focus/dropdown-menu-item:text-inherit',
+        'ml-auto pl-4 text-xs tracking-widest text-secondary group-focus/dropdown-menu-item:text-inherit',
         className
       )}
       {...props}
