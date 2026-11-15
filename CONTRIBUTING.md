@@ -38,12 +38,11 @@ When proposing a new component or pattern, include:
 
 If your contribution is approved, read the following before starting:
 
-1. [Constitution](CONSTITUTION.md) — the high-level vision
-2. [Archetypes](docs/patterns/archetypes.md) — the kinds of component and what each needs
-3. [Architecture decisions](docs/adr/) — why things are the way they are, notably
+1. [Archetypes](docs/patterns/archetypes.md) — the kinds of component and what each needs
+2. [Architecture decisions](docs/adr/) — why things are the way they are, notably
    [styling API](docs/adr/0011-component-styling-api.md) and
    [radius tiers](docs/adr/0010-radius-tiers-by-role.md)
-4. The `build-component` skill in [.agents/skills](.agents/skills/build-component/SKILL.md) — the step-by-step build process
+3. The `build-component` skill in [.agents/skills](.agents/skills/build-component/SKILL.md) — the step-by-step build process
 
 The code is the source of truth; see [ADR-0012](docs/adr/0012-documentation-model.md).
 
