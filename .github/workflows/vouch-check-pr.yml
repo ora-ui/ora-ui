@@ -1,0 +1,28 @@
+name: vouch-check-pr
+
+# Closes PRs from authors who are not in .github/VOUCHED.td.
+# Collaborators with write access and bots are skipped.
+#
+# pull_request_target runs with a write token, so this workflow must never
+# check out or run code from the PR. The vouch action only reads PR metadata.
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mitchellh/vouch/action/check-pr@d66fa29a64600490892131ad87597c30c91fcac4 # v1.5.0
+        with:
+          pr-number: ${{ github.event.pull_request.number }}
+          auto-close: true
+          # Dry run: logs what it would close. Set to false to enforce.
+          dry-run: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

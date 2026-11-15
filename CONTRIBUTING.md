@@ -7,12 +7,28 @@ Thank you for your interest in contributing to Ora.
 Ora is in early development. We are building the foundation — the core
 components, patterns, and conventions that will define the project.
 
+## Get Vouched Before Opening a Pull Request
+
+Pull requests from people who are not vouched for are closed automatically.
+This keeps the review queue manageable while the project stabilizes.
+
+To get vouched, open a
+[vouch request](https://github.com/ora-ui/ora-ui/issues/new?template=vouch_request.yml):
+say who you are and what you want to work on, in your own words. A maintainer
+will reply `vouch`, which adds you to [`.github/VOUCHED.td`](.github/VOUCHED.td).
+After that, your pull requests stay open. If one was closed before you were
+vouched, open a new one or ask in your vouch request for it to be reopened.
+
+Collaborators don't need to be vouched. The system is
+[Vouch](https://github.com/mitchellh/vouch).
+
 ## How to Contribute
 
 ### Bug Fixes and Improvements
 
 Bug fixes, performance improvements, and documentation fixes are welcome.
-Open a pull request with a clear description of the problem and solution.
+Once you're vouched, open a pull request with a clear description of the
+problem and solution.
 
 ### New Features, Components, or Patterns
 

@@ -1,0 +1,43 @@
+name: vouch-manage-by-issue
+
+# A maintainer comments `vouch`, `denounce <reason>` or `unvouch` on an issue
+# (or `vouch @user`) to update .github/VOUCHED.td.
+#
+# develop is protected, so the action opens a PR with the change instead of
+# pushing. This needs Settings → Actions → General → "Allow GitHub Actions to
+# create and approve pull requests".
+
+on:
+  issue_comment:
+    types: [created]
+
+concurrency:
+  group: vouch-manage
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  manage:
+    # Cheap pre-filter; the action re-checks the commenter's role itself.
+    if: >-
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association) &&
+      (startsWith(github.event.comment.body, 'vouch') ||
+       startsWith(github.event.comment.body, 'denounce') ||
+       startsWith(github.event.comment.body, 'unvouch'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mitchellh/vouch/action/manage-by-issue@d66fa29a64600490892131ad87597c30c91fcac4 # v1.5.0
+        with:
+          repo: ${{ github.repository }}
+          issue-id: ${{ github.event.issue.number }}
+          comment-id: ${{ github.event.comment.id }}
+          vouched-file: .github/VOUCHED.td
+          pull-request: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
