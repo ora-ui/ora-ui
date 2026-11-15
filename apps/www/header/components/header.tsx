@@ -36,7 +36,7 @@ interface HeaderActionsProps {
   showSearch: boolean;
 }
 
-export function HeaderDesktopActions({ onSearchOpen, showSearch }: HeaderActionsProps) {
+function HeaderDesktopActions({ onSearchOpen, showSearch }: HeaderActionsProps) {
   return (
     <div className="hidden lg:flex items-center gap-2 pr-6">
       {showSearch && (
@@ -72,7 +72,7 @@ export function HeaderDesktopActions({ onSearchOpen, showSearch }: HeaderActions
   );
 }
 
-export function HeaderMobileActions({ onSearchOpen, showSearch }: HeaderActionsProps) {
+function HeaderMobileActions({ onSearchOpen, showSearch }: HeaderActionsProps) {
   return (
     <div className="flex lg:hidden items-center gap-1 pr-4">
       {showSearch && (
@@ -116,7 +116,6 @@ export function Header() {
       <div className="hidden lg:flex items-center gap-8">
         <nav aria-label="Primary navigation" className="flex items-center gap-6 text-sm">
           <Link render={<NextLink href="/docs" />}>Documentation</Link>
-          {/* <Link render={<NextLink href="/docs/components" />}>Components</Link> */}
         </nav>
         <HeaderDesktopActions onSearchOpen={() => setSearchOpen(true)} showSearch={showSearch} />
       </div>

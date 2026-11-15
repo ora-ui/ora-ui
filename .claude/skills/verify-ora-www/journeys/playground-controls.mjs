@@ -1,5 +1,3 @@
-// Feature: features/playground-controls.md — drive the Button entry's controls and prove the
-// preview and the URL (deep link) both follow.
 export default async ({ page, step, shot, aria, check, expect }) => {
   const controls = page.getByRole('complementary');
   const preview = page.locator('main');

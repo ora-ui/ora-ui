@@ -49,7 +49,7 @@ export type InputSpec =
 
 export type ListItem = Record<string, string>;
 
-export type ContentSpec = Record<string, InputSpec>;
+type ContentSpec = Record<string, InputSpec>;
 
 export type ContentGroup = {
   label: string;

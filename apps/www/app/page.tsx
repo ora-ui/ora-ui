@@ -5,12 +5,10 @@ import { motion } from 'motion/react';
 import { MeshGradient } from '@paper-design/shaders-react';
 import { Logo } from '@/header/assets/logo';
 
-/** Shared spring for the entrance — bounce stays at 0 (settle, never overshoot). */
 const SPRING = { type: 'spring', duration: 0.8, bounce: 0 } as const;
 
 const BASE_SPEED = 0.11;
 
-/** Accent (third) gradient color, cycled with the left/right arrow keys. */
 const ACCENTS = ['#333333', '#485721', '#6F451C', '#005C5E', '#4A4A7B', '#743C4D'];
 
 export default function Page() {
@@ -33,7 +31,6 @@ export default function Page() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
 
-  // Hold the shimmer until the entrance has settled, then start it.
   React.useEffect(() => {
     const id = window.setTimeout(() => setShimmer(true), 1050);
     return () => window.clearTimeout(id);
@@ -52,14 +49,12 @@ export default function Page() {
         colors={['#070707', '#111010', ACCENTS[accent]]}
       />
 
-      {/* Logo paths fill with --primary; pin it to a muted white on the dark gradient. */}
       <div
         className="relative grid h-full w-full place-items-center px-6"
         style={{ ['--primary' as string]: 'rgba(255,255,255,0.7)' }}
       >
         <div className="flex items-center">
           <Logo className="h-7 w-auto shrink-0 text-white/80" />
-          {/* Separator + text spring open from zero width, pushing the centered logo aside. */}
           <motion.span
             aria-hidden
             className="flex shrink-0 items-center overflow-hidden"
@@ -75,8 +70,6 @@ export default function Page() {
             animate={{ width: 'auto', opacity: 1, filter: 'blur(0px)' }}
             transition={{ ...SPRING, delay: 0.7 }}
           >
-            {/* Glyphs slide out from the separator's direction as the width opens,
-                then the shimmer sweeps across — both owned by motion's timeline. */}
             <motion.span
               initial={{ x: -8 }}
               animate={{ x: 0 }}

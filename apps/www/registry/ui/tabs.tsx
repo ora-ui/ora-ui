@@ -67,7 +67,6 @@ function TabsList({
             transition &&
               'motion-safe:transition-[translate,width,height] motion-safe:duration-200 motion-safe:ease-in-out',
             [
-              // Anchor to bottom-left; translate to exact tab position for both orientations
               'bottom-0 left-0 rounded-sm',
               'h-(--active-tab-height) w-(--active-tab-width)',
               'translate-x-(--active-tab-left) -translate-y-(--active-tab-bottom)',

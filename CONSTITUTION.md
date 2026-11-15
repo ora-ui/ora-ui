@@ -1,3 +1,0 @@
-# Constitution
-
-TODO

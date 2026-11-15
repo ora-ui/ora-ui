@@ -170,8 +170,9 @@ pattern docs against stable vocabulary.
 - Update `docs/conventions/COMPONENT-DOCS.md` API Reference convention
   to require category subheadings. _(Done; the docs-page conventions now
   live in the `document-component` skill.)_
-- Create `docs/patterns/` tree at the repo root (sibling to
-  `docs/conventions/` and `docs/adr/`) for pattern documentation. In
+- _(Done; `docs/patterns/` holds archetypes, Group and Item.
+  `docs/conventions/` was later removed.)_ Create `docs/patterns/`
+  tree at the repo root for pattern documentation. In
   pre-alpha, pattern docs are contributor/agent-facing only — they
   inform how components get built, which is not yet a user concern.
   Promote to user-facing docs (frontmatter chips on Component docs,

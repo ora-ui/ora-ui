@@ -41,13 +41,8 @@
   --on-solid: var(--gray-50);
   --ui-label: var(--primary);
 
-  /* Semantic color-step aliases (ADR-0008): an interim layer between the
-     remappable semantic tokens (--ui-subtle, --interactive, …) and the raw
-     color scales (--blue-a50, …). Each semantic name maps to a fixed hue:
-     accent→blue, success→green, warning→yellow, destructive→red. A component
-     that needs a specific step not covered by a semantic token references
-     e.g. --accent-a200 to lock to the accent hue without pinning to "blue";
-     redefining what "accent" means happens here, in one place. */
+  /* Fixed-hue step aliases (ADR-0008): accent→blue, success→green,
+     warning→yellow, destructive→red. Remap a hue here, in one place. */
   --accent-50: var(--blue-50);
   --accent-100: var(--blue-100);
   --accent-200: var(--blue-200);
@@ -252,7 +247,6 @@
   --color-on-fill: var(--on-fill);
   --color-ui-label: var(--ui-label);
 
-  /* semantic layer (ADR-0008) */
   --color-surface-1: var(--surface-1);
   --color-surface-2: var(--surface-2);
   --color-ui-subtle: var(--ui-subtle);
@@ -266,7 +260,6 @@
   --color-border-strong: var(--border-strong);
   --color-on-solid: var(--on-solid);
 
-  /* Semantic color-step aliases — fixed-hue steps (see :root above) */
   --color-accent-50: var(--accent-50);
   --color-accent-100: var(--accent-100);
   --color-accent-200: var(--accent-200);
@@ -360,13 +353,11 @@
   --color-destructive-a950: var(--destructive-a950);
 }
 
-/* Shiki dual-theme: map code block backgrounds to Ora surface token */
 :root {
   --shiki-light-bg: var(--subtle);
   --shiki-dark-bg: var(--subtle);
 }
 
-/* Syntax token colors: light mode uses --shiki-light, dark uses --shiki-dark */
 pre.shiki code span {
   color: var(--shiki-light);
   font-style: var(--shiki-light-font-style, normal);
@@ -381,21 +372,16 @@ pre.shiki code span {
   text-decoration: var(--shiki-dark-text-decoration, none);
 }
 
-/* Apply horizontal padding to code element so all lines indent consistently */
 pre.shiki code {
   display: block;
   padding-inline: 0.75rem;
 }
 
-/* Hide Shiki's trailing empty line */
 pre.shiki code .line:last-child:empty {
   display: none;
 }
 
 @layer base {
-  /* * {
-    @apply border-border outline-ring/50;
-  } */
   body {
     @apply bg-background text-primary;
   }

@@ -76,7 +76,6 @@ function extractTextContent(node: React.ReactNode): string {
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
-    // HTML element overrides
     h1: ({ className, ...props }: React.ComponentProps<'h1'>) => (
       <h1
         className={cn('text-3xl font-semibold tracking-tight text-primary', className)}
@@ -213,14 +212,12 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
         {...props}
       />
     ),
-    // Docs components
     CodeBlockTabs,
     Steps,
     Step,
     Callout,
     ComponentPreview,
     ComponentSource,
-    // Ora UI components
     Badge,
     Button,
     ButtonGroup,
@@ -281,5 +278,3 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ...components,
   };
 }
-
-export const useMDXComponents = getMDXComponents;

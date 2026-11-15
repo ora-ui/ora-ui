@@ -8,8 +8,6 @@ import type { EntryState } from '@/playground/lib/types';
 
 type PhosphorIcon = ComponentType<{ className?: string; weight?: 'regular' | 'fill' }>;
 
-// In ghost variant items, swap to filled icon weight when pressed. Detected
-// via the `group/toggle` class on Toggle + aria-pressed CSS variant.
 function ToolIcon({ Icon, fillOnPressed }: { Icon: PhosphorIcon; fillOnPressed: boolean }) {
   if (!fillOnPressed) return <Icon />;
   return (

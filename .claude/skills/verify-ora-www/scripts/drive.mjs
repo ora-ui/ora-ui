@@ -1,13 +1,4 @@
 #!/usr/bin/env node
-// Run one journey against the verify server and write evidence.
-// Usage: drive.mjs <journey-name | path/to/journey.mjs> [--out <dir>] [--headed] [--viewport 1440x900]
-//
-// A journey is an ES module: export default async ({ page, context, base, step, shot, aria, check, expect }) => {}
-//   step(label, fn)  runs fn, records pass/fail in steps.json; a failure stops the journey
-//   shot(name)       viewport screenshot -> NN-name.png
-//   aria(name, loc)  ARIA snapshot of loc (default body) -> NN-name.aria.yml
-//   check(cond, msg) records an assertion; throws inside step() when false
-//   expect           @playwright/test expect (auto-waiting locator assertions)
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
