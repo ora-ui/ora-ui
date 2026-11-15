@@ -18,17 +18,25 @@ Related: [Group](group.md), [Item](item.md),
 
 ## At a glance
 
-| Archetype         | Built                                                             | To build (Base UI)                                           | Theme                                        | Variant                              | Radius                                                   | Reference          |
-| ----------------- | ----------------------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------- | ------------------------------------ | -------------------------------------------------------- | ------------------ |
-| Action            | button, toggle, link                                              | —                                                            | `gray \| accent` (+`destructive` for Button) | yes, 3–5                             | dynamic                                                  | `button.tsx`       |
-| Selection control | checkbox, radio-group, switch                                     | Slider                                                       | `gray \| accent`, active state only          | `solid \| surface` (Switch has none) | intrinsic: full (radio, switch) or `sm` (checkbox)       | `checkbox.tsx`     |
-| Text field        | input, textarea, input-group                                      | NumberField, OTP field                                       | none                                         | `surface \| outline \| soft`         | dynamic (Input); clamped `md` (Textarea, see exceptions) | `input.tsx`        |
-| List popup        | select, dropdown-menu                                             | Combobox, Autocomplete, ContextMenu, Menubar, NavigationMenu | `gray \| accent` on the popup                | `soft \| solid`                      | container `md`, items concentric                         | `select.tsx`       |
-| Plain overlay     | dialog, alert-dialog, drawer, tooltip                             | Popover, PreviewCard                                         | none                                         | none                                 | clamped, steps up with size (`md` → `lg` → `xl`)         | `dialog.tsx`       |
-| Group             | toggle-group, checkbox-group, button-group, avatar-group, toolbar | Fieldset                                                     | inherits from items                          | item variant via context             | container dynamic, items concentric                      | `toggle-group.tsx` |
-| Disclosure        | accordion, tabs                                                   | Collapsible                                                  | none                                         | yes                                  | clamped `md`                                             | `accordion.tsx`    |
-| Status / display  | badge, avatar, kbd                                                | Meter, Progress, Toast                                       | full semantic set when it shows status       | yes                                  | varies (badge formula, avatar full, kbd `sm`)            | `badge.tsx`        |
-| Layout            | separator, scroll-area, label, form                               | Box, Flex, Grid, Stack (Ora additions)                       | none                                         | none                                 | none                                                     | `separator.tsx`    |
+| Archetype         | Built                                                             | To build (Base UI)                                           | Theme                                                                             | Variant                                                                                                                        | Radius                                                                                                                                  | Reference          |
+| ----------------- | ----------------------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| Action            | button, toggle, link                                              | —                                                            | `gray \| accent` (+`destructive` for Button, Link)                                | `solid \| outline \| surface \| soft \| ghost` (+`on-solid` for Toggle in a filled container; Link has none, only `underline`) | dynamic (Link: fixed `xs`)                                                                                                              | `button.tsx`       |
+| Selection control | checkbox, radio-group, switch                                     | Slider                                                       | `gray \| accent`, active state only (Checkbox, Switch; RadioGroup has no `theme`) | `solid \| surface` (Checkbox, RadioGroupItem; Switch has none)                                                                 | intrinsic: full (radio, switch) or `sm` (checkbox)                                                                                      | `checkbox.tsx`     |
+| Text field        | input, textarea, input-group                                      | NumberField, OTP field                                       | none                                                                              | `surface \| outline \| soft` (InputGroup has none; its addon variant is declared but not wired)                                | dynamic (Input, InputGroup); clamped `md` (Textarea, see exceptions)                                                                    | `input.tsx`        |
+| List popup        | select, dropdown-menu                                             | Combobox, Autocomplete, ContextMenu, Menubar, NavigationMenu | `gray \| accent` on the popup                                                     | `soft \| solid`                                                                                                                | container `md`, items concentric                                                                                                        | `select.tsx`       |
+| Plain overlay     | dialog, alert-dialog, drawer, tooltip                             | Popover, PreviewCard                                         | none                                                                              | none                                                                                                                           | fixed, no `size` prop: `lg` (Dialog, AlertDialog), `rounded-t-xl` (Drawer), `md` (Tooltip)                                              | `dialog.tsx`       |
+| Group             | toggle-group, checkbox-group, button-group, avatar-group, toolbar | Fieldset                                                     | ToggleGroup, CheckboxGroup: `theme` via context; others none                      | ToggleGroup (`itemVariant`), CheckboxGroup (`variant`) via context; others none                                                | ToggleGroup: container dynamic, items concentric; others see Context propagation                                                        | `toggle-group.tsx` |
+| Disclosure        | accordion, tabs                                                   | Collapsible                                                  | none                                                                              | Accordion item: `underline \| soft`, plus a root `bordered` boolean. Tabs list: `soft \| solid`                                | clamped `md` (bordered Accordion, TabsSurface); Tabs triggers `sm`, Accordion triggers square with outer corners concentric to the root | `accordion.tsx`    |
+| Status / display  | badge, avatar, kbd                                                | Meter, Progress, Toast                                       | Badge: full semantic set. Avatar: `gray \| accent`. Kbd: none                     | Badge `solid \| soft \| outline \| surface`, Kbd `ghost \| soft \| surface`, Avatar none                                       | varies (badge formula, avatar full, kbd `sm`)                                                                                           | `badge.tsx`        |
+| Layout            | separator, scroll-area, label, form                               | Box, Flex, Grid, Stack (Ora additions)                       | none                                                                              | none                                                                                                                           | none                                                                                                                                    | `separator.tsx`    |
+
+### Outside the archetype model
+
+Three registry components fit no archetype, and that is fine.
+
+- **sidebar**: an app-shell layout part. It has no Base UI primitive, no variant or theme, and only its items are rounded (`md`). Its context carries only `collapsed` state.
+- **sonner**: a themed wrapper around the `sonner` library, not Base UI. It follows `next-themes` and reads `--radius` for the toast radius. Toast is on the Status / display to-build list instead.
+- **visually-hidden**: a screen-reader-only `span` utility. It has no appearance concerns.
 
 ## Classifying a new component
 
@@ -66,11 +74,21 @@ unsure. Then:
 - Text fields, overlays, disclosures and layout: no theme. Text fields
   show errors through the invalid state, not a theme.
 
-Selection controls apply the theme to the active state only
-(checked box, on switch, filled slider track). The idle state stays
-gray.
-
 Apply it with `data-theme={theme !== 'gray' ? theme : undefined}`.
+
+**Active-state variant.** Toggle and Switch set `data-theme` only while
+pressed or checked, so the idle state stays gray:
+
+```tsx
+// toggle.tsx
+data-theme={theme !== 'gray' && pressed ? theme : undefined}
+// switch.tsx
+data-theme={theme !== 'gray' && isChecked ? theme : undefined}
+```
+
+Checkbox sets `data-theme` unconditionally, but its theme styles apply
+to the checked and indeterminate states only. The same goes for a slider
+track when it is built. RadioGroup has no `theme` prop at all.
 
 ### Variant
 
@@ -90,6 +108,14 @@ Known exceptions (eye test over rule):
   enough that a high `--radius` makes it a blob.
 - **Badge**: custom `min()`/`max()` formula so it stays pill-like at low
   radii.
+- **Link**: fixed `rounded-xs`.
+- **Plain overlays**: no `size` prop, so the radius is fixed. Dialog and
+  AlertDialog use `rounded-lg`, Drawer uses `rounded-t-xl` (top corners
+  only), Tooltip uses `rounded-md`.
+- **ButtonGroup**: no container radius. Items keep their own dynamic
+  radius and only the inner corners square off.
+- **Toolbar**: no root radius. ToolbarButton and ToolbarLink are pills
+  (`rounded-4xl`).
 
 When a new component is a large surface in an archetype that defaults to
 dynamic, flag it for an eye test instead of assuming.
@@ -99,19 +125,34 @@ dynamic, flag it for an eye test instead of assuming.
 Containers whose items sit inside padding expose
 `density?: 'none' | 'compact' | 'comfortable'` (default `comfortable`).
 It controls the container padding, and the concentric item radius
-follows. Seen on Select and ToggleGroup. Candidates: other list popups,
+follows. Seen on Select and ToggleGroup only (checked against every
+`registry/ui` file). Candidates: other list popups,
 Toolbar.
 
 ### Context propagation
 
-List popups and Groups pass appearance from the root to parts that are
-portaled or nested, so users set it once:
+List popups, Tabs and some Groups pass appearance from the root to
+parts that are portaled or nested, so users set it once:
 
 ```tsx
 const SelectContext = React.createContext<SelectContextValue>({ ... });
 ```
 
 **Local props win**: `const variant = props.variant ?? context.variant`.
+
+What each Group does today:
+
+| Group         | Context                                                        | Container radius                                 | Item radius                                |
+| ------------- | -------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------ |
+| ToggleGroup   | yes: `itemVariant`, `size`, `theme`, `attached`, `orientation` | dynamic, except variant `none` (no radius)       | concentric via `--item-radius` and density |
+| CheckboxGroup | yes: `variant`, `theme`                                        | none (plain flex column)                         | Checkbox's own `sm`                        |
+| ButtonGroup   | none                                                           | none, inner corners of attached items square off | each Button's own dynamic radius           |
+| AvatarGroup   | none                                                           | none (overlapping stack)                         | Avatar's own full radius                   |
+| Toolbar       | none                                                           | none                                             | pills (`rounded-4xl`), not concentric      |
+
+ToggleGroup and CheckboxGroup match the pattern. ButtonGroup,
+AvatarGroup and Toolbar are exceptions. They are layout shells.
+
 Only propagate appearance (variant, theme, size, density) and structure
 (orientation, attached). Behaviour stays with Base UI.
 
@@ -135,8 +176,11 @@ render Ora's `Button` (see `alert-dialog.tsx`).
 
 ## Open questions
 
-- Theme prop types: some components accept custom theme strings, some
-  don't. Direction: all themed components accept them.
+- Theme prop types: some components accept custom theme strings (Button,
+  Link, Toggle, ToggleGroup, Switch, Avatar), some don't (Badge,
+  Checkbox, CheckboxGroup, Select, DropdownMenu). The desired state is that all themed
+  components accept them. That is not reached yet. Tracked in
+  [#283](https://github.com/ora-ui/ora-ui/issues/283).
 - Invalid-state styling reaches the destructive scale directly. It may
   become a semantic remap (like `[data-theme]`) once the pattern settles.
 - Toast's theme surface (full semantic set vs `type`) is undecided.
