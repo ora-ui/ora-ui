@@ -1,0 +1,38 @@
+import { {{Name}} } from '@/registry/ui/{{name}}';
+import type { EntrySchema } from '@/playground/lib/types';
+
+export const {{camel}}Entry: EntrySchema = {
+  component: '{{name}}',
+  name: '{{Sentence}}',
+  variants: {
+    variant: {
+      values: [{{variantList}}],
+      label: 'Variant',
+      default: '{{defaultVariant}}',
+    },
+    theme: {
+      values: ['gray', 'accent'],
+      label: 'Theme',
+      default: 'gray',
+    },
+  },
+  content: {
+    label: {
+      type: 'string',
+      label: 'Label',
+      default: '{{Sentence}}',
+    },
+  },
+  render: function {{Name}}Render({ variants, inputs }) {
+    return (
+      <label className="flex items-center gap-2">
+        <{{Name}}
+          defaultChecked
+          variant={variants.variant as {{variantUnion}} }
+          theme={variants.theme as string}
+        />
+        <span className="text-sm text-foreground">{inputs.label as string}</span>
+      </label>
+    );
+  },
+};

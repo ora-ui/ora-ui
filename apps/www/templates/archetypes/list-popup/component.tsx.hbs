@@ -1,0 +1,124 @@
+'use client';
+
+import * as React from 'react';
+import { Select as SelectPrimitive } from '@base-ui/react/select';
+import { CheckIcon } from '@phosphor-icons/react';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { cn } from '@/registry/lib/utils';
+
+// TODO: wrap the Base UI primitive for {{name}} if it is not Select, and fill in the variant classes
+const {{camel}}Variants = cva(
+  'relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md bg-overlay p-1 text-primary shadow-md ring-1 ring-line duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+  {
+    variants: {
+      variant: {
+{{#each variants}}
+        '{{value}}': '',
+{{/each}}
+      },
+    },
+    defaultVariants: {
+      variant: '{{defaultVariant}}',
+    },
+  }
+);
+
+type Variant = {{variantUnion}};
+type Theme = 'gray' | 'accent' | (string & {});
+
+interface {{Name}}ContextValue {
+  variant: Variant;
+  theme: Theme;
+}
+
+const {{Name}}Context = React.createContext<{{Name}}ContextValue>({
+  variant: '{{defaultVariant}}',
+  theme: 'gray',
+});
+
+const {{Name}} = SelectPrimitive.Root;
+
+function {{Name}}Value({ className, ...props }: SelectPrimitive.Value.Props) {
+  return (
+    <SelectPrimitive.Value
+      data-slot="{{name}}-value"
+      className={cn('flex flex-1 text-left', className)}
+      {...props}
+    />
+  );
+}
+
+function {{Name}}Trigger(props: SelectPrimitive.Trigger.Props) {
+  return <SelectPrimitive.Trigger data-slot="{{name}}-trigger" {...props} />;
+}
+
+function {{Name}}Content({
+  className,
+  children,
+  side = 'bottom',
+  sideOffset = 4,
+  align = 'center',
+  variant = '{{defaultVariant}}',
+  theme = 'gray',
+  ...props
+}: SelectPrimitive.Popup.Props &
+  Pick<SelectPrimitive.Positioner.Props, 'align' | 'side' | 'sideOffset'> &
+  VariantProps<typeof {{camel}}Variants> & {
+    theme?: Theme;
+  }) {
+  const context = { variant: variant ?? '{{defaultVariant}}', theme };
+  return (
+    <{{Name}}Context.Provider value={context}>
+      <SelectPrimitive.Portal>
+        <SelectPrimitive.Positioner
+          side={side}
+          sideOffset={sideOffset}
+          align={align}
+          className="isolate z-50"
+        >
+          <SelectPrimitive.Popup
+            data-slot="{{name}}-content"
+            data-variant={variant}
+            data-theme={theme !== 'gray' ? theme : undefined}
+            className={cn({{camel}}Variants({ variant }), className)}
+            {...props}
+          >
+            <SelectPrimitive.List>{children}</SelectPrimitive.List>
+          </SelectPrimitive.Popup>
+        </SelectPrimitive.Positioner>
+      </SelectPrimitive.Portal>
+    </{{Name}}Context.Provider>
+  );
+}
+
+function {{Name}}Item({ className, children, ...props }: SelectPrimitive.Item.Props) {
+  const { variant } = React.useContext({{Name}}Context);
+
+  return (
+    <SelectPrimitive.Item
+      data-slot="{{name}}-item"
+      data-variant={variant}
+      className={cn(
+        'relative flex h-7 w-full cursor-default items-center gap-1.5 rounded-(--menu-item-radius) pr-8 pl-1.5 text-sm outline-hidden select-none',
+        'data-highlighted:bg-interactive',
+        'data-disabled:pointer-events-none data-disabled:opacity-50',
+        className
+      )}
+      {...props}
+    >
+      <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-nowrap">
+        {children}
+      </SelectPrimitive.ItemText>
+      <SelectPrimitive.ItemIndicator
+        render={
+          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">
+            <CheckIcon className="pointer-events-none" />
+          </span>
+        }
+      />
+    </SelectPrimitive.Item>
+  );
+}
+
+export { {{Name}}, {{Name}}Content, {{Name}}Item, {{Name}}Trigger, {{Name}}Value, {{camel}}Variants };

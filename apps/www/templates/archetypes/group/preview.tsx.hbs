@@ -1,0 +1,11 @@
+import { {{Name}}, {{Name}}Item } from '@/registry/ui/{{name}}';
+
+export default function {{fn}}() {
+  return (
+    <{{Name}} aria-label="{{Sentence}}" defaultValue={['one']}{{#if variant}} variant="{{variant}}"{{/if}}>
+      <{{Name}}Item value="one">One</{{Name}}Item>
+      <{{Name}}Item value="two">Two</{{Name}}Item>
+      <{{Name}}Item value="three">Three</{{Name}}Item>
+    </{{Name}}>
+  );
+}

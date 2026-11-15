@@ -1,0 +1,7 @@
+import { {{Name}} } from '@/registry/ui/{{name}}';
+
+export default function {{fn}}() {
+  return (
+    <{{Name}}{{#if variant}} variant="{{variant}}"{{/if}} aria-label="{{Sentence}}" placeholder="Type here" className="w-64" />
+  );
+}

@@ -1,0 +1,34 @@
+import {
+  {{Name}},
+  {{Name}}Content,
+  {{Name}}Item,
+  {{Name}}Trigger,
+} from '@/registry/ui/{{name}}';
+import type { EntrySchema } from '@/playground/lib/types';
+
+export const {{camel}}Entry: EntrySchema = {
+  component: '{{name}}',
+  name: '{{Sentence}}',
+  variants: {
+    variant: {
+      values: [{{variantList}}],
+      label: 'Variant',
+      default: '{{defaultVariant}}',
+    },
+  },
+  render: function {{Name}}Render({ variants }) {
+    const variant = variants.variant as {{variantUnion}};
+    return (
+      <{{Name}} defaultValue={['item-1']} className="w-full max-w-sm">
+        <{{Name}}Item value="item-1" variant={variant}>
+          <{{Name}}Trigger>First section</{{Name}}Trigger>
+          <{{Name}}Content>Content for the first section.</{{Name}}Content>
+        </{{Name}}Item>
+        <{{Name}}Item value="item-2" variant={variant}>
+          <{{Name}}Trigger>Second section</{{Name}}Trigger>
+          <{{Name}}Content>Content for the second section.</{{Name}}Content>
+        </{{Name}}Item>
+      </{{Name}}>
+    );
+  },
+};

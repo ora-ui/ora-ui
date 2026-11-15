@@ -1,0 +1,43 @@
+import { Button } from '@/registry/ui/button';
+import {
+  {{Name}},
+  {{Name}}Content,
+  {{Name}}Item,
+  {{Name}}Trigger,
+  {{Name}}Value,
+} from '@/registry/ui/{{name}}';
+import type { EntrySchema } from '@/playground/lib/types';
+
+export const {{camel}}Entry: EntrySchema = {
+  component: '{{name}}',
+  name: '{{Sentence}}',
+  variants: {
+    variant: {
+      values: [{{variantList}}],
+      label: 'Variant',
+      default: '{{defaultVariant}}',
+    },
+    theme: {
+      values: ['gray', 'accent'],
+      label: 'Theme',
+      default: 'gray',
+    },
+  },
+  render: function {{Name}}Render({ variants }) {
+    return (
+      <{{Name}} defaultValue="apple">
+        <{{Name}}Trigger render={<Button variant="outline" />} aria-label="Fruit">
+          <{{Name}}Value />
+        </{{Name}}Trigger>
+        <{{Name}}Content
+          variant={variants.variant as {{variantUnion}} }
+          theme={variants.theme as string}
+        >
+          <{{Name}}Item value="apple">Apple</{{Name}}Item>
+          <{{Name}}Item value="banana">Banana</{{Name}}Item>
+          <{{Name}}Item value="cherry">Cherry</{{Name}}Item>
+        </{{Name}}Content>
+      </{{Name}}>
+    );
+  },
+};

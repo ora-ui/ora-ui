@@ -1,0 +1,44 @@
+import { Input as InputPrimitive } from '@base-ui/react/input';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { cn } from '@/registry/lib/utils';
+
+// TODO: wrap the Base UI primitive for {{name}} if it is not Input, and fill in the variant classes
+const {{camel}}Variants = cva(
+  [
+    'h-7.5 w-full min-w-32 rounded-dynamic px-3 text-sm text-primary',
+    'placeholder:text-secondary',
+    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+    'focus-visible:outline-3 focus-visible:outline-ring/50 focus-visible:outline-offset-0',
+    'aria-invalid:border-destructive-700 aria-invalid:focus-visible:outline-destructive-700',
+  ],
+  {
+    variants: {
+      variant: {
+{{#each variants}}
+        '{{value}}': '',
+{{/each}}
+      },
+    },
+    defaultVariants: {
+      variant: '{{defaultVariant}}',
+    },
+  }
+);
+
+function {{Name}}({
+  className,
+  variant = '{{defaultVariant}}',
+  ...props
+}: InputPrimitive.Props & VariantProps<typeof {{camel}}Variants>) {
+  return (
+    <InputPrimitive
+      data-slot="{{name}}"
+      data-variant={variant}
+      className={cn({{camel}}Variants({ variant, className }))}
+      {...props}
+    />
+  );
+}
+
+export { {{Name}}, {{camel}}Variants };

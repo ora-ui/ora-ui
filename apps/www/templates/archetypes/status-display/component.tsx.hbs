@@ -1,0 +1,54 @@
+import { mergeProps } from '@base-ui/react/merge-props';
+import { useRender } from '@base-ui/react/use-render';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { cn } from '@/registry/lib/utils';
+
+// TODO: fill in the variant classes
+const {{camel}}Variants = cva(
+  "group/{{name}} inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-[min(var(--radius),max(8px,calc(var(--radius)-10px)))] border border-transparent whitespace-nowrap font-medium text-ui-label text-xs h-5 min-w-4.5 px-1.5 focus-visible:outline-2 focus-visible:outline-focus [&>svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3",
+  {
+    variants: {
+      variant: {
+{{#each variants}}
+        '{{value}}': '',
+{{/each}}
+      },
+    },
+    defaultVariants: {
+      variant: '{{defaultVariant}}',
+    },
+  }
+);
+
+type Theme = 'gray' | 'accent' | 'destructive' | 'warning' | 'success' | (string & {});
+
+function {{Name}}({
+  className,
+  variant = '{{defaultVariant}}',
+  theme = 'gray',
+  render,
+  ...props
+}: useRender.ComponentProps<'span'> & VariantProps<typeof {{camel}}Variants> & { theme?: Theme }) {
+  return useRender({
+    defaultTagName: 'span',
+    props: mergeProps<'span'>(
+      {
+        className: cn({{camel}}Variants({ variant }), className),
+        ...({
+          'data-slot': '{{name}}',
+          'data-variant': variant,
+          'data-theme': theme !== 'gray' ? theme : undefined,
+        } as React.HTMLAttributes<HTMLSpanElement>),
+      },
+      props
+    ),
+    render,
+    state: {
+      slot: '{{name}}',
+      variant,
+    },
+  });
+}
+
+export { {{Name}}, {{camel}}Variants };

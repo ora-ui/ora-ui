@@ -1,0 +1,33 @@
+import { {{Name}}, {{Name}}Item } from '@/registry/ui/{{name}}';
+import type { EntrySchema } from '@/playground/lib/types';
+
+export const {{camel}}Entry: EntrySchema = {
+  component: '{{name}}',
+  name: '{{Sentence}}',
+  variants: {
+    variant: {
+      values: [{{variantList}}],
+      label: 'Variant',
+      default: '{{defaultVariant}}',
+    },
+    theme: {
+      values: ['gray', 'accent'],
+      label: 'Theme',
+      default: 'gray',
+    },
+  },
+  render: function {{Name}}Render({ variants }) {
+    return (
+      <{{Name}}
+        aria-label="{{Sentence}}"
+        defaultValue={['one']}
+        variant={variants.variant as {{variantUnion}} }
+        theme={variants.theme as string}
+      >
+        <{{Name}}Item value="one">One</{{Name}}Item>
+        <{{Name}}Item value="two">Two</{{Name}}Item>
+        <{{Name}}Item value="three">Three</{{Name}}Item>
+      </{{Name}}>
+    );
+  },
+};

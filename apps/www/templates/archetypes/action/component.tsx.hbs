@@ -1,0 +1,43 @@
+'use client';
+
+import { Button as ButtonPrimitive } from '@base-ui/react/button';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { cn } from '@/registry/lib/utils';
+
+// TODO: wrap the Base UI primitive for {{name}} if it is not Button, and fill in the variant classes
+const {{camel}}Variants = cva(
+  'group/{{name}} inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-dynamic text-sm text-ui-label font-medium select-none bg-clip-padding disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=\'size-\'])]:size-3 shrink-0 [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-ring',
+  {
+    variants: {
+      variant: {
+{{#each variants}}
+        '{{value}}': '',
+{{/each}}
+      },
+    },
+    defaultVariants: {
+      variant: '{{defaultVariant}}',
+    },
+  }
+);
+
+type Theme = 'gray' | 'accent' | 'destructive' | (string & {});
+
+interface {{Name}}Props extends ButtonPrimitive.Props, VariantProps<typeof {{camel}}Variants> {
+  theme?: Theme;
+}
+
+function {{Name}}({ className, variant = '{{defaultVariant}}', theme = 'gray', ...props }: {{Name}}Props) {
+  return (
+    <ButtonPrimitive
+      data-slot="{{name}}"
+      data-variant={variant}
+      data-theme={theme !== 'gray' ? theme : undefined}
+      className={cn({{camel}}Variants({ variant, className }))}
+      {...props}
+    />
+  );
+}
+
+export { {{Name}}, {{camel}}Variants };

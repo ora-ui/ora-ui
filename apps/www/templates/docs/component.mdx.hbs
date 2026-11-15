@@ -1,6 +1,6 @@
 ---
-title: {{sentenceCase name}}
-description: {{description}}
+title: {{Sentence}}
+description: {{{descriptionYaml}}}
 ---
 
 <ComponentPreview name="{{name}}-hero" />
@@ -52,26 +52,28 @@ description: {{description}}
 {/* TODO: customise import and usage snippet */}
 
 ```tsx
-import { {{pascalCase name}} } from '@/registry/ui/{{name}}';
+import { {{Name}} } from '@/registry/ui/{{name}}';
 
-<{{pascalCase name}}>{{pascalCase name}}</{{pascalCase name}}>;
+<{{Name}}>{{Name}}</{{Name}}>;
 ```
 
+{{#if examples.length}}
 ## Examples
 
-{{#each variants}}
-### {{sentenceCase this}}
+{{#each examples}}
+### {{Sentence}}
 
-{/* TODO: add description for the {{this}} variant */}
+{/* TODO: add description for the {{value}} example */}
 
-<ComponentPreview name="{{@root.name}}-{{this}}" />
+<ComponentPreview name="{{@root.name}}-{{value}}" />
 
 {{/each}}
+{{/if}}
 ## API Reference
 
 {/* TODO: document props from the component source, or replace this section with a single link to the Base UI API reference */}
 
-### {{pascalCase name}}
+### {{Name}}
 
 #### Appearance
 

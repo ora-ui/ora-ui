@@ -1,0 +1,21 @@
+import {
+  {{Name}},
+  {{Name}}Content,
+  {{Name}}Item,
+  {{Name}}Trigger,
+} from '@/registry/ui/{{name}}';
+
+export default function {{fn}}() {
+  return (
+    <{{Name}} defaultValue={['item-1']} className="w-full max-w-sm">
+      <{{Name}}Item value="item-1"{{#if variant}} variant="{{variant}}"{{/if}}>
+        <{{Name}}Trigger>First section</{{Name}}Trigger>
+        <{{Name}}Content>Content for the first section.</{{Name}}Content>
+      </{{Name}}Item>
+      <{{Name}}Item value="item-2"{{#if variant}} variant="{{variant}}"{{/if}}>
+        <{{Name}}Trigger>Second section</{{Name}}Trigger>
+        <{{Name}}Content>Content for the second section.</{{Name}}Content>
+      </{{Name}}Item>
+    </{{Name}}>
+  );
+}
