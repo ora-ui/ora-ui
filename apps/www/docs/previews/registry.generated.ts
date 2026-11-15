@@ -82,7 +82,7 @@ import * as ToggleGroupHeroModule from './toggle-group/toggle-group-hero';
 import * as ToggleGroupVariantsModule from './toggle-group/toggle-group-variants';
 import * as ToggleGroupVerticalModule from './toggle-group/toggle-group-vertical';
 
-export interface PreviewExport {
+interface PreviewExport {
   name: string;
   value: string;
   label: string;

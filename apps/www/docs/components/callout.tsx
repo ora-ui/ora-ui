@@ -43,4 +43,3 @@ function Callout({
 }
 
 export { Callout };
-export type { CalloutVariant };

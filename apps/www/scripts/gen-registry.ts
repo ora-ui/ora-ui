@@ -217,7 +217,7 @@ import type React from 'react';
 
 ${importLines.join('\n')}
 
-export interface PreviewExport {
+interface PreviewExport {
   name: string;
   value: string;
   label: string;
