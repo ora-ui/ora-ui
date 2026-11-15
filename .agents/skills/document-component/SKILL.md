@@ -5,74 +5,107 @@ description: Scaffolds and fills the docs page for an existing Ora UI component,
 
 # Document Component
 
+All paths are relative to `apps/www/`.
+
 ## Procedure
 
-1. **Verify** — check `apps/www/src/components/ui/<name>.tsx` exists. If not, suggest `build-component` instead.
+1. **Verify**: check `registry/ui/<name>.tsx` exists. If not, suggest
+   `build-component` instead.
 
-2. **Check for existing docs** — check if `content/docs/components/<name>.mdx` exists.
-   - **Exists → update path**: read the existing MDX and restructure it to follow current conventions (add `## Examples` wrapper, demote example headings from `##` to `###`, replace any inline code blocks with `<ComponentPreview>`, ensure `## API Reference` follows the API Reference convention). Then ask the user which examples (if any) should use the `select` pattern for interactive variant switching before touching any preview files. Skip to step 6.
-   - **Does not exist → new path**: continue to step 3.
+2. **Check for existing docs** at `docs/content/components/<name>.mdx`.
+   - **Exists (update path)**: read it and restructure it to the page
+     conventions below (`## Examples` wrapper, `###` example headings,
+     `<ComponentPreview>` instead of inline code, API Reference
+     convention). Ask which examples should use the `select` pattern
+     before touching preview files. Skip to step 6.
+   - **Doesn't exist (new path)**: continue.
 
-3. **Read the component** — read the source to understand its prop surface and sub-components.
+3. **Read the component** to learn its parts and own props. If it has a
+   playground entry (`playground/entries/<name>.tsx`), use its prop
+   categories for the API Reference grouping.
 
-4. **Gather inputs** (ask if not provided):
-   - One-line description for the MDX frontmatter
-   - Examples to showcase (e.g. `default,multiple`). Each example becomes a separate preview file and `### Example` section. Name them by the scenario they demonstrate, not by visual style.
-   - **Which examples should be interactive?** Ask the user which examples (if any) should use the `select` pattern to switch between visual variants. Don't infer this — prompt explicitly. Singular examples (e.g. icon-only) and polymorphic examples (e.g. as-a-link) typically don't need it; visual style variant groups typically do. See the Interactive previews convention in [COMPONENT-DOCS.md](../../../../docs/conventions/COMPONENT-DOCS.md).
+4. **Gather inputs** (ask for anything not provided):
+   - A one-line description for the frontmatter.
+   - The examples to show, named by scenario (`multiple`, not
+     `expanded-state`). Each becomes a preview file and a `###` section.
+   - **Which examples use `select`.** Ask; don't infer. See
+     [REFERENCE.md](REFERENCE.md#interactive-previews-select).
 
-5. **Scaffold** — run non-interactively, passing example names as the variants argument:
+5. **Scaffold** non-interactively:
 
    ```bash
    pnpm --filter www scaffold component <name> "<description>" "<example1,example2>"
    ```
 
-   Generates preview files, registry entries, `sources.ts` entry, and the MDX page. See [REFERENCE.md](REFERENCE.md) for the full file list.
+   This creates the hero and example preview files, the MDX page and the
+   `meta.json` entry. It doesn't touch any registry file; those are
+   generated (step 8).
 
-6. **Fill preview TODOs** — for each `src/previews/<name>/<name>-<example>.tsx`, replace the TODO with real JSX derived from the component source. Follow the instance count convention (see Conventions below).
+6. **Fill the previews** in `docs/previews/<name>/`. Replace each TODO
+   with real JSX from the component source. Naming rules (enforced by
+   the generator):
+   - Every exported function starts with the directory's PascalCase name
+     (`docs/previews/button/` → `Button…`).
+   - Every file has a default export.
+   - For a `select` example, export one function per option; the option
+     value is the kebab-case suffix (`ButtonSolid` → `"solid"`). See
+     [REFERENCE.md](REFERENCE.md#interactive-previews-select).
 
-   **If any preview uses the `select` pattern** (new or update path): also update `src/previews/registry.ts` — change the default import to named+default imports, and add a `variants` map to the registry entry. The `select` prop on `<ComponentPreview>` is non-functional without this.
+   Only the hero may render several instances or extra markup. Every
+   other preview, including each `select` option, renders one instance.
 
-   ```ts
-   // imports
-   import BadgeVariantsDefault, {
-     Solid as BadgeVariantsSolid,
-     Soft as BadgeVariantsSoft,
-   } from './badge/badge-variants';
+7. **Fill the MDX**:
+   - Add `links.doc` and `links.api` to the frontmatter when the
+     component wraps a Base UI primitive.
+   - Fill in the usage snippet (import from `@/registry/ui/<name>` plus
+     the minimal part tree).
+   - Add a one-line description above each `<ComponentPreview>`.
+   - Write the API Reference (see conventions below).
 
-   // registry entry
-   'badge-variants': {
-     component: BadgeVariantsDefault,
-     variants: { solid: BadgeVariantsSolid, soft: BadgeVariantsSoft },
-     source: readSource('badge/badge-variants.tsx'),
-   },
-   ```
-
-7. **Fill MDX TODOs** — in `content/docs/components/<name>.mdx`:
-   - Replace the usage snippet (import + minimal JSX)
-   - Add a one-line description above each `<ComponentPreview>`
-   - Fill the `## API Reference` section — see API Reference convention below
-
-8. **Typecheck**:
+8. **Generate and check**:
 
    ```bash
+   pnpm --filter www gen:registry
    pnpm --filter www typecheck
    ```
 
-9. Report what was created or changed. Ask the user to spot-check in dev.
+   `gen:registry` rebuilds `docs/previews/registry.generated.ts` and
+   `registry/lib/sources.generated.ts` and fails on naming violations.
+   Don't edit the generated files.
 
-## Conventions
+9. **Report** what was created or changed and ask the user to check the
+   page in dev.
 
-Full conventions are in [docs/conventions/COMPONENT-DOCS.md](../../../../docs/conventions/COMPONENT-DOCS.md). Quick reference:
+## Page conventions
 
-- Page order: Hero → Installation → Usage → Examples (`### per example`) → API Reference
-- Hero sits above Installation with no heading; `<ComponentPreview>` never has inline code children
-- Manual install step 2 uses `<ComponentSource name="..." />`, never pasted source
-- **Compound primitive** (thin Base UI wrapper, no own props): replace API Reference section with a single link to the Base UI API Reference
-- **Own props** (CVA variants, custom logic): full table per sub-component, ending with a forwarding note
-- **Preview instance count**: the hero preview may render multiple component instances or include additional markup (e.g. a badge composed with a label, or several representative states side by side). Every other preview — including each export in a select — renders a single component instance. Don't show a row of three badges to demonstrate the `soft` variant; show one.
+Order: hero preview (no heading) → `## Installation` → `## Usage` →
+`## Examples` (one `###` per scenario, sentence case) →
+`## API Reference`.
 
-## What NOT to do
+- **Installation**: CLI and Manual tabs, from the template. Manual step 2
+  is `<ComponentSource name="<name>" />`, never pasted source.
+- **Usage**: code only, no prose.
+- **`<ComponentPreview>`** never has children; the preview file renders.
+- **API Reference**:
+  - **Thin Base UI wrapper with no own props**: one line linking to the
+    Base UI API Reference instead of a table.
+  - **Own props**: a `###` section per part with own props, a
+    `| Prop | Type | Default |` table, grouped under `####` Appearance /
+    Structure / Behavior headings
+    ([ADR-0007](../../../docs/adr/0007-component-prop-taxonomy.md)).
+    Skip the `####` headings when a part has two or fewer own props.
+    Content props aren't listed.
+  - End with "All other props are forwarded to the underlying
+    [Base UI X](https://base-ui.com/react/components/x) primitive."
+  - Document notable CSS custom properties and `data-slot` names here
+    too, since components carry no header comment block.
 
-- Don't create files the scaffolder generates — always run the scaffolder first
-- Don't paste preview source into MDX as a code block
-- Don't run the dev server or take screenshots
+See [REFERENCE.md](REFERENCE.md) for a page skeleton and preview
+examples.
+
+## Don't
+
+- Create files the scaffolder generates; run it first.
+- Edit `registry.generated.ts` or `sources.generated.ts`.
+- Paste preview source into the MDX.
+- Run the dev server or take screenshots.

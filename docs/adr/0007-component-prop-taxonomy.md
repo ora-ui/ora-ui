@@ -165,9 +165,11 @@ pattern docs against stable vocabulary.
   / Behavior / Content instead of Variant / Content / Example. Example
   remains out of scope for Entries — that part of ADR-0005 is unchanged.
 - Update `docs/conventions/INDEX.md` props section to name the four
-  categories.
+  categories. _(Done; that doc was later removed — the taxonomy is
+  referenced from [ADR-0011](0011-component-styling-api.md).)_
 - Update `docs/conventions/COMPONENT-DOCS.md` API Reference convention
-  to require category subheadings.
+  to require category subheadings. _(Done; the docs-page conventions now
+  live in the `document-component` skill.)_
 - Create `docs/patterns/` tree at the repo root (sibling to
   `docs/conventions/` and `docs/adr/`) for pattern documentation. In
   pre-alpha, pattern docs are contributor/agent-facing only — they
@@ -185,7 +187,8 @@ pattern docs against stable vocabulary.
   "All other props are forwarded to the underlying Base UI primitive"
   footer. Revisit when a notable forwarded prop (e.g. polymorphism
   via `render`) earns its own callout block in the docs page.
-- Retire the "Documenting the interface" section in
+- _(Done — recorded in [ADR-0011](0011-component-styling-api.md).)_
+  Retire the "Documenting the interface" section in
   `docs/conventions/INDEX.md` that prescribes a JSDoc block on each
   component file listing CSS custom properties and slots. Users own
   the source after install — the block is clutter in the consumer's

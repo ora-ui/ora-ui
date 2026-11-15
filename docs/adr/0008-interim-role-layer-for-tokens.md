@@ -282,25 +282,17 @@ mental model.
 
 ## Followups
 
-- Full rewrite of `docs/conventions/TOKEN-SYSTEM.md` against the
-  three-tier model, the 18-token contract, the naming convention,
-  and the alpha-modifier policy. Absorbs the existing
-  `Performance Contract` section's radius warning as a one-liner
-  inside the Radius section; drops the rest.
-- Update worked examples in `docs/conventions/INDEX.md` (theming
-  pattern, CVA snippet, token usage note) to use new token names.
-- Swap the canonical "intent over scale" example in
-  `docs/PRINCIPLES.md` from `--hover` vs `--gray-200` to
-  `--separator` vs `--gray-400` — preserves the principle without
-  the ordinal-name ambiguity.
-- Update the one-line token reference in
-  `docs/COMPONENT-GUIDE.md`.
+- ~~Rewrite `TOKEN-SYSTEM.md`, and update the token examples in
+  `docs/conventions/INDEX.md`, `docs/PRINCIPLES.md` and
+  `docs/COMPONENT-GUIDE.md`.~~ Superseded 2026-11-14: those docs were
+  removed ([ADR-0012](0012-documentation-model.md)). Token values live
+  in `globals.css`; the radius "don't animate" warning moved to
+  [ADR-0010](0010-radius-tiers-by-role.md).
 - Add `Semantic layer` and `Scale` glossary entries to
   `CONTEXT.md`. They are contributor-meaningful terms (consistent
   with how `Slice`, `Manifest`, etc. are scoped).
-- Port components to the new token names. The Reference
-  Implementations list in `docs/conventions/INDEX.md` updates
-  organically as components migrate. No separate migration doc
+- Port components to the new token names. Reference implementations
+  per archetype are listed in `docs/patterns/archetypes.md`. No separate migration doc
   needed.
 - Component-scoped CSS custom properties (the third tier) are
   covered case-by-case as components grow. A future ADR may
