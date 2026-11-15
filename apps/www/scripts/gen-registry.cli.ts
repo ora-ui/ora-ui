@@ -45,7 +45,8 @@ async function runWatch() {
   const { default: chokidar } = await import('chokidar');
 
   const watcher = chokidar.watch([opts.previewsDir, opts.uiDir], {
-    ignored: [opts.registryOut, opts.sourcesOut, /(^|[/\\])\../],
+    ignored: (p: string) =>
+      p === opts.registryOut || p === opts.sourcesOut || path.basename(p).startsWith('.'),
     ignoreInitial: true,
     awaitWriteFinish: { stabilityThreshold: 100, pollInterval: 50 },
   });

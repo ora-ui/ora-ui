@@ -11,10 +11,11 @@ async function runWatch() {
 
   const { default: chokidar } = await import('chokidar');
 
+  const outs = new Set(specs.map((s) => s.out));
   const watcher = chokidar.watch(
     specs.map((s) => s.dir),
     {
-      ignored: [...specs.map((s) => s.out), /(^|[/\\])\../],
+      ignored: (p: string) => outs.has(p) || path.basename(p).startsWith('.'),
       ignoreInitial: true,
       awaitWriteFinish: { stabilityThreshold: 100, pollInterval: 50 },
     }
