@@ -90,6 +90,9 @@ export function parseArgs(argv: string[]): ParseResult {
 
   const name = rest[0].trim();
   if (!KEBAB.test(name)) return fail(`Name "${name}" must be kebab-case, e.g. date-picker.`);
+  if (name.endsWith('-render')) {
+    return fail(`Name "${name}" cannot end in -render. gen-lists skips those playground files.`);
+  }
   const description = rest[1].trim();
 
   if (command === 'docs') {
@@ -99,7 +102,7 @@ export function parseArgs(argv: string[]): ParseResult {
   }
 
   const archetype = rest[3].trim();
-  if (!(archetype in ARCHETYPES)) {
+  if (!Object.hasOwn(ARCHETYPES, archetype)) {
     return fail(`Unknown archetype "${archetype}". Valid archetypes: ${ARCHETYPE_IDS.join(', ')}.`);
   }
   const id = archetype as ArchetypeId;

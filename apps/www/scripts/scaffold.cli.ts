@@ -37,14 +37,22 @@ try {
   const { args } = parsed;
   const written =
     args.command === 'component' ? scaffoldComponent(wwwRoot, args) : scaffoldDocs(wwwRoot, args);
-  prettier(written);
+  if (written.length === 0) console.log('Every file already exists. Nothing was written.');
+  else prettier(written);
   for (const file of written) console.log(`wrote apps/www/${file}`);
 
   if (args.command === 'component') {
-    run('pnpm', ['run', 'gen:manifest']);
-    writeInstallFile(args.name);
-    run('pnpm', ['run', 'gen:registry']);
-    run('pnpm', ['run', 'gen:lists']);
+    try {
+      run('pnpm', ['run', 'gen:manifest']);
+      writeInstallFile(args.name);
+      run('pnpm', ['run', 'gen:registry']);
+      run('pnpm', ['run', 'gen:lists']);
+    } catch (err) {
+      console.error(
+        `\nA generator failed after the files above were written. Delete them, fix the error and run the same command again.`
+      );
+      throw err;
+    }
   }
 } catch (err) {
   if (!(err instanceof ScaffoldError)) throw err;

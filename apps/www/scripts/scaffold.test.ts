@@ -76,6 +76,8 @@ describe('parseArgs', () => {
     expect(message).toMatch(/Unknown archetype "widget"/);
     for (const id of archetypeIds) expect(message).toContain(id);
     expect(archetypeIds).toHaveLength(9);
+    expect(error('component', 'foo', 'desc', 'none', 'constructor')).toMatch(/Unknown archetype/);
+    expect(error('component', 'foo', 'desc', 'solid', 'toString')).toMatch(/Unknown archetype/);
   });
 
   it('requires none for archetypes without variants and rejects it for the rest', () => {
@@ -88,6 +90,7 @@ describe('parseArgs', () => {
     expect(error('component', 'FooBar', 'desc', 'solid', 'action')).toMatch(/kebab-case/);
     expect(error('component', 'foo_bar', 'desc', 'solid', 'action')).toMatch(/kebab-case/);
     expect(error('component', '1foo', 'desc', 'solid', 'action')).toMatch(/kebab-case/);
+    expect(error('component', 'text-render', 'desc', 'solid', 'action')).toMatch(/-render/);
     expect(error('component', 'foo', 'desc', 'Big Soft', 'action')).toMatch(/kebab-case/);
     expect(error('component', 'foo', 'desc', 'solid,solid', 'action')).toMatch(/twice/);
     expect(error('component', 'foo', 'desc', 'hero', 'action')).toMatch(/reserved/);
