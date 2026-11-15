@@ -129,8 +129,9 @@ of a similar item: `registry:ui`, its file, `dependencies`,
    `apps/www/playground/lib/types.ts`), with a render component (see
    `toggle.tsx` + `toggle-render.tsx`). Put Appearance/Structure props
    in `variants`, behaviour in `behavior`, and content inputs in
-   `content`. Register it in `apps/www/playground/entries/index.ts`
-   (import and array, alphabetical).
+   `content`. No registration step. `pnpm gen:lists`
+   builds `entries.generated.ts` from the folder (gitignored; `pnpm dev`
+   watches, and `build`, `test:unit` and `typecheck` run it).
 2. **Docs page.** Hand off to the `document-component` skill.
 3. **Checks:**
 
