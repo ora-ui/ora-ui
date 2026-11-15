@@ -177,13 +177,14 @@ to allow incremental adoption without requiring consumers to adopt Ora's token s
 The middle tier of Ora's three-tier token architecture ([[Scale]] →
 Semantic layer → component vars). A small, fixed-shape set of named
 roles — backgrounds, surfaces, ui strengths, solids, borders, ring,
-foregrounds — that components actually read. Components never reach
-into the Scale directly; they read semantic roles, and the roles map
-onto Scale steps. A theme reimplements this layer to swap aesthetics
-while the role names and their intent stay constant.
+foregrounds — that components actually read. Components read semantic
+roles first, and the roles map onto Scale steps; a direct Scale reach
+is allowed when no role fits (see `docs/adr/0009-token-architecture.md`).
+A theme reimplements this layer to swap aesthetics while the role names
+and their intent stay constant.
 
-See `docs/conventions/TOKEN-SYSTEM.md` for the full role list and
-naming convention.
+See `apps/www/registry/theme/globals.css` for the full role list and
+`docs/adr/0008-interim-role-layer-for-tokens.md` for the naming convention.
 
 ### Scale
 
@@ -194,5 +195,5 @@ that the [[Semantic layer]] maps onto. New themes plug in by providing
 Scale values for the same set of roles rather than forking the
 component set.
 
-See `docs/conventions/TOKEN-SYSTEM.md` for how Scales back the
+See `apps/www/registry/theme/globals.css` for how Scales back the
 semantic roles.

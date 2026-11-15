@@ -16,3 +16,13 @@ This is a typescript monorepo that uses pnpm as package manager.
 - If you believe a gitleaks finding is a false positive, add an
   allowlist entry in `.gitleaks.toml` with a comment explaining why.
   Do not add to `.gitleaksignore` without a comment.
+
+## Where things live
+
+- **Code is the source of truth.** Tokens: `apps/www/registry/theme/globals.css`.
+  Components: `apps/www/registry/ui/`. If a doc disagrees with the code, the code wins.
+- **Workflows** (build, document, commit, file an issue): `.agents/skills/`.
+  `.claude/skills/*` are symlinks to it — edit the `.agents` copy.
+- **Why** something non-obvious is the way it is: `docs/adr/`.
+- **What we usually do** (archetypes, Group, Item): `docs/patterns/`. A guide, not a contract.
+- **Terms**: `CONTEXT.md`.

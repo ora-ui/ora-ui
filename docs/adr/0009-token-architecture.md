@@ -1,13 +1,16 @@
-# ADR-0008: Token architecture (scale foundation, semantic API, inline theme retargeting)
+# ADR-0009: Token architecture (scale foundation, semantic API, inline theme retargeting)
 
 ## Status
 
-Proposed — 2026-06-09
+Proposed — 2026-06-09. Amended 2026-11-14 (renumbered from a duplicate
+0008; source of truth moved from `TOKEN-SYSTEM.md` to `globals.css` —
+see [Source-of-truth](#source-of-truth)).
 
 ## Relationship to ADR-0008 (interim role layer)
 
-This ADR sits alongside `0008-interim-role-layer-for-tokens.md`. The
-two share a number; they cover different cuts of the same decision:
+This ADR sits alongside [ADR-0008](0008-interim-role-layer-for-tokens.md).
+They cover different cuts of the same decision (originally both were
+numbered 0008):
 
 - **The interim ADR is the contract**: the 18-token semantic layer
   shape, naming convention (rest/interactive split + ordinal ladders
@@ -17,7 +20,7 @@ two share a number; they cover different cuts of the same decision:
 - **This ADR is the implementation strategy** for Ora's base theme:
   how the scale layer is sourced (Radix step semantics for gray and
   custom accents), how `[data-theme]` retargeting works without an
-  intermediate role-binding layer, how docs serve as the spec, how
+  intermediate role-binding layer, where the spec lives, how
   promotion of new semantic tokens is governed, and how migration
   sequences.
 
@@ -28,7 +31,7 @@ authored, how `[data-theme]` blocks resolve, migration sequencing).
 
 ## Context
 
-Ora's current token system (documented in `docs/conventions/TOKEN-SYSTEM.md`)
+Ora's token system at the time (documented in the since-removed `docs/conventions/TOKEN-SYSTEM.md`)
 defines semantic tokens directly with hex values and uses a per-theme
 alias layer to support themed components:
 
@@ -227,9 +230,9 @@ blocks (`--ui` reads step 3 everywhere). Some do not, by design:
 the alpha variant of step 11) in accent themes, because colored
 accents at the deepest step oversaturate as label text.
 
-These intentional step shifts are documented in TOKEN-SYSTEM.md, not
-encoded in CSS. The CSS expresses what each token _is_; the docs
-explain _why_.
+These intentional step shifts are explained by a short comment next to
+the token in `globals.css`. The value expresses what each token _is_;
+the comment explains _why_.
 
 ### Semantic-first rule
 
@@ -247,22 +250,21 @@ count grows past easy PR review.
 
 ### Source-of-truth
 
-`docs/conventions/TOKEN-SYSTEM.md` holds the spec for every token:
-which palette and step it reads from in each context (base, each
-`[data-theme]`), and the rationale for any step-shifts. Encoded as
-tables per token domain so each token is one row, scannable and
-diff-friendly.
+> **Amended 2026-11-14.** This section originally made
+> `docs/conventions/TOKEN-SYSTEM.md` the contract, with CSS as the
+> implementation. In practice the doc drifted from `globals.css` within
+> months, so the spec was wrong exactly when agents relied on it. Per
+> [ADR-0012](0012-documentation-model.md), code is the source of truth.
 
-CSS is the implementation. Agents and contributors are prompted to
-read TOKEN-SYSTEM.md first and treat it as the contract; if CSS
-disagrees with docs, the CSS is wrong.
+`apps/www/registry/theme/globals.css` is the spec for every token: which
+palette and step it reads in `:root` and in each `[data-theme]` block.
+Step shifts and other non-obvious choices get a short comment next to
+the token. Agents and contributors read `globals.css` directly; there
+is no separate token table to keep in sync.
 
-No automated drift detector ships with this decision. Drift is a real
-risk but bounded by the small token surface, the single curator, and
-the table format (which makes "did this PR update the doc?" a fast
-review question). The table-shaped spec is latent capability for a
-future script if drift becomes a felt pain — addable without
-restructuring the doc.
+The contract-level decisions (the semantic layer shape, naming, the
+alpha-modifier policy) stay in ADR-0008 and this ADR. They change
+rarely, and when they do the ADR is updated or superseded.
 
 ## Alternatives considered
 
@@ -336,15 +338,10 @@ intentional exceptions without polluting consumer-owned CSS.
   "accent `--ui`" is convention-enforced rather than structural. A
   later drift script can mitigate, but ships with this ADR as a
   deferred capability, not a built-in safeguard.
-- TOKEN-SYSTEM.md becomes load-bearing — it's the source of truth
-  for token spec, not just narrative. Drift between docs and CSS
-  becomes a real bug class.
-- Onus on the curator (single gatekeeper) to keep docs current with
-  CSS, and to make semantic-promotion calls. Bottleneck risk if the
-  curator's bandwidth shrinks.
-- Migration cost: globals.css needs restructuring; TOKEN-SYSTEM.md
-  needs rewriting; existing components keep working (they reference
-  semantic tokens which still exist) but the underlying definitions
+- Onus on the curator (single gatekeeper) to make semantic-promotion
+  calls. Bottleneck risk if the curator's bandwidth shrinks.
+- Migration cost: globals.css needs restructuring; existing components
+  keep working (they reference semantic tokens which still exist) but the underlying definitions
   shift wholesale.
 
 ## Followups
@@ -374,16 +371,9 @@ intentional exceptions without polluting consumer-owned CSS.
 - **Migration is independent of the eager Entry-schema migration
   (ADR-0007).** They share no risk surface and should not be batched —
   coupling them lets either's iteration block the other.
-- Rewrite `docs/conventions/TOKEN-SYSTEM.md` to use the table-per-
-  domain spec shape. Each token = one row with base step, theme
-  steps, notes for any step-shifts. Lands with Phase 2.
-- Add prompt-level guidance for agents (likely in `AGENTS.md` or a
-  token-focused convention doc) that says: read TOKEN-SYSTEM.md
-  first when touching tokens; treat it as the spec; update the doc
-  table in the same PR as any token change.
+- ~~Rewrite `TOKEN-SYSTEM.md` as a table-per-domain spec; add agent
+  guidance to read it first.~~ Superseded by the 2026-11-14 amendment:
+  `globals.css` is the spec, with comments for step shifts.
 - Audit existing `bg-ui/50`-style alpha modifier usage after Phase 2.
   Each is a candidate for either a new semantic token (curator-
   promoted) or a documented scale-direct reach.
-- Build a drift detection script if drift between docs and CSS
-  becomes felt pain. The table format is designed to support this
-  without restructuring.
