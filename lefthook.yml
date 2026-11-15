@@ -13,12 +13,12 @@ pre-commit:
     secrets:
       run: npx tsx scripts/run-gitleaks-staged.ts
     gen-manifest:
-      glob: 'apps/www/registry/ui/**/*'
+      glob: 'apps/www/registry/ui/**'
       root: 'apps/www'
       run: pnpm run gen:manifest
       stage_fixed: true
     gen-registry:
-      glob: 'apps/www/{registry/ui,docs/previews}/**/*'
+      glob: 'apps/www/{registry/ui,docs/previews}/**'
       root: 'apps/www'
       run: pnpm run gen:registry
       stage_fixed: true
