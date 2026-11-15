@@ -22,6 +22,10 @@ pre-commit:
       root: 'apps/www'
       run: pnpm run gen:registry
       stage_fixed: true
+    conventions:
+      glob: 'apps/www/{registry/ui,docs/content/components,playground/entries,public/r,scripts}/**'
+      root: 'apps/www'
+      run: pnpm run check:conventions
 
 commit-msg:
   commands:
