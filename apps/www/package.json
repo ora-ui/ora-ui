@@ -20,7 +20,7 @@
     "gen:manifest": "tsx scripts/gen-manifest.ts",
     "gen:manifest:check": "tsx scripts/gen-manifest.ts --check",
     "build:registry": "pnpm gen:manifest && shadcn build",
-    "postinstall": "pnpm gen:lists"
+    "postinstall": "pnpm gen:lists || echo 'gen-lists failed, see the error above. Install continues, but build and typecheck will fail until it is fixed.'"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

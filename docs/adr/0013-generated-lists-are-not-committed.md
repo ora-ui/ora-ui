@@ -26,7 +26,9 @@ for a committed generated file.
 `entries.generated.ts` and `meta.json` are gitignored and never
 committed. Every command that needs them generates them first:
 `pnpm dev` (watch mode), `build`, `test:unit`, `typecheck`, and
-`postinstall` for fresh clones and editors.
+`postinstall` for fresh clones and editors. `postinstall` only warns
+when generation fails, so a bad entry file blocks commits and builds
+but never `pnpm install`.
 
 Rejected:
 
