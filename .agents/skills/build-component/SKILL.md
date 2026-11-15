@@ -101,7 +101,10 @@ draft and confirm again.
 
 ## Phase 3: Scaffold, then implement
 
-Start by scaffolding. Every argument is required; there is no prompt.
+For a new component, start by scaffolding. Every argument is required;
+there is no prompt. A rework skips the scaffold, since the component
+file exists; run `pnpm --filter www scaffold docs` if its docs page is
+missing.
 
 ```bash
 pnpm --filter www scaffold component <name> "<description>" "<variants|none>" <archetype>
@@ -112,8 +115,8 @@ variant values, or the literal `none` for archetypes without variants
 (`plain-overlay`, `layout`). `<archetype>` is one of: `action`, `selection-control`,
 `text-field`, `list-popup`, `plain-overlay`, `group`, `disclosure`,
 `status-display`, `layout`. A missing argument prints usage; an unknown
-archetype lists the valid ones. It aborts if `registry/ui/<name>.tsx`
-already exists.
+archetype lists the valid ones. It aborts, writing nothing, if any file
+it would write already exists.
 
 It writes:
 
@@ -129,8 +132,8 @@ and then runs the generators, which update:
 - `apps/www/public/r/<name>.json` (the install file)
 - `apps/www/docs/previews/registry.generated.ts` and
   `apps/www/registry/lib/sources.generated.ts` (`gen:registry`)
-- `playground/entries/entries.generated.ts` and
-  `docs/content/components/meta.json` (`gen:lists`)
+- `apps/www/playground/entries/entries.generated.ts` and
+  `apps/www/docs/content/components/meta.json` (`gen:lists`)
 
 No index needs a hand edit. Don't add the registry item to
 `registry.json` yourself.
@@ -164,8 +167,8 @@ EntrySchema`, types in `apps/www/playground/lib/types.ts`). Put
    a file (`pnpm dev` watches; `build`, `test:unit` and `typecheck`
    run it).
 2. **Docs page.** Fill the scaffolded page and previews with the
-   `document-component` skill (skip its scaffold step; `scaffold
-component` already wrote them).
+   `document-component` skill. For a new component, skip its scaffold
+   step, since `scaffold component` already wrote them.
 3. **Checks:**
 
    ```bash

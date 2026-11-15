@@ -249,8 +249,8 @@ const RULES: Record<RuleId, Rule> = {
   'playground-entry': fileRule(
     (slug) => `playground/entries/${slug}.tsx`,
     'playground entry',
-    (slug) =>
-      `\`pnpm --filter www scaffold component ${slug} ...\` writes it, or copy the shape of playground/entries/button.tsx`,
+    () =>
+      'Copy the shape of playground/entries/button.tsx. For a new component, `pnpm --filter www scaffold component` writes it',
     'playground-entry'
   ),
   'install-file': fileRule(
