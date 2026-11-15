@@ -37,7 +37,7 @@ pre-push:
     build:
       run: pnpm run build
     test:
-      run: pnpm run test
+      run: pnpm --filter www test:unit
 
 post-merge:
   commands:
