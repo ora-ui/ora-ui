@@ -43,7 +43,9 @@ Rejected:
   own files.
 - A checkout without `pnpm install` or `pnpm gen:lists` has no
   `entries.generated.ts`, and imports of `@/playground/entries` fail
-  until it is generated.
+  until it is generated. `launch.sh` and the post-checkout hook run
+  `pnpm gen:lists`, so bare `next dev` and branch switches that delete
+  `meta.json` regenerate it.
 - `meta.json` is invisible in git. Sidebar order is always alphabetical
   by slug. Custom ordering would need a different mechanism.
 - A playground entry file must export a const named `<camelSlug>Entry`
