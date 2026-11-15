@@ -44,3 +44,5 @@ post-checkout:
   commands:
     install:
       run: git diff --name-only "$1" "$2" | grep -q pnpm-lock.yaml && pnpm install || true
+    gen-lists:
+      run: pnpm -C apps/www gen:lists
