@@ -5,17 +5,24 @@ components with the same role, and so the same styling concerns. Classify
 a new component first, and most of its API follows: whether it is themed,
 which variants it offers, its radius tier, whether it propagates context.
 
-**Direction, not enforcement.** These are observations of the current
-code, not rules. A component may deviate when its needs demand it; when
-it does on purpose, note it here (small exceptions) or in an ADR
-(anything that changes the rule). The reference file for each archetype
-is the source of truth: read it before copying anything from this page.
+**Mostly direction.** Most of this page describes the current code, not
+rules. A component may deviate when its needs demand it; when it does on
+purpose, note it here (small exceptions) or in an ADR (anything that
+changes the rule). The reference file for each archetype is the source
+of truth: read it before copying anything from this page.
 
-Four rules are enforced. `pnpm --filter www check:conventions` runs in the
-pre-commit hook and in CI, and fails on a new break of
-[Data attributes](#data-attributes) (every part sets `data-slot`),
-[Theme](#theme) (the `data-theme` formula and an open `theme` type) or
-[Docs page, playground entry and install file](#docs-page-playground-entry-and-install-file).
+**Checked rules.** `pnpm --filter www check:conventions` runs in the
+pre-commit hook and in CI. It fails when a component breaks one of these:
+
+- [Data attributes](#data-attributes): every exported component sets
+  `data-slot`. A component that only provides context and renders no
+  element of its own is exempt. The other data attributes are not
+  checked.
+- [Theme](#theme): `data-theme` uses the documented formula, and a
+  `theme` prop accepts custom strings.
+- [Docs page, playground entry and install file](#docs-page-playground-entry-and-install-file):
+  each component has all three.
+
 Known breaks are listed in `apps/www/scripts/conventions-baseline.json`.
 That list only shrinks: fixing a break fails the check until its entry is
 deleted.
@@ -176,10 +183,12 @@ Only propagate appearance (variant, theme, size, density) and structure
 
 ### Data attributes
 
-Every part sets `data-slot="<component>-<part>"`. Parts also reflect
-their appearance and structure as `data-variant`, `data-size`,
-`data-orientation`, `data-density`, `data-attached` where they apply,
-so outside CSS can target them.
+Every exported component sets `data-slot`: `"<component>"` on the root
+(`data-slot="button"`) and `"<component>-<part>"` on the other parts
+(`data-slot="select-trigger"`). Parts also reflect their appearance and
+structure as `data-variant`, `data-size`, `data-orientation`,
+`data-density`, `data-attached` where they apply, so outside CSS can
+target them.
 
 ### Docs page, playground entry and install file
 
