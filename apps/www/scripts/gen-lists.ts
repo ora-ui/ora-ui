@@ -13,7 +13,6 @@ export class MissingEntryExportError extends Error {
 }
 
 export interface ListSpec {
-  name: string;
   dir: string;
   out: string;
   slugOf: (file: string) => string | null;
@@ -75,7 +74,6 @@ export function createSpecs(wwwRoot: string): ListSpec[] {
   const docsDir = path.join(wwwRoot, 'docs/content/components');
   return [
     {
-      name: 'playground entries',
       dir: entriesDir,
       out: path.join(entriesDir, 'entries.generated.ts'),
       slugOf: (file) =>
@@ -83,7 +81,6 @@ export function createSpecs(wwwRoot: string): ListSpec[] {
       render: renderEntries,
     },
     {
-      name: 'docs meta',
       dir: docsDir,
       out: path.join(docsDir, 'meta.json'),
       slugOf: (file) => (file.endsWith('.mdx') ? path.basename(file, '.mdx') : null),
@@ -92,7 +89,7 @@ export function createSpecs(wwwRoot: string): ListSpec[] {
   ];
 }
 
-export function renderList(spec: ListSpec): string {
+function renderList(spec: ListSpec): string {
   const slugs = fs
     .readdirSync(spec.dir)
     .map(spec.slugOf)
