@@ -61,7 +61,7 @@ For more information, see the Base UI [Accordion API Reference](https://base-ui.
 ## Scaffolder
 
 ```bash
-pnpm --filter www scaffold component <name> "<description>" "<example1,example2>"
+pnpm --filter www scaffold docs <name> "<description>" "<example1,example2>"
 ```
 
 | File                                        | Action                                        |

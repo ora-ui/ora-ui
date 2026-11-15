@@ -99,15 +99,51 @@ Confirm or correct, and I'll build it.
 Wait for a clear go-ahead. If the user changes something, update the
 draft and confirm again.
 
-## Phase 3: Implementation
+## Phase 3: Scaffold, then implement
 
-Write `apps/www/registry/ui/<name>.tsx`, in this order:
+Start by scaffolding. Every argument is required; there is no prompt.
+
+```bash
+pnpm --filter www scaffold component <name> "<description>" "<variants|none>" <archetype>
+```
+
+`<name>` is kebab-case. `<variants>` is a comma-separated list of
+variant values, or the literal `none` for archetypes without variants
+(`layout`). `<archetype>` is one of: `action`, `selection-control`,
+`text-field`, `list-popup`, `plain-overlay`, `group`, `disclosure`,
+`status-display`, `layout`. A missing argument prints usage; an unknown
+archetype lists the valid ones. It aborts if `registry/ui/<name>.tsx`
+already exists.
+
+It writes:
+
+- `apps/www/registry/ui/<name>.tsx` (the archetype's starting shape)
+- `apps/www/playground/entries/<name>.tsx`
+- `apps/www/docs/content/components/<name>.mdx`
+- `apps/www/docs/previews/<name>/<name>-hero.tsx`
+- `apps/www/docs/previews/<name>/<name>-<variant>.tsx`, one per variant
+
+and then runs the generators, which update:
+
+- `apps/www/registry.json` (`gen:manifest`)
+- `apps/www/public/r/<name>.json` (the install file)
+- `apps/www/docs/previews/registry.generated.ts` and
+  `apps/www/registry/lib/sources.generated.ts` (`gen:registry`)
+- `playground/entries/entries.generated.ts` and
+  `docs/content/components/meta.json` (`gen:lists`)
+
+No index needs a hand edit. Don't add the registry item to
+`registry.json` yourself.
+
+Then fill in `apps/www/registry/ui/<name>.tsx`, in this order. The
+template imports the reference component's Base UI primitive; swap it
+if yours differs.
 
 1. **Types**: variant, theme and other unions. Theme follows whatever
    the reference file does for custom strings.
 2. **cva definitions** using semantic tokens (`bg-ui`, `text-primary`,
    `border-border`). Reach into the colour scale only when no semantic
-   token fits.
+   token fits. The scaffold leaves variant classes empty.
 3. **Context** (if any), with defaults matching the root's defaults.
 4. **Parts**: wrap the Base UI part, set `data-slot="<name>-<part>"`,
    reflect appearance as `data-variant` / `data-size` / etc., set
@@ -118,26 +154,24 @@ Write `apps/www/registry/ui/<name>.tsx`, in this order:
 
 Don't add a header comment block listing CSS variables or slots.
 
-Then add the registry item to `apps/www/registry.json` (copy the shape
-of a similar item: `registry:ui`, its file, `dependencies`,
-`registryDependencies: ["utils"]`, plus any Ora components it imports).
-
 ## Phase 4: Playground, docs and checks
 
-1. **Playground entry.** Create `apps/www/playground/entries/<name>.tsx`
-   exporting `<name>Entry: EntrySchema` (types in
-   `apps/www/playground/lib/types.ts`), with a render component (see
-   `toggle.tsx` + `toggle-render.tsx`). Put Appearance/Structure props
-   in `variants`, behaviour in `behavior`, and content inputs in
-   `content`. No registration step. `pnpm gen:lists`
-   builds `entries.generated.ts` from the folder (gitignored; `pnpm dev`
-   watches, and `build`, `test:unit` and `typecheck` run it).
-2. **Docs page.** Hand off to the `document-component` skill.
+1. **Playground entry.** Edit the scaffolded
+   `apps/www/playground/entries/<name>.tsx` (`<name>Entry:
+EntrySchema`, types in `apps/www/playground/lib/types.ts`). Put
+   Appearance/Structure props in `variants`, behaviour in `behavior`,
+   and content inputs in `content`. Rerun `pnpm gen:lists` if you add
+   a file (`pnpm dev` watches; `build`, `test:unit` and `typecheck`
+   run it).
+2. **Docs page.** Fill the scaffolded page and previews with the
+   `document-component` skill (skip its scaffold step; `scaffold
+component` already wrote them).
 3. **Checks:**
 
    ```bash
    pnpm --filter www typecheck
    pnpm --filter www lint
+   pnpm --filter www check:conventions
    ```
 
 4. **Report** what you built, what you inferred versus what the user

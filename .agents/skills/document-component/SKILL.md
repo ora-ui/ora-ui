@@ -34,10 +34,12 @@ All paths are relative to `apps/www/`.
 5. **Scaffold** non-interactively:
 
    ```bash
-   pnpm --filter www scaffold component <name> "<description>" "<example1,example2>"
+   pnpm --filter www scaffold docs <name> "<description>" "<example1,example2>"
    ```
 
-   This creates the hero and example preview files and the MDX page. The
+   Every argument is required. This is for a component that already
+   exists; `scaffold component` (build-component) writes the docs page
+   itself. This creates the hero and example preview files and the MDX page. The
    docs `meta.json` is generated from the MDX files (`pnpm gen:lists`,
    gitignored), so don't edit it. It doesn't touch any registry file; those are
    generated (step 8).
