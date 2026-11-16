@@ -1,0 +1,10 @@
+import { {{Name}} } from '@/registry/ui/{{name}}';
+
+export default function {{fn}}() {
+  return (
+    <label className="flex items-center gap-2">
+      <{{Name}}{{#if variant}} variant="{{variant}}"{{/if}} defaultChecked />
+      <span className="text-sm text-foreground">{{Sentence}}</span>
+    </label>
+  );
+}

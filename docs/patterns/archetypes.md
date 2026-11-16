@@ -195,10 +195,12 @@ target them.
 Every `registry/ui` component ships with three files beside it:
 
 - a docs page at `docs/content/components/<name>.mdx`
-  (`pnpm --filter www scaffold component <name>` creates it),
+  (`pnpm --filter www scaffold component <name> ...` creates it for a new
+  component; `scaffold docs` creates the page and its previews for an existing one),
 - a playground entry at `playground/entries/<name>.tsx`,
 - a published install file at `public/r/<name>.json`
-  (`pnpm --filter www build:registry` writes it).
+  (`scaffold component` writes it; `pnpm --filter www build:registry`
+  rebuilds all of them).
 
 ### Field integration
 

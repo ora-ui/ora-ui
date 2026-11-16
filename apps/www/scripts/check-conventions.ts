@@ -243,13 +243,14 @@ const RULES: Record<RuleId, Rule> = {
     (slug) => `docs/content/components/${slug}.mdx`,
     'docs page',
     (slug) =>
-      `\`pnpm --filter www scaffold component ${slug}\` or the document-component skill creates it`,
+      `\`pnpm --filter www scaffold component ${slug} ...\` writes it for a new component, or \`pnpm --filter www scaffold docs ${slug} ...\` for an existing one`,
     'docs-page'
   ),
   'playground-entry': fileRule(
     (slug) => `playground/entries/${slug}.tsx`,
     'playground entry',
-    () => 'Copy the shape of playground/entries/button.tsx',
+    () =>
+      'Copy the shape of playground/entries/button.tsx. For a new component, `pnpm --filter www scaffold component` writes it',
     'playground-entry'
   ),
   'install-file': fileRule(

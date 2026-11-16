@@ -1,0 +1,56 @@
+'use client';
+
+import { Checkbox as CheckboxPrimitive } from '@base-ui/react/checkbox';
+import { CheckIcon } from '@phosphor-icons/react';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { cn } from '@/registry/lib/utils';
+
+// TODO: wrap the Base UI primitive for {{name}} if it is not Checkbox, and fill in the variant classes
+const {{camel}}Variants = cva(
+  'group/{{name}} relative flex size-4 shrink-0 items-center justify-center rounded-sm border transition-colors',
+  {
+    variants: {
+      variant: {
+{{#each variants}}
+        '{{value}}': '',
+{{/each}}
+      },
+    },
+    defaultVariants: {
+      variant: '{{defaultVariant}}',
+    },
+  }
+);
+
+type Theme = 'gray' | 'accent' | (string & {});
+
+interface {{Name}}Props extends CheckboxPrimitive.Root.Props, VariantProps<typeof {{camel}}Variants> {
+  theme?: Theme;
+}
+
+function {{Name}}({ className, variant = '{{defaultVariant}}', theme = 'gray', ...props }: {{Name}}Props) {
+  return (
+    <CheckboxPrimitive.Root
+      data-slot="{{name}}"
+      data-variant={variant}
+      data-theme={theme !== 'gray' ? theme : undefined}
+      className={cn(
+        {{camel}}Variants({ variant }),
+        'data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
+        'focus-visible:outline-2 focus-visible:outline-focus',
+        className
+      )}
+      {...props}
+    >
+      <CheckboxPrimitive.Indicator
+        data-slot="{{name}}-indicator"
+        className="flex items-center justify-center text-current [&_svg]:size-3"
+      >
+        <CheckIcon weight="bold" />
+      </CheckboxPrimitive.Indicator>
+    </CheckboxPrimitive.Root>
+  );
+}
+
+export { {{Name}}, {{camel}}Variants };

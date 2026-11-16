@@ -1,0 +1,28 @@
+import { {{Name}} } from '@/registry/ui/{{name}}';
+import type { EntrySchema } from '@/playground/lib/types';
+
+export const {{camel}}Entry: EntrySchema = {
+  component: '{{name}}',
+  name: '{{Sentence}}',
+  variants: {
+    orientation: {
+      values: ['horizontal', 'vertical'],
+      label: 'Orientation',
+      default: 'horizontal',
+    },
+  },
+  render: function {{Name}}Render({ variants }) {
+    const orientation = variants.orientation as 'horizontal' | 'vertical';
+    return (
+      <div
+        className={
+          orientation === 'vertical' ? 'flex h-10 items-center gap-4' : 'flex w-48 flex-col gap-4'
+        }
+      >
+        <span className="text-sm">Above</span>
+        <{{Name}} orientation={orientation} />
+        <span className="text-sm">Below</span>
+      </div>
+    );
+  },
+};

@@ -1,0 +1,25 @@
+'use client';
+
+import { Button } from '@/registry/ui/button';
+import {
+  {{Name}},
+  {{Name}}Content,
+  {{Name}}Item,
+  {{Name}}Trigger,
+  {{Name}}Value,
+} from '@/registry/ui/{{name}}';
+
+export default function {{fn}}() {
+  return (
+    <{{Name}} defaultValue="apple">
+      <{{Name}}Trigger render={<Button variant="outline" />} aria-label="Fruit">
+        <{{Name}}Value />
+      </{{Name}}Trigger>
+      <{{Name}}Content{{#if variant}} variant="{{variant}}"{{/if}}>
+        <{{Name}}Item value="apple">Apple</{{Name}}Item>
+        <{{Name}}Item value="banana">Banana</{{Name}}Item>
+        <{{Name}}Item value="cherry">Cherry</{{Name}}Item>
+      </{{Name}}Content>
+    </{{Name}}>
+  );
+}

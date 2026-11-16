@@ -1,0 +1,11 @@
+import { {{Name}} } from '@/registry/ui/{{name}}';
+
+export default function {{fn}}() {
+  return (
+    <div className="flex w-48 flex-col gap-4">
+      <span className="text-sm">Above</span>
+      <{{Name}} />
+      <span className="text-sm">Below</span>
+    </div>
+  );
+}

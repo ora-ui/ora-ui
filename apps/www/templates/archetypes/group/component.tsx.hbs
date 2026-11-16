@@ -1,0 +1,86 @@
+'use client';
+
+import * as React from 'react';
+import { Toggle as TogglePrimitive } from '@base-ui/react/toggle';
+import { ToggleGroup as ToggleGroupPrimitive } from '@base-ui/react/toggle-group';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { cn } from '@/registry/lib/utils';
+
+// TODO: wrap the Base UI primitive for {{name}} if it is not ToggleGroup, and fill in the variant classes
+const {{camel}}Variants = cva(
+  'group/{{name}} flex w-fit gap-1 rounded-dynamic p-1 [--item-radius:calc(var(--radius-dynamic)-3px)]',
+  {
+    variants: {
+      variant: {
+{{#each variants}}
+        '{{value}}': '',
+{{/each}}
+      },
+    },
+    defaultVariants: {
+      variant: '{{defaultVariant}}',
+    },
+  }
+);
+
+type Variant = {{variantUnion}};
+type Theme = 'gray' | 'accent' | (string & {});
+
+interface {{Name}}ContextValue {
+  variant: Variant;
+  theme: Theme;
+}
+
+const {{Name}}Context = React.createContext<{{Name}}ContextValue>({
+  variant: '{{defaultVariant}}',
+  theme: 'gray',
+});
+
+function {{Name}}({
+  className,
+  variant = '{{defaultVariant}}',
+  theme = 'gray',
+  children,
+  ...props
+}: ToggleGroupPrimitive.Props & VariantProps<typeof {{camel}}Variants> & { theme?: Theme }) {
+  const context = { variant: variant ?? '{{defaultVariant}}', theme };
+  return (
+    <ToggleGroupPrimitive
+      data-slot="{{name}}"
+      data-variant={variant}
+      className={cn({{camel}}Variants({ variant }), className)}
+      {...props}
+    >
+      <{{Name}}Context.Provider value={context}>{children}</{{Name}}Context.Provider>
+    </ToggleGroupPrimitive>
+  );
+}
+
+function {{Name}}Item({
+  className,
+  variant,
+  theme,
+  ...props
+}: TogglePrimitive.Props & { variant?: Variant; theme?: Theme }) {
+  const context = React.useContext({{Name}}Context);
+  const resolvedVariant = variant ?? context.variant;
+  const resolvedTheme = theme ?? context.theme;
+
+  return (
+    <TogglePrimitive
+      data-slot="{{name}}-item"
+      data-variant={resolvedVariant}
+      data-theme={resolvedTheme !== 'gray' ? resolvedTheme : undefined}
+      className={cn(
+        'inline-flex h-7 shrink-0 items-center justify-center gap-1.5 rounded-(--item-radius) px-2 text-sm font-medium select-none',
+        'disabled:pointer-events-none disabled:opacity-50',
+        'focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-ring',
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+export { {{Name}}, {{Name}}Item, {{camel}}Variants };

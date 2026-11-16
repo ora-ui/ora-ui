@@ -1,0 +1,38 @@
+import { Button } from '@/registry/ui/button';
+import {
+  {{Name}},
+  {{Name}}Content,
+  {{Name}}Description,
+  {{Name}}Title,
+  {{Name}}Trigger,
+} from '@/registry/ui/{{name}}';
+import type { EntrySchema } from '@/playground/lib/types';
+
+export const {{camel}}Entry: EntrySchema = {
+  component: '{{name}}',
+  name: '{{Sentence}}',
+  variants: {},
+  content: {
+    title: {
+      type: 'string',
+      label: 'Title',
+      default: '{{Sentence}}',
+    },
+    description: {
+      type: 'string',
+      label: 'Description',
+      default: 'Describe what this does.',
+    },
+  },
+  render: function {{Name}}Render({ inputs }) {
+    return (
+      <{{Name}}>
+        <{{Name}}Trigger render={<Button variant="outline">Open</Button>} />
+        <{{Name}}Content>
+          <{{Name}}Title>{inputs.title as string}</{{Name}}Title>
+          <{{Name}}Description>{inputs.description as string}</{{Name}}Description>
+        </{{Name}}Content>
+      </{{Name}}>
+    );
+  },
+};

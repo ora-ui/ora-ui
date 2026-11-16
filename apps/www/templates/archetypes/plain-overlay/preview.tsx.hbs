@@ -1,0 +1,22 @@
+'use client';
+
+import { Button } from '@/registry/ui/button';
+import {
+  {{Name}},
+  {{Name}}Content,
+  {{Name}}Description,
+  {{Name}}Title,
+  {{Name}}Trigger,
+} from '@/registry/ui/{{name}}';
+
+export default function {{fn}}() {
+  return (
+    <{{Name}}>
+      <{{Name}}Trigger render={<Button variant="outline">Open</Button>} />
+      <{{Name}}Content>
+        <{{Name}}Title>{{Sentence}}</{{Name}}Title>
+        <{{Name}}Description>Describe what this does.</{{Name}}Description>
+      </{{Name}}Content>
+    </{{Name}}>
+  );
+}

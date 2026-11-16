@@ -1,0 +1,78 @@
+'use client';
+
+import { Accordion as AccordionPrimitive } from '@base-ui/react/accordion';
+import { ChevronDownIcon } from '@heroicons/react/16/solid';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { cn } from '@/registry/lib/utils';
+
+// TODO: wrap the Base UI primitive for {{name}} if it is not Accordion, and fill in the variant classes
+const {{camel}}Variants = cva('group/{{name}}-item border-b border-border-subtle', {
+  variants: {
+    variant: {
+{{#each variants}}
+      '{{value}}': '',
+{{/each}}
+    },
+  },
+  defaultVariants: {
+    variant: '{{defaultVariant}}',
+  },
+});
+
+function {{Name}}({ className, ...props }: AccordionPrimitive.Root.Props) {
+  return (
+    <AccordionPrimitive.Root
+      data-slot="{{name}}"
+      className={cn('flex flex-col justify-center text-sm', className)}
+      {...props}
+    />
+  );
+}
+
+function {{Name}}Item({
+  className,
+  variant = '{{defaultVariant}}',
+  ...props
+}: AccordionPrimitive.Item.Props & VariantProps<typeof {{camel}}Variants>) {
+  return (
+    <AccordionPrimitive.Item
+      data-slot="{{name}}-item"
+      data-variant={variant}
+      className={cn({{camel}}Variants({ variant }), className)}
+      {...props}
+    />
+  );
+}
+
+function {{Name}}Trigger({ className, children, ...props }: AccordionPrimitive.Trigger.Props) {
+  return (
+    <AccordionPrimitive.Header className="flex">
+      <AccordionPrimitive.Trigger
+        data-slot="{{name}}-trigger"
+        className={cn(
+          'group relative flex w-full items-center justify-between gap-2 px-3 py-2 text-left font-normal focus-visible:z-1 focus-visible:outline-2 focus-visible:outline-ring',
+          className
+        )}
+        {...props}
+      >
+        {children}
+        <ChevronDownIcon className="size-4 shrink-0 text-secondary motion-safe:transition-transform motion-safe:duration-200 group-aria-expanded:rotate-180" />
+      </AccordionPrimitive.Trigger>
+    </AccordionPrimitive.Header>
+  );
+}
+
+function {{Name}}Content({ className, children, ...props }: AccordionPrimitive.Panel.Props) {
+  return (
+    <AccordionPrimitive.Panel
+      data-slot="{{name}}-content"
+      className="h-(--accordion-panel-height) overflow-hidden text-secondary motion-safe:transition-[height] motion-safe:ease-out data-ending-style:h-0 data-starting-style:h-0"
+      {...props}
+    >
+      <div className={cn('p-3', className)}>{children}</div>
+    </AccordionPrimitive.Panel>
+  );
+}
+
+export { {{Name}}, {{Name}}Content, {{Name}}Item, {{Name}}Trigger, {{camel}}Variants };
