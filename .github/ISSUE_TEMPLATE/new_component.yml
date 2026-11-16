@@ -1,0 +1,100 @@
+name: '🧩 New component'
+description: 'Request a new component, with the requirements an agent needs to build it'
+title: 'New component: '
+labels: ['enhancement', 'needs-triage']
+body:
+  - type: 'markdown'
+    attributes:
+      value: |
+        Fill in every field. Read `docs/patterns/archetypes.md` first: the
+        archetype decides most of the answers. A maintainer replaces
+        `needs-triage` with `agent-ready` once these requirements are
+        approved. An agent then builds the component from this issue
+        without asking again.
+  - type: 'input'
+    id: 'name'
+    attributes:
+      label: 'Name'
+      description: 'Kebab-case, as the file name in `apps/www/registry/ui/`.'
+      placeholder: 'progress'
+    validations:
+      required: true
+  - type: 'input'
+    id: 'description'
+    attributes:
+      label: 'Description'
+      description: 'One sentence for the docs page and the install file.'
+      placeholder: 'Displays the status of a task that takes a long time.'
+    validations:
+      required: true
+  - type: 'input'
+    id: 'primitive'
+    attributes:
+      label: 'Base UI primitive'
+      description: 'The import path, or `none` for an Ora-only component.'
+      placeholder: '@base-ui/react/progress'
+    validations:
+      required: true
+  - type: 'dropdown'
+    id: 'archetype'
+    attributes:
+      label: 'Archetype'
+      options:
+        - 'action'
+        - 'selection-control'
+        - 'text-field'
+        - 'list-popup'
+        - 'plain-overlay'
+        - 'group'
+        - 'disclosure'
+        - 'status-display'
+        - 'layout'
+    validations:
+      required: true
+  - type: 'textarea'
+    id: 'parts'
+    attributes:
+      label: 'Parts'
+      description: 'One Ora export per Base UI part, with flat names. Mark any Ora-only part.'
+      placeholder: |
+        Progress (Root)
+        ProgressTrack (Track)
+        ProgressIndicator (Indicator)
+        ProgressLabel (Label)
+        ProgressValue (Value)
+    validations:
+      required: true
+  - type: 'input'
+    id: 'theme'
+    attributes:
+      label: 'Theme'
+      description: 'Comma-separated, default first, or `none`.'
+      placeholder: 'gray, accent'
+    validations:
+      required: true
+  - type: 'input'
+    id: 'variants'
+    attributes:
+      label: 'Variants'
+      description: 'Comma-separated, default first. `none` only for plain-overlay and layout, which take no variants; every other archetype needs at least one.'
+      placeholder: 'solid, soft'
+    validations:
+      required: true
+  - type: 'input'
+    id: 'sizes'
+    attributes:
+      label: 'Sizes'
+      description: 'Comma-separated, default first, or `none`.'
+      placeholder: 'md, sm, lg'
+    validations:
+      required: true
+  - type: 'textarea'
+    id: 'playground'
+    attributes:
+      label: 'Playground'
+      description: 'Optional. Which props become controls, and what content the entry shows.'
+  - type: 'textarea'
+    id: 'notes'
+    attributes:
+      label: 'Other requirements'
+      description: 'Optional. Other props, radius, context, CSS custom properties, or deviations from the archetype. The agent infers anything left out and lists it in the PR.'

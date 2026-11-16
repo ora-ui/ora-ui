@@ -23,6 +23,9 @@ This is a typescript monorepo that uses pnpm as package manager.
   Components: `apps/www/registry/ui/`. If a doc disagrees with the code, the code wins.
 - **Workflows** (build, document, commit, file an issue): `.agents/skills/`.
   `.claude/skills/*` are symlinks to it — edit the `.agents` copy.
+- **Building a new component**, from a request or a new-component issue:
+  the build-component skill. An `agent-ready` issue from the
+  new-component template is its approved requirements.
 - **Why** something non-obvious is the way it is: `docs/adr/`.
 - **What we usually do** (archetypes, Group, Item): `docs/patterns/`. A guide, not a contract.
 - **Terms**: `CONTEXT.md`.

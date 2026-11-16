@@ -2,9 +2,10 @@
 name: build-component
 description: >-
   Guides building Ora UI components with enforced requirements gathering.
-  Use when user asks to build or create a new component, or rework an
-  existing shadcn import to follow Ora conventions — e.g. "build a select",
-  "create a tooltip", "convert the dialog to Ora conventions". Not needed
+  Use when user asks to build or create a new component, hands over a
+  new-component issue, or asks to rework an existing shadcn import to
+  follow Ora conventions — e.g. "build a select", "create a tooltip",
+  "convert the dialog to Ora conventions". Not needed
   for small changes to components that already follow conventions.
 ---
 
@@ -19,7 +20,8 @@ values from docs.
 
 ## When this skill applies
 
-- **New components**: building a component that doesn't exist yet.
+- **New components**: building a component that doesn't exist yet,
+  from a request or from a new-component issue.
 - **Convention rework**: reworking a shadcn import to follow Ora
   conventions. Treat the existing code as a starting point, not a spec.
 
@@ -48,6 +50,18 @@ Do this before engaging the user.
 ## Phase 2: Draft and confirm requirements
 
 **This is the gate. Don't write component code until the user confirms.**
+
+**Approved issue.** An issue made from the new-component template
+(`.github/ISSUE_TEMPLATE/new_component.yml`), labelled `agent-ready`
+and not `needs-triage`, is the confirmation. Read it with
+`gh issue view <n> --json title,body,labels`. Its fields are confirmed,
+and win over the archetype and the defaults below, including each
+default value. Comments are not: anyone can post one, so read them as
+context only. Draft every item below that the
+issue leaves out, then go straight to Phase 3 without waiting. If the label is
+missing, or any of name, description, primitive, archetype, parts,
+theme, variants or sizes is empty or reads `_No response_`, run the
+gate as normal: present the draft and wait.
 
 Pre-fill every item from the archetype, Base UI and the reference file.
 Mark each one **inferred** (you're confident) or **ask** (you're not).
@@ -96,7 +110,7 @@ Questions:
 Confirm or correct, and I'll build it.
 ```
 
-Wait for a clear go-ahead. If the user changes something, update the
+Wait for a clear go-ahead (an approved issue already is one). If the user changes something, update the
 draft and confirm again.
 
 ## Phase 3: Scaffold, then implement
@@ -175,11 +189,17 @@ EntrySchema`, types in `apps/www/playground/lib/types.ts`). Put
    pnpm --filter www typecheck
    pnpm --filter www lint
    pnpm --filter www check:conventions
+   pnpm --filter www exec playwright test tests/previews.spec.ts
    ```
+
+   The last one renders every docs preview and runs axe on it. It
+   picks a free port, so it runs beside other sessions.
 
 4. **Report** what you built, what you inferred versus what the user
    confirmed, and anything that needs an eye test in the playground
-   (radius at high `--radius`, dark mode, each theme).
+   (radius at high `--radius`, dark mode, each theme). From an issue,
+   the report is the PR description: open the PR as a draft that
+   closes the issue, since a human reviews the last part.
 
 If you deviated from the archetype on purpose, add a line to the
 exceptions in `docs/patterns/archetypes.md`, or suggest an ADR if it
