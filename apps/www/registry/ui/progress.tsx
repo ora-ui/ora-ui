@@ -6,21 +6,24 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/registry/lib/utils';
 
-const progressTrackVariants = cva('col-span-2 w-full overflow-hidden rounded-dynamic bg-ui', {
-  variants: {
-    size: {
-      sm: 'h-(--progress-height,--spacing(1))',
-      md: 'h-(--progress-height,--spacing(2))',
-      lg: 'h-(--progress-height,--spacing(3))',
+const progressTrackVariants = cva(
+  'col-span-2 w-full overflow-hidden rounded-[calc(var(--radius)*0.25)] bg-ui',
+  {
+    variants: {
+      size: {
+        sm: 'h-(--progress-height,--spacing(1))',
+        md: 'h-(--progress-height,--spacing(2))',
+        lg: 'h-(--progress-height,--spacing(3))',
+      },
     },
-  },
-  defaultVariants: {
-    size: 'md',
-  },
-});
+    defaultVariants: {
+      size: 'md',
+    },
+  }
+);
 
 const progressIndicatorVariants = cva(
-  'block h-full rounded-none transition-[width] duration-300 ease-out motion-reduce:transition-none data-indeterminate:w-full data-indeterminate:animate-pulse',
+  'block h-full rounded-none transition-[width] duration-300 ease-out motion-reduce:transition-none data-indeterminate:w-full data-indeterminate:animate-pulse data-indeterminate:[animation-duration:1s]',
   {
     variants: {
       variant: {

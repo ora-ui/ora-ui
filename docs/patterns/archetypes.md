@@ -43,7 +43,7 @@ Related: [Group](group.md), [Item](item.md),
 | Plain overlay     | dialog, alert-dialog, drawer, tooltip                             | Popover, PreviewCard                                         | none                                                                              | none                                                                                                                           | fixed, no `size` prop: `lg` (Dialog, AlertDialog), `rounded-t-xl` (Drawer), `md` (Tooltip)                                              | `dialog.tsx`       |
 | Group             | toggle-group, checkbox-group, button-group, avatar-group, toolbar | Fieldset                                                     | ToggleGroup, CheckboxGroup: `theme` via context; others none                      | ToggleGroup (`itemVariant`), CheckboxGroup (`variant`) via context; others none                                                | ToggleGroup: container dynamic, items concentric; others see Context propagation                                                        | `toggle-group.tsx` |
 | Disclosure        | accordion, tabs                                                   | Collapsible                                                  | none                                                                              | Accordion item: `underline \| soft`, plus a root `bordered` boolean. Tabs list: `soft \| solid`                                | clamped `md` (bordered Accordion, TabsSurface); Tabs triggers `sm`, Accordion triggers square with outer corners concentric to the root | `accordion.tsx`    |
-| Status / display  | badge, avatar, kbd                                                | Meter, Progress, Toast                                       | Badge: full semantic set. Avatar: `gray \| accent`. Kbd: none                     | Badge `solid \| soft \| outline \| surface`, Kbd `ghost \| soft \| surface`, Avatar none                                       | varies (badge formula, avatar full, kbd `sm`)                                                                                           | `badge.tsx`        |
+| Status / display  | badge, avatar, kbd, progress                                      | Meter, Toast                                                 | Badge: full semantic set. Avatar: `gray \| accent`. Kbd: none                     | Badge `solid \| soft \| outline \| surface`, Kbd `ghost \| soft \| surface`, Avatar none                                       | varies (badge formula, avatar full, kbd `sm`, progress track a quarter of `--radius`)                                                   | `badge.tsx`        |
 | Layout            | separator, scroll-area, label, form                               | Box, Flex, Grid, Stack (Ora additions)                       | none                                                                              | none                                                                                                                           | none                                                                                                                                    | `separator.tsx`    |
 
 ### Outside the archetype model
@@ -134,6 +134,10 @@ Known exceptions (eye test over rule):
 - **Badge**: custom `min()`/`max()` formula so it stays pill-like at low
   radii.
 - **Link**: fixed `rounded-xs`.
+- **Progress**: the track uses `calc(var(--radius) * 0.25)` with no cap.
+  It is only 4 to 12px tall, so a dynamic radius makes it a pill from the
+  smallest step. A quarter keeps every size short of a pill through the
+  Large preset, and Full still gives a pill.
 - **Plain overlays**: no `size` prop, so the radius is fixed. Dialog and
   AlertDialog use `rounded-lg`, Drawer uses `rounded-t-xl` (top corners
   only), Tooltip uses `rounded-md`.
