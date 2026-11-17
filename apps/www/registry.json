@@ -318,6 +318,23 @@
       ]
     },
     {
+      "name": "meter",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/meter.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
+    },
+    {
       "name": "progress",
       "type": "registry:ui",
       "files": [
