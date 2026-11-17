@@ -1,9 +1,14 @@
 ---
 name: create-issue
-description: Creates a GitHub issue with structured context. Use when the user asks to file a bug, log an issue, or create an enhancement request.
+description: Creates a GitHub issue with structured context. Use when the user asks to file a bug, log an issue, or create an enhancement request. A new-component proposal goes to build-component instead.
 ---
 
 # Create Issue
+
+A request for a new component goes to the **build-component** skill's
+proposal mode (`.agents/skills/build-component/SKILL.md`), which files
+it in the new-component template's shape. This skill handles every
+other issue.
 
 ## Workflow
 

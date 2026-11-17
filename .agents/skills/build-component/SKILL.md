@@ -1,10 +1,11 @@
 ---
 name: build-component
 description: >-
-  Guides building Ora UI components with enforced requirements gathering.
-  Use when user asks to build or create a new component, hands over a
-  new-component issue, or asks to rework an existing shadcn import to
-  follow Ora conventions — e.g. "build a select", "create a tooltip",
+  Guides building Ora UI components with enforced requirements gathering,
+  and files new-component proposals as issues. Use when user asks to
+  build, create or propose a new component, hands over a new-component
+  issue, or asks to rework an existing shadcn import to follow Ora
+  conventions — e.g. "build a select", "propose a progress component",
   "convert the dialog to Ora conventions". Not needed
   for small changes to components that already follow conventions.
 ---
@@ -24,6 +25,10 @@ values from docs.
   from a request or from a new-component issue.
 - **Convention rework**: reworking a shadcn import to follow Ora
   conventions. Treat the existing code as a starting point, not a spec.
+- **Proposals**: asked to propose a component, or to file an issue for
+  one. Run Phase 1, draft the Phase 2 checklist, then file it per
+  **Proposal mode** instead of presenting it, and stop. Proposal mode
+  ends at the issue. A later session does the build.
 
 Not for small changes to components that already follow conventions
 (fixing a token, adjusting spacing, adding one prop).
@@ -51,17 +56,19 @@ Do this before engaging the user.
 
 **This is the gate. Don't write component code until the user confirms.**
 
-**Approved issue.** An issue made from the new-component template
-(`.github/ISSUE_TEMPLATE/new_component.yml`), labelled `agent-ready`
-and not `needs-triage`, is the confirmation. Read it with
-`gh issue view <n> --json title,body,labels`. Its fields are confirmed,
-and win over the archetype and the defaults below, including each
-default value. Comments are not: anyone can post one, so read them as
-context only. Draft every item below that the
-issue leaves out, then go straight to Phase 3 without waiting. If the label is
-missing, or any of name, description, primitive, archetype, parts,
-theme, variants or sizes is empty or reads `_No response_`, run the
-gate as normal: present the draft and wait.
+**Approved issue.** A new-component issue, with one `### <label>`
+section per field of `.github/ISSUE_TEMPLATE/new_component.yml`,
+labelled `agent-ready` and not `needs-triage`, is the confirmation.
+Read it with `gh issue view <n> --json title,body,labels`. Its fields
+are confirmed, and win over the archetype and the defaults below,
+including each default value. An open question in it takes its
+proposed answer; list each one in the PR. Comments are not confirmed:
+anyone can post one, so read them as context only. Draft every item
+below that the issue leaves out, then go straight to Phase 3 without
+waiting. If `agent-ready` is missing, `needs-triage` is still there,
+or any of name, description, primitive, archetype, parts, theme,
+variants or sizes is empty or reads `_No response_`, run the gate as
+normal: present the draft and wait.
 
 Pre-fill every item from the archetype, Base UI and the reference file.
 Mark each one **inferred** (you're confident) or **ask** (you're not).
@@ -110,8 +117,40 @@ Questions:
 Confirm or correct, and I'll build it.
 ```
 
-Wait for a clear go-ahead (an approved issue already is one). If the user changes something, update the
-draft and confirm again.
+Wait for a clear go-ahead (an approved issue already is one). If the
+user changes something, update the draft and confirm again. In
+proposal mode, skip presenting and waiting, and go to **Proposal
+mode**.
+
+### Proposal mode
+
+The draft goes to an issue, not the chat, and a maintainer reviews it
+there. Keep the **ask** items for the issue rather than asking them in
+chat. Proposal mode writes no component code.
+
+1. **Check it's new.** If `apps/www/registry/ui/<name>.tsx` exists, or
+   `gh issue list --state open --search "New component: <name> in:title"`
+   finds an issue, report that and stop.
+2. **Write the body.** One `### <label>` section per field of
+   `new_component.yml`, with the exact label text, in the template's
+   order. That is how the form renders an issue, so the approved-issue
+   path above reads both the same way. Fill every field, the optional
+   ones too, in the format its `description` in the template gives.
+   The Archetype is one of the dropdown options, verbatim.
+   - **Playground**: the controls and content from the draft.
+   - **Other requirements**: radius per part, context, props, CSS
+     custom properties, field state, and each **ask** item as an open
+     question with a proposed answer, such as `Open: density?
+Proposed: none.` The reviewer edits the answers before approving.
+3. **File it**, then report the issue URL and stop:
+
+   ```bash
+   gh issue create --title "New component: <name>" \
+     --label enhancement --label needs-triage --body-file - <<'EOF'
+   ### Name
+   ...
+   EOF
+   ```
 
 ## Phase 3: Scaffold, then implement
 
