@@ -9,7 +9,7 @@ import {
 export default function ProgressHero() {
   return (
     <div className="w-full max-w-sm">
-      <Progress value={60} theme="accent">
+      <Progress value={60}>
         <ProgressLabel>Uploading files</ProgressLabel>
         <ProgressValue />
         <ProgressTrack>
