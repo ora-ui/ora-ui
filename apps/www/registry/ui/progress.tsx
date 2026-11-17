@@ -22,58 +22,35 @@ const progressTrackVariants = cva(
   }
 );
 
-const progressIndicatorVariants = cva(
-  'block h-full rounded-none transition-[width] duration-300 ease-out motion-reduce:transition-none data-indeterminate:w-full data-indeterminate:animate-pulse data-indeterminate:[animation-duration:1s]',
-  {
-    variants: {
-      variant: {
-        solid: 'bg-solid',
-        soft: 'bg-border',
-      },
-    },
-    defaultVariants: {
-      variant: 'solid',
-    },
-  }
-);
-
-type Variant = NonNullable<VariantProps<typeof progressIndicatorVariants>['variant']>;
 type Size = NonNullable<VariantProps<typeof progressTrackVariants>['size']>;
 type Theme = 'gray' | 'accent' | 'destructive' | 'warning' | 'success' | (string & {});
 
 const ProgressContext = React.createContext<{
-  variant: Variant;
   size: Size;
   theme: Theme;
 }>({
-  variant: 'solid',
   size: 'md',
   theme: 'gray',
 });
 
 function Progress({
   className,
-  variant = 'solid',
   size = 'md',
   theme = 'gray',
   children,
   ...props
 }: ProgressPrimitive.Root.Props & {
-  variant?: Variant;
   size?: Size;
   theme?: Theme;
 }) {
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
-      data-variant={variant}
       data-size={size}
       className={cn('grid w-full grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2', className)}
       {...props}
     >
-      <ProgressContext.Provider value={{ variant, size, theme }}>
-        {children}
-      </ProgressContext.Provider>
+      <ProgressContext.Provider value={{ size, theme }}>{children}</ProgressContext.Provider>
     </ProgressPrimitive.Root>
   );
 }
@@ -118,20 +95,20 @@ function ProgressTrack({
 
 function ProgressIndicator({
   className,
-  variant,
   theme,
   ...props
-}: ProgressPrimitive.Indicator.Props & { variant?: Variant; theme?: Theme }) {
+}: ProgressPrimitive.Indicator.Props & { theme?: Theme }) {
   const context = React.useContext(ProgressContext);
-  const resolvedVariant = variant ?? context.variant;
   const resolvedTheme = theme ?? context.theme;
 
   return (
     <ProgressPrimitive.Indicator
       data-slot="progress-indicator"
-      data-variant={resolvedVariant}
       data-theme={resolvedTheme !== 'gray' ? resolvedTheme : undefined}
-      className={cn(progressIndicatorVariants({ variant: resolvedVariant }), className)}
+      className={cn(
+        'block h-full bg-solid rounded-none transition-[width] duration-300 ease-out motion-reduce:transition-none data-indeterminate:w-full data-indeterminate:animate-pulse data-indeterminate:[animation-duration:1s]',
+        className
+      )}
       {...props}
     />
   );
@@ -144,5 +121,4 @@ export {
   ProgressTrack,
   ProgressIndicator,
   progressTrackVariants,
-  progressIndicatorVariants,
 };

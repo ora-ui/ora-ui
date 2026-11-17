@@ -74,12 +74,6 @@ import {
 
 ## Examples
 
-### Variants
-
-The `variant` prop sets the indicator fill. `solid` is the full-contrast fill and `soft` is a lower-contrast one.
-
-<ComponentPreview name="progress-variants" select={['solid', 'soft']} />
-
 ### Sizes
 
 The `size` prop sets the track height.
@@ -113,13 +107,12 @@ Set `theme` from the task's state, such as `accent` while it runs and `success` 
 
 #### Appearance
 
-| Prop      | Type                                                                      | Default   |
-| --------- | ------------------------------------------------------------------------- | --------- |
-| `variant` | `"solid" \| "soft"`                                                       | `"solid"` |
-| `size`    | `"sm" \| "md" \| "lg"`                                                    | `"md"`    |
-| `theme`   | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | `"gray"`  |
+| Prop    | Type                                                                      | Default  |
+| ------- | ------------------------------------------------------------------------- | -------- |
+| `size`  | `"sm" \| "md" \| "lg"`                                                    | `"md"`   |
+| `theme` | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | `"gray"` |
 
-`Progress` passes `size` to `ProgressTrack`, and `variant` and `theme` to `ProgressIndicator`. Set them on a part to override the root. The track stays neutral in every theme.
+`Progress` passes `size` to `ProgressTrack` and `theme` to `ProgressIndicator`. Set them on a part to override the root. The track stays neutral in every theme.
 
 ### ProgressTrack
 
@@ -129,10 +122,9 @@ Set `theme` from the task's state, such as `accent` while it runs and `success` 
 
 ### ProgressIndicator
 
-| Prop      | Type                                                                      | Default |
-| --------- | ------------------------------------------------------------------------- | ------- |
-| `variant` | `"solid" \| "soft"`                                                       | Root    |
-| `theme`   | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | Root    |
+| Prop    | Type                                                                      | Default |
+| ------- | ------------------------------------------------------------------------- | ------- |
+| `theme` | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | Root    |
 
 ### Styling
 

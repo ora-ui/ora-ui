@@ -11,11 +11,6 @@ export const progressEntry: EntrySchema = {
   component: 'progress',
   name: 'Progress',
   variants: {
-    variant: {
-      values: ['solid', 'soft'],
-      label: 'Variant',
-      default: 'solid',
-    },
     theme: {
       values: ['gray', 'accent', 'destructive', 'warning', 'success'],
       label: 'Theme',
@@ -64,7 +59,6 @@ export const progressEntry: EntrySchema = {
     return (
       <div className="w-80">
         <Progress
-          variant={variants.variant as 'solid' | 'soft'}
           theme={variants.theme as string}
           size={variants.size as 'sm' | 'md' | 'lg'}
           value={behavior.indeterminate === true ? null : (behavior.value as number)}
