@@ -6,7 +6,12 @@ Accepted — 2026-05-16. Amended 2026-11-15: implemented. The cutover
 landed, `main.v2.mts` became `.sandcastle/main.mts` and the
 `sandcastle:v2` script became `sandcastle`. `main.legacy.mts` was deleted
 after the rollback window ([#242](https://github.com/ora-ui/ora-ui/issues/242)).
-Sandcastle itself is slated for deprecation.
+
+Deprecated — 2026-11-16. Sandcastle is removed: the orchestrator,
+prompts, Dockerfile, workflows and the `@ai-hero/sandcastle` dependency
+are deleted. Agent work now runs in interactive sessions. The
+`agent-ready` label stays and marks issues an agent session can pick up
+without human input. The other labels in this ADR are retired.
 
 ## Context
 

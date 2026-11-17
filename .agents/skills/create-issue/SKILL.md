@@ -25,8 +25,9 @@ description: Creates a GitHub issue with structured context. Use when the user a
      first if it doesn't exist:
      `gh label create "component: {name}" --color "8B5CF6"`
    - **Readiness label** — one of:
-     - `agent-ready` — well-scoped, self-contained, clear acceptance criteria,
-       safe for an autonomous agent to pick up without human input
+     - `agent-ready` — well-scoped, self-contained, with clear acceptance
+       criteria. An agent session can pick it up and finish it without human
+       input
      - `needs-triage` — requirements are unclear, cross-cutting, or need
        design input before work can start
 
