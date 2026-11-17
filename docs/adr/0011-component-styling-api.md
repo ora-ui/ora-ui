@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted — 2026-11-14
+Accepted — 2026-11-14. Amended 2026-11-17: status theme set.
 
 ## Context
 
@@ -50,8 +50,14 @@ approach is retired.
 
 Theme values default to `'gray' | 'accent'`, with `gray` as the default.
 Components that can represent a destructive action add `destructive`.
-Components that convey status use the full semantic set
-(`accent`, `destructive`, `warning`, `success`).
+Components whose value can be good or bad on its own use the full
+semantic set (`accent`, `destructive`, `warning`, `success`).
+
+> **Amended 2026-11-17.** This originally gave the full set to every
+> component that conveys status. Progress conveys status but only shows
+> completion, so it keeps `gray | accent`. Meter, Badge and Toast keep
+> the full set. See the Theme section of
+> [`docs/patterns/archetypes.md`](../patterns/archetypes.md).
 
 Reaching into the colour scale directly (for example
 `aria-invalid:border-destructive-700`) is allowed when no semantic

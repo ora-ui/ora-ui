@@ -94,8 +94,15 @@ Plain `string` drops the autocomplete, so the check requires
 
 - Can represent a destructive action (Button, menu items) → add
   `destructive`.
-- Conveys status (Badge, Meter, Progress, Toast) → full set: `accent`,
-  `destructive`, `warning`, `success`.
+- Its value can be good or bad on its own (Badge, Meter, Toast) → full
+  set: `accent`, `destructive`, `warning`, `success`. A meter reading
+  sits in a fixed range where low or high can mean trouble.
+- It only shows how far along something is (Progress) → `gray | accent`.
+  Progress runs from start to done, and no point on that path is an
+  error. A failed task is reported by the UI around the bar.
+
+The test is the value, not the archetype. Being a Status / display
+component does not on its own earn the full set.
 - Text fields, overlays, disclosures and layout: no theme. Text fields
   show errors through the invalid state, not a theme.
 

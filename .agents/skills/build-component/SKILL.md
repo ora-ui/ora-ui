@@ -79,7 +79,8 @@ Present it as a draft for the user to correct, not a questionnaire.
       (`SelectTrigger`); note any Ora-only parts
 - [ ] **Theme**: none, `gray | accent` (default when unsure), plus
       `destructive` if it can be a destructive action, or the full
-      status set if it conveys status. Default `gray`
+      status set only if its value can be good or bad on its own
+      (Meter yes, Progress no). Default `gray`
 - [ ] **Variants**: from `solid | soft | surface | outline | ghost`, and
       the default
 - [ ] **Size / density**, if the archetype uses them
