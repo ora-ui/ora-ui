@@ -6,21 +6,18 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/registry/lib/utils';
 
-const meterTrackVariants = cva(
-  'col-span-2 w-full overflow-hidden rounded-[calc(var(--radius)*0.25)] bg-ui',
-  {
-    variants: {
-      size: {
-        sm: 'h-1',
-        md: 'h-2',
-        lg: 'h-3',
-      },
+const meterTrackVariants = cva('col-span-2 w-full overflow-hidden rounded-xs bg-ui', {
+  variants: {
+    size: {
+      sm: 'h-(--meter-height,--spacing(1))',
+      md: 'h-(--meter-height,--spacing(2))',
+      lg: 'h-(--meter-height,--spacing(3))',
     },
-    defaultVariants: {
-      size: 'md',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
 
 type Size = NonNullable<VariantProps<typeof meterTrackVariants>['size']>;
 type Theme = 'gray' | 'accent' | 'destructive' | 'warning' | 'success' | (string & {});

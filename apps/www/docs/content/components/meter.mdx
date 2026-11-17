@@ -122,6 +122,6 @@ Set `theme` from the value, such as `warning` past 75% and `destructive` past 90
 
 ### Styling
 
-The track is 4px tall at `sm`, 8px at `md` and 12px at `lg`. The parts set `data-slot` to `meter`, `meter-label`, `meter-value`, `meter-track` and `meter-indicator`.
+Set `--meter-height` on `MeterTrack` or any ancestor to override the `size` height (`sm` 4px, `md` 8px, `lg` 12px). The parts set `data-slot` to `meter`, `meter-label`, `meter-value`, `meter-track` and `meter-indicator`.
 
 All other props, including `value`, `min`, `max`, `format`, `locale` and `getAriaValueText`, are forwarded to the underlying [Base UI Meter](https://base-ui.com/react/components/meter) primitive.
