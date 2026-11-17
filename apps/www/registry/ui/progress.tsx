@@ -6,21 +6,18 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/registry/lib/utils';
 
-const progressTrackVariants = cva(
-  'col-span-2 w-full overflow-hidden rounded-[calc(var(--radius)*0.25)] bg-ui',
-  {
-    variants: {
-      size: {
-        sm: 'h-(--progress-height,--spacing(1))',
-        md: 'h-(--progress-height,--spacing(2))',
-        lg: 'h-(--progress-height,--spacing(3))',
-      },
+const progressTrackVariants = cva('col-span-2 w-full overflow-hidden rounded-xs bg-ui', {
+  variants: {
+    size: {
+      sm: 'h-(--progress-height,--spacing(1))',
+      md: 'h-(--progress-height,--spacing(2))',
+      lg: 'h-(--progress-height,--spacing(3))',
     },
-    defaultVariants: {
-      size: 'md',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
 
 type Size = NonNullable<VariantProps<typeof progressTrackVariants>['size']>;
 type Theme = 'gray' | 'accent' | 'destructive' | 'warning' | 'success' | (string & {});
