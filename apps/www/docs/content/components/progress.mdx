@@ -70,6 +70,8 @@ import {
 </Progress>;
 ```
 
+`ProgressLabel` names the progress bar for assistive technology. If you leave it out, pass `aria-label` to `Progress`.
+
 ## Examples
 
 ### Variants
@@ -80,13 +82,13 @@ The `variant` prop sets the indicator fill. `solid` is the full-contrast fill an
 
 ### Sizes
 
-The `size` prop sets the track height through `--progress-height`.
+The `size` prop sets the track height.
 
 <ComponentPreview name="progress-sizes" select={['sm', 'md', 'lg']} />
 
 ### Themes
 
-The `theme` prop applies a color scheme to the track and indicator.
+The `theme` prop applies a color scheme to the indicator. The track stays neutral.
 
 <ComponentPreview
   name="progress-themes"
@@ -95,7 +97,7 @@ The `theme` prop applies a color scheme to the track and indicator.
 
 ### Indeterminate
 
-Pass `value={null}` when the amount of work is unknown. The indicator animates, unless the user prefers reduced motion.
+Pass `value={null}` when the amount of work is unknown. The indicator fills the track and pulses, so it never reads as a value.
 
 <ComponentPreview name="progress-indeterminate" />
 
@@ -127,13 +129,13 @@ Set `theme` from the task's state, such as `accent` while it runs and `success` 
 
 ### ProgressIndicator
 
-| Prop      | Type                | Default |
-| --------- | ------------------- | ------- |
-| `variant` | `"solid" \| "soft"` | Root    |
-| `theme`   | `string`            | Root    |
+| Prop      | Type                                                                      | Default |
+| --------- | ------------------------------------------------------------------------- | ------- |
+| `variant` | `"solid" \| "soft"`                                                       | Root    |
+| `theme`   | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | Root    |
 
 ### Styling
 
-`ProgressTrack` reads `--progress-height` for its height (`sm` 4px, `md` 8px, `lg` 12px). The parts set `data-slot` to `progress`, `progress-label`, `progress-value`, `progress-track` and `progress-indicator`.
+Set `--progress-height` on `ProgressTrack` or any ancestor to override the `size` height (`sm` 4px, `md` 8px, `lg` 12px). The parts set `data-slot` to `progress`, `progress-label`, `progress-value`, `progress-track` and `progress-indicator`.
 
 All other props, including `value`, `min`, `max`, `format`, `locale` and `getAriaValueText`, are forwarded to the underlying [Base UI Progress](https://base-ui.com/react/components/progress) primitive.

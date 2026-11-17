@@ -68,6 +68,7 @@ export const progressEntry: EntrySchema = {
           theme={variants.theme as string}
           size={variants.size as 'sm' | 'md' | 'lg'}
           value={behavior.indeterminate === true ? null : (behavior.value as number)}
+          aria-label={inputs.showLabel === true ? undefined : (inputs.label as string)}
         >
           {inputs.showLabel === true && <ProgressLabel>{inputs.label as string}</ProgressLabel>}
           {inputs.showValue === true && <ProgressValue />}
