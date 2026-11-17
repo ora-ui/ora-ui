@@ -1,0 +1,133 @@
+---
+title: Progress
+description: 'Displays the status of a task that takes a long time.'
+links:
+  doc: https://base-ui.com/react/components/progress
+  api: https://base-ui.com/react/components/progress#api-reference
+---
+
+<ComponentPreview name="progress-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/progress.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/progress.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/progress.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/progress.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="progress" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  Progress,
+  ProgressIndicator,
+  ProgressLabel,
+  ProgressTrack,
+  ProgressValue,
+} from '@/registry/ui/progress';
+
+<Progress value={60}>
+  <ProgressLabel>Uploading files</ProgressLabel>
+  <ProgressValue />
+  <ProgressTrack>
+    <ProgressIndicator />
+  </ProgressTrack>
+</Progress>;
+```
+
+`ProgressLabel` names the progress bar for assistive technology. If you leave it out, pass `aria-label` to `Progress`.
+
+## Examples
+
+### Sizes
+
+The `size` prop sets the track height.
+
+<ComponentPreview name="progress-sizes" select={['sm', 'md', 'lg']} />
+
+### Themes
+
+The `theme` prop applies a color scheme to the indicator. The track stays neutral.
+
+<ComponentPreview
+  name="progress-themes"
+  select={['gray', 'accent', 'destructive', 'warning', 'success']}
+/>
+
+### Indeterminate
+
+Pass `value={null}` when the amount of work is unknown. The indicator fills the track and pulses, so it never reads as a value.
+
+<ComponentPreview name="progress-indeterminate" />
+
+### Status
+
+Set `theme` from the task's state, such as `accent` while it runs and `success` once it finishes. Progress doesn't switch theme on its own when it completes.
+
+<ComponentPreview name="progress-status" />
+
+## API Reference
+
+### Progress
+
+#### Appearance
+
+| Prop    | Type                                                                      | Default  |
+| ------- | ------------------------------------------------------------------------- | -------- |
+| `size`  | `"sm" \| "md" \| "lg"`                                                    | `"md"`   |
+| `theme` | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | `"gray"` |
+
+`Progress` passes `size` to `ProgressTrack` and `theme` to `ProgressIndicator`. Set them on a part to override the root. The track stays neutral in every theme.
+
+### ProgressTrack
+
+| Prop   | Type                   | Default |
+| ------ | ---------------------- | ------- |
+| `size` | `"sm" \| "md" \| "lg"` | Root    |
+
+### ProgressIndicator
+
+| Prop    | Type                                                                      | Default |
+| ------- | ------------------------------------------------------------------------- | ------- |
+| `theme` | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | Root    |
+
+### Styling
+
+Set `--progress-height` on `ProgressTrack` or any ancestor to override the `size` height (`sm` 4px, `md` 8px, `lg` 12px). The parts set `data-slot` to `progress`, `progress-label`, `progress-value`, `progress-track` and `progress-indicator`.
+
+All other props, including `value`, `min`, `max`, `format`, `locale` and `getAriaValueText`, are forwarded to the underlying [Base UI Progress](https://base-ui.com/react/components/progress) primitive.
