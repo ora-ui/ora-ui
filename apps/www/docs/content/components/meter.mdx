@@ -68,12 +68,6 @@ import { Meter, MeterIndicator, MeterLabel, MeterTrack, MeterValue } from '@/reg
 
 ## Examples
 
-### Variants
-
-The `variant` prop sets the indicator fill. `solid` is the full-contrast fill and `soft` is a lower-contrast one.
-
-<ComponentPreview name="meter-variants" select={['solid', 'soft']} />
-
 ### Sizes
 
 The `size` prop sets the track height.
@@ -107,13 +101,12 @@ Set `theme` from the value, such as `warning` past 75% and `destructive` past 90
 
 #### Appearance
 
-| Prop      | Type                                                                      | Default   |
-| --------- | ------------------------------------------------------------------------- | --------- |
-| `variant` | `"solid" \| "soft"`                                                       | `"solid"` |
-| `size`    | `"sm" \| "md" \| "lg"`                                                    | `"md"`    |
-| `theme`   | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | `"gray"`  |
+| Prop    | Type                                                                      | Default  |
+| ------- | ------------------------------------------------------------------------- | -------- |
+| `size`  | `"sm" \| "md" \| "lg"`                                                    | `"md"`   |
+| `theme` | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | `"gray"` |
 
-`Meter` passes `size` to `MeterTrack`, and `variant` and `theme` to `MeterIndicator`. Set them on a part to override the root. The track stays neutral in every theme.
+`Meter` passes `size` to `MeterTrack` and `theme` to `MeterIndicator`. Set them on a part to override the root. The track stays neutral in every theme.
 
 ### MeterTrack
 
@@ -123,10 +116,9 @@ Set `theme` from the value, such as `warning` past 75% and `destructive` past 90
 
 ### MeterIndicator
 
-| Prop      | Type                                                                      | Default |
-| --------- | ------------------------------------------------------------------------- | ------- |
-| `variant` | `"solid" \| "soft"`                                                       | Root    |
-| `theme`   | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | Root    |
+| Prop    | Type                                                                      | Default |
+| ------- | ------------------------------------------------------------------------- | ------- |
+| `theme` | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | Root    |
 
 ### Styling
 

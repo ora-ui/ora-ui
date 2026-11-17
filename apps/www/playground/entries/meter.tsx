@@ -5,11 +5,6 @@ export const meterEntry: EntrySchema = {
   component: 'meter',
   name: 'Meter',
   variants: {
-    variant: {
-      values: ['solid', 'soft'],
-      label: 'Variant',
-      default: 'solid',
-    },
     theme: {
       values: ['gray', 'accent', 'destructive', 'warning', 'success'],
       label: 'Theme',
@@ -69,7 +64,6 @@ export const meterEntry: EntrySchema = {
     return (
       <div className="w-80">
         <Meter
-          variant={variants.variant as 'solid' | 'soft'}
           theme={variants.theme as string}
           size={variants.size as 'sm' | 'md' | 'lg'}
           value={behavior.value as number}

@@ -22,56 +22,35 @@ const meterTrackVariants = cva(
   }
 );
 
-const meterIndicatorVariants = cva(
-  'block h-full rounded-none transition-[width] duration-300 ease-out motion-reduce:transition-none',
-  {
-    variants: {
-      variant: {
-        solid: 'bg-solid',
-        soft: 'bg-border',
-      },
-    },
-    defaultVariants: {
-      variant: 'solid',
-    },
-  }
-);
-
-type Variant = NonNullable<VariantProps<typeof meterIndicatorVariants>['variant']>;
 type Size = NonNullable<VariantProps<typeof meterTrackVariants>['size']>;
 type Theme = 'gray' | 'accent' | 'destructive' | 'warning' | 'success' | (string & {});
 
 const MeterContext = React.createContext<{
-  variant: Variant;
   size: Size;
   theme: Theme;
 }>({
-  variant: 'solid',
   size: 'md',
   theme: 'gray',
 });
 
 function Meter({
   className,
-  variant = 'solid',
   size = 'md',
   theme = 'gray',
   children,
   ...props
 }: MeterPrimitive.Root.Props & {
-  variant?: Variant;
   size?: Size;
   theme?: Theme;
 }) {
   return (
     <MeterPrimitive.Root
       data-slot="meter"
-      data-variant={variant}
       data-size={size}
       className={cn('grid w-full grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2', className)}
       {...props}
     >
-      <MeterContext.Provider value={{ variant, size, theme }}>{children}</MeterContext.Provider>
+      <MeterContext.Provider value={{ size, theme }}>{children}</MeterContext.Provider>
     </MeterPrimitive.Root>
   );
 }
@@ -112,31 +91,23 @@ function MeterTrack({ className, size, ...props }: MeterPrimitive.Track.Props & 
 
 function MeterIndicator({
   className,
-  variant,
   theme,
   ...props
-}: MeterPrimitive.Indicator.Props & { variant?: Variant; theme?: Theme }) {
+}: MeterPrimitive.Indicator.Props & { theme?: Theme }) {
   const context = React.useContext(MeterContext);
-  const resolvedVariant = variant ?? context.variant;
   const resolvedTheme = theme ?? context.theme;
 
   return (
     <MeterPrimitive.Indicator
       data-slot="meter-indicator"
-      data-variant={resolvedVariant}
       data-theme={resolvedTheme !== 'gray' ? resolvedTheme : undefined}
-      className={cn(meterIndicatorVariants({ variant: resolvedVariant }), className)}
+      className={cn(
+        'block h-full bg-solid rounded-none transition-[width] duration-300 ease-out motion-reduce:transition-none',
+        className
+      )}
       {...props}
     />
   );
 }
 
-export {
-  Meter,
-  MeterLabel,
-  MeterValue,
-  MeterTrack,
-  MeterIndicator,
-  meterTrackVariants,
-  meterIndicatorVariants,
-};
+export { Meter, MeterLabel, MeterValue, MeterTrack, MeterIndicator, meterTrackVariants };

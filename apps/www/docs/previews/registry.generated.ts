@@ -62,7 +62,6 @@ import * as MeterRangeModule from './meter/meter-range';
 import * as MeterSizesModule from './meter/meter-sizes';
 import * as MeterThemesModule from './meter/meter-themes';
 import * as MeterThresholdsModule from './meter/meter-thresholds';
-import * as MeterVariantsModule from './meter/meter-variants';
 import * as ProgressHeroModule from './progress/progress-hero';
 import * as ProgressIndeterminateModule from './progress/progress-indeterminate';
 import * as ProgressSizesModule from './progress/progress-sizes';
@@ -613,15 +612,6 @@ export const registry: Record<string, PreviewEntry> = {
     { name: "MeterThresholds", value: "thresholds", label: "Thresholds", component: MeterThresholdsModule.default, snippet: "export default function MeterThresholds() {\n  const used = 92;\n  const theme = used >= 90 ? 'destructive' : used >= 75 ? 'warning' : 'accent';\n\n  return (\n    <div className=\"w-full max-w-sm\">\n      <Meter value={used} theme={theme}>\n        <MeterLabel>Monthly API quota</MeterLabel>\n        <MeterValue />\n        <MeterTrack>\n          <MeterIndicator />\n        </MeterTrack>\n      </Meter>\n    </div>\n  );\n}" },
     ],
     source: "import { Meter, MeterIndicator, MeterLabel, MeterTrack, MeterValue } from '@/registry/ui/meter';\n\nexport default function MeterThresholds() {\n  const used = 92;\n  const theme = used >= 90 ? 'destructive' : used >= 75 ? 'warning' : 'accent';\n\n  return (\n    <div className=\"w-full max-w-sm\">\n      <Meter value={used} theme={theme}>\n        <MeterLabel>Monthly API quota</MeterLabel>\n        <MeterValue />\n        <MeterTrack>\n          <MeterIndicator />\n        </MeterTrack>\n      </Meter>\n    </div>\n  );\n}\n",
-  },
-  "meter-variants": {
-    slug: "meter-variants",
-    defaultExport: { name: "MeterSolid", value: "solid", label: "Solid", component: MeterVariantsModule.MeterSolid, snippet: "export function MeterSolid() {\n  return (\n    <div className=\"w-full max-w-sm\">\n      <Meter value={24} variant=\"solid\">\n        <MeterLabel>Storage used</MeterLabel>\n        <MeterValue />\n        <MeterTrack>\n          <MeterIndicator />\n        </MeterTrack>\n      </Meter>\n    </div>\n  );\n}" },
-    exports: [
-    { name: "MeterSolid", value: "solid", label: "Solid", component: MeterVariantsModule.MeterSolid, snippet: "export function MeterSolid() {\n  return (\n    <div className=\"w-full max-w-sm\">\n      <Meter value={24} variant=\"solid\">\n        <MeterLabel>Storage used</MeterLabel>\n        <MeterValue />\n        <MeterTrack>\n          <MeterIndicator />\n        </MeterTrack>\n      </Meter>\n    </div>\n  );\n}" },
-    { name: "MeterSoft", value: "soft", label: "Soft", component: MeterVariantsModule.MeterSoft, snippet: "export function MeterSoft() {\n  return (\n    <div className=\"w-full max-w-sm\">\n      <Meter value={24} variant=\"soft\">\n        <MeterLabel>Storage used</MeterLabel>\n        <MeterValue />\n        <MeterTrack>\n          <MeterIndicator />\n        </MeterTrack>\n      </Meter>\n    </div>\n  );\n}" },
-    ],
-    source: "import { Meter, MeterIndicator, MeterLabel, MeterTrack, MeterValue } from '@/registry/ui/meter';\n\nexport function MeterSolid() {\n  return (\n    <div className=\"w-full max-w-sm\">\n      <Meter value={24} variant=\"solid\">\n        <MeterLabel>Storage used</MeterLabel>\n        <MeterValue />\n        <MeterTrack>\n          <MeterIndicator />\n        </MeterTrack>\n      </Meter>\n    </div>\n  );\n}\n\nexport function MeterSoft() {\n  return (\n    <div className=\"w-full max-w-sm\">\n      <Meter value={24} variant=\"soft\">\n        <MeterLabel>Storage used</MeterLabel>\n        <MeterValue />\n        <MeterTrack>\n          <MeterIndicator />\n        </MeterTrack>\n      </Meter>\n    </div>\n  );\n}\n\nexport default MeterSolid;\n",
   },
   "progress-hero": {
     slug: "progress-hero",
