@@ -1,8 +1,7 @@
 import { Meter, MeterIndicator, MeterLabel, MeterTrack, MeterValue } from '@/registry/ui/meter';
 
-const used = 92;
-
 export default function MeterThresholds() {
+  const used = 92;
   const theme = used >= 90 ? 'destructive' : used >= 75 ? 'warning' : 'accent';
 
   return (

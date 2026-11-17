@@ -5,7 +5,12 @@ import { Meter, MeterIndicator, MeterLabel, MeterTrack, MeterValue } from '@/reg
 export default function MeterRange() {
   return (
     <div className="w-full max-w-sm">
-      <Meter value={42} max={128} format={{ style: 'unit', unit: 'gigabyte' }}>
+      <Meter
+        value={42}
+        max={128}
+        format={{ style: 'unit', unit: 'gigabyte' }}
+        getAriaValueText={(formattedValue) => `${formattedValue} of 128 GB`}
+      >
         <MeterLabel>Storage used</MeterLabel>
         <MeterValue>{(formattedValue) => `${formattedValue} of 128 GB`}</MeterValue>
         <MeterTrack>
