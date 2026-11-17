@@ -134,10 +134,10 @@ Known exceptions (eye test over rule):
 - **Badge**: custom `min()`/`max()` formula so it stays pill-like at low
   radii.
 - **Link**: fixed `rounded-xs`.
-- **Progress**: the track is clamped `xs`, not dynamic. It is only 4 to
-  12px tall, so a dynamic radius makes it a pill from the smallest step.
-  The 4px cap keeps the `md` and `lg` tracks short of a pill at every
-  preset.
+- **Progress, Meter**: the track is clamped `xs`, not dynamic. It is only
+  4 to 12px tall, so a dynamic radius makes it a pill from the smallest
+  step. The 4px cap keeps a square-ish track at the default preset, and
+  only the larger presets round the `sm` and `md` tracks into a pill.
 - **Plain overlays**: no `size` prop, so the radius is fixed. Dialog and
   AlertDialog use `rounded-lg`, Drawer uses `rounded-t-xl` (top corners
   only), Tooltip uses `rounded-md`.
