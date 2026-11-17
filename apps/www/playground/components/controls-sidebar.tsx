@@ -50,7 +50,7 @@ export function ControlsSidebar({
   schema: EntrySchema;
   state: EntryState;
   setVariant: (key: string, value: string | boolean) => void;
-  setBehavior: (key: string, value: string | boolean) => void;
+  setBehavior: (key: string, value: string | boolean | number) => void;
   setInput: (key: string, value: unknown) => void;
 }) {
   const groups = schema.groups ?? [];
@@ -97,15 +97,27 @@ export function ControlsSidebar({
                   allowThemeSwatch
                 />
               ))}
-              {Object.entries(schema.behavior ?? {}).map(([key, spec]) => (
-                <EnumRow
-                  key={`b:${key}`}
-                  controlKey={key}
-                  spec={spec}
-                  value={state.behavior[key]}
-                  onChange={(value) => setBehavior(key, value)}
-                />
-              ))}
+              {Object.entries(schema.behavior ?? {}).map(([key, spec]) =>
+                'type' in spec && spec.type === 'number' ? (
+                  <NumberRow
+                    key={`b:${key}`}
+                    label={spec.label ?? key}
+                    min={spec.min}
+                    max={spec.max}
+                    step={spec.step}
+                    value={state.behavior[key] as number}
+                    onChange={(value) => setBehavior(key, value)}
+                  />
+                ) : (
+                  <EnumRow
+                    key={`b:${key}`}
+                    controlKey={key}
+                    spec={spec}
+                    value={state.behavior[key] as string | boolean}
+                    onChange={(value) => setBehavior(key, value)}
+                  />
+                )
+              )}
             </div>
           ) : (
             <EmptyState message="No controls for this component." />
@@ -285,6 +297,41 @@ function EnumRow({
           ))}
         </SelectContent>
       </Select>
+    </ControlRow>
+  );
+}
+
+function NumberRow({
+  label,
+  min,
+  max,
+  step = 1,
+  value,
+  onChange,
+}: {
+  label: string;
+  min: number;
+  max: number;
+  step?: number;
+  value: number;
+  onChange: (value: number) => void;
+}) {
+  return (
+    <ControlRow label={label} asLabel endPad>
+      <span className="flex items-center gap-2">
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="w-28 accent-solid"
+        />
+        <span aria-hidden className="w-8 text-right text-xs tabular-nums text-primary">
+          {value}
+        </span>
+      </span>
     </ControlRow>
   );
 }

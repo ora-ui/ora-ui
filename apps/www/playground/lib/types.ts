@@ -12,6 +12,15 @@ export type VariantSpec =
       default: boolean;
     };
 
+export type NumberSpec = {
+  type: 'number';
+  min: number;
+  max: number;
+  step?: number;
+  default: number;
+  label?: string;
+};
+
 export type ItemShape = Record<string, ItemFieldSpec>;
 
 export type ItemFieldSpec =
@@ -61,7 +70,7 @@ export type EntrySchema = {
   component: string;
   name: string;
   variants: Record<string, VariantSpec>;
-  behavior?: Record<string, VariantSpec>;
+  behavior?: Record<string, VariantSpec | NumberSpec>;
   content?: ContentSpec;
   groups?: readonly ContentGroup[];
   render: ComponentType<EntryState>;
@@ -69,6 +78,6 @@ export type EntrySchema = {
 
 export type EntryState = {
   variants: Record<string, string | boolean>;
-  behavior: Record<string, string | boolean>;
+  behavior: Record<string, string | boolean | number>;
   inputs: Record<string, unknown>;
 };

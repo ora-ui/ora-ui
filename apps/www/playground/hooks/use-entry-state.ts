@@ -1,13 +1,37 @@
 'use client';
 
 import * as React from 'react';
-import { useQueryStates, parseAsString, parseAsBoolean, parseAsJson } from 'nuqs';
-import type { EntrySchema, EntryState, ListItem } from '@/playground/lib/types';
+import { createParser, useQueryStates, parseAsString, parseAsBoolean, parseAsJson } from 'nuqs';
+import type {
+  EntrySchema,
+  EntryState,
+  ListItem,
+  NumberSpec,
+  VariantSpec,
+} from '@/playground/lib/types';
+
+function parseAsStepped({ min, max, step = 1, default: fallback }: NumberSpec) {
+  return createParser({
+    parse: (raw) => {
+      const n = Number.parseFloat(raw);
+      if (Number.isNaN(n)) return null;
+      return Math.min(max, Math.max(min, min + Math.round((n - min) / step) * step));
+    },
+    serialize: String,
+  }).withDefault(fallback);
+}
 
 type EntryParser =
   | ReturnType<typeof parseAsString.withDefault>
   | ReturnType<typeof parseAsBoolean.withDefault>
+  | ReturnType<typeof parseAsStepped>
   | ReturnType<ReturnType<typeof parseAsJson<ListItem[]>>['withDefault']>;
+
+function parserFor(spec: VariantSpec | NumberSpec): EntryParser {
+  if (!('type' in spec)) return parseAsString.withDefault(spec.default);
+  if (spec.type === 'number') return parseAsStepped(spec);
+  return parseAsBoolean.withDefault(spec.default);
+}
 
 function buildParsers(schema: EntrySchema) {
   const parsers: Record<string, EntryParser> = {};
@@ -16,18 +40,12 @@ function buildParsers(schema: EntrySchema) {
   const inputKeys: string[] = [];
 
   for (const [key, spec] of Object.entries(schema.variants)) {
-    parsers[key] =
-      'type' in spec
-        ? parseAsBoolean.withDefault(spec.default)
-        : parseAsString.withDefault(spec.default);
+    parsers[key] = parserFor(spec);
     variantKeys.push(key);
   }
   if (schema.behavior) {
     for (const [key, spec] of Object.entries(schema.behavior)) {
-      parsers[key] =
-        'type' in spec
-          ? parseAsBoolean.withDefault(spec.default)
-          : parseAsString.withDefault(spec.default);
+      parsers[key] = parserFor(spec);
       behaviorKeys.push(key);
     }
   }
@@ -62,9 +80,9 @@ export function useEntryState(schema: EntrySchema) {
     for (const key of variantKeys) {
       variants[key] = urlState[key] as string | boolean;
     }
-    const behavior: Record<string, string | boolean> = {};
+    const behavior: Record<string, string | boolean | number> = {};
     for (const key of behaviorKeys) {
-      behavior[key] = urlState[key] as string | boolean;
+      behavior[key] = urlState[key] as string | boolean | number;
     }
     const inputs: Record<string, unknown> = {};
     for (const key of inputKeys) {
@@ -77,7 +95,7 @@ export function useEntryState(schema: EntrySchema) {
     setUrlState({ [key]: value });
   };
 
-  const setBehavior = (key: string, value: string | boolean) => {
+  const setBehavior = (key: string, value: string | boolean | number) => {
     setUrlState({ [key]: value });
   };
 
