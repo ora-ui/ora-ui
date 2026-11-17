@@ -5,7 +5,11 @@ import {
   {{Name}}Trigger,
 } from '@/registry/ui/{{name}}';
 
-export default function {{fn}}() {
+{{#each previews}}
+{{#unless @first}}
+
+{{/unless}}
+export {{#if @root.single}}default {{/if}}function {{fn}}() {
   return (
     <{{Name}} defaultValue={['item-1']} className="w-full max-w-sm">
       <{{Name}}Item value="item-1"{{#if variant}} variant="{{variant}}"{{/if}}>
@@ -19,3 +23,8 @@ export default function {{fn}}() {
     </{{Name}}>
   );
 }
+{{/each}}
+{{#unless single}}
+
+export default {{defaultFn}};
+{{/unless}}

@@ -1,6 +1,10 @@
 import { {{Name}}, {{Name}}Item } from '@/registry/ui/{{name}}';
 
-export default function {{fn}}() {
+{{#each previews}}
+{{#unless @first}}
+
+{{/unless}}
+export {{#if @root.single}}default {{/if}}function {{fn}}() {
   return (
     <{{Name}} aria-label="{{Sentence}}" defaultValue={['one']}{{#if variant}} variant="{{variant}}"{{/if}}>
       <{{Name}}Item value="one">One</{{Name}}Item>
@@ -9,3 +13,8 @@ export default function {{fn}}() {
     </{{Name}}>
   );
 }
+{{/each}}
+{{#unless single}}
+
+export default {{defaultFn}};
+{{/unless}}

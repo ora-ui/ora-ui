@@ -9,7 +9,11 @@ import {
   {{Name}}Value,
 } from '@/registry/ui/{{name}}';
 
-export default function {{fn}}() {
+{{#each previews}}
+{{#unless @first}}
+
+{{/unless}}
+export {{#if @root.single}}default {{/if}}function {{fn}}() {
   return (
     <{{Name}} defaultValue="apple">
       <{{Name}}Trigger render={<Button variant="outline" />} aria-label="Fruit">
@@ -23,3 +27,8 @@ export default function {{fn}}() {
     </{{Name}}>
   );
 }
+{{/each}}
+{{#unless single}}
+
+export default {{defaultFn}};
+{{/unless}}

@@ -181,7 +181,8 @@ It writes:
 - `apps/www/playground/entries/<name>.tsx`
 - `apps/www/docs/content/components/<name>.mdx`
 - `apps/www/docs/previews/<name>/<name>-hero.tsx`
-- `apps/www/docs/previews/<name>/<name>-<variant>.tsx`, one per variant
+- `apps/www/docs/previews/<name>/<name>-variants.tsx`, one export per
+  variant, shown as a `select` example
 
 and then runs the generators, which update:
 

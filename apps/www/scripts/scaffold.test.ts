@@ -137,7 +137,7 @@ describe('scaffoldComponent', () => {
 
     const previews = parsePreviewsDir(path.join(root, 'docs/previews'));
     expect(previews.map((p) => p.slug).sort()).toEqual(
-      ['zz-widget-hero', ...input.variants.map((v) => `zz-widget-${v}`)].sort()
+      input.variants.length ? ['zz-widget-hero', 'zz-widget-variants'] : ['zz-widget-hero']
     );
     expect(previews.find((p) => p.slug === 'zz-widget-hero')?.defaultExport.name).toBe(
       'ZzWidgetHero'
@@ -153,20 +153,23 @@ describe('scaffoldComponent', () => {
     ).toEqual(['zz-widget']);
   });
 
-  it('writes one preview per variant and lists them as docs examples', () => {
+  it('writes one switchable variants example with an option per variant', () => {
     const written = scaffoldComponent(root, componentArgs('action'));
-    expect(written).toContain('docs/previews/zz-widget/zz-widget-on-soft.tsx');
-    const preview = fs.readFileSync(
-      path.join(root, 'docs/previews/zz-widget/zz-widget-on-soft.tsx'),
-      'utf-8'
+    expect(written).toContain('docs/previews/zz-widget/zz-widget-variants.tsx');
+    expect(written).not.toContain('docs/previews/zz-widget/zz-widget-on-soft.tsx');
+    const variants = parsePreviewsDir(path.join(root, 'docs/previews')).find(
+      (p) => p.slug === 'zz-widget-variants'
     );
-    expect(preview).toContain('export default function ZzWidgetOnSoft');
-    expect(preview).toContain('variant="on-soft"');
+    expect(variants?.exports.map((e) => e.value)).toEqual(['solid', 'on-soft']);
+    expect(variants?.defaultExport.name).toBe('ZzWidgetSolid');
+    expect(variants?.source).toContain('variant="on-soft"');
     const source = fs.readFileSync(path.join(root, 'registry/ui/zz-widget.tsx'), 'utf-8');
     expect(source).toContain("'on-soft': '',");
     expect(source).toContain("'solid': '',");
     const mdx = fs.readFileSync(path.join(root, 'docs/content/components/zz-widget.mdx'), 'utf-8');
-    expect(mdx).toContain('<ComponentPreview name="zz-widget-on-soft" />');
+    expect(mdx).toContain(
+      `<ComponentPreview name="zz-widget-variants" select={['solid', 'on-soft']} />`
+    );
   });
 
   it('omits the variants export and the examples section when there are no variants', () => {

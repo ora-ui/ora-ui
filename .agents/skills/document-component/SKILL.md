@@ -44,7 +44,7 @@ All paths are relative to `apps/www/`.
 
    Every argument is required. It creates the hero, one preview file
    per example and the MDX page, and leaves any file that exists alone.
-   After `scaffold component` the page and the variant previews exist,
+   After `scaffold component` the page and the variants preview exist,
    so it only adds the other examples' previews. Add their `###`
    sections to the MDX by hand. The
    docs `meta.json` is generated from the MDX files (`pnpm gen:lists`,
@@ -91,9 +91,8 @@ All paths are relative to `apps/www/`.
 When no examples are given, draft these in order:
 
 1. `hero`: the most common product use, in the default appearance.
-2. The variants: one example per variant, as `scaffold component`
-   writes them, or one `variants (select)` example when they share
-   their content.
+2. `variants (select)`, one option per variant. `scaffold component`
+   writes it this way.
 3. `theme (select)`, if the component has a `theme` prop.
 4. Each demo on the primitive's Base UI page, named by its scenario
    and rebuilt with Ora parts. Skip any that repeat an example above.
