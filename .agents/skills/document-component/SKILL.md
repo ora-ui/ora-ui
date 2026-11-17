@@ -32,8 +32,9 @@ All paths are relative to `apps/www/`.
      none are given, draft them from [Default examples](#default-examples).
      From an issue, use the draft and list it in the PR. Otherwise show
      it and let the user correct it.
-   - **Which examples use `select`.** A `(select)` mark in the list
-     answers it. Otherwise ask; don't infer. See
+   - **Which examples use `select`.** One Appearance prop's options
+     (`variant`, `theme`, `size`) always do. A `(select)` mark in the
+     list answers it for the rest. Otherwise ask; don't infer. See
      [REFERENCE.md](REFERENCE.md#interactive-previews-select).
 
 5. **Scaffold** non-interactively:
@@ -93,7 +94,8 @@ When no examples are given, draft these in order:
 1. `hero`: the most common product use, in the default appearance.
 2. `variants (select)`, one option per variant. `scaffold component`
    writes it this way.
-3. `theme (select)`, if the component has a `theme` prop.
+3. `theme (select)` and `size (select)`, for each of those props the
+   component has.
 4. Each demo on the primitive's Base UI page, named by its scenario
    and rebuilt with Ora parts. Skip any that repeat an example above.
 
