@@ -1,0 +1,127 @@
+---
+title: Meter
+description: 'Displays a numeric value within a known range, such as disk usage or a score.'
+links:
+  doc: https://base-ui.com/react/components/meter
+  api: https://base-ui.com/react/components/meter#api-reference
+---
+
+<ComponentPreview name="meter-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/meter.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/meter.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/meter.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/meter.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="meter" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import { Meter, MeterIndicator, MeterLabel, MeterTrack, MeterValue } from '@/registry/ui/meter';
+
+<Meter value={24}>
+  <MeterLabel>Storage used</MeterLabel>
+  <MeterValue />
+  <MeterTrack>
+    <MeterIndicator />
+  </MeterTrack>
+</Meter>;
+```
+
+`MeterLabel` names the meter for assistive technology. If you leave it out, pass `aria-label` to `Meter`.
+
+## Examples
+
+### Sizes
+
+The `size` prop sets the track height.
+
+<ComponentPreview name="meter-sizes" select={['sm', 'md', 'lg']} />
+
+### Themes
+
+The `theme` prop applies a color scheme to the indicator. The track stays neutral.
+
+<ComponentPreview
+  name="meter-themes"
+  select={['gray', 'accent', 'destructive', 'warning', 'success']}
+/>
+
+### Range and format
+
+Set `min` and `max` for a range other than 0 to 100, and `format` to show the value in its own unit. Pass a function to `MeterValue` to add text around the formatted value.
+
+<ComponentPreview name="meter-range" />
+
+### Thresholds
+
+Set `theme` from the value, such as `warning` past 75% and `destructive` past 90%. Meter doesn't switch theme on its own.
+
+<ComponentPreview name="meter-thresholds" />
+
+## API Reference
+
+### Meter
+
+#### Appearance
+
+| Prop    | Type                                                                      | Default  |
+| ------- | ------------------------------------------------------------------------- | -------- |
+| `size`  | `"sm" \| "md" \| "lg"`                                                    | `"md"`   |
+| `theme` | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | `"gray"` |
+
+`Meter` passes `size` to `MeterTrack` and `theme` to `MeterIndicator`. Set them on a part to override the root. The track stays neutral in every theme.
+
+### MeterTrack
+
+| Prop   | Type                   | Default |
+| ------ | ---------------------- | ------- |
+| `size` | `"sm" \| "md" \| "lg"` | Root    |
+
+### MeterIndicator
+
+| Prop    | Type                                                                      | Default |
+| ------- | ------------------------------------------------------------------------- | ------- |
+| `theme` | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | Root    |
+
+### Styling
+
+Set `--meter-height` on `MeterTrack` or any ancestor to override the `size` height (`sm` 4px, `md` 8px, `lg` 12px). The parts set `data-slot` to `meter`, `meter-label`, `meter-value`, `meter-track` and `meter-indicator`.
+
+All other props, including `value`, `min`, `max`, `format`, `locale` and `getAriaValueText`, are forwarded to the underlying [Base UI Meter](https://base-ui.com/react/components/meter) primitive.
