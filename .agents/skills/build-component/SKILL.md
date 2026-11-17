@@ -92,6 +92,9 @@ Present it as a draft for the user to correct, not a questionnaire.
 - [ ] **Field / invalid state**, for text fields and selection controls
 - [ ] **Playground**: which props become controls, and what content
       inputs the entry needs. Ask what the user wants to show
+- [ ] **Docs examples**: hero first, from the default examples in the
+      `document-component` skill, plus any usage pattern the component
+      is meant for (Progress: accent while running, success when done)
 
 For a rework, also list **what to keep** and **what to change**.
 
@@ -138,6 +141,7 @@ chat. Proposal mode writes no component code.
    ones too, in the format its `description` in the template gives.
    The Archetype is one of the dropdown options, verbatim.
    - **Playground**: the controls and content from the draft.
+   - **Docs examples**: the list from the draft, one line per example.
    - **Other requirements**: radius per part, context, props, CSS
      custom properties, field state, and each **ask** item as an open
      question with a proposed answer, such as `Open: density?
@@ -220,8 +224,8 @@ EntrySchema`, types in `apps/www/playground/lib/types.ts`). Put
    a file (`pnpm dev` watches; `build`, `test:unit` and `typecheck`
    run it).
 2. **Docs page.** Fill the scaffolded page and previews with the
-   `document-component` skill. For a new component, skip its scaffold
-   step, since `scaffold component` already wrote them.
+   `document-component` skill. Give it the issue's Docs examples, or
+   the confirmed draft's.
 3. **Checks:**
 
    ```bash

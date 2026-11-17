@@ -28,7 +28,12 @@ All paths are relative to `apps/www/`.
    - A one-line description for the frontmatter.
    - The examples to show, named by scenario (`multiple`, not
      `expanded-state`). Each becomes a preview file and a `###` section.
-   - **Which examples use `select`.** Ask; don't infer. See
+     Take them from the issue's Docs examples or the caller's list. If
+     none are given, draft them from [Default examples](#default-examples).
+     From an issue, use the draft and list it in the PR. Otherwise show
+     it and let the user correct it.
+   - **Which examples use `select`.** A `(select)` mark in the list
+     answers it. Otherwise ask; don't infer. See
      [REFERENCE.md](REFERENCE.md#interactive-previews-select).
 
 5. **Scaffold** non-interactively:
@@ -37,9 +42,11 @@ All paths are relative to `apps/www/`.
    pnpm --filter www scaffold docs <name> "<description>" "<example1,example2>"
    ```
 
-   Every argument is required. This is for a component that already
-   exists; `scaffold component` (build-component) writes the docs page
-   itself. This creates the hero and example preview files and the MDX page. The
+   Every argument is required. It creates the hero, one preview file
+   per example and the MDX page, and leaves any file that exists alone.
+   After `scaffold component` the page and the variant previews exist,
+   so it only adds the other examples' previews. Add their `###`
+   sections to the MDX by hand. The
    docs `meta.json` is generated from the MDX files (`pnpm gen:lists`,
    gitignored), so don't edit it. It doesn't touch any registry file; those are
    generated (step 8).
@@ -78,6 +85,34 @@ All paths are relative to `apps/www/`.
 
 9. **Report** what was created or changed and ask the user to check the
    page in dev.
+
+## Default examples
+
+When no examples are given, draft these in order:
+
+1. `hero`: the most common product use, in the default appearance.
+2. The variants: one example per variant, as `scaffold component`
+   writes them, or one `variants (select)` example when they share
+   their content.
+3. `theme (select)`, if the component has a `theme` prop.
+4. Each demo on the primitive's Base UI page, named by its scenario
+   and rebuilt with Ora parts. Skip any that repeat an example above.
+
+## Example content
+
+Every preview shows the component the way a real product uses it,
+whether the examples came from an issue, a caller or the defaults.
+
+- Start from the Base UI demo for the primitive. Keep its scenario and
+  the parts it pairs: Progress shows a label ("Export data") beside its
+  value ("64%"), not a bare bar.
+- Write real copy for one concrete scenario: "Sign up", "Featured",
+  "Uploading report.pdf". Never "Label", "Item 1", "Option A",
+  "Click me" or lorem ipsum.
+- Keep one scenario across a `select` example's options, so they
+  compare like for like (every Button variant reads "Sign up").
+- An example the list names without content ("a hero") still gets
+  content from these rules. Don't ask for it.
 
 ## Page conventions
 
