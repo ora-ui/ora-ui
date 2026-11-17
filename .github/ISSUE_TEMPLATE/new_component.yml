@@ -94,6 +94,15 @@ body:
       label: 'Playground'
       description: 'Optional. Which props become controls, and what content the entry shows.'
   - type: 'textarea'
+    id: 'examples'
+    attributes:
+      label: 'Docs examples'
+      description: 'Optional. One line per example, hero first, as `<kebab-name>: <what it shows and its content>`. Mark an example whose options switch in place with `(select)`. Left empty, the agent uses the default examples in the document-component skill.'
+      placeholder: |
+        hero: a gray bar labelled "Export data" with its value, 64%
+        theme (select): one bar per theme
+        status: accent while running, success when done, destructive on failure
+  - type: 'textarea'
     id: 'notes'
     attributes:
       label: 'Other requirements'

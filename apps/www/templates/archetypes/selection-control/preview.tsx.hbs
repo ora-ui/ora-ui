@@ -1,6 +1,10 @@
 import { {{Name}} } from '@/registry/ui/{{name}}';
 
-export default function {{fn}}() {
+{{#each previews}}
+{{#unless @first}}
+
+{{/unless}}
+export {{#if @root.single}}default {{/if}}function {{fn}}() {
   return (
     <label className="flex items-center gap-2">
       <{{Name}}{{#if variant}} variant="{{variant}}"{{/if}} defaultChecked />
@@ -8,3 +12,8 @@ export default function {{fn}}() {
     </label>
   );
 }
+{{/each}}
+{{#unless single}}
+
+export default {{defaultFn}};
+{{/unless}}

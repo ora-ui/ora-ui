@@ -31,6 +31,9 @@ A small, self-contained example of a Registry component, rendered inline
 on a docs page via `<ComponentPreview />`. One preview file may export
 several named functions, each shown as a tab.
 
+A docs page's `## Examples` section is a list of Previews. "Docs
+examples" in a new-component issue means these, not an [[Example]].
+
 ### Playground
 
 The interactive surface where a user explores Components before
@@ -63,11 +66,11 @@ Component has Previews and a Playground entry.
 ### Playground Entry
 
 A per-Component artifact that drives its Playground page. An Entry is
-a **schema** (declarative description of the Component's variants and
-content shape) — the controls sidebar renders generic controls from it and the
+a **schema** (declarative description of the Component's Appearance,
+Structure and Behavior props and its content shape) — the controls sidebar renders generic controls from it and the
 code snippet is emitted automatically from current state. No bespoke
 React render escape hatch: anything intrinsic to the Component must be
-expressible via Variants + Content (see those terms). If something
+expressible through those props and Content (see those terms). If something
 cannot be expressed, the schema model is extended; the Entry never
 forks into hand-authored React.
 
@@ -102,18 +105,18 @@ A discrete prop on a Component that changes its runtime behavior without
 changing its visual appearance — i.e. not a CVA branch. Examples:
 Accordion's `multiple` (single- vs multi-open), DropdownMenu's `modal`,
 form fields' `disabled` when exposed as a demo control. Distinct from
-[[Variant]] (which alters styling via CVA) and [[Content]] (which fills
-slots/children). Controls sidebar renders Behavior props in their own
-section, mechanically similar to Variants (one control per prop).
+[[Appearance]] and [[Structure]] (CVA branches) and [[Content]] (which
+fills slots/children). Controls sidebar renders Behavior props in their
+own section, mechanically like Appearance props (one control per prop).
 
 ### Content
 
 What fills a Component's slots/children. Parametric within typed
 bounds: template choices (e.g. for Button, "text only" vs "leading
 icon + text" vs "icon only") plus inputs the chosen template consumes
-(e.g. label text, icon identifier). Distinct from Variants — Variants
-are props the Component exposes; Content is what gets passed into the
-Component. Controls sidebar renders a template picker plus inputs.
+(e.g. label text, icon identifier). Distinct from props: Appearance,
+Structure and Behavior are props the Component exposes; Content is what
+gets passed into the Component. Controls sidebar renders a template picker plus inputs.
 
 ### Example
 

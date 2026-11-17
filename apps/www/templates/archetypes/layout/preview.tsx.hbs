@@ -1,6 +1,10 @@
 import { {{Name}} } from '@/registry/ui/{{name}}';
 
-export default function {{fn}}() {
+{{#each previews}}
+{{#unless @first}}
+
+{{/unless}}
+export {{#if @root.single}}default {{/if}}function {{fn}}() {
   return (
     <div className="flex w-48 flex-col gap-4">
       <span className="text-sm">Above</span>
@@ -9,3 +13,8 @@ export default function {{fn}}() {
     </div>
   );
 }
+{{/each}}
+{{#unless single}}
+
+export default {{defaultFn}};
+{{/unless}}

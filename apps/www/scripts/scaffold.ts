@@ -199,24 +199,36 @@ export function scaffoldComponent(
     variantUnion: variants.map((v) => `'${v}'`).join(' | '),
   };
   const dir = `archetypes/${archetype}`;
-  const preview = (fn: string, variant?: string) =>
-    render(`${dir}/preview.tsx.hbs`, { ...ctx, fn, variant });
+  const variantFns = variants.map((variant) => ({
+    ...ctx,
+    fn: `${base.Name}${pascalCase(variant)}`,
+    variant,
+  }));
+  const preview = (previews: object[], defaultFn?: string) =>
+    render(`${dir}/preview.tsx.hbs`, { ...ctx, previews, single: !defaultFn, defaultFn });
 
   const outputs: Output[] = [
     { file: `registry/ui/${name}.tsx`, contents: render(`${dir}/component.tsx.hbs`, ctx) },
     { file: `playground/entries/${name}.tsx`, contents: render(`${dir}/entry.tsx.hbs`, ctx) },
     {
       file: `docs/content/components/${name}.mdx`,
-      contents: render('docs/component.mdx.hbs', { ...base, examples: variants.map(item) }),
+      contents: render('docs/component.mdx.hbs', {
+        ...base,
+        variantOptions: variants.map((v) => `'${v}'`).join(', '),
+      }),
     },
     {
       file: `docs/previews/${name}/${name}-hero.tsx`,
-      contents: preview(`${base.Name}Hero`),
+      contents: preview([{ ...ctx, fn: `${base.Name}Hero` }]),
     },
-    ...variants.map((variant) => ({
-      file: `docs/previews/${name}/${name}-${variant}.tsx`,
-      contents: preview(`${base.Name}${pascalCase(variant)}`, variant),
-    })),
+    ...(variantFns.length
+      ? [
+          {
+            file: `docs/previews/${name}/${name}-variants.tsx`,
+            contents: preview(variantFns, variantFns[0].fn),
+          },
+        ]
+      : []),
   ];
   return writeAll(wwwRoot, outputs, { skipExisting: false });
 }

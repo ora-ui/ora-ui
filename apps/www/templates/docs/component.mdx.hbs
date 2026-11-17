@@ -57,6 +57,16 @@ import { {{Name}} } from '@/registry/ui/{{name}}';
 <{{Name}}>{{Name}}</{{Name}}>;
 ```
 
+{{#if variantOptions}}
+## Examples
+
+### Variants
+
+{/* TODO: add description for the variants example */}
+
+<ComponentPreview name="{{name}}-variants" select={[{{{variantOptions}}}]} />
+
+{{/if}}
 {{#if examples.length}}
 ## Examples
 

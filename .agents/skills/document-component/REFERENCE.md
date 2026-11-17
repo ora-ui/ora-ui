@@ -104,12 +104,12 @@ The preview `name` is the file name without `.tsx`.
 
 ### Interactive previews (select)
 
-Use `select` when an example shows visual variants of the same content
-and the reader benefits from switching between them in place (for
-example solid / outline / soft under one "Variants" heading). Don't use
-it for standalone examples (`icon-only`, `loading`), polymorphic ones
-(`as-a-link`) or examples whose markup differs. There is no fixed rule:
-ask the user which examples should be interactive.
+An example that shows the options of one Appearance prop (`variant`,
+`theme`, `size`) is always a `select` example: one option per value,
+the same content in each. Every existing page does this. Don't use it
+for standalone examples (`icon-only`, `loading`), polymorphic ones
+(`as-a-link`) or examples whose markup differs. For any other example,
+ask the user whether it should be interactive.
 
 One file, one export per option, plus a default export:
 

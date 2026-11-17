@@ -1,7 +1,16 @@
 import { {{Name}} } from '@/registry/ui/{{name}}';
 
-export default function {{fn}}() {
+{{#each previews}}
+{{#unless @first}}
+
+{{/unless}}
+export {{#if @root.single}}default {{/if}}function {{fn}}() {
   return (
     <{{Name}}{{#if variant}} variant="{{variant}}"{{/if}} aria-label="{{Sentence}}" placeholder="Type here" className="w-64" />
   );
 }
+{{/each}}
+{{#unless single}}
+
+export default {{defaultFn}};
+{{/unless}}
