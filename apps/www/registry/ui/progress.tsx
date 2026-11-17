@@ -101,18 +101,15 @@ function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
 function ProgressTrack({
   className,
   size,
-  theme,
   ...props
-}: ProgressPrimitive.Track.Props & { size?: Size; theme?: Theme }) {
+}: ProgressPrimitive.Track.Props & { size?: Size }) {
   const context = React.useContext(ProgressContext);
   const resolvedSize = size ?? context.size;
-  const resolvedTheme = theme ?? context.theme;
 
   return (
     <ProgressPrimitive.Track
       data-slot="progress-track"
       data-size={resolvedSize}
-      data-theme={resolvedTheme !== 'gray' ? resolvedTheme : undefined}
       className={cn(progressTrackVariants({ size: resolvedSize }), className)}
       {...props}
     />

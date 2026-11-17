@@ -117,14 +117,13 @@ Set `theme` from the task's state, such as `accent` while it runs and `success` 
 | `size`    | `"sm" \| "md" \| "lg"`                                                    | `"md"`    |
 | `theme`   | `"gray" \| "accent" \| "destructive" \| "warning" \| "success" \| string` | `"gray"`  |
 
-`Progress` passes `variant`, `size` and `theme` to `ProgressTrack` and `ProgressIndicator`. Set them on either part to override the root.
+`Progress` passes `size` to `ProgressTrack`, and `variant` and `theme` to `ProgressIndicator`. Set them on a part to override the root. The track stays neutral in every theme.
 
 ### ProgressTrack
 
-| Prop    | Type                   | Default |
-| ------- | ---------------------- | ------- |
-| `size`  | `"sm" \| "md" \| "lg"` | Root    |
-| `theme` | `string`               | Root    |
+| Prop   | Type                   | Default |
+| ------ | ---------------------- | ------- |
+| `size` | `"sm" \| "md" \| "lg"` | Root    |
 
 ### ProgressIndicator
 
