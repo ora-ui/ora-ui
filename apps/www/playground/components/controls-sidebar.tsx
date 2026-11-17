@@ -725,6 +725,11 @@ function ThemingPanel() {
     if (stored && RADIUS_STEPS.some((s) => s.value === stored)) setRadius(stored);
   }, []);
   const mode = mounted && resolvedTheme === 'dark' ? 'dark' : 'light';
+  /*
+   * Base UI's radio group keeps its tab stop on the value it mounted with, so the
+   * groups whose value is only known after mount remount once to move it.
+   */
+  const mountKey = mounted ? 'mounted' : 'ssr';
 
   useEffect(() => {
     if (!mounted) return;
@@ -761,6 +766,7 @@ function ThemingPanel() {
       <section className="flex flex-col gap-2">
         <SectionHeader label="Appearance" />
         <RadioGroupPrimitive
+          key={mountKey}
           value={mode}
           onValueChange={(next) => setTheme(next as string)}
           className="grid grid-cols-[1fr_1fr] gap-1"
@@ -787,6 +793,7 @@ function ThemingPanel() {
       <section className="flex flex-col gap-2">
         <SectionHeader label="Radius" />
         <RadioGroupPrimitive
+          key={mountKey}
           value={radius}
           onValueChange={(next) => setRadius(next as string)}
           className="flex justify-between"
