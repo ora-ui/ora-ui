@@ -400,6 +400,23 @@
       ]
     },
     {
+      "name": "slider",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/slider.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
+    },
+    {
       "name": "sonner",
       "type": "registry:ui",
       "files": [

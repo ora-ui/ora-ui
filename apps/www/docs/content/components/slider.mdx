@@ -1,0 +1,186 @@
+---
+title: Slider
+description: 'An input where the user picks a value, or a range, by dragging a thumb along a track.'
+links:
+  doc: https://base-ui.com/react/components/slider
+  api: https://base-ui.com/react/components/slider#api-reference
+---
+
+<ComponentPreview name="slider-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/slider.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/slider.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/slider.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/slider.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="slider" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  Slider,
+  SliderLabel,
+  SliderValue,
+  SliderControl,
+  SliderTrack,
+  SliderIndicator,
+  SliderThumb,
+} from '@/registry/ui/slider';
+
+<Slider defaultValue={40}>
+  <SliderLabel>Volume</SliderLabel>
+  <SliderValue />
+  <SliderControl>
+    <SliderTrack>
+      <SliderIndicator />
+    </SliderTrack>
+    <SliderThumb aria-label="Volume" />
+  </SliderControl>
+</Slider>;
+```
+
+## Examples
+
+### Variant
+
+Use `variant` to switch between a solid and a soft indicator.
+
+<ComponentPreview name="slider-variants" select={['solid', 'soft']} />
+
+### Theme
+
+Use `theme` to colour the indicator and the thumb focus ring. The track stays neutral.
+
+<ComponentPreview name="slider-theme" select={['gray', 'accent']} />
+
+### Size
+
+Use `size` to change the track height and the thumb size.
+
+<ComponentPreview name="slider-size" select={['sm', 'md', 'lg']} />
+
+### Range
+
+Render one `SliderThumb` per value. Pass an array to `defaultValue` and give each thumb its `index` and an accessible name.
+
+<ComponentPreview name="slider-range" />
+
+### Steps
+
+Set `step` to snap the value to fixed increments.
+
+<ComponentPreview name="slider-steps" />
+
+### Vertical
+
+Set `orientation="vertical"`. The slider fills the height of its container.
+
+<ComponentPreview name="slider-vertical" />
+
+### Formatted
+
+Use `format` to control how the value is read out. It takes `Intl.NumberFormat` options.
+
+<ComponentPreview name="slider-formatted" />
+
+### Field
+
+Wrap the slider in `Field` to get a label, a description and the invalid state.
+
+<ComponentPreview name="slider-field" />
+
+### Disabled
+
+Set `disabled` to stop the slider from taking input.
+
+<ComponentPreview name="slider-disabled" />
+
+## API Reference
+
+### Slider
+
+#### Appearance
+
+| Prop      | Type                           | Default   |
+| --------- | ------------------------------ | --------- |
+| `variant` | `"solid" \| "soft"`            | `"solid"` |
+| `size`    | `"sm" \| "md" \| "lg"`         | `"md"`    |
+| `theme`   | `"gray" \| "accent" \| string` | `"gray"`  |
+
+`variant`, `size` and `theme` flow to the parts through context. A prop on a part wins.
+
+#### Structure
+
+| Prop          | Type                         | Default        |
+| ------------- | ---------------------------- | -------------- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
+
+### SliderTrack
+
+| Prop   | Type                   | Default |
+| ------ | ---------------------- | ------- |
+| `size` | `"sm" \| "md" \| "lg"` | context |
+
+### SliderIndicator
+
+| Prop      | Type                           | Default |
+| --------- | ------------------------------ | ------- |
+| `variant` | `"solid" \| "soft"`            | context |
+| `theme`   | `"gray" \| "accent" \| string` | context |
+
+### SliderThumb
+
+| Prop    | Type                           | Default |
+| ------- | ------------------------------ | ------- |
+| `size`  | `"sm" \| "md" \| "lg"`         | context |
+| `theme` | `"gray" \| "accent" \| string` | context |
+
+Every thumb needs an accessible name. Pass `aria-label`, or `getAriaLabel` for a range.
+
+### CSS custom properties
+
+| Property          | Description                                                                             |
+| ----------------- | --------------------------------------------------------------------------------------- |
+| `--slider-height` | Track thickness. Defaults to `--spacing(1)`, `--spacing(2)` and `--spacing(3)` by size. |
+
+### Data slots
+
+`slider`, `slider-label`, `slider-value`, `slider-control`, `slider-track`, `slider-indicator`, `slider-thumb`.
+
+All other props are forwarded to the underlying [Base UI Slider](https://base-ui.com/react/components/slider) primitive.
