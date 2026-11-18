@@ -105,7 +105,7 @@ export const comboboxEntry: EntrySchema = {
                   {value.map((item) => (
                     <ComboboxChip key={item}>
                       {item}
-                      <ComboboxChipRemove />
+                      <ComboboxChipRemove aria-label={`Remove ${item}`} />
                     </ComboboxChip>
                   ))}
                   <ComboboxInput

@@ -33,7 +33,7 @@ const densityPad: Record<ComboboxDensity, string> = {
 
 const comboboxInputGroupVariants = cva(
   [
-    'has-[[data-slot=combobox-input]:focus-visible]:border-focus has-[[data-slot=combobox-input]:focus-visible]:outline-2 has-[[data-slot=combobox-input]:focus-visible]:outline-focus',
+    'not-in-data-[slot=combobox-content]:has-[[data-slot=combobox-input]:focus-visible]:border-focus not-in-data-[slot=combobox-content]:has-[[data-slot=combobox-input]:focus-visible]:outline-2 not-in-data-[slot=combobox-content]:has-[[data-slot=combobox-input]:focus-visible]:outline-focus',
     'has-[button]:pr-1 has-[[data-slot=combobox-chips]]:h-auto has-[[data-slot=combobox-chips]]:min-h-9',
   ],
   {
@@ -74,7 +74,7 @@ function ComboboxInput({ className, ...props }: ComboboxPrimitive.Input.Props) {
       data-slot="combobox-input"
       className={cn(
         inputVariants(),
-        'h-full min-w-0 flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:outline-none aria-invalid:outline-none',
+        'h-full min-w-0 flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:outline-0 aria-invalid:outline-0',
         className
       )}
       {...props}
@@ -166,7 +166,7 @@ const comboboxContentBaseStyles = [
   'data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
   'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95',
   'data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
-  '*:data-[slot=combobox-input-group]:m-1 *:data-[slot=combobox-input-group]:w-auto',
+  '*:data-[slot=combobox-input-group]:m-1 *:data-[slot=combobox-input-group]:w-auto *:data-[slot=combobox-input-group]:rounded-(--menu-item-radius)',
 ] as const;
 
 function ComboboxContent({
@@ -212,13 +212,18 @@ function ComboboxContent({
   );
 }
 
-function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
-  const { density } = React.useContext(ComboboxContext);
+function ComboboxList({
+  className,
+  density: densityProp,
+  ...props
+}: ComboboxPrimitive.List.Props & { density?: ComboboxDensity }) {
+  const context = React.useContext(ComboboxContext);
+  const density = densityProp ?? context.density;
   return (
     <ComboboxPrimitive.List
       data-slot="combobox-list"
       className={cn(
-        'min-h-0 flex-1 scroll-py-1 overflow-y-auto overscroll-contain outline-none data-empty:p-0',
+        'min-h-0 flex-1 scroll-py-1 overflow-x-hidden overflow-y-auto overscroll-contain outline-none data-empty:p-0',
         densityPad[density],
         className
       )}
@@ -227,13 +232,22 @@ function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
   );
 }
 
-function ComboboxItem({ className, children, ...props }: ComboboxPrimitive.Item.Props) {
-  const { variant, density } = React.useContext(ComboboxContext);
+function ComboboxItem({
+  className,
+  children,
+  variant: variantProp,
+  density: densityProp,
+  ...props
+}: ComboboxPrimitive.Item.Props & { variant?: ComboboxVariant; density?: ComboboxDensity }) {
+  const context = React.useContext(ComboboxContext);
+  const variant = variantProp ?? context.variant;
+  const density = densityProp ?? context.density;
   const flushRadius = density === 'none';
 
   return (
     <ComboboxPrimitive.Item
       data-slot="combobox-item"
+      data-variant={variant}
       className={cn(
         'relative flex h-7 w-full cursor-default items-center gap-1.5 pr-8 pl-1.5 text-sm text-gray-950 outline-hidden select-none',
         flushRadius ? 'rounded-none' : 'rounded-(--menu-item-radius)',
@@ -296,7 +310,7 @@ function ComboboxEmpty({ className, ...props }: ComboboxPrimitive.Empty.Props) {
   return (
     <ComboboxPrimitive.Empty
       data-slot="combobox-empty"
-      className={cn('px-2 py-3 text-center text-sm text-muted empty:hidden', className)}
+      className={cn('px-2 py-3 text-center text-sm text-muted empty:m-0 empty:p-0', className)}
       {...props}
     />
   );
@@ -306,7 +320,7 @@ function ComboboxStatus({ className, ...props }: ComboboxPrimitive.Status.Props)
   return (
     <ComboboxPrimitive.Status
       data-slot="combobox-status"
-      className={cn('px-2 py-1.5 text-xs text-muted empty:hidden', className)}
+      className={cn('px-2 py-1.5 text-xs text-muted empty:m-0 empty:p-0', className)}
       {...props}
     />
   );

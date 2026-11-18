@@ -1,5 +1,7 @@
 'use client';
 
+import * as React from 'react';
+
 import {
   Combobox,
   ComboboxCollection,
@@ -36,7 +38,7 @@ export default function ComboboxGroups() {
         <ComboboxEmpty>No produce found.</ComboboxEmpty>
         <ComboboxList>
           {(group: ProduceGroup, index: number) => (
-            <div key={group.label}>
+            <React.Fragment key={group.label}>
               {index > 0 && <ComboboxSeparator />}
               <ComboboxGroup items={group.items}>
                 <ComboboxLabel>{group.label}</ComboboxLabel>
@@ -48,7 +50,7 @@ export default function ComboboxGroups() {
                   )}
                 </ComboboxCollection>
               </ComboboxGroup>
-            </div>
+            </React.Fragment>
           )}
         </ComboboxList>
       </ComboboxContent>
