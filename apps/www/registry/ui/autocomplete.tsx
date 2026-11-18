@@ -192,16 +192,12 @@ function AutocompleteList({
 function AutocompleteItem({
   className,
   variant: variantProp,
-  density: densityProp,
   ...props
 }: AutocompletePrimitive.Item.Props & {
   variant?: AutocompleteVariant;
-  density?: AutocompleteDensity;
 }) {
   const context = React.useContext(AutocompleteContext);
   const variant = variantProp ?? context.variant;
-  const density = densityProp ?? context.density;
-  const flushRadius = density === 'none';
 
   return (
     <AutocompletePrimitive.Item
@@ -209,7 +205,7 @@ function AutocompleteItem({
       data-variant={variant}
       className={cn(
         'relative flex h-7 w-full cursor-default items-center gap-1.5 px-1.5 text-sm text-gray-950 outline-hidden select-none',
-        flushRadius ? 'rounded-none' : 'rounded-(--menu-item-radius)',
+        'rounded-(--menu-item-radius)',
         variant === 'solid'
           ? 'data-highlighted:bg-solid data-highlighted:text-on-solid data-highlighted:**:text-on-solid'
           : 'data-highlighted:bg-interactive data-highlighted:text-(--menu-item-highlight-text)',
