@@ -1,0 +1,139 @@
+---
+title: OTP Field
+description: 'A row of single-character inputs for entering a one-time passcode, with paste, auto-advance and completion handling.'
+links:
+  doc: https://base-ui.com/react/components/otp-field
+  api: https://base-ui.com/react/components/otp-field#api-reference
+---
+
+<ComponentPreview name="otp-field-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/otp-field.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/otp-field.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/otp-field.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/otp-field.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="otp-field" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import { OTPField, OTPFieldInput, OTPFieldSeparator } from '@/registry/ui/otp-field';
+
+<OTPField length={6}>
+  {Array.from({ length: 6 }, (_, index) => (
+    <OTPFieldInput key={index} />
+  ))}
+</OTPField>;
+```
+
+## Examples
+
+### Variants
+
+The `variant` prop controls the visual style of every slot. It matches the variants of [Input](/docs/components/input).
+
+<ComponentPreview name="otp-field-variants" select={['surface', 'outline', 'soft']} />
+
+### Grouped
+
+Place `OTPFieldSeparator` between slots to split the code into groups.
+
+<ComponentPreview name="otp-field-grouped" />
+
+### Alphanumeric
+
+Set `validationType` to accept letters as well as digits. `normalizeValue` runs after filtering, here to uppercase the code.
+
+<ComponentPreview name="otp-field-alphanumeric" />
+
+### Mask
+
+Set `mask` to show entered characters as dots.
+
+<ComponentPreview name="otp-field-mask" />
+
+### Complete
+
+`onValueComplete` fires once every slot is filled.
+
+<ComponentPreview name="otp-field-complete" />
+
+### Auto submit
+
+Set `autoSubmit` to submit the owning form on the last character.
+
+<ComponentPreview name="otp-field-auto-submit" />
+
+### Field
+
+Use the field inside `Field` to get a label, a description and an error message. The slots show the invalid state.
+
+<ComponentPreview name="otp-field-field" />
+
+### Disabled
+
+Set `disabled` to stop all interaction.
+
+<ComponentPreview name="otp-field-disabled" />
+
+## API Reference
+
+### OTPField
+
+| Prop      | Type                               | Default     |
+| --------- | ---------------------------------- | ----------- |
+| `variant` | `"surface" \| "outline" \| "soft"` | `"surface"` |
+
+`variant` passes to every `OTPFieldInput` inside. A `variant` set on a slot wins.
+
+All other props are forwarded to the underlying [Base UI OTP Field](https://base-ui.com/react/components/otp-field) primitive.
+
+Set `--otp-slot-size` on `OTPField` to change the slot width and height. It defaults to `2.5rem`. Parts carry `data-slot="otp-field"`, `"otp-field-input"` and `"otp-field-separator"`. The root sets `data-complete` when every slot is filled.
+
+### OTPFieldInput
+
+| Prop      | Type                               | Default                |
+| --------- | ---------------------------------- | ---------------------- |
+| `variant` | `"surface" \| "outline" \| "soft"` | The `OTPField` variant |
+
+All other props are forwarded to the underlying Base UI OTP Field Input primitive.
+
+### OTPFieldSeparator
+
+All props are forwarded to the underlying Base UI Separator primitive.

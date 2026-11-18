@@ -57,6 +57,15 @@ import * as InputVariantModule from './input/input-variant';
 import * as KbdCombinationModule from './kbd/kbd-combination';
 import * as KbdHeroModule from './kbd/kbd-hero';
 import * as KbdVariantModule from './kbd/kbd-variant';
+import * as OtpFieldAlphanumericModule from './otp-field/otp-field-alphanumeric';
+import * as OtpFieldAutoSubmitModule from './otp-field/otp-field-auto-submit';
+import * as OtpFieldCompleteModule from './otp-field/otp-field-complete';
+import * as OtpFieldDisabledModule from './otp-field/otp-field-disabled';
+import * as OtpFieldFieldModule from './otp-field/otp-field-field';
+import * as OtpFieldGroupedModule from './otp-field/otp-field-grouped';
+import * as OtpFieldHeroModule from './otp-field/otp-field-hero';
+import * as OtpFieldMaskModule from './otp-field/otp-field-mask';
+import * as OtpFieldVariantsModule from './otp-field/otp-field-variants';
 import * as RadioGroupHeroModule from './radio-group/radio-group-hero';
 import * as RadioGroupVariantModule from './radio-group/radio-group-variant';
 import * as SeparatorHeroModule from './separator/separator-hero';
@@ -556,6 +565,80 @@ export const registry: Record<string, PreviewEntry> = {
     { name: "KbdGhost", value: "ghost", label: "Ghost", component: KbdVariantModule.KbdGhost, snippet: "export function KbdGhost() {\n  return <Kbd variant=\"ghost\">K</Kbd>;\n}" },
     ],
     source: "'use client';\n\nimport { Kbd } from '@/registry/ui/kbd';\n\nexport function KbdSoft() {\n  return <Kbd variant=\"soft\">K</Kbd>;\n}\n\nexport function KbdSurface() {\n  return <Kbd variant=\"surface\">K</Kbd>;\n}\n\nexport function KbdGhost() {\n  return <Kbd variant=\"ghost\">K</Kbd>;\n}\n\nexport default KbdSoft;\n",
+  },
+  "otp-field-alphanumeric": {
+    slug: "otp-field-alphanumeric",
+    defaultExport: { name: "OtpFieldAlphanumeric", value: "alphanumeric", label: "Alphanumeric", component: OtpFieldAlphanumericModule.default, snippet: "export default function OtpFieldAlphanumeric() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Recovery code</FieldLabel>\n      <OTPField\n        length={6}\n        validationType=\"alphanumeric\"\n        normalizeValue={(value) => value.toUpperCase()}\n      >\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}" },
+    exports: [
+    { name: "OtpFieldAlphanumeric", value: "alphanumeric", label: "Alphanumeric", component: OtpFieldAlphanumericModule.default, snippet: "export default function OtpFieldAlphanumeric() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Recovery code</FieldLabel>\n      <OTPField\n        length={6}\n        validationType=\"alphanumeric\"\n        normalizeValue={(value) => value.toUpperCase()}\n      >\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}" },
+    ],
+    source: "'use client';\n\nimport { Field, FieldLabel } from '@/registry/ui/form';\nimport { OTPField, OTPFieldInput } from '@/registry/ui/otp-field';\n\nexport default function OtpFieldAlphanumeric() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Recovery code</FieldLabel>\n      <OTPField\n        length={6}\n        validationType=\"alphanumeric\"\n        normalizeValue={(value) => value.toUpperCase()}\n      >\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}\n",
+  },
+  "otp-field-auto-submit": {
+    slug: "otp-field-auto-submit",
+    defaultExport: { name: "OtpFieldAutoSubmit", value: "auto-submit", label: "Auto Submit", component: OtpFieldAutoSubmitModule.default, snippet: "export default function OtpFieldAutoSubmit() {\n  const [submitted, setSubmitted] = React.useState<string | null>(null);\n\n  return (\n    <Form\n      className=\"flex flex-col gap-3\"\n      onFormSubmit={(values) => setSubmitted(String(values.code))}\n    >\n      <Field name=\"code\">\n        <FieldLabel>Verification code</FieldLabel>\n        <OTPField length={6} autoSubmit>\n          {Array.from({ length: 6 }, (_, index) => (\n            <OTPFieldInput key={index} />\n          ))}\n        </OTPField>\n      </Field>\n      <p className=\"text-sm text-secondary\">\n        {submitted ? `Verified ${submitted}` : 'The form submits on the last digit.'}\n      </p>\n    </Form>\n  );\n}" },
+    exports: [
+    { name: "OtpFieldAutoSubmit", value: "auto-submit", label: "Auto Submit", component: OtpFieldAutoSubmitModule.default, snippet: "export default function OtpFieldAutoSubmit() {\n  const [submitted, setSubmitted] = React.useState<string | null>(null);\n\n  return (\n    <Form\n      className=\"flex flex-col gap-3\"\n      onFormSubmit={(values) => setSubmitted(String(values.code))}\n    >\n      <Field name=\"code\">\n        <FieldLabel>Verification code</FieldLabel>\n        <OTPField length={6} autoSubmit>\n          {Array.from({ length: 6 }, (_, index) => (\n            <OTPFieldInput key={index} />\n          ))}\n        </OTPField>\n      </Field>\n      <p className=\"text-sm text-secondary\">\n        {submitted ? `Verified ${submitted}` : 'The form submits on the last digit.'}\n      </p>\n    </Form>\n  );\n}" },
+    ],
+    source: "'use client';\n\nimport * as React from 'react';\n\nimport { Field, FieldLabel, Form } from '@/registry/ui/form';\nimport { OTPField, OTPFieldInput } from '@/registry/ui/otp-field';\n\nexport default function OtpFieldAutoSubmit() {\n  const [submitted, setSubmitted] = React.useState<string | null>(null);\n\n  return (\n    <Form\n      className=\"flex flex-col gap-3\"\n      onFormSubmit={(values) => setSubmitted(String(values.code))}\n    >\n      <Field name=\"code\">\n        <FieldLabel>Verification code</FieldLabel>\n        <OTPField length={6} autoSubmit>\n          {Array.from({ length: 6 }, (_, index) => (\n            <OTPFieldInput key={index} />\n          ))}\n        </OTPField>\n      </Field>\n      <p className=\"text-sm text-secondary\">\n        {submitted ? `Verified ${submitted}` : 'The form submits on the last digit.'}\n      </p>\n    </Form>\n  );\n}\n",
+  },
+  "otp-field-complete": {
+    slug: "otp-field-complete",
+    defaultExport: { name: "OtpFieldComplete", value: "complete", label: "Complete", component: OtpFieldCompleteModule.default, snippet: "export default function OtpFieldComplete() {\n  const [code, setCode] = React.useState('');\n\n  return (\n    <div className=\"flex flex-col gap-3\">\n      <Field name=\"code\">\n        <FieldLabel>Verification code</FieldLabel>\n        <OTPField length={6} onValueComplete={setCode}>\n          {Array.from({ length: 6 }, (_, index) => (\n            <OTPFieldInput key={index} />\n          ))}\n        </OTPField>\n      </Field>\n      <p className=\"text-sm text-secondary\">\n        {code ? `Code entered: ${code}` : 'Enter all six digits.'}\n      </p>\n    </div>\n  );\n}" },
+    exports: [
+    { name: "OtpFieldComplete", value: "complete", label: "Complete", component: OtpFieldCompleteModule.default, snippet: "export default function OtpFieldComplete() {\n  const [code, setCode] = React.useState('');\n\n  return (\n    <div className=\"flex flex-col gap-3\">\n      <Field name=\"code\">\n        <FieldLabel>Verification code</FieldLabel>\n        <OTPField length={6} onValueComplete={setCode}>\n          {Array.from({ length: 6 }, (_, index) => (\n            <OTPFieldInput key={index} />\n          ))}\n        </OTPField>\n      </Field>\n      <p className=\"text-sm text-secondary\">\n        {code ? `Code entered: ${code}` : 'Enter all six digits.'}\n      </p>\n    </div>\n  );\n}" },
+    ],
+    source: "'use client';\n\nimport * as React from 'react';\n\nimport { Field, FieldLabel } from '@/registry/ui/form';\nimport { OTPField, OTPFieldInput } from '@/registry/ui/otp-field';\n\nexport default function OtpFieldComplete() {\n  const [code, setCode] = React.useState('');\n\n  return (\n    <div className=\"flex flex-col gap-3\">\n      <Field name=\"code\">\n        <FieldLabel>Verification code</FieldLabel>\n        <OTPField length={6} onValueComplete={setCode}>\n          {Array.from({ length: 6 }, (_, index) => (\n            <OTPFieldInput key={index} />\n          ))}\n        </OTPField>\n      </Field>\n      <p className=\"text-sm text-secondary\">\n        {code ? `Code entered: ${code}` : 'Enter all six digits.'}\n      </p>\n    </div>\n  );\n}\n",
+  },
+  "otp-field-disabled": {
+    slug: "otp-field-disabled",
+    defaultExport: { name: "OtpFieldDisabled", value: "disabled", label: "Disabled", component: OtpFieldDisabledModule.default, snippet: "export default function OtpFieldDisabled() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6} disabled>\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}" },
+    exports: [
+    { name: "OtpFieldDisabled", value: "disabled", label: "Disabled", component: OtpFieldDisabledModule.default, snippet: "export default function OtpFieldDisabled() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6} disabled>\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}" },
+    ],
+    source: "import { Field, FieldLabel } from '@/registry/ui/form';\nimport { OTPField, OTPFieldInput } from '@/registry/ui/otp-field';\n\nexport default function OtpFieldDisabled() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6} disabled>\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}\n",
+  },
+  "otp-field-field": {
+    slug: "otp-field-field",
+    defaultExport: { name: "OtpFieldField", value: "field", label: "Field", component: OtpFieldFieldModule.default, snippet: "export default function OtpFieldField() {\n  return (\n    <Field name=\"code\" invalid>\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6} defaultValue=\"123456\">\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n      <FieldDescription>We sent a 6 digit code to your phone.</FieldDescription>\n      <FieldError match>That code has expired. Request a new one.</FieldError>\n    </Field>\n  );\n}" },
+    exports: [
+    { name: "OtpFieldField", value: "field", label: "Field", component: OtpFieldFieldModule.default, snippet: "export default function OtpFieldField() {\n  return (\n    <Field name=\"code\" invalid>\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6} defaultValue=\"123456\">\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n      <FieldDescription>We sent a 6 digit code to your phone.</FieldDescription>\n      <FieldError match>That code has expired. Request a new one.</FieldError>\n    </Field>\n  );\n}" },
+    ],
+    source: "import { Field, FieldDescription, FieldError, FieldLabel } from '@/registry/ui/form';\nimport { OTPField, OTPFieldInput } from '@/registry/ui/otp-field';\n\nexport default function OtpFieldField() {\n  return (\n    <Field name=\"code\" invalid>\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6} defaultValue=\"123456\">\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n      <FieldDescription>We sent a 6 digit code to your phone.</FieldDescription>\n      <FieldError match>That code has expired. Request a new one.</FieldError>\n    </Field>\n  );\n}\n",
+  },
+  "otp-field-grouped": {
+    slug: "otp-field-grouped",
+    defaultExport: { name: "OtpFieldGrouped", value: "grouped", label: "Grouped", component: OtpFieldGroupedModule.default, snippet: "export default function OtpFieldGrouped() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6}>\n        <OTPFieldInput />\n        <OTPFieldInput />\n        <OTPFieldInput />\n        <OTPFieldSeparator />\n        <OTPFieldInput />\n        <OTPFieldInput />\n        <OTPFieldInput />\n      </OTPField>\n    </Field>\n  );\n}" },
+    exports: [
+    { name: "OtpFieldGrouped", value: "grouped", label: "Grouped", component: OtpFieldGroupedModule.default, snippet: "export default function OtpFieldGrouped() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6}>\n        <OTPFieldInput />\n        <OTPFieldInput />\n        <OTPFieldInput />\n        <OTPFieldSeparator />\n        <OTPFieldInput />\n        <OTPFieldInput />\n        <OTPFieldInput />\n      </OTPField>\n    </Field>\n  );\n}" },
+    ],
+    source: "import { Field, FieldLabel } from '@/registry/ui/form';\nimport { OTPField, OTPFieldInput, OTPFieldSeparator } from '@/registry/ui/otp-field';\n\nexport default function OtpFieldGrouped() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6}>\n        <OTPFieldInput />\n        <OTPFieldInput />\n        <OTPFieldInput />\n        <OTPFieldSeparator />\n        <OTPFieldInput />\n        <OTPFieldInput />\n        <OTPFieldInput />\n      </OTPField>\n    </Field>\n  );\n}\n",
+  },
+  "otp-field-hero": {
+    slug: "otp-field-hero",
+    defaultExport: { name: "OtpFieldHero", value: "hero", label: "Hero", component: OtpFieldHeroModule.default, snippet: "export default function OtpFieldHero() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6}>\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}" },
+    exports: [
+    { name: "OtpFieldHero", value: "hero", label: "Hero", component: OtpFieldHeroModule.default, snippet: "export default function OtpFieldHero() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6}>\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}" },
+    ],
+    source: "import { Field, FieldLabel } from '@/registry/ui/form';\nimport { OTPField, OTPFieldInput } from '@/registry/ui/otp-field';\n\nexport default function OtpFieldHero() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6}>\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}\n",
+  },
+  "otp-field-mask": {
+    slug: "otp-field-mask",
+    defaultExport: { name: "OtpFieldMask", value: "mask", label: "Mask", component: OtpFieldMaskModule.default, snippet: "export default function OtpFieldMask() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Security PIN</FieldLabel>\n      <OTPField length={6} mask defaultValue=\"482916\">\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}" },
+    exports: [
+    { name: "OtpFieldMask", value: "mask", label: "Mask", component: OtpFieldMaskModule.default, snippet: "export default function OtpFieldMask() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Security PIN</FieldLabel>\n      <OTPField length={6} mask defaultValue=\"482916\">\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}" },
+    ],
+    source: "import { Field, FieldLabel } from '@/registry/ui/form';\nimport { OTPField, OTPFieldInput } from '@/registry/ui/otp-field';\n\nexport default function OtpFieldMask() {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Security PIN</FieldLabel>\n      <OTPField length={6} mask defaultValue=\"482916\">\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}\n",
+  },
+  "otp-field-variants": {
+    slug: "otp-field-variants",
+    defaultExport: { name: "OtpFieldSurface", value: "surface", label: "Surface", component: OtpFieldVariantsModule.OtpFieldSurface, snippet: "export function OtpFieldSurface() {\n  return <Slots variant=\"surface\" />;\n}" },
+    exports: [
+    { name: "OtpFieldSurface", value: "surface", label: "Surface", component: OtpFieldVariantsModule.OtpFieldSurface, snippet: "export function OtpFieldSurface() {\n  return <Slots variant=\"surface\" />;\n}" },
+    { name: "OtpFieldOutline", value: "outline", label: "Outline", component: OtpFieldVariantsModule.OtpFieldOutline, snippet: "export function OtpFieldOutline() {\n  return <Slots variant=\"outline\" />;\n}" },
+    { name: "OtpFieldSoft", value: "soft", label: "Soft", component: OtpFieldVariantsModule.OtpFieldSoft, snippet: "export function OtpFieldSoft() {\n  return <Slots variant=\"soft\" />;\n}" },
+    ],
+    source: "import { Field, FieldLabel } from '@/registry/ui/form';\nimport { OTPField, OTPFieldInput } from '@/registry/ui/otp-field';\n\ntype Variant = 'surface' | 'outline' | 'soft';\n\nfunction Slots({ variant }: { variant: Variant }) {\n  return (\n    <Field name=\"code\">\n      <FieldLabel>Verification code</FieldLabel>\n      <OTPField length={6} variant={variant}>\n        {Array.from({ length: 6 }, (_, index) => (\n          <OTPFieldInput key={index} />\n        ))}\n      </OTPField>\n    </Field>\n  );\n}\n\nexport function OtpFieldSurface() {\n  return <Slots variant=\"surface\" />;\n}\n\nexport function OtpFieldOutline() {\n  return <Slots variant=\"outline\" />;\n}\n\nexport function OtpFieldSoft() {\n  return <Slots variant=\"soft\" />;\n}\n\nexport default OtpFieldSurface;\n",
   },
   "radio-group-hero": {
     slug: "radio-group-hero",
