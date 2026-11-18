@@ -124,12 +124,26 @@ Set `disabled` to stop all interaction.
 | --------- | ---------------------------------- | ----------- |
 | `variant` | `"surface" \| "outline" \| "soft"` | `"surface"` |
 
-`variant` flows to `NumberFieldGroup`, `NumberFieldDecrement` and `NumberFieldIncrement` through context. Set `variant` on a part to override it.
+`variant` flows to `NumberFieldGroup`, `NumberFieldDecrement` and `NumberFieldIncrement` through context. A `variant` set on a part wins.
 
 All other props are forwarded to the underlying [Base UI Number Field](https://base-ui.com/react/components/number-field) primitive.
 
-### Parts
+### NumberFieldGroup
 
-`NumberFieldGroup`, `NumberFieldInput`, `NumberFieldDecrement`, `NumberFieldIncrement`, `NumberFieldScrubArea` and `NumberFieldScrubAreaCursor` forward their props to the matching Base UI part. `NumberFieldDecrement` and `NumberFieldIncrement` render an Ora [Button](/docs/components/button) with the `ghost` variant and the `icon` size.
+| Prop      | Type                               | Default                  |
+| --------- | ---------------------------------- | ------------------------ |
+| `variant` | `"surface" \| "outline" \| "soft"` | `variant` of NumberField |
+
+### NumberFieldDecrement and NumberFieldIncrement
+
+| Prop      | Type                               | Default                  |
+| --------- | ---------------------------------- | ------------------------ |
+| `variant` | `"surface" \| "outline" \| "soft"` | `variant` of NumberField |
+
+The buttons reflect `variant` as `data-variant`. They render an Ora [Button](/docs/components/button) with the `ghost` variant and the `icon` size.
+
+### Other parts
+
+`NumberFieldInput`, `NumberFieldScrubArea` and `NumberFieldScrubAreaCursor` forward their props to the matching Base UI part.
 
 Each part sets `data-slot` to `number-field-<part>`, for example `number-field-group`.

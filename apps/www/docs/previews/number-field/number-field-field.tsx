@@ -11,7 +11,7 @@ export default function NumberFieldField() {
   return (
     <Field name="seats" invalid className="w-64">
       <FieldLabel>Seats</FieldLabel>
-      <NumberField defaultValue={0}>
+      <NumberField defaultValue={0} min={1}>
         <NumberFieldGroup>
           <NumberFieldDecrement />
           <NumberFieldInput />

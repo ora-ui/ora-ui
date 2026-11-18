@@ -16,7 +16,7 @@ export default function NumberFieldFormat() {
       >
         <NumberFieldGroup>
           <NumberFieldDecrement />
-          <NumberFieldInput aria-label="Quantity" />
+          <NumberFieldInput aria-label="Price" />
           <NumberFieldIncrement />
         </NumberFieldGroup>
       </NumberField>

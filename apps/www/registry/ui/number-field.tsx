@@ -44,6 +44,7 @@ function NumberFieldGroup({
         'has-[input:disabled]:cursor-not-allowed has-[input:disabled]:opacity-50',
         'has-[input:focus-visible]:outline-3 has-[input:focus-visible]:outline-ring/50',
         'has-[input[aria-invalid=true]]:border-destructive-700 has-[input[aria-invalid=true]]:outline-2 has-[input[aria-invalid=true]]:outline-destructive-700',
+        'data-invalid:border-destructive-700 data-invalid:outline-2 data-invalid:outline-destructive-700',
         'has-[input[aria-invalid=true]:focus-visible]:outline-3 has-[input[aria-invalid=true]:focus-visible]:outline-destructive-700',
         className
       )}
@@ -66,7 +67,7 @@ function NumberFieldInput({ className, ...props }: NumberFieldPrimitive.Input.Pr
 }
 
 const buttonClassName =
-  'h-full w-8 shrink-0 rounded-none border-line-ui focus-visible:-outline-offset-2 group-has-[input:disabled]/number-field-group:disabled:opacity-100';
+  'h-full w-8 shrink-0 rounded-none border-line-ui group-has-[input:disabled]/number-field-group:disabled:opacity-100';
 
 function NumberFieldDecrement({
   className,
@@ -80,7 +81,6 @@ function NumberFieldDecrement({
     <NumberFieldPrimitive.Decrement
       data-slot="number-field-decrement"
       data-variant={variant ?? context.variant}
-      aria-label="Decrease"
       render={<Button variant="ghost" size="icon" />}
       className={cn(buttonClassName, 'border-r', className)}
       {...props}
@@ -102,7 +102,6 @@ function NumberFieldIncrement({
     <NumberFieldPrimitive.Increment
       data-slot="number-field-increment"
       data-variant={variant ?? context.variant}
-      aria-label="Increase"
       render={<Button variant="ghost" size="icon" />}
       className={cn(buttonClassName, 'border-l', className)}
       {...props}

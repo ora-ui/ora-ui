@@ -22,10 +22,10 @@
     "button-theme/accent": ["color-contrast"],
     "button-theme/destructive": ["color-contrast"],
     "kbd-combination/combination": ["color-contrast"],
+    "number-field-field/field": ["color-contrast"],
     "switch-hero/hero": ["aria-toggle-field-name"],
     "switch-theme/accent": ["aria-toggle-field-name"],
     "switch-theme/gray": ["aria-toggle-field-name"],
-    "tabs-with-surface/with-surface": ["color-contrast"],
-    "number-field-field/field": ["color-contrast"]
+    "tabs-with-surface/with-surface": ["color-contrast"]
   }
 }
