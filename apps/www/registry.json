@@ -179,8 +179,7 @@
       ],
       "dependencies": [
         "@base-ui/react",
-        "@phosphor-icons/react",
-        "class-variance-authority"
+        "@phosphor-icons/react"
       ],
       "registryDependencies": [
         "utils"

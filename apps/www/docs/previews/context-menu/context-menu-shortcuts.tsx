@@ -11,7 +11,7 @@ import {
 export default function ContextMenuShortcuts() {
   return (
     <ContextMenu>
-      <ContextMenuTrigger className="flex h-[120px] w-[200px] items-center justify-center rounded-md border border-dashed border-line-ui text-sm text-secondary select-none">
+      <ContextMenuTrigger className="flex h-[120px] w-[200px] items-center justify-center rounded-md border border-dashed border-border text-sm text-secondary select-none">
         Right click here
       </ContextMenuTrigger>
       <ContextMenuContent>

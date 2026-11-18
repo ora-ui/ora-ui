@@ -132,10 +132,10 @@ Set `disabled` on an item to make it unavailable.
 
 #### Appearance
 
-| Prop      | Type                 | Default  |
-| --------- | -------------------- | -------- |
-| `variant` | `"soft" \| "solid"`  | `"soft"` |
-| `theme`   | `"gray" \| "accent"` | `"gray"` |
+| Prop      | Type                           | Default  |
+| --------- | ------------------------------ | -------- |
+| `variant` | `"soft" \| "solid"`            | `"soft"` |
+| `theme`   | `"gray" \| "accent" \| string` | `"gray"` |
 
 #### Structure
 
@@ -146,7 +146,7 @@ Set `disabled` on an item to make it unavailable.
 | `sideOffset`  | `number`                                                                   | Base UI default                      |
 | `alignOffset` | `number`                                                                   | Base UI default                      |
 
-`ContextMenuSubContent` takes the same props and inherits `variant` and `theme` from the parent content.
+`ContextMenuSubContent` takes the same props and inherits `variant` and `theme` from the parent content. Its defaults are `side="inline-end"`, `align="start"`, `sideOffset={0}` and `alignOffset={-3}`.
 
 ### ContextMenuItem
 
@@ -155,6 +155,8 @@ Set `disabled` on an item to make it unavailable.
 | `variant` | `"default" \| "destructive"` | `"default"` |
 | `inset`   | `boolean`                    | `false`     |
 
-`ContextMenuLabel`, `ContextMenuCheckboxItem`, `ContextMenuRadioItem` and `ContextMenuSubTrigger` also take `inset`.
+`ContextMenuLabel`, `ContextMenuCheckboxItem`, `ContextMenuRadioItem`, `ContextMenuSubTrigger` and `ContextMenuSeparator` also take `inset`.
 
-For all other parts, see the Base UI [Context Menu API Reference](https://base-ui.com/react/components/context-menu#api-reference).
+Content and item styling reads `--menu-item-radius` and `--menu-item-highlight-text`, set on `[data-slot="context-menu-content"]` and `[data-slot="context-menu-sub-content"]`. Parts carry `data-slot` names of the form `context-menu-<part>`.
+
+All other props are forwarded to the underlying [Base UI Context Menu](https://base-ui.com/react/components/context-menu) primitive. The trigger is a plain `div`, so keyboard users open the menu with the context-menu key or Shift+F10 while it has focus.
