@@ -59,7 +59,7 @@ export const popoverEntry: EntrySchema = {
           side={variants.side as 'top' | 'right' | 'bottom' | 'left'}
           align={variants.align as 'start' | 'center' | 'end'}
           sideOffset={Number.isFinite(offset) ? offset : 4}
-          showCloseButton={behavior.showCloseButton as boolean}
+          showCloseButton={(behavior.showCloseButton as boolean) || (behavior.modal as boolean)}
         >
           <PopoverHeader>
             <PopoverTitle>{inputs.title as string}</PopoverTitle>

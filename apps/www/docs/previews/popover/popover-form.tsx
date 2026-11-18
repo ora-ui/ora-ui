@@ -21,7 +21,7 @@ export default function PopoverForm() {
           <PopoverTitle>Rename project</PopoverTitle>
           <PopoverDescription>Pick a name your team will recognise.</PopoverDescription>
         </PopoverHeader>
-        <Form onSubmit={(event) => event.preventDefault()}>
+        <Form className="flex flex-col gap-4" onSubmit={(event) => event.preventDefault()}>
           <Field name="name">
             <FieldLabel>Project name</FieldLabel>
             <Input defaultValue="Website redesign" />

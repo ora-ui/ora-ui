@@ -95,7 +95,7 @@ A popover can hold interactive content such as a small form. Focus moves into th
 
 ### Modal
 
-Pass `modal` to `Popover` to lock page scroll and trap focus. Render a `PopoverClose` inside the content so touch users can dismiss it.
+Pass `modal` to `Popover` to lock page scroll and block interaction outside it. Base UI traps focus only when a `PopoverClose` is rendered inside the content, so include one.
 
 <ComponentPreview name="popover-modal" />
 
@@ -103,16 +103,25 @@ Pass `modal` to `Popover` to lock page scroll and trap focus. Render a `PopoverC
 
 ### PopoverContent
 
-| Prop              | Type                                                                       | Default    |
-| ----------------- | -------------------------------------------------------------------------- | ---------- |
-| `side`            | `"top" \| "right" \| "bottom" \| "left" \| "inline-start" \| "inline-end"` | `"bottom"` |
-| `sideOffset`      | `number`                                                                   | `4`        |
-| `align`           | `"start" \| "center" \| "end"`                                             | `"center"` |
-| `alignOffset`     | `number`                                                                   | `0`        |
-| `showCloseButton` | `boolean`                                                                  | `false`    |
+#### Structure
+
+| Prop          | Type                                                                       | Default    |
+| ------------- | -------------------------------------------------------------------------- | ---------- |
+| `side`        | `"top" \| "right" \| "bottom" \| "left" \| "inline-start" \| "inline-end"` | `"bottom"` |
+| `sideOffset`  | `number`                                                                   | `4`        |
+| `align`       | `"start" \| "center" \| "end"`                                             | `"center"` |
+| `alignOffset` | `number`                                                                   | `0`        |
+
+#### Behavior
+
+| Prop              | Type      | Default |
+| ----------------- | --------- | ------- |
+| `showCloseButton` | `boolean` | `false` |
 
 ### PopoverHeader
 
 A flex column that spaces `PopoverTitle` and `PopoverDescription`. It is Ora only and has no Base UI counterpart.
 
-For all other parts, see the Base UI [Popover API Reference](https://base-ui.com/react/components/popover#api-reference).
+Slots are `popover`, `popover-trigger`, `popover-content`, `popover-header`, `popover-title`, `popover-description` and `popover-close`.
+
+All other props are forwarded to the underlying [Base UI Popover](https://base-ui.com/react/components/popover) primitive.
