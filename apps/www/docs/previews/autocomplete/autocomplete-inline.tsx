@@ -25,7 +25,7 @@ const tags = [
 
 export default function AutocompleteInline() {
   return (
-    <Autocomplete items={tags} mode="both" autoHighlight>
+    <Autocomplete items={tags} mode="both">
       <AutocompleteInputGroup className="w-64">
         <AutocompleteInput aria-label="Tag" placeholder="Search tags" />
       </AutocompleteInputGroup>
