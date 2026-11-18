@@ -6,7 +6,7 @@ export default function CollapsibleButtonTrigger() {
     <Collapsible className="w-full max-w-sm">
       <CollapsibleTrigger
         render={<Button variant="outline" />}
-        className="w-auto in-data-[variant=underline]:hover:no-underline"
+        className="w-auto font-medium data-[icon-position=end]:justify-center in-data-[variant=underline]:hover:no-underline"
       >
         Show details
       </CollapsibleTrigger>

@@ -83,7 +83,7 @@ Add children with `data-slot="collapsible-trigger-icon"` to replace the chevron.
 
 ### Button trigger
 
-Pass an Ora Button to the `render` prop to use it as the trigger.
+Pass an Ora Button to the `render` prop to use it as the trigger. The trigger's row classes merge into the Button, so override the ones you don't want with `className`.
 
 <ComponentPreview name="collapsible-button-trigger" />
 
@@ -107,6 +107,6 @@ Set `hiddenUntilFound` on the content so find-in-page can reveal a closed panel.
 | -------------- | ------------------ | ------- |
 | `iconPosition` | `'start' \| 'end'` | `'end'` |
 
-The trigger and the content carry `data-slot="collapsible-trigger"` and `data-slot="collapsible-content"`. The content animates its height from the `--collapsible-panel-height` property that Base UI sets on the panel.
+The parts carry `data-slot` values `collapsible`, `collapsible-trigger` and `collapsible-content`. The root sets `data-variant` and the trigger sets `data-icon-position`. The default chevron is `collapsible-trigger-icon-default`, and a custom icon uses `collapsible-trigger-icon`. `className` on the content applies to its inner padding wrapper. The content animates its height from the `--collapsible-panel-height` property that Base UI sets on the panel.
 
 All other props are forwarded to the underlying [Base UI Collapsible](https://base-ui.com/react/components/collapsible) primitive.

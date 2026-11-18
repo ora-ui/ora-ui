@@ -1,6 +1,6 @@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/registry/ui/collapsible';
 
-export function CollapsibleIconPositionEnd() {
+export function CollapsibleEnd() {
   return (
     <Collapsible className="w-full max-w-sm">
       <CollapsibleTrigger iconPosition="end">Show details</CollapsibleTrigger>
@@ -11,7 +11,7 @@ export function CollapsibleIconPositionEnd() {
   );
 }
 
-export function CollapsibleIconPositionStart() {
+export function CollapsibleStart() {
   return (
     <Collapsible className="w-full max-w-sm">
       <CollapsibleTrigger iconPosition="start">Show details</CollapsibleTrigger>
@@ -22,4 +22,4 @@ export function CollapsibleIconPositionStart() {
   );
 }
 
-export default CollapsibleIconPositionEnd;
+export default CollapsibleEnd;

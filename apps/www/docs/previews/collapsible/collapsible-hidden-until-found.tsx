@@ -5,7 +5,8 @@ export default function CollapsibleHiddenUntilFound() {
     <Collapsible className="w-full max-w-sm">
       <CollapsibleTrigger>Show details</CollapsibleTrigger>
       <CollapsibleContent hiddenUntilFound>
-        Your plan renews on the first of each month. You can cancel at any time.
+        Your plan renews on the first of each month. Search this page for &quot;renews&quot; to open
+        this panel.
       </CollapsibleContent>
     </Collapsible>
   );
