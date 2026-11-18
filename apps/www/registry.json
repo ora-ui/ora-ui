@@ -169,6 +169,26 @@
       ]
     },
     {
+      "name": "combobox",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/combobox.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "input",
+        "input-group",
+        "utils"
+      ]
+    },
+    {
       "name": "dialog",
       "type": "registry:ui",
       "files": [
