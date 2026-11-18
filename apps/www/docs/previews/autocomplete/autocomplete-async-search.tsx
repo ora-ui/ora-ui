@@ -66,7 +66,7 @@ export default function AutocompleteAsyncSearch() {
         : null;
 
   return (
-    <Autocomplete items={results} filter={null} onValueChange={setQuery}>
+    <Autocomplete openOnInputClick items={results} filter={null} onValueChange={setQuery}>
       <AutocompleteInputGroup className="w-64">
         <AutocompleteInput aria-label="Reviewer" placeholder="Assign a reviewer" />
       </AutocompleteInputGroup>

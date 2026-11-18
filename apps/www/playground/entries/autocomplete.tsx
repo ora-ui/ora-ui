@@ -87,7 +87,7 @@ export const autocompleteEntry: EntrySchema = {
 
     return (
       <Autocomplete items={items} mode={mode} autoHighlight={autoHighlight} disabled={disabled}>
-        <AutocompleteInputGroup className="w-72">
+        <AutocompleteInputGroup className="w-64">
           <AutocompleteInput
             aria-label="Tag"
             aria-invalid={invalid || undefined}

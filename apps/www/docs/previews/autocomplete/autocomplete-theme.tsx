@@ -25,7 +25,7 @@ const tags = [
 
 function TagAutocomplete({ theme }: { theme: 'gray' | 'accent' }) {
   return (
-    <Autocomplete items={tags}>
+    <Autocomplete openOnInputClick items={tags}>
       <AutocompleteInputGroup className="w-64">
         <AutocompleteInput aria-label="Tag" placeholder="Search tags" />
       </AutocompleteInputGroup>
