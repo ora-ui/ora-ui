@@ -166,7 +166,7 @@ const comboboxContentBaseStyles = [
   'data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
   'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95',
   'data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
-  '*:data-[slot=combobox-input-group]:m-1 *:data-[slot=combobox-input-group]:w-auto *:data-[slot=combobox-input-group]:rounded-(--menu-item-radius)',
+  '*:data-[slot=combobox-input-group]:m-1 *:data-[slot=combobox-input-group]:w-auto *:data-[slot=combobox-input-group]:rounded-[max(calc(min(var(--radius),10px)-4px),min(var(--radius),2px))]',
 ] as const;
 
 function ComboboxContent({
@@ -236,13 +236,10 @@ function ComboboxItem({
   className,
   children,
   variant: variantProp,
-  density: densityProp,
   ...props
-}: ComboboxPrimitive.Item.Props & { variant?: ComboboxVariant; density?: ComboboxDensity }) {
+}: ComboboxPrimitive.Item.Props & { variant?: ComboboxVariant }) {
   const context = React.useContext(ComboboxContext);
   const variant = variantProp ?? context.variant;
-  const density = densityProp ?? context.density;
-  const flushRadius = density === 'none';
 
   return (
     <ComboboxPrimitive.Item
@@ -250,7 +247,7 @@ function ComboboxItem({
       data-variant={variant}
       className={cn(
         'relative flex h-7 w-full cursor-default items-center gap-1.5 pr-8 pl-1.5 text-sm text-gray-950 outline-hidden select-none',
-        flushRadius ? 'rounded-none' : 'rounded-(--menu-item-radius)',
+        'rounded-(--menu-item-radius)',
         variant === 'solid'
           ? 'data-highlighted:bg-solid data-highlighted:text-on-solid data-highlighted:**:text-on-solid'
           : 'data-highlighted:bg-interactive data-highlighted:text-(--menu-item-highlight-text)',
