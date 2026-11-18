@@ -1,0 +1,140 @@
+---
+title: Navigation Menu
+description: "A bar of links and dropdown panels for site navigation, with a popup that morphs between each panel's content."
+links:
+  doc: https://base-ui.com/react/components/navigation-menu
+  api: https://base-ui.com/react/components/navigation-menu#api-reference
+---
+
+<ComponentPreview name="navigation-menu-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/navigation-menu.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/navigation-menu.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/navigation-menu.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/navigation-menu.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="navigation-menu" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from '@/registry/ui/navigation-menu';
+
+<NavigationMenu>
+  <NavigationMenuList>
+    <NavigationMenuItem>
+      <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink href="#">Analytics</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+    <NavigationMenuItem>
+      <NavigationMenuLink href="#">Pricing</NavigationMenuLink>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+  <NavigationMenuViewport />
+</NavigationMenu>;
+```
+
+## Examples
+
+### Links only
+
+Plain links need no panel. Set `active` on the link for the current page. To use a router link, pass it to `render`, for example `render={<Link href="/pricing" />}`.
+
+<ComponentPreview name="navigation-menu-links-only" />
+
+### Nested
+
+A panel can hold grouped links inline, with a heading above each group.
+
+<ComponentPreview name="navigation-menu-nested" />
+
+### Large menu
+
+A tall panel is capped at `--available-height` and scrolls natively inside the popup. Ora does not use `ScrollArea` here.
+
+<ComponentPreview name="navigation-menu-large-menu" />
+
+### Vertical
+
+Set `orientation="vertical"` on `NavigationMenu`, and place the popup beside the list with `side="right"` on `NavigationMenuViewport`.
+
+<ComponentPreview name="navigation-menu-vertical" />
+
+## API Reference
+
+### NavigationMenu
+
+| Prop          | Type                         | Default        |
+| ------------- | ---------------------------- | -------------- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
+
+### NavigationMenuViewport
+
+#### Structure
+
+| Prop          | Type                                                                       | Default    |
+| ------------- | -------------------------------------------------------------------------- | ---------- |
+| `side`        | `"top" \| "bottom" \| "left" \| "right" \| "inline-start" \| "inline-end"` | `"bottom"` |
+| `sideOffset`  | `number`                                                                   | `8`        |
+| `align`       | `"start" \| "center" \| "end"`                                             | `"start"`  |
+| `alignOffset` | `number`                                                                   | `0`        |
+
+### NavigationMenuLink
+
+| Prop           | Type      | Default |
+| -------------- | --------- | ------- |
+| `active`       | `boolean` | `false` |
+| `closeOnClick` | `boolean` | `false` |
+
+### Notes
+
+- `NavigationMenuViewport` renders the portal, positioner, popup and viewport as one part. Place it inside `NavigationMenu`, beside `NavigationMenuList`.
+- `NavigationMenuTrigger` renders a chevron. Put a `NavigationMenuIcon` inside it to replace the chevron.
+- The popup animates with CSS transitions, so there is no need for `actionsRef` or `preventUnmountOnClose()`. Those are only for JavaScript animations. The size and position transitions are skipped under `prefers-reduced-motion`.
+
+All other props are forwarded to the underlying [Base UI Navigation Menu](https://base-ui.com/react/components/navigation-menu) primitive.
