@@ -68,19 +68,29 @@ function Menubar({
 function MenubarMenu({ ...props }: MenuPrimitive.Root.Props) {
   return <MenuPrimitive.Root data-slot="menubar-menu" {...props} />;
 }
-function MenubarTrigger({ className, ...props }: MenuPrimitive.Trigger.Props) {
-  const { variant, theme } = React.useContext(MenubarContext);
+function MenubarTrigger({
+  className,
+  variant,
+  theme,
+  ...props
+}: MenuPrimitive.Trigger.Props & {
+  variant?: MenubarVariant;
+  theme?: MenubarTheme;
+}) {
+  const root = React.useContext(MenubarContext);
+  const resolvedVariant = variant ?? root.variant;
+  const resolvedTheme = theme ?? root.theme;
 
   return (
     <MenuPrimitive.Trigger
       data-slot="menubar-trigger"
-      data-variant={variant}
-      data-theme={theme !== 'gray' && variant === 'solid' ? theme : undefined}
+      data-variant={resolvedVariant}
+      data-theme={resolvedTheme !== 'gray' ? resolvedTheme : undefined}
       className={cn(
-        'inline-flex h-7.5 shrink-0 items-center justify-start gap-1.5 rounded-(--menu-item-radius) px-3 text-sm font-medium whitespace-nowrap text-primary outline-none select-none hover:bg-interactive focus-visible:outline-2 focus-visible:outline-ring data-disabled:pointer-events-none data-disabled:opacity-50',
-        variant === 'solid'
+        "inline-flex h-7.5 shrink-0 items-center justify-start gap-1.5 rounded-(--menu-item-radius) px-3 text-sm font-medium whitespace-nowrap text-gray-950 select-none hover:bg-(--gray-a200) focus-visible:outline-2 focus-visible:outline-ring data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3",
+        resolvedVariant === 'solid'
           ? 'data-popup-open:bg-solid data-popup-open:text-on-solid data-popup-open:hover:bg-solid'
-          : 'data-popup-open:bg-interactive',
+          : 'data-popup-open:bg-interactive data-popup-open:text-primary',
         className
       )}
       {...props}
@@ -113,7 +123,7 @@ function MenubarContent({
           className="isolate z-50 outline-none"
           align={align ?? 'start'}
           alignOffset={alignOffset}
-          side={side ?? (vertical ? 'right' : 'bottom')}
+          side={side ?? (vertical ? 'inline-end' : 'bottom')}
           sideOffset={sideOffset}
         >
           <MenuPrimitive.Popup
@@ -286,7 +296,7 @@ function MenubarSubTrigger({
 function MenubarSubContent({
   align = 'start',
   alignOffset = -3,
-  side = 'right',
+  side = 'inline-end',
   sideOffset = 0,
   className,
   ...props

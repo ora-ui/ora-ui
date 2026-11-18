@@ -124,10 +124,10 @@ Set `orientation="vertical"` to lay the bar out as a column. Menus open to the r
 
 #### Appearance
 
-| Prop      | Type                 | Default  |
-| --------- | -------------------- | -------- |
-| `variant` | `"soft" \| "solid"`  | `"soft"` |
-| `theme`   | `"gray" \| "accent"` | `"gray"` |
+| Prop      | Type                           | Default  |
+| --------- | ------------------------------ | -------- |
+| `variant` | `"soft" \| "solid"`            | `"soft"` |
+| `theme`   | `"gray" \| "accent" \| string` | `"gray"` |
 
 #### Structure
 
@@ -135,25 +135,34 @@ Set `orientation="vertical"` to lay the bar out as a column. Menus open to the r
 | ------------- | ---------------------------- | -------------- |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
 
+### MenubarTrigger
+
+`variant` and `theme` default to the values on `Menubar`. A value set here wins. They style the open trigger only, and a closed trigger stays gray.
+
+| Prop      | Type                           | Default                |
+| --------- | ------------------------------ | ---------------------- |
+| `variant` | `"soft" \| "solid"`            | inherited from Menubar |
+| `theme`   | `"gray" \| "accent" \| string` | inherited from Menubar |
+
 ### MenubarContent
 
 `variant` and `theme` default to the values on `Menubar`. A value set here wins.
 
 #### Appearance
 
-| Prop      | Type                 | Default                |
-| --------- | -------------------- | ---------------------- |
-| `variant` | `"soft" \| "solid"`  | inherited from Menubar |
-| `theme`   | `"gray" \| "accent"` | inherited from Menubar |
+| Prop      | Type                           | Default                |
+| --------- | ------------------------------ | ---------------------- |
+| `variant` | `"soft" \| "solid"`            | inherited from Menubar |
+| `theme`   | `"gray" \| "accent" \| string` | inherited from Menubar |
 
 #### Structure
 
-| Prop          | Type                                     | Default                                |
-| ------------- | ---------------------------------------- | -------------------------------------- |
-| `side`        | `"top" \| "right" \| "bottom" \| "left"` | `"bottom"`, or `"right"` when vertical |
-| `align`       | `"start" \| "center" \| "end"`           | `"start"`                              |
-| `sideOffset`  | `number`                                 | `4`                                    |
-| `alignOffset` | `number`                                 | `0`                                    |
+| Prop          | Type                                                                       | Default                                     |
+| ------------- | -------------------------------------------------------------------------- | ------------------------------------------- |
+| `side`        | `"top" \| "right" \| "bottom" \| "left" \| "inline-start" \| "inline-end"` | `"bottom"`, or `"inline-end"` when vertical |
+| `align`       | `"start" \| "center" \| "end"`                                             | `"start"`                                   |
+| `sideOffset`  | `number`                                                                   | `4`                                         |
+| `alignOffset` | `number`                                                                   | `0`                                         |
 
 ### MenubarItem
 
@@ -164,8 +173,8 @@ Set `orientation="vertical"` to lay the bar out as a column. Menus open to the r
 
 `MenubarLabel`, `MenubarCheckboxItem`, `MenubarRadioItem` and `MenubarSubTrigger` also take `inset`.
 
-`MenubarSubContent` takes the same structure props as `MenubarContent` and inherits `variant` and `theme`. It defaults to `side="right"` and `align="start"`.
+`MenubarSubContent` takes the same structure props as `MenubarContent` and inherits `variant` and `theme`. It defaults to `side="inline-end"` and `align="start"`.
 
-Slots: `menubar`, `menubar-trigger`, `menubar-content`, `menubar-sub-content` and `menubar-item`.
+Every part renders `data-slot="menubar-<part>"`, such as `menubar`, `menubar-trigger`, `menubar-content`, `menubar-sub-content` and `menubar-item`. A custom `[data-theme]` block themes any of them.
 
 All other props are forwarded to the underlying [Base UI Menubar](https://base-ui.com/react/components/menubar) and [Menu](https://base-ui.com/react/components/menu) primitives.
