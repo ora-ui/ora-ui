@@ -318,6 +318,24 @@
       ]
     },
     {
+      "name": "otp-field",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/otp-field.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "input",
+        "utils"
+      ]
+    },
+    {
       "name": "radio-group",
       "type": "registry:ui",
       "files": [
