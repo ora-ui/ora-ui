@@ -1,0 +1,112 @@
+---
+title: Collapsible
+description: 'A button that shows and hides a single panel of content inline.'
+links:
+  doc: https://base-ui.com/react/components/collapsible
+  api: https://base-ui.com/react/components/collapsible#api-reference
+---
+
+<ComponentPreview name="collapsible-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/collapsible.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/collapsible.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/collapsible.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/collapsible.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="collapsible" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/registry/ui/collapsible';
+
+<Collapsible>
+  <CollapsibleTrigger>Show details</CollapsibleTrigger>
+  <CollapsibleContent>Your plan renews on the first of each month.</CollapsibleContent>
+</Collapsible>;
+```
+
+## Examples
+
+### Variant
+
+Set `variant` on the root to style the trigger. The `soft` trigger fills a square background.
+
+<ComponentPreview name="collapsible-variants" select={['underline', 'soft']} />
+
+### Icon position
+
+Set `iconPosition` on the trigger to move the chevron to the start or the end.
+
+<ComponentPreview name="collapsible-icon-position" select={['end', 'start']} />
+
+### Custom icon
+
+Add children with `data-slot="collapsible-trigger-icon"` to replace the chevron. Set `data-when` to `collapsed` or `expanded` to show an icon in one state only.
+
+<ComponentPreview name="collapsible-custom-icon" />
+
+### Button trigger
+
+Pass an Ora Button to the `render` prop to use it as the trigger.
+
+<ComponentPreview name="collapsible-button-trigger" />
+
+### Hidden until found
+
+Set `hiddenUntilFound` on the content so find-in-page can reveal a closed panel.
+
+<ComponentPreview name="collapsible-hidden-until-found" />
+
+## API Reference
+
+### Collapsible
+
+| Prop      | Type                    | Default       |
+| --------- | ----------------------- | ------------- |
+| `variant` | `'underline' \| 'soft'` | `'underline'` |
+
+### CollapsibleTrigger
+
+| Prop           | Type               | Default |
+| -------------- | ------------------ | ------- |
+| `iconPosition` | `'start' \| 'end'` | `'end'` |
+
+The trigger and the content carry `data-slot="collapsible-trigger"` and `data-slot="collapsible-content"`. The content animates its height from the `--collapsible-panel-height` property that Base UI sets on the panel.
+
+All other props are forwarded to the underlying [Base UI Collapsible](https://base-ui.com/react/components/collapsible) primitive.
