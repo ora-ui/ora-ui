@@ -318,6 +318,26 @@
       ]
     },
     {
+      "name": "number-field",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/number-field.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "utils"
+      ]
+    },
+    {
       "name": "radio-group",
       "type": "registry:ui",
       "files": [
