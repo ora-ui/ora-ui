@@ -5,19 +5,20 @@ import type { EntrySchema } from '@/playground/lib/types';
 export const previewCardEntry: EntrySchema = {
   component: 'preview-card',
   name: 'Preview Card',
-  variants: {
+  variants: {},
+  content: {
     side: {
+      type: 'select',
       label: 'Side',
-      values: ['top', 'right', 'bottom', 'left'],
+      values: ['bottom', 'top', 'left', 'right'],
       default: 'bottom',
     },
     align: {
+      type: 'select',
       label: 'Align',
-      values: ['start', 'center', 'end'],
+      values: ['center', 'start', 'end'],
       default: 'center',
     },
-  },
-  content: {
     sideOffset: {
       type: 'string',
       label: 'Side offset',
@@ -49,24 +50,23 @@ export const previewCardEntry: EntrySchema = {
       default: 'Styled primitives and composable patterns for building accessible interfaces.',
     },
   },
-  render: function PreviewCardRender({ variants, inputs }) {
-    const offset = Number(inputs.sideOffset);
-    const delay = Number(inputs.delay);
-    const closeDelay = Number(inputs.closeDelay);
+  render: function PreviewCardRender({ inputs }) {
+    const toNumber = (value: unknown) =>
+      value === '' || !Number.isFinite(Number(value)) ? undefined : Number(value);
 
     return (
       <PreviewCard>
         <PreviewCardTrigger
-          delay={Number.isFinite(delay) ? delay : 600}
-          closeDelay={Number.isFinite(closeDelay) ? closeDelay : 300}
+          delay={toNumber(inputs.delay)}
+          closeDelay={toNumber(inputs.closeDelay)}
           render={<Link href="https://ora-ui.com" underline="always" />}
         >
           {inputs.link as string}
         </PreviewCardTrigger>
         <PreviewCardContent
-          side={variants.side as 'top' | 'right' | 'bottom' | 'left'}
-          align={variants.align as 'start' | 'center' | 'end'}
-          sideOffset={Number.isFinite(offset) ? offset : 4}
+          side={inputs.side as 'top' | 'right' | 'bottom' | 'left'}
+          align={inputs.align as 'start' | 'center' | 'end'}
+          sideOffset={toNumber(inputs.sideOffset)}
           className="flex flex-col gap-1"
         >
           <p className="font-medium">{inputs.title as string}</p>

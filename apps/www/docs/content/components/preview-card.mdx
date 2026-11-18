@@ -62,9 +62,10 @@ import { PreviewCard, PreviewCardContent, PreviewCardTrigger } from '@/registry/
 </PreviewCard>;
 ```
 
-The card opens on mouse hover and keyboard focus only. Touch devices and screen readers never see it, so it must not hold anything the reader needs that the link's own page does not repeat.
-
-`PreviewCardTrigger` renders an unstyled `<a>`. Pass Ora's `Link` through `render` to style it.
+<Callout variant="warning" title="Accessibility">
+  The card opens on mouse hover and keyboard focus only. Touch devices and screen readers never see
+  it, so it must not hold anything the reader needs that the link's own page does not repeat.
+</Callout>
 
 ## Examples
 
@@ -72,7 +73,7 @@ The card opens on mouse hover and keyboard focus only. Touch devices and screen 
 
 Set `side` and `align` on `PreviewCardContent` to choose where the card opens. It flips to the opposite side when there is no room.
 
-<ComponentPreview name="preview-card-placement" select={['top', 'right', 'bottom', 'left']} />
+<ComponentPreview name="preview-card-placement" select={['bottom', 'top', 'right', 'left']} />
 
 ### Delay
 
@@ -98,6 +99,8 @@ A link inside a paragraph of text opens a card when hovered or focused.
 | `sideOffset`  | `number`                                                                   | `4`        |
 | `align`       | `"start" \| "center" \| "end"`                                             | `"center"` |
 | `alignOffset` | `number`                                                                   | `0`        |
+
+`PreviewCardTrigger` renders an unstyled `<a>`. Compose it with Ora's `Link` through `render`.
 
 The card is `w-64` with `p-3` padding. Override either with `className`.
 
