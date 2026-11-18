@@ -394,6 +394,9 @@ pre.shiki code .line:last-child:empty {
    at runtime — recompute the formula directly from --radius. */
 [data-slot='dropdown-menu-content'],
 [data-slot='dropdown-menu-sub-content'],
+[data-slot='menubar'],
+[data-slot='menubar-content'],
+[data-slot='menubar-sub-content'],
 [data-slot='select-content'] {
   --menu-item-radius: min(max(calc(min(var(--radius), 10px) - 3px), 2px), 6px);
   --menu-item-highlight-text: var(--primary);
@@ -406,6 +409,9 @@ pre.shiki code .line:last-child:empty {
 [data-slot='dropdown-menu-content'][data-theme],
 [data-slot='dropdown-menu-sub-content'][data-theme],
 [data-slot='dropdown-menu-item'][data-theme],
+[data-slot='menubar-content'][data-theme],
+[data-slot='menubar-sub-content'][data-theme],
+[data-slot='menubar-item'][data-theme],
 [data-slot='select-content'][data-theme] {
   --menu-item-highlight-text: var(--secondary);
 }

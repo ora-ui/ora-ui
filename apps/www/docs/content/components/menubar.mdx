@@ -1,0 +1,171 @@
+---
+title: Menubar
+description: 'A horizontal bar of menus, such as File, Edit and View, with keyboard navigation between them.'
+links:
+  doc: https://base-ui.com/react/components/menubar
+  api: https://base-ui.com/react/components/menubar#api-reference
+---
+
+<ComponentPreview name="menubar-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/menubar.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/menubar.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/menubar.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/menubar.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="menubar" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from '@/registry/ui/menubar';
+
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>File</MenubarTrigger>
+    <MenubarContent>
+      <MenubarItem>New file</MenubarItem>
+      <MenubarSeparator />
+      <MenubarItem>Save</MenubarItem>
+    </MenubarContent>
+  </MenubarMenu>
+</Menubar>;
+```
+
+## Examples
+
+### Variant
+
+The `variant` prop on `Menubar` controls how the open trigger and focused items are highlighted. It passes down to every `MenubarContent`.
+
+<ComponentPreview name="menubar-variants" select={['soft', 'solid']} />
+
+### Theme
+
+The `theme` prop applies a color scheme to the highlight.
+
+<ComponentPreview name="menubar-theme" select={['gray', 'accent']} />
+
+### Shortcuts
+
+`MenubarShortcut` right-aligns a key hint inside an item.
+
+<ComponentPreview name="menubar-shortcuts" />
+
+### Checkbox items
+
+`MenubarCheckboxItem` toggles an option on and off.
+
+<ComponentPreview name="menubar-checkbox-items" />
+
+### Radio items
+
+`MenubarRadioGroup` and `MenubarRadioItem` pick one option from a set.
+
+<ComponentPreview name="menubar-radio-items" />
+
+### Submenu
+
+`MenubarSub`, `MenubarSubTrigger` and `MenubarSubContent` nest a menu inside an item.
+
+<ComponentPreview name="menubar-submenu" />
+
+### Vertical
+
+Set `orientation="vertical"` to lay the bar out as a column. Menus open to the right and arrow keys move up and down.
+
+<ComponentPreview name="menubar-vertical" />
+
+## API Reference
+
+### Menubar
+
+#### Appearance
+
+| Prop      | Type                 | Default  |
+| --------- | -------------------- | -------- |
+| `variant` | `"soft" \| "solid"`  | `"soft"` |
+| `theme`   | `"gray" \| "accent"` | `"gray"` |
+
+#### Structure
+
+| Prop          | Type                         | Default        |
+| ------------- | ---------------------------- | -------------- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
+
+### MenubarContent
+
+`variant` and `theme` default to the values on `Menubar`. A value set here wins.
+
+#### Appearance
+
+| Prop      | Type                 | Default                |
+| --------- | -------------------- | ---------------------- |
+| `variant` | `"soft" \| "solid"`  | inherited from Menubar |
+| `theme`   | `"gray" \| "accent"` | inherited from Menubar |
+
+#### Structure
+
+| Prop          | Type                                     | Default                                |
+| ------------- | ---------------------------------------- | -------------------------------------- |
+| `side`        | `"top" \| "right" \| "bottom" \| "left"` | `"bottom"`, or `"right"` when vertical |
+| `align`       | `"start" \| "center" \| "end"`           | `"start"`                              |
+| `sideOffset`  | `number`                                 | `4`                                    |
+| `alignOffset` | `number`                                 | `0`                                    |
+
+### MenubarItem
+
+| Prop      | Type                         | Default     |
+| --------- | ---------------------------- | ----------- |
+| `variant` | `"default" \| "destructive"` | `"default"` |
+| `inset`   | `boolean`                    | `false`     |
+
+`MenubarLabel`, `MenubarCheckboxItem`, `MenubarRadioItem` and `MenubarSubTrigger` also take `inset`.
+
+`MenubarSubContent` takes the same structure props as `MenubarContent` and inherits `variant` and `theme`. It defaults to `side="right"` and `align="start"`.
+
+Slots: `menubar`, `menubar-trigger`, `menubar-content`, `menubar-sub-content` and `menubar-item`.
+
+All other props are forwarded to the underlying [Base UI Menubar](https://base-ui.com/react/components/menubar) and [Menu](https://base-ui.com/react/components/menu) primitives.
