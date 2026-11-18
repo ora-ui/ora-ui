@@ -39,7 +39,7 @@ export default function NavigationMenuVertical() {
           <NavigationMenuLink href="#">Team</NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
-      <NavigationMenuViewport side="right" align="start" sideOffset={8} />
+      <NavigationMenuViewport side="right" />
     </NavigationMenu>
   );
 }

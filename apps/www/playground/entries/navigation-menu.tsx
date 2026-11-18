@@ -41,13 +41,14 @@ function Panel({ links }: { links: PanelLink[] }) {
 export const navigationMenuEntry: EntrySchema = {
   component: 'navigation-menu',
   name: 'Navigation Menu',
-  variants: {},
-  behavior: {
+  variants: {
     orientation: {
       values: ['horizontal', 'vertical'],
       label: 'Orientation',
       default: 'horizontal',
     },
+  },
+  behavior: {
     delay: {
       values: ['0', '50', '200', '500'],
       label: 'Open delay',
@@ -79,10 +80,10 @@ export const navigationMenuEntry: EntrySchema = {
       default: '8',
     },
   },
-  render: function NavigationMenuRender({ behavior, inputs }) {
+  render: function NavigationMenuRender({ variants, behavior, inputs }) {
     return (
       <NavigationMenu
-        orientation={behavior.orientation as 'horizontal' | 'vertical'}
+        orientation={variants.orientation as 'horizontal' | 'vertical'}
         delay={Number(behavior.delay)}
         closeDelay={Number(behavior.closeDelay)}
       >

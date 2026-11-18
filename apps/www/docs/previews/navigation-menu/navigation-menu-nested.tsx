@@ -15,6 +15,8 @@ const SECTIONS = [
   { heading: 'Components', links: ['Button', 'Dialog', 'Tabs'] },
 ];
 
+const THEMING_LINKS = ['Colors', 'Radius'];
+
 export default function NavigationMenuNested() {
   return (
     <NavigationMenu>
@@ -30,6 +32,15 @@ export default function NavigationMenuNested() {
                     {section.links.map((link) => (
                       <li key={link}>
                         <NavigationMenuLink href="#">{link}</NavigationMenuLink>
+                        {link === 'Theming' && (
+                          <ul className="mt-0.5 ml-3 grid gap-0.5 border-l border-line pl-1">
+                            {THEMING_LINKS.map((child) => (
+                              <li key={child}>
+                                <NavigationMenuLink href="#">{child}</NavigationMenuLink>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
                       </li>
                     ))}
                   </ul>

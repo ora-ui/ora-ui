@@ -105,8 +105,8 @@ function NavigationMenuLink({ className, ...props }: NavigationMenuPrimitive.Lin
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
       className={cn(
-        'flex flex-col gap-0.5 rounded-sm px-3 py-1.5 text-sm text-primary outline-none hover:bg-interactive focus-visible:outline-2 focus-visible:outline-ring data-active:bg-interactive-subtle data-active:font-medium',
-        'in-data-[slot=navigation-menu-list]:h-7.5 in-data-[slot=navigation-menu-list]:justify-center in-data-[slot=navigation-menu-list]:rounded-dynamic in-data-[slot=navigation-menu-list]:py-0 in-data-[slot=navigation-menu-list]:text-ui-label in-data-[slot=navigation-menu-list]:font-medium in-data-[slot=navigation-menu-list]:hover:bg-interactive-subtle',
+        'flex flex-col gap-0.5 rounded-sm px-3 py-1.5 text-sm text-primary outline-hidden hover:bg-interactive focus-visible:outline-2 focus-visible:outline-ring data-active:bg-interactive-subtle data-active:font-medium',
+        'in-data-[slot=navigation-menu-list]:h-7.5 in-data-[slot=navigation-menu-list]:justify-center in-data-[slot=navigation-menu-list]:rounded-dynamic in-data-[slot=navigation-menu-list]:py-0 in-data-[slot=navigation-menu-list]:text-ui-label in-data-[slot=navigation-menu-list]:font-medium',
         className
       )}
       {...props}
