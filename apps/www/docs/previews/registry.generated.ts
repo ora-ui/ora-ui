@@ -145,6 +145,20 @@ import * as ToggleGroupConnectedModule from './toggle-group/toggle-group-connect
 import * as ToggleGroupHeroModule from './toggle-group/toggle-group-hero';
 import * as ToggleGroupVariantsModule from './toggle-group/toggle-group-variants';
 import * as ToggleGroupVerticalModule from './toggle-group/toggle-group-vertical';
+import * as TypographyBlockquoteModule from './typography/typography-blockquote';
+import * as TypographyH1Module from './typography/typography-h1';
+import * as TypographyH2Module from './typography/typography-h2';
+import * as TypographyH3Module from './typography/typography-h3';
+import * as TypographyH4Module from './typography/typography-h4';
+import * as TypographyHeroModule from './typography/typography-hero';
+import * as TypographyInlineCodeModule from './typography/typography-inline-code';
+import * as TypographyLargeModule from './typography/typography-large';
+import * as TypographyLeadModule from './typography/typography-lead';
+import * as TypographyListModule from './typography/typography-list';
+import * as TypographyMutedModule from './typography/typography-muted';
+import * as TypographyPModule from './typography/typography-p';
+import * as TypographySmallModule from './typography/typography-small';
+import * as TypographyTableModule from './typography/typography-table';
 
 interface PreviewExport {
   name: string;
@@ -1351,5 +1365,117 @@ export const registry: Record<string, PreviewEntry> = {
     { name: "ToggleGroupVertical", value: "vertical", label: "Vertical", component: ToggleGroupVerticalModule.default, snippet: "export default function ToggleGroupVertical() {\n  return (\n    <ToggleGroup orientation=\"vertical\" itemVariant=\"outline\" attached>\n      <ToggleGroupItem value=\"bold\" aria-label=\"Bold\">\n        <FontBoldIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value=\"italic\" aria-label=\"Italic\">\n        <FontItalicIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value=\"underline\" aria-label=\"Underline\">\n        <UnderlineIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}" },
     ],
     source: "import { FontBoldIcon, FontItalicIcon, UnderlineIcon } from '@radix-ui/react-icons';\n\nimport { ToggleGroup, ToggleGroupItem } from '@/registry/ui/toggle-group';\n\nexport default function ToggleGroupVertical() {\n  return (\n    <ToggleGroup orientation=\"vertical\" itemVariant=\"outline\" attached>\n      <ToggleGroupItem value=\"bold\" aria-label=\"Bold\">\n        <FontBoldIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value=\"italic\" aria-label=\"Italic\">\n        <FontItalicIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem value=\"underline\" aria-label=\"Underline\">\n        <UnderlineIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}\n",
+  },
+  "typography-blockquote": {
+    slug: "typography-blockquote",
+    defaultExport: { name: "TypographyBlockquote", value: "blockquote", label: "Blockquote", component: TypographyBlockquoteModule.default, snippet: "export default function TypographyBlockquote() {\n  return (\n    <blockquote className=\"mt-6 border-l-2 border-separator pl-6 italic text-secondary\">\n      &ldquo;If a question gets asked twice, the answer belongs in the guide.&rdquo;\n    </blockquote>\n  );\n}" },
+    exports: [
+    { name: "TypographyBlockquote", value: "blockquote", label: "Blockquote", component: TypographyBlockquoteModule.default, snippet: "export default function TypographyBlockquote() {\n  return (\n    <blockquote className=\"mt-6 border-l-2 border-separator pl-6 italic text-secondary\">\n      &ldquo;If a question gets asked twice, the answer belongs in the guide.&rdquo;\n    </blockquote>\n  );\n}" },
+    ],
+    source: "export default function TypographyBlockquote() {\n  return (\n    <blockquote className=\"mt-6 border-l-2 border-separator pl-6 italic text-secondary\">\n      &ldquo;If a question gets asked twice, the answer belongs in the guide.&rdquo;\n    </blockquote>\n  );\n}\n",
+  },
+  "typography-h1": {
+    slug: "typography-h1",
+    defaultExport: { name: "TypographyH1", value: "h1", label: "H1", component: TypographyH1Module.default, snippet: "export default function TypographyH1() {\n  return (\n    <h1 className=\"scroll-m-20 text-4xl font-extrabold tracking-tight text-balance text-primary\">\n      Shipping the field guide\n    </h1>\n  );\n}" },
+    exports: [
+    { name: "TypographyH1", value: "h1", label: "H1", component: TypographyH1Module.default, snippet: "export default function TypographyH1() {\n  return (\n    <h1 className=\"scroll-m-20 text-4xl font-extrabold tracking-tight text-balance text-primary\">\n      Shipping the field guide\n    </h1>\n  );\n}" },
+    ],
+    source: "export default function TypographyH1() {\n  return (\n    <h1 className=\"scroll-m-20 text-4xl font-extrabold tracking-tight text-balance text-primary\">\n      Shipping the field guide\n    </h1>\n  );\n}\n",
+  },
+  "typography-h2": {
+    slug: "typography-h2",
+    defaultExport: { name: "TypographyH2", value: "h2", label: "H2", component: TypographyH2Module.default, snippet: "export default function TypographyH2() {\n  return (\n    <h2 className=\"scroll-m-20 border-b border-separator pb-2 text-3xl font-semibold tracking-tight text-primary first:mt-0\">\n      Where we started\n    </h2>\n  );\n}" },
+    exports: [
+    { name: "TypographyH2", value: "h2", label: "H2", component: TypographyH2Module.default, snippet: "export default function TypographyH2() {\n  return (\n    <h2 className=\"scroll-m-20 border-b border-separator pb-2 text-3xl font-semibold tracking-tight text-primary first:mt-0\">\n      Where we started\n    </h2>\n  );\n}" },
+    ],
+    source: "export default function TypographyH2() {\n  return (\n    <h2 className=\"scroll-m-20 border-b border-separator pb-2 text-3xl font-semibold tracking-tight text-primary first:mt-0\">\n      Where we started\n    </h2>\n  );\n}\n",
+  },
+  "typography-h3": {
+    slug: "typography-h3",
+    defaultExport: { name: "TypographyH3", value: "h3", label: "H3", component: TypographyH3Module.default, snippet: "export default function TypographyH3() {\n  return (\n    <h3 className=\"scroll-m-20 text-2xl font-semibold tracking-tight text-primary\">What we kept</h3>\n  );\n}" },
+    exports: [
+    { name: "TypographyH3", value: "h3", label: "H3", component: TypographyH3Module.default, snippet: "export default function TypographyH3() {\n  return (\n    <h3 className=\"scroll-m-20 text-2xl font-semibold tracking-tight text-primary\">What we kept</h3>\n  );\n}" },
+    ],
+    source: "export default function TypographyH3() {\n  return (\n    <h3 className=\"scroll-m-20 text-2xl font-semibold tracking-tight text-primary\">What we kept</h3>\n  );\n}\n",
+  },
+  "typography-h4": {
+    slug: "typography-h4",
+    defaultExport: { name: "TypographyH4", value: "h4", label: "H4", component: TypographyH4Module.default, snippet: "export default function TypographyH4() {\n  return (\n    <h4 className=\"scroll-m-20 text-xl font-semibold tracking-tight text-primary\">Page owners</h4>\n  );\n}" },
+    exports: [
+    { name: "TypographyH4", value: "h4", label: "H4", component: TypographyH4Module.default, snippet: "export default function TypographyH4() {\n  return (\n    <h4 className=\"scroll-m-20 text-xl font-semibold tracking-tight text-primary\">Page owners</h4>\n  );\n}" },
+    ],
+    source: "export default function TypographyH4() {\n  return (\n    <h4 className=\"scroll-m-20 text-xl font-semibold tracking-tight text-primary\">Page owners</h4>\n  );\n}\n",
+  },
+  "typography-hero": {
+    slug: "typography-hero",
+    defaultExport: { name: "TypographyHero", value: "hero", label: "Hero", component: TypographyHeroModule.default, snippet: "export default function TypographyHero() {\n  return (\n    <article className=\"max-w-prose text-primary\">\n      <h1 className=\"scroll-m-20 text-4xl font-extrabold tracking-tight text-balance\">\n        Shipping the field guide\n      </h1>\n      <p className=\"mt-6 text-xl text-secondary\">\n        How a four-person team rebuilt its onboarding docs in a single sprint.\n      </p>\n      <h2 className=\"mt-10 scroll-m-20 border-b border-separator pb-2 text-3xl font-semibold tracking-tight\">\n        Where we started\n      </h2>\n      <p className=\"leading-7 not-first:mt-6\">\n        New hires spent their first week asking the same questions in chat. The answers existed, but\n        they were spread across{' '}\n        <a\n          href=\"#where-we-started\"\n          className=\"font-medium underline underline-offset-4 hover:text-secondary\"\n        >\n          three wikis\n        </a>{' '}\n        and a folder of slide decks nobody could find.\n      </p>\n      <blockquote className=\"mt-6 border-l-2 border-separator pl-6 italic text-secondary\">\n        &ldquo;If a question gets asked twice, the answer belongs in the guide.&rdquo;\n      </blockquote>\n      <h3 className=\"mt-8 scroll-m-20 text-2xl font-semibold tracking-tight\">What we kept</h3>\n      <ul className=\"my-6 ml-6 list-disc [&>li]:mt-2\">\n        <li>One page per task, written as steps.</li>\n        <li>\n          Commands in code blocks, such as{' '}\n          <code className=\"relative rounded-xs bg-ui px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold\">\n            pnpm dev\n          </code>\n          .\n        </li>\n        <li>A named owner at the top of every page.</li>\n      </ul>\n      <p className=\"leading-7 not-first:mt-6\">\n        By the end of the sprint, questions in the onboarding channel had dropped by half.\n      </p>\n    </article>\n  );\n}" },
+    exports: [
+    { name: "TypographyHero", value: "hero", label: "Hero", component: TypographyHeroModule.default, snippet: "export default function TypographyHero() {\n  return (\n    <article className=\"max-w-prose text-primary\">\n      <h1 className=\"scroll-m-20 text-4xl font-extrabold tracking-tight text-balance\">\n        Shipping the field guide\n      </h1>\n      <p className=\"mt-6 text-xl text-secondary\">\n        How a four-person team rebuilt its onboarding docs in a single sprint.\n      </p>\n      <h2 className=\"mt-10 scroll-m-20 border-b border-separator pb-2 text-3xl font-semibold tracking-tight\">\n        Where we started\n      </h2>\n      <p className=\"leading-7 not-first:mt-6\">\n        New hires spent their first week asking the same questions in chat. The answers existed, but\n        they were spread across{' '}\n        <a\n          href=\"#where-we-started\"\n          className=\"font-medium underline underline-offset-4 hover:text-secondary\"\n        >\n          three wikis\n        </a>{' '}\n        and a folder of slide decks nobody could find.\n      </p>\n      <blockquote className=\"mt-6 border-l-2 border-separator pl-6 italic text-secondary\">\n        &ldquo;If a question gets asked twice, the answer belongs in the guide.&rdquo;\n      </blockquote>\n      <h3 className=\"mt-8 scroll-m-20 text-2xl font-semibold tracking-tight\">What we kept</h3>\n      <ul className=\"my-6 ml-6 list-disc [&>li]:mt-2\">\n        <li>One page per task, written as steps.</li>\n        <li>\n          Commands in code blocks, such as{' '}\n          <code className=\"relative rounded-xs bg-ui px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold\">\n            pnpm dev\n          </code>\n          .\n        </li>\n        <li>A named owner at the top of every page.</li>\n      </ul>\n      <p className=\"leading-7 not-first:mt-6\">\n        By the end of the sprint, questions in the onboarding channel had dropped by half.\n      </p>\n    </article>\n  );\n}" },
+    ],
+    source: "export default function TypographyHero() {\n  return (\n    <article className=\"max-w-prose text-primary\">\n      <h1 className=\"scroll-m-20 text-4xl font-extrabold tracking-tight text-balance\">\n        Shipping the field guide\n      </h1>\n      <p className=\"mt-6 text-xl text-secondary\">\n        How a four-person team rebuilt its onboarding docs in a single sprint.\n      </p>\n      <h2 className=\"mt-10 scroll-m-20 border-b border-separator pb-2 text-3xl font-semibold tracking-tight\">\n        Where we started\n      </h2>\n      <p className=\"leading-7 not-first:mt-6\">\n        New hires spent their first week asking the same questions in chat. The answers existed, but\n        they were spread across{' '}\n        <a\n          href=\"#where-we-started\"\n          className=\"font-medium underline underline-offset-4 hover:text-secondary\"\n        >\n          three wikis\n        </a>{' '}\n        and a folder of slide decks nobody could find.\n      </p>\n      <blockquote className=\"mt-6 border-l-2 border-separator pl-6 italic text-secondary\">\n        &ldquo;If a question gets asked twice, the answer belongs in the guide.&rdquo;\n      </blockquote>\n      <h3 className=\"mt-8 scroll-m-20 text-2xl font-semibold tracking-tight\">What we kept</h3>\n      <ul className=\"my-6 ml-6 list-disc [&>li]:mt-2\">\n        <li>One page per task, written as steps.</li>\n        <li>\n          Commands in code blocks, such as{' '}\n          <code className=\"relative rounded-xs bg-ui px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold\">\n            pnpm dev\n          </code>\n          .\n        </li>\n        <li>A named owner at the top of every page.</li>\n      </ul>\n      <p className=\"leading-7 not-first:mt-6\">\n        By the end of the sprint, questions in the onboarding channel had dropped by half.\n      </p>\n    </article>\n  );\n}\n",
+  },
+  "typography-inline-code": {
+    slug: "typography-inline-code",
+    defaultExport: { name: "TypographyInlineCode", value: "inline-code", label: "Inline Code", component: TypographyInlineCodeModule.default, snippet: "export default function TypographyInlineCode() {\n  return (\n    <code className=\"relative rounded-xs bg-ui px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold\">\n      pnpm dev\n    </code>\n  );\n}" },
+    exports: [
+    { name: "TypographyInlineCode", value: "inline-code", label: "Inline Code", component: TypographyInlineCodeModule.default, snippet: "export default function TypographyInlineCode() {\n  return (\n    <code className=\"relative rounded-xs bg-ui px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold\">\n      pnpm dev\n    </code>\n  );\n}" },
+    ],
+    source: "export default function TypographyInlineCode() {\n  return (\n    <code className=\"relative rounded-xs bg-ui px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold\">\n      pnpm dev\n    </code>\n  );\n}\n",
+  },
+  "typography-large": {
+    slug: "typography-large",
+    defaultExport: { name: "TypographyLarge", value: "large", label: "Large", component: TypographyLargeModule.default, snippet: "export default function TypographyLarge() {\n  return <div className=\"text-lg font-semibold\">Publish this page?</div>;\n}" },
+    exports: [
+    { name: "TypographyLarge", value: "large", label: "Large", component: TypographyLargeModule.default, snippet: "export default function TypographyLarge() {\n  return <div className=\"text-lg font-semibold\">Publish this page?</div>;\n}" },
+    ],
+    source: "export default function TypographyLarge() {\n  return <div className=\"text-lg font-semibold\">Publish this page?</div>;\n}\n",
+  },
+  "typography-lead": {
+    slug: "typography-lead",
+    defaultExport: { name: "TypographyLead", value: "lead", label: "Lead", component: TypographyLeadModule.default, snippet: "export default function TypographyLead() {\n  return (\n    <p className=\"text-xl text-secondary\">\n      How a four-person team rebuilt its onboarding docs in a single sprint.\n    </p>\n  );\n}" },
+    exports: [
+    { name: "TypographyLead", value: "lead", label: "Lead", component: TypographyLeadModule.default, snippet: "export default function TypographyLead() {\n  return (\n    <p className=\"text-xl text-secondary\">\n      How a four-person team rebuilt its onboarding docs in a single sprint.\n    </p>\n  );\n}" },
+    ],
+    source: "export default function TypographyLead() {\n  return (\n    <p className=\"text-xl text-secondary\">\n      How a four-person team rebuilt its onboarding docs in a single sprint.\n    </p>\n  );\n}\n",
+  },
+  "typography-list": {
+    slug: "typography-list",
+    defaultExport: { name: "TypographyList", value: "list", label: "List", component: TypographyListModule.default, snippet: "export default function TypographyList() {\n  return (\n    <ul className=\"my-6 ml-6 list-disc [&>li]:mt-2\">\n      <li>One page per task, written as steps.</li>\n      <li>Commands in code blocks, ready to copy.</li>\n      <li>A named owner at the top of every page.</li>\n    </ul>\n  );\n}" },
+    exports: [
+    { name: "TypographyList", value: "list", label: "List", component: TypographyListModule.default, snippet: "export default function TypographyList() {\n  return (\n    <ul className=\"my-6 ml-6 list-disc [&>li]:mt-2\">\n      <li>One page per task, written as steps.</li>\n      <li>Commands in code blocks, ready to copy.</li>\n      <li>A named owner at the top of every page.</li>\n    </ul>\n  );\n}" },
+    ],
+    source: "export default function TypographyList() {\n  return (\n    <ul className=\"my-6 ml-6 list-disc [&>li]:mt-2\">\n      <li>One page per task, written as steps.</li>\n      <li>Commands in code blocks, ready to copy.</li>\n      <li>A named owner at the top of every page.</li>\n    </ul>\n  );\n}\n",
+  },
+  "typography-muted": {
+    slug: "typography-muted",
+    defaultExport: { name: "TypographyMuted", value: "muted", label: "Muted", component: TypographyMutedModule.default, snippet: "export default function TypographyMuted() {\n  return <p className=\"text-sm text-secondary\">We&rsquo;ll send the invite to this address.</p>;\n}" },
+    exports: [
+    { name: "TypographyMuted", value: "muted", label: "Muted", component: TypographyMutedModule.default, snippet: "export default function TypographyMuted() {\n  return <p className=\"text-sm text-secondary\">We&rsquo;ll send the invite to this address.</p>;\n}" },
+    ],
+    source: "export default function TypographyMuted() {\n  return <p className=\"text-sm text-secondary\">We&rsquo;ll send the invite to this address.</p>;\n}\n",
+  },
+  "typography-p": {
+    slug: "typography-p",
+    defaultExport: { name: "TypographyP", value: "p", label: "P", component: TypographyPModule.default, snippet: "export default function TypographyP() {\n  return (\n    <p className=\"leading-7 not-first:mt-6\">\n      New hires spent their first week asking the same questions in chat. The answers existed, but\n      they were spread across three wikis and a folder of slide decks nobody could find.\n    </p>\n  );\n}" },
+    exports: [
+    { name: "TypographyP", value: "p", label: "P", component: TypographyPModule.default, snippet: "export default function TypographyP() {\n  return (\n    <p className=\"leading-7 not-first:mt-6\">\n      New hires spent their first week asking the same questions in chat. The answers existed, but\n      they were spread across three wikis and a folder of slide decks nobody could find.\n    </p>\n  );\n}" },
+    ],
+    source: "export default function TypographyP() {\n  return (\n    <p className=\"leading-7 not-first:mt-6\">\n      New hires spent their first week asking the same questions in chat. The answers existed, but\n      they were spread across three wikis and a folder of slide decks nobody could find.\n    </p>\n  );\n}\n",
+  },
+  "typography-small": {
+    slug: "typography-small",
+    defaultExport: { name: "TypographySmall", value: "small", label: "Small", component: TypographySmallModule.default, snippet: "export default function TypographySmall() {\n  return <small className=\"text-sm leading-none font-medium\">Work email</small>;\n}" },
+    exports: [
+    { name: "TypographySmall", value: "small", label: "Small", component: TypographySmallModule.default, snippet: "export default function TypographySmall() {\n  return <small className=\"text-sm leading-none font-medium\">Work email</small>;\n}" },
+    ],
+    source: "export default function TypographySmall() {\n  return <small className=\"text-sm leading-none font-medium\">Work email</small>;\n}\n",
+  },
+  "typography-table": {
+    slug: "typography-table",
+    defaultExport: { name: "TypographyTable", value: "table", label: "Table", component: TypographyTableModule.default, snippet: "export default function TypographyTable() {\n  return (\n    <div className=\"my-6 w-full overflow-y-auto\">\n      <table className=\"w-full\">\n        <thead>\n          <tr className=\"m-0 border-t border-separator p-0 even:bg-ui\">\n            <th className=\"border border-separator px-4 py-2 text-left font-bold\">Section</th>\n            <th className=\"border border-separator px-4 py-2 text-left font-bold\">Owner</th>\n            <th className=\"border border-separator px-4 py-2 text-left font-bold\">Updated</th>\n          </tr>\n        </thead>\n        <tbody>\n          {rows.map((row) => (\n            <tr key={row.section} className=\"m-0 border-t border-separator p-0 even:bg-ui\">\n              <td className=\"border border-separator px-4 py-2 text-left\">{row.section}</td>\n              <td className=\"border border-separator px-4 py-2 text-left\">{row.owner}</td>\n              <td className=\"border border-separator px-4 py-2 text-left\">{row.updated}</td>\n            </tr>\n          ))}\n        </tbody>\n      </table>\n    </div>\n  );\n}" },
+    exports: [
+    { name: "TypographyTable", value: "table", label: "Table", component: TypographyTableModule.default, snippet: "export default function TypographyTable() {\n  return (\n    <div className=\"my-6 w-full overflow-y-auto\">\n      <table className=\"w-full\">\n        <thead>\n          <tr className=\"m-0 border-t border-separator p-0 even:bg-ui\">\n            <th className=\"border border-separator px-4 py-2 text-left font-bold\">Section</th>\n            <th className=\"border border-separator px-4 py-2 text-left font-bold\">Owner</th>\n            <th className=\"border border-separator px-4 py-2 text-left font-bold\">Updated</th>\n          </tr>\n        </thead>\n        <tbody>\n          {rows.map((row) => (\n            <tr key={row.section} className=\"m-0 border-t border-separator p-0 even:bg-ui\">\n              <td className=\"border border-separator px-4 py-2 text-left\">{row.section}</td>\n              <td className=\"border border-separator px-4 py-2 text-left\">{row.owner}</td>\n              <td className=\"border border-separator px-4 py-2 text-left\">{row.updated}</td>\n            </tr>\n          ))}\n        </tbody>\n      </table>\n    </div>\n  );\n}" },
+    ],
+    source: "const rows = [\n  { section: 'Getting set up', owner: 'Priya', updated: 'Mar 4' },\n  { section: 'Running locally', owner: 'Sam', updated: 'Mar 6' },\n  { section: 'Shipping a change', owner: 'Ana', updated: 'Mar 11' },\n];\n\nexport default function TypographyTable() {\n  return (\n    <div className=\"my-6 w-full overflow-y-auto\">\n      <table className=\"w-full\">\n        <thead>\n          <tr className=\"m-0 border-t border-separator p-0 even:bg-ui\">\n            <th className=\"border border-separator px-4 py-2 text-left font-bold\">Section</th>\n            <th className=\"border border-separator px-4 py-2 text-left font-bold\">Owner</th>\n            <th className=\"border border-separator px-4 py-2 text-left font-bold\">Updated</th>\n          </tr>\n        </thead>\n        <tbody>\n          {rows.map((row) => (\n            <tr key={row.section} className=\"m-0 border-t border-separator p-0 even:bg-ui\">\n              <td className=\"border border-separator px-4 py-2 text-left\">{row.section}</td>\n              <td className=\"border border-separator px-4 py-2 text-left\">{row.owner}</td>\n              <td className=\"border border-separator px-4 py-2 text-left\">{row.updated}</td>\n            </tr>\n          ))}\n        </tbody>\n      </table>\n    </div>\n  );\n}\n",
   },
 };
