@@ -53,6 +53,26 @@
       ]
     },
     {
+      "name": "autocomplete",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/autocomplete.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "input",
+        "input-group",
+        "utils"
+      ]
+    },
+    {
       "name": "avatar-group",
       "type": "registry:ui",
       "files": [
@@ -330,6 +350,40 @@
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/popover.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ],
+      "registryDependencies": [
+        "button",
+        "utils"
+      ]
+    },
+    {
+      "name": "preview-card",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/preview-card.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react"
       ],
       "registryDependencies": [
         "utils"
