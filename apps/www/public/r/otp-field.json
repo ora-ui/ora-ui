@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "otp-field",
+  "dependencies": ["@base-ui/react", "class-variance-authority"],
+  "registryDependencies": ["input", "utils"],
+  "files": [
+    {
+      "path": "registry/ui/otp-field.tsx",
+      "content": "'use client';\n\nimport * as React from 'react';\nimport { OTPField as OTPFieldPrimitive } from '@base-ui/react/otp-field';\nimport type { VariantProps } from 'class-variance-authority';\n\nimport { cn } from '@/registry/lib/utils';\nimport { inputVariants } from '@/registry/ui/input';\n\ntype Variant = NonNullable<VariantProps<typeof inputVariants>['variant']>;\n\nconst OTPFieldContext = React.createContext<{ variant: Variant }>({ variant: 'surface' });\n\nfunction OTPField({\n  className,\n  variant = 'surface',\n  ...props\n}: OTPFieldPrimitive.Root.Props & { variant?: Variant }) {\n  const context = React.useMemo(() => ({ variant }), [variant]);\n\n  return (\n    <OTPFieldContext.Provider value={context}>\n      <OTPFieldPrimitive.Root\n        data-slot=\"otp-field\"\n        data-variant={variant}\n        className={cn('flex gap-2', className)}\n        {...props}\n      />\n    </OTPFieldContext.Provider>\n  );\n}\n\nfunction OTPFieldInput({\n  className,\n  variant,\n  ...props\n}: OTPFieldPrimitive.Input.Props & { variant?: Variant }) {\n  const context = React.useContext(OTPFieldContext);\n  const resolved = variant ?? context.variant;\n\n  return (\n    <OTPFieldPrimitive.Input\n      data-slot=\"otp-field-input\"\n      data-variant={resolved}\n      className={cn(\n        inputVariants({ variant: resolved }),\n        'size-(--otp-slot-size,--spacing(10)) min-w-0 px-0 text-center tabular-nums transition-colors',\n        className\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction OTPFieldSeparator({ className, ...props }: OTPFieldPrimitive.Separator.Props) {\n  return (\n    <OTPFieldPrimitive.Separator\n      data-slot=\"otp-field-separator\"\n      className={cn('h-px w-3 shrink-0 self-center bg-line', className)}\n      {...props}\n    />\n  );\n}\n\nexport { OTPField, OTPFieldInput, OTPFieldSeparator };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
