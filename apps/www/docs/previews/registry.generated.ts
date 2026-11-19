@@ -134,7 +134,6 @@ import * as SliderRangeModule from './slider/slider-range';
 import * as SliderSizeModule from './slider/slider-size';
 import * as SliderStepsModule from './slider/slider-steps';
 import * as SliderThemeModule from './slider/slider-theme';
-import * as SliderVariantsModule from './slider/slider-variants';
 import * as SliderVerticalModule from './slider/slider-vertical';
 import * as SwitchHeroModule from './switch/switch-hero';
 import * as SwitchThemeModule from './switch/switch-theme';
@@ -1268,15 +1267,6 @@ export const registry: Record<string, PreviewEntry> = {
     { name: "SliderAccent", value: "accent", label: "Accent", component: SliderThemeModule.SliderAccent, snippet: "export function SliderAccent() {\n  return (\n    <Slider theme=\"accent\" defaultValue={40} className=\"w-72\">\n      <SliderLabel>Volume</SliderLabel>\n      <SliderValue />\n      <SliderControl>\n        <SliderTrack>\n          <SliderIndicator />\n        </SliderTrack>\n        <SliderThumb aria-label=\"Volume\" />\n      </SliderControl>\n    </Slider>\n  );\n}" },
     ],
     source: "import {\n  Slider,\n  SliderControl,\n  SliderIndicator,\n  SliderLabel,\n  SliderThumb,\n  SliderTrack,\n  SliderValue,\n} from '@/registry/ui/slider';\n\nexport function SliderGray() {\n  return (\n    <Slider theme=\"gray\" defaultValue={40} className=\"w-72\">\n      <SliderLabel>Volume</SliderLabel>\n      <SliderValue />\n      <SliderControl>\n        <SliderTrack>\n          <SliderIndicator />\n        </SliderTrack>\n        <SliderThumb aria-label=\"Volume\" />\n      </SliderControl>\n    </Slider>\n  );\n}\n\nexport function SliderAccent() {\n  return (\n    <Slider theme=\"accent\" defaultValue={40} className=\"w-72\">\n      <SliderLabel>Volume</SliderLabel>\n      <SliderValue />\n      <SliderControl>\n        <SliderTrack>\n          <SliderIndicator />\n        </SliderTrack>\n        <SliderThumb aria-label=\"Volume\" />\n      </SliderControl>\n    </Slider>\n  );\n}\n\nexport default SliderGray;\n",
-  },
-  "slider-variants": {
-    slug: "slider-variants",
-    defaultExport: { name: "SliderSolid", value: "solid", label: "Solid", component: SliderVariantsModule.SliderSolid, snippet: "export function SliderSolid() {\n  return (\n    <Slider variant=\"solid\" defaultValue={40} className=\"w-72\">\n      <SliderLabel>Volume</SliderLabel>\n      <SliderValue />\n      <SliderControl>\n        <SliderTrack>\n          <SliderIndicator />\n        </SliderTrack>\n        <SliderThumb aria-label=\"Volume\" />\n      </SliderControl>\n    </Slider>\n  );\n}" },
-    exports: [
-    { name: "SliderSolid", value: "solid", label: "Solid", component: SliderVariantsModule.SliderSolid, snippet: "export function SliderSolid() {\n  return (\n    <Slider variant=\"solid\" defaultValue={40} className=\"w-72\">\n      <SliderLabel>Volume</SliderLabel>\n      <SliderValue />\n      <SliderControl>\n        <SliderTrack>\n          <SliderIndicator />\n        </SliderTrack>\n        <SliderThumb aria-label=\"Volume\" />\n      </SliderControl>\n    </Slider>\n  );\n}" },
-    { name: "SliderSoft", value: "soft", label: "Soft", component: SliderVariantsModule.SliderSoft, snippet: "export function SliderSoft() {\n  return (\n    <Slider variant=\"soft\" defaultValue={40} className=\"w-72\">\n      <SliderLabel>Volume</SliderLabel>\n      <SliderValue />\n      <SliderControl>\n        <SliderTrack>\n          <SliderIndicator />\n        </SliderTrack>\n        <SliderThumb aria-label=\"Volume\" />\n      </SliderControl>\n    </Slider>\n  );\n}" },
-    ],
-    source: "import {\n  Slider,\n  SliderControl,\n  SliderIndicator,\n  SliderLabel,\n  SliderThumb,\n  SliderTrack,\n  SliderValue,\n} from '@/registry/ui/slider';\n\nexport function SliderSolid() {\n  return (\n    <Slider variant=\"solid\" defaultValue={40} className=\"w-72\">\n      <SliderLabel>Volume</SliderLabel>\n      <SliderValue />\n      <SliderControl>\n        <SliderTrack>\n          <SliderIndicator />\n        </SliderTrack>\n        <SliderThumb aria-label=\"Volume\" />\n      </SliderControl>\n    </Slider>\n  );\n}\n\nexport function SliderSoft() {\n  return (\n    <Slider variant=\"soft\" defaultValue={40} className=\"w-72\">\n      <SliderLabel>Volume</SliderLabel>\n      <SliderValue />\n      <SliderControl>\n        <SliderTrack>\n          <SliderIndicator />\n        </SliderTrack>\n        <SliderThumb aria-label=\"Volume\" />\n      </SliderControl>\n    </Slider>\n  );\n}\n\nexport default SliderSolid;\n",
   },
   "slider-vertical": {
     slug: "slider-vertical",

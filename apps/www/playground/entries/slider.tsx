@@ -18,11 +18,6 @@ export const sliderEntry: EntrySchema = {
   component: 'slider',
   name: 'Slider',
   variants: {
-    variant: {
-      values: ['solid', 'soft'],
-      label: 'Variant',
-      default: 'solid',
-    },
     size: {
       values: ['sm', 'md', 'lg'],
       label: 'Size',
@@ -70,7 +65,6 @@ export const sliderEntry: EntrySchema = {
       <div className={vertical ? 'h-48' : 'w-full max-w-80'}>
         <Slider
           key={`${range}-${min}-${max}-${step}-${value}`}
-          variant={variants.variant as 'solid' | 'soft'}
           size={variants.size as 'sm' | 'md' | 'lg'}
           theme={variants.theme as string}
           orientation={variants.orientation as 'horizontal' | 'vertical'}

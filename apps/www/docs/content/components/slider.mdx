@@ -77,12 +77,6 @@ import {
 
 ## Examples
 
-### Variant
-
-Use `variant` to switch between a solid and a soft indicator.
-
-<ComponentPreview name="slider-variants" select={['solid', 'soft']} />
-
 ### Theme
 
 Use `theme` to colour the indicator and the thumb focus ring. The track stays neutral.
@@ -137,13 +131,12 @@ Set `disabled` to stop the slider from taking input.
 
 #### Appearance
 
-| Prop      | Type                           | Default   |
-| --------- | ------------------------------ | --------- |
-| `variant` | `"solid" \| "soft"`            | `"solid"` |
-| `size`    | `"sm" \| "md" \| "lg"`         | `"md"`    |
-| `theme`   | `"gray" \| "accent" \| string` | `"gray"`  |
+| Prop    | Type                           | Default  |
+| ------- | ------------------------------ | -------- |
+| `size`  | `"sm" \| "md" \| "lg"`         | `"md"`   |
+| `theme` | `"gray" \| "accent" \| string` | `"gray"` |
 
-`variant`, `size` and `theme` flow to the parts through context. A prop on a part wins.
+`size` and `theme` flow to the parts through context. A prop on a part wins.
 
 #### Structure
 
@@ -159,10 +152,9 @@ Set `disabled` to stop the slider from taking input.
 
 ### SliderIndicator
 
-| Prop      | Type                           | Default |
-| --------- | ------------------------------ | ------- |
-| `variant` | `"solid" \| "soft"`            | context |
-| `theme`   | `"gray" \| "accent" \| string` | context |
+| Prop    | Type                           | Default |
+| ------- | ------------------------------ | ------- |
+| `theme` | `"gray" \| "accent" \| string` | context |
 
 ### SliderThumb
 

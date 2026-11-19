@@ -22,20 +22,8 @@ const sliderTrackVariants = cva(
   }
 );
 
-const sliderIndicatorVariants = cva('rounded-none', {
-  variants: {
-    variant: {
-      solid: 'bg-solid',
-      soft: 'bg-border',
-    },
-  },
-  defaultVariants: {
-    variant: 'solid',
-  },
-});
-
 const sliderThumbVariants = cva(
-  'block shrink-0 rounded-full border border-border-strong bg-background outline-offset-2 outline-focus transition-transform select-none has-focus-visible:outline-2 data-theme:outline-(--ring) active:scale-110 motion-reduce:transition-none group-data-disabled/slider:cursor-not-allowed group-data-invalid/slider:border-destructive-700 group-data-invalid/slider:has-focus-visible:outline-destructive-700',
+  'block shrink-0 rounded-full border border-border-strong bg-white outline-offset-2 outline-focus transition-transform select-none has-focus-visible:outline-2 data-theme:outline-(--ring) active:scale-110 motion-reduce:transition-none group-data-disabled/slider:cursor-not-allowed group-data-invalid/slider:border-destructive-700 group-data-invalid/slider:has-focus-visible:outline-destructive-700',
   {
     variants: {
       size: {
@@ -50,38 +38,32 @@ const sliderThumbVariants = cva(
   }
 );
 
-type Variant = NonNullable<VariantProps<typeof sliderIndicatorVariants>['variant']>;
 type Size = NonNullable<VariantProps<typeof sliderTrackVariants>['size']>;
 type Theme = 'gray' | 'accent' | (string & {});
 
 const SliderContext = React.createContext<{
-  variant: Variant;
   size: Size;
   theme: Theme;
 }>({
-  variant: 'solid',
   size: 'md',
   theme: 'gray',
 });
 
 function Slider({
   className,
-  variant = 'solid',
   size = 'md',
   theme = 'gray',
   children,
   ...props
 }: SliderPrimitive.Root.Props & {
-  variant?: Variant;
   size?: Size;
   theme?: Theme;
 }) {
-  const contextValue = React.useMemo(() => ({ variant, size, theme }), [variant, size, theme]);
+  const contextValue = React.useMemo(() => ({ size, theme }), [size, theme]);
 
   return (
     <SliderPrimitive.Root
       data-slot="slider"
-      data-variant={variant}
       data-size={size}
       className={cn(
         'group/slider grid w-full grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 data-[orientation=vertical]:flex data-[orientation=vertical]:h-full data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-center data-[orientation=vertical]:gap-y-2',
@@ -143,20 +125,17 @@ function SliderTrack({ className, size, ...props }: SliderPrimitive.Track.Props 
 
 function SliderIndicator({
   className,
-  variant,
   theme,
   ...props
-}: SliderPrimitive.Indicator.Props & { variant?: Variant; theme?: Theme }) {
+}: SliderPrimitive.Indicator.Props & { theme?: Theme }) {
   const context = React.useContext(SliderContext);
-  const resolvedVariant = variant ?? context.variant;
   const resolvedTheme = theme ?? context.theme;
 
   return (
     <SliderPrimitive.Indicator
       data-slot="slider-indicator"
-      data-variant={resolvedVariant}
       data-theme={resolvedTheme !== 'gray' ? resolvedTheme : undefined}
-      className={cn(sliderIndicatorVariants({ variant: resolvedVariant }), className)}
+      className={cn('rounded-none bg-solid', className)}
       {...props}
     />
   );
@@ -192,6 +171,5 @@ export {
   SliderIndicator,
   SliderThumb,
   sliderTrackVariants,
-  sliderIndicatorVariants,
   sliderThumbVariants,
 };
