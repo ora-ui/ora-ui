@@ -1,0 +1,127 @@
+---
+title: Popover
+description: 'Displays rich, interactive content in a floating panel anchored to a trigger.'
+links:
+  doc: https://base-ui.com/react/components/popover
+  api: https://base-ui.com/react/components/popover#api-reference
+---
+
+<ComponentPreview name="popover-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/popover.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/popover.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/popover.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/popover.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="popover" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from '@/registry/ui/popover';
+
+<Popover>
+  <PopoverTrigger render={<button>Open</button>} />
+  <PopoverContent>
+    <PopoverHeader>
+      <PopoverTitle>Title</PopoverTitle>
+      <PopoverDescription>Description</PopoverDescription>
+    </PopoverHeader>
+  </PopoverContent>
+</Popover>;
+```
+
+## Examples
+
+### Placement
+
+Set `side` and `align` on `PopoverContent` to choose where the popover opens. It flips to the opposite side when there is no room.
+
+<ComponentPreview name="popover-placement" select={['top', 'right', 'bottom', 'left']} />
+
+### Open on hover
+
+Pass `openOnHover` to `PopoverTrigger` to open the popover when the trigger is hovered. Use `delay` and `closeDelay` to tune the timing.
+
+<ComponentPreview name="popover-open-on-hover" />
+
+### Form
+
+A popover can hold interactive content such as a small form. Focus moves into the popover when it opens.
+
+<ComponentPreview name="popover-form" />
+
+### Modal
+
+Pass `modal` to `Popover` to lock page scroll and block interaction outside it. Base UI traps focus only when a `PopoverClose` is rendered inside the content, so include one.
+
+<ComponentPreview name="popover-modal" />
+
+## API Reference
+
+### PopoverContent
+
+#### Structure
+
+| Prop          | Type                                                                       | Default    |
+| ------------- | -------------------------------------------------------------------------- | ---------- |
+| `side`        | `"top" \| "right" \| "bottom" \| "left" \| "inline-start" \| "inline-end"` | `"bottom"` |
+| `sideOffset`  | `number`                                                                   | `4`        |
+| `align`       | `"start" \| "center" \| "end"`                                             | `"center"` |
+| `alignOffset` | `number`                                                                   | `0`        |
+
+#### Behavior
+
+| Prop              | Type      | Default |
+| ----------------- | --------- | ------- |
+| `showCloseButton` | `boolean` | `false` |
+
+### PopoverHeader
+
+A flex column that spaces `PopoverTitle` and `PopoverDescription`. It is Ora only and has no Base UI counterpart.
+
+Slots are `popover`, `popover-trigger`, `popover-content`, `popover-header`, `popover-title`, `popover-description` and `popover-close`.
+
+All other props are forwarded to the underlying [Base UI Popover](https://base-ui.com/react/components/popover) primitive.

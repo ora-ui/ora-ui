@@ -1,0 +1,172 @@
+---
+title: Autocomplete
+description: 'An input that suggests a list of options as you type, without forcing the value to be one of them.'
+links:
+  doc: https://base-ui.com/react/components/autocomplete
+  api: https://base-ui.com/react/components/autocomplete#api-reference
+---
+
+<ComponentPreview name="autocomplete-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/autocomplete.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/autocomplete.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/autocomplete.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/autocomplete.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the `input` and `input-group` components, which Autocomplete builds on</Step>
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="autocomplete" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  Autocomplete,
+  AutocompleteContent,
+  AutocompleteEmpty,
+  AutocompleteInput,
+  AutocompleteInputGroup,
+  AutocompleteItem,
+  AutocompleteList,
+} from '@/registry/ui/autocomplete';
+
+const tags = ['Accessibility', 'Performance', 'Security'];
+
+<Autocomplete items={tags}>
+  <AutocompleteInputGroup>
+    <AutocompleteInput aria-label="Tag" placeholder="Search tags" />
+  </AutocompleteInputGroup>
+  <AutocompleteContent>
+    <AutocompleteEmpty>No tags found.</AutocompleteEmpty>
+    <AutocompleteList>
+      {(tag: string) => (
+        <AutocompleteItem key={tag} value={tag}>
+          {tag}
+        </AutocompleteItem>
+      )}
+    </AutocompleteList>
+  </AutocompleteContent>
+</Autocomplete>;
+```
+
+## Examples
+
+### Variant
+
+The `variant` prop on `AutocompleteContent` styles the highlighted suggestion.
+
+<ComponentPreview name="autocomplete-variants" select={['soft', 'solid']} />
+
+### Theme
+
+The `theme` prop on `AutocompleteContent` recolors the highlighted suggestion.
+
+<ComponentPreview name="autocomplete-theme" select={['gray', 'accent']} />
+
+### Groups
+
+Pass grouped items to `Autocomplete` and render each group with `AutocompleteGroup`, `AutocompleteLabel` and `AutocompleteCollection`. Separate groups with `AutocompleteSeparator`.
+
+<ComponentPreview name="autocomplete-groups" />
+
+### Inline
+
+Set `mode="both"` to fill the input with the highlighted item as you move through the list with the arrow keys. Typing filters the list and leaves your text alone.
+
+<ComponentPreview name="autocomplete-inline" />
+
+### Async search
+
+Load suggestions from a server with `filter={null}` so Base UI does not filter them again, and report progress through `AutocompleteStatus`.
+
+<ComponentPreview name="autocomplete-async-search" />
+
+### Limit results
+
+Set `limit` on `Autocomplete` to cap how many suggestions the popup shows.
+
+<ComponentPreview name="autocomplete-limit-results" />
+
+### Fuzzy
+
+Pass a `filter` function to replace the default contains match, here a fuzzy match on the letters in order.
+
+<ComponentPreview name="autocomplete-fuzzy" />
+
+### Invalid
+
+Inside a `Field`, the input group takes the invalid state from the field.
+
+<ComponentPreview name="autocomplete-invalid" />
+
+## API Reference
+
+### AutocompleteInputGroup
+
+| Prop      | Type                               | Default     |
+| --------- | ---------------------------------- | ----------- |
+| `variant` | `'surface' \| 'outline' \| 'soft'` | `'surface'` |
+
+`AutocompleteInputGroup` builds on `InputGroup`, and `variant` matches the `Input` variants. `AutocompleteInput` reuses the `Input` styles.
+
+### AutocompleteContent
+
+`AutocompleteContent` renders the portal, positioner and popup in one part. Its appearance props reach every `AutocompleteItem` and `AutocompleteList` inside it through context.
+
+#### Appearance
+
+| Prop      | Type                                   | Default         |
+| --------- | -------------------------------------- | --------------- |
+| `variant` | `'soft' \| 'solid'`                    | `'soft'`        |
+| `theme`   | `'gray' \| 'accent' \| (string & {})`  | `'gray'`        |
+| `density` | `'none' \| 'compact' \| 'comfortable'` | `'comfortable'` |
+
+#### Structure
+
+| Prop          | Type                                                                       | Default    |
+| ------------- | -------------------------------------------------------------------------- | ---------- |
+| `side`        | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'bottom'` |
+| `sideOffset`  | `number`                                                                   | `4`        |
+| `align`       | `'start' \| 'center' \| 'end'`                                             | `'start'`  |
+| `alignOffset` | `number`                                                                   | `0`        |
+
+### Styling hooks
+
+`AutocompleteContent` sizes itself with the Base UI `--anchor-width` and `--available-height` properties, and `AutocompleteItem` rounds with `--menu-item-radius`. Each part sets `data-slot="autocomplete-<part>"`, for example `autocomplete-input-group`, `autocomplete-input` and `autocomplete-item`.
+
+All other props are forwarded to the underlying [Base UI Autocomplete](https://base-ui.com/react/components/autocomplete#api-reference) primitive.
