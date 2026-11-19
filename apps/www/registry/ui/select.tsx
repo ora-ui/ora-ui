@@ -161,16 +161,15 @@ function SelectLabel({ className, ...props }: SelectPrimitive.GroupLabel.Props) 
 }
 
 function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Props) {
-  const { variant, iconPosition, density } = React.useContext(SelectContext);
+  const { variant, iconPosition } = React.useContext(SelectContext);
   const iconStart = iconPosition === 'start';
-  const flushRadius = density === 'none';
 
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
         'relative flex w-full cursor-default items-center gap-1.5 h-7 text-sm text-gray-950 outline-hidden select-none',
-        flushRadius ? 'rounded-none' : 'rounded-(--menu-item-radius)',
+        'rounded-(--menu-item-radius)',
         iconStart ? 'pl-7 pr-2' : 'pl-1.5 pr-8',
         variant === 'solid'
           ? 'data-highlighted:bg-solid data-highlighted:text-on-solid data-highlighted:**:text-on-solid'
