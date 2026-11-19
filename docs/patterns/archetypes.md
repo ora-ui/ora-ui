@@ -43,7 +43,7 @@ Related: [Group](group.md), [Item](item.md),
 | Plain overlay     | dialog, alert-dialog, drawer, tooltip, popover, preview-card, navigation-menu | —                                      | none                                                                              | none                                                                                                                                   | fixed, no `size` prop: `lg` (Dialog, AlertDialog), `rounded-t-xl` (Drawer), `md` (Tooltip, Popover, PreviewCard, NavigationMenu popup)                                  | `dialog.tsx`       |
 | Group             | toggle-group, checkbox-group, button-group, avatar-group, toolbar             | Fieldset                               | ToggleGroup, CheckboxGroup: `theme` via context; others none                      | ToggleGroup (`itemVariant`), CheckboxGroup (`variant`) via context; others none                                                        | ToggleGroup: container dynamic, items concentric; others see Context propagation                                                                                        | `toggle-group.tsx` |
 | Disclosure        | accordion, collapsible, tabs                                                  | —                                      | none                                                                              | Accordion item: `underline \| soft`, plus a root `bordered` boolean. Collapsible root: `underline \| soft`. Tabs list: `soft \| solid` | clamped `md` (bordered Accordion, TabsSurface); Tabs triggers `sm`, Accordion triggers square with outer corners concentric to the root; Collapsible has no root radius | `accordion.tsx`    |
-| Status / display  | badge, avatar, kbd                                                            | Meter, Progress, Toast                 | Badge: full semantic set. Avatar: `gray \| accent`. Kbd: none                     | Badge `solid \| soft \| outline \| surface`, Kbd `ghost \| soft \| surface`, Avatar none                                               | varies (badge formula, avatar full, kbd `sm`)                                                                                                                           | `badge.tsx`        |
+| Status / display  | badge, avatar, kbd, toast                                                     | Meter, Progress                        | Badge: full semantic set. Avatar: `gray \| accent`. Kbd: none                     | Badge `solid \| soft \| outline \| surface`, Kbd `ghost \| soft \| surface`, Avatar none, Toast `soft \| solid`                        | varies (badge formula, avatar full, kbd `sm`)                                                                                                                           | `badge.tsx`        |
 | Layout            | separator, scroll-area, label, form                                           | Box, Flex, Grid, Stack (Ora additions) | none                                                                              | none                                                                                                                                   | none                                                                                                                                                                    | `separator.tsx`    |
 
 ### Outside the archetype model
@@ -51,7 +51,7 @@ Related: [Group](group.md), [Item](item.md),
 Three registry components fit no archetype, and that is fine.
 
 - **sidebar**: an app-shell layout part. It has no Base UI primitive, no variant or theme, and only its items are rounded (`md`). Its context carries only `collapsed` state.
-- **sonner**: a themed wrapper around the `sonner` library, not Base UI. It follows `next-themes` and reads `--radius` for the toast radius. Toast is on the Status / display to-build list instead.
+- **sonner**: a themed wrapper around the `sonner` library, not Base UI. It follows `next-themes` and reads `--radius` for the toast radius. It is deprecated in favour of Toast, which is built on Base UI. It stays in the registry for existing users.
 - **visually-hidden**: a screen-reader-only `span` utility. It has no appearance concerns.
 
 ## Classifying a new component
@@ -224,4 +224,6 @@ render Ora's `Button` (see `alert-dialog.tsx`).
   check baselines these as `theme-open`.
 - Invalid-state styling reaches the destructive scale directly. It may
   become a semantic remap (like `[data-theme]`) once the pattern settles.
-- Toast's theme surface (full semantic set vs `type`) is undecided.
+- Toast carries both `type` and `theme`. A type maps to a theme (`success`, `destructive`, `warning`, `accent`, `gray`) and an explicit `theme` wins.
+- Toast's replay keyframes live in `globals.css`, because the registry manifest has no CSS field. Manual installs copy them by hand.
+- `Toaster` sets `data-slot="toaster"` on the viewport it renders, in place of `toast-viewport`.

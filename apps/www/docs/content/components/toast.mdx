@@ -1,0 +1,232 @@
+---
+title: Toast
+description: 'Displays brief, auto-dismissing notifications that stack in a corner of the screen.'
+links:
+  doc: https://base-ui.com/react/components/toast
+  api: https://base-ui.com/react/components/toast#api-reference
+---
+
+<ComponentPreview name="toast-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/toast.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/toast.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/toast.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/toast.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react @heroicons/react class-variance-authority' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react @heroicons/react class-variance-authority' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react @heroicons/react class-variance-authority' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react @heroicons/react class-variance-authority' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="toast" />
+
+      <Step>Add the replay animations to your global stylesheet</Step>
+
+      Copy the `--animate-toast-*` variables into your `@theme inline` block, and the matching `toast-*` keyframes beside it. They are in the Ora `globals.css`. The CLI install does not add them, and without them a toast that is updated in place does not animate.
+
+      <Step>Mount the Toaster once near the root of your app</Step>
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+Mount one `Toaster` near the root of your app. Call `toast()` from any client code, inside or outside a React component.
+
+```tsx
+import { Toaster } from '@/registry/ui/toast';
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      {children}
+      <Toaster />
+    </>
+  );
+}
+```
+
+```tsx
+import { toast } from '@/registry/ui/toast';
+
+toast('Export complete', { description: 'Your file is ready to download.' });
+```
+
+`toast()` only runs in the browser. Do not call it from a server component or a server action. Call it from an event handler or a client component.
+
+Fire toasts from events. A `toast()` called in a mount effect can run before the `Toaster` has subscribed, and the toast is dropped.
+
+## Examples
+
+### Theme
+
+Pass `theme` to color a toast. When you omit it, the theme follows the toast `type`.
+
+<ComponentPreview
+  name="toast-theme"
+  select={['gray', 'accent', 'destructive', 'warning', 'success']}
+/>
+
+### Variant
+
+Pass `variant` to `toast()` to change the style of one toast, or to `Toaster` to change every toast. `soft` is the default.
+
+<ComponentPreview name="toast-variants" select={['soft', 'solid']} />
+
+### Types
+
+`toast.success`, `toast.error`, `toast.warning`, `toast.info` and `toast.loading` set the type, which picks the icon and the theme. `error` and `warning` toasts are announced with high priority.
+
+<ComponentPreview name="toast-types" />
+
+<Callout variant="info" title="Type and theme">
+  A type maps to a theme. `success` is success, `error` is destructive, `warning` is warning, `info`
+  is accent, and a toast with no type is gray. An explicit `theme` always wins over the type.
+</Callout>
+
+### Action
+
+Pass `actionProps` to add a button to the toast, for example to undo what just happened.
+
+<ComponentPreview name="toast-action" />
+
+<Callout variant="warning" title="Accessibility">
+  Toasts leave on their own, so an action button must not be the only way to complete a task. Offer
+  the same action somewhere persistent.
+</Callout>
+
+### Promise
+
+`toast.promise` shows a loading toast, then replaces it with the success or error toast when the promise settles.
+
+<ComponentPreview name="toast-promise" />
+
+### Persistent
+
+Set `timeout` to `0` to keep a toast until the user closes it.
+
+<ComponentPreview name="toast-persistent" />
+
+### Stacking
+
+Toasts stack and fan out on hover or focus. `Toaster` shows at most `limit` toasts at once, which is `3` by default.
+
+<ComponentPreview name="toast-stacking" />
+
+### Update in place
+
+Firing a toast with an `id` that is already on screen updates that toast instead of adding another. Fire it again and the toast pulses. An error toast shakes. Click each button twice to see it. `toast.update` and a settling `toast.promise` change the toast without the animation, and reduced motion turns it off.
+
+<ComponentPreview name="toast-update-in-place" />
+
+## API Reference
+
+### Toaster
+
+Renders the provider, viewport and a default toast layout with a title, description, action and close button.
+
+#### Appearance
+
+| Prop       | Type                                                               | Default          |
+| ---------- | ------------------------------------------------------------------ | ---------------- |
+| `variant`  | `"soft" \| "solid"`                                                | `"soft"`         |
+| `position` | `"bottom-right" \| "bottom-center" \| "top-right" \| "top-center"` | `"bottom-right"` |
+
+#### Behavior
+
+| Prop           | Type           | Default                             |
+| -------------- | -------------- | ----------------------------------- |
+| `limit`        | `number`       | `3`                                 |
+| `timeout`      | `number`       | `5000`                              |
+| `toastManager` | `ToastManager` | the shared manager behind `toast()` |
+
+### toast
+
+Call `toast(title, options)` or `toast({ title, ...options })`. It returns the toast id.
+
+#### Appearance
+
+| Option    | Type                                                            | Default                    |
+| --------- | --------------------------------------------------------------- | -------------------------- |
+| `theme`   | `"gray" \| "accent" \| "destructive" \| "warning" \| "success"` | from `type`, else `"gray"` |
+| `variant` | `"soft" \| "solid"`                                             | the `Toaster` variant      |
+
+#### Structure
+
+| Option        | Type              | Default |
+| ------------- | ----------------- | ------- |
+| `description` | `React.ReactNode` | none    |
+| `actionProps` | `ButtonProps`     | none    |
+
+#### Behavior
+
+| Option     | Type              | Default                                          |
+| ---------- | ----------------- | ------------------------------------------------ |
+| `id`       | `string`          | generated                                        |
+| `timeout`  | `number`          | the `Toaster` timeout, `0` never auto-closes     |
+| `priority` | `"low" \| "high"` | `"high"` for `error` and `warning`, else `"low"` |
+
+The helper also has `toast.success`, `toast.error`, `toast.warning`, `toast.info` and `toast.loading`, which set the type, since `toast()` takes no `type` option. `toast.promise(promise, { loading, success, error })` tracks a promise. `toast.update(id, options)` changes a toast and keeps its previous theme and variant. `toast.dismiss(id)` closes one toast, or all of them when called with no id.
+
+### useToast
+
+Re-export of the Base UI `useToastManager` hook. Use it inside a `ToastProvider` when you need the toast list or the manager in a component.
+
+### Parts
+
+`Toaster` composes the parts below. Use them directly to build your own layout. Wrap them in `ToastProvider`, and render the `Toast` list inside `ToastViewport`.
+
+| Part               | Purpose                                                |
+| ------------------ | ------------------------------------------------------ |
+| `ToastProvider`    | Holds toast state. Takes `variant` and `toastManager`. |
+| `ToastViewport`    | The fixed container. Takes `position`.                 |
+| `Toast`            | One toast. Takes `toast`, `theme` and `variant`.       |
+| `ToastContent`     | Wraps the title, description and action.               |
+| `ToastTitle`       | The title.                                             |
+| `ToastDescription` | The description.                                       |
+| `ToastAction`      | A soft, small Ora Button.                              |
+| `ToastClose`       | A ghost icon Ora Button.                               |
+
+### Keyboard
+
+Press `F6` to move focus to the viewport, then use `Tab` to reach each toast. Each toast has a close button. Toasts pause while the viewport is hovered or focused.
+
+### CSS custom properties
+
+| Property        | Default   | Purpose                          |
+| --------------- | --------- | -------------------------------- |
+| `--toast-width` | `22.5rem` | Width of the viewport and toasts |
+| `--toast-gap`   | `0.75rem` | Gap between expanded toasts      |
+
+Slots are `toaster`, `toast-viewport`, `toast`, `toast-content`, `toast-icon`, `toast-title`, `toast-description`, `toast-action` and `toast-close`.
+
+Anchored toasts, which attach to a trigger element, are not supported yet.
+
+All other props are forwarded to the underlying [Base UI Toast](https://base-ui.com/react/components/toast) primitive.

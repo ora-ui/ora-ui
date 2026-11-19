@@ -10,6 +10,7 @@ import {
   XCircleIcon,
 } from '@heroicons/react/16/solid';
 
+/** @deprecated Use the Toast component (`@/registry/ui/toast`), which is built on Base UI. */
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme();
 

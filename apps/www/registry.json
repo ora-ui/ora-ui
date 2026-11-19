@@ -627,6 +627,25 @@
       ]
     },
     {
+      "name": "toast",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/toast.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@heroicons/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "button",
+        "utils"
+      ]
+    },
+    {
       "name": "toggle-group",
       "type": "registry:ui",
       "files": [
