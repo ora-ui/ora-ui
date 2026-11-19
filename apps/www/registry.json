@@ -207,6 +207,23 @@
       ]
     },
     {
+      "name": "context-menu",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/context-menu.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
+    },
+    {
       "name": "dialog",
       "type": "registry:ui",
       "files": [

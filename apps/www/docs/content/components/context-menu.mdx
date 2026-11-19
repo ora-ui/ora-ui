@@ -1,0 +1,162 @@
+---
+title: Context menu
+description: A menu of actions that opens at the pointer on right click or long press.
+links:
+  doc: https://base-ui.com/react/components/context-menu
+  api: https://base-ui.com/react/components/context-menu#api-reference
+---
+
+<ComponentPreview name="context-menu-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/context-menu.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/context-menu.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/context-menu.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/context-menu.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="context-menu" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuGroup,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from '@/registry/ui/context-menu';
+
+<ContextMenu>
+  <ContextMenuTrigger>Right click here</ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuGroup>
+      <ContextMenuLabel>Section</ContextMenuLabel>
+      <ContextMenuItem>Item</ContextMenuItem>
+    </ContextMenuGroup>
+    <ContextMenuSeparator />
+    <ContextMenuItem>Another item</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>;
+```
+
+## Examples
+
+### Variants
+
+The `variant` prop on `ContextMenuContent` controls how the focused item is highlighted.
+
+<ComponentPreview name="context-menu-variants" select={['soft', 'solid']} />
+
+### Theme
+
+The `theme` prop applies a color scheme to the focused item highlight.
+
+<ComponentPreview name="context-menu-theme" select={['gray', 'accent']} />
+
+### Shortcuts
+
+Place a `ContextMenuShortcut` inside an item to show its key hint on the right.
+
+<ComponentPreview name="context-menu-shortcuts" />
+
+### Checkbox items
+
+Use `ContextMenuCheckboxItem` for options that switch on and off.
+
+<ComponentPreview name="context-menu-checkbox-items" />
+
+### Radio items
+
+Wrap `ContextMenuRadioItem` parts in a `ContextMenuRadioGroup` to choose one option.
+
+<ComponentPreview name="context-menu-radio-items" />
+
+### Submenu
+
+Nest a `ContextMenuSub` to open a second menu from an item.
+
+<ComponentPreview name="context-menu-submenu" />
+
+### Destructive
+
+Set `variant="destructive"` on an item for an action that cannot be undone.
+
+<ComponentPreview name="context-menu-destructive" />
+
+### Disabled items
+
+Set `disabled` on an item to make it unavailable.
+
+<ComponentPreview name="context-menu-disabled-items" />
+
+## API Reference
+
+### ContextMenuContent
+
+#### Appearance
+
+| Prop      | Type                           | Default  |
+| --------- | ------------------------------ | -------- |
+| `variant` | `"soft" \| "solid"`            | `"soft"` |
+| `theme`   | `"gray" \| "accent" \| string` | `"gray"` |
+
+#### Structure
+
+| Prop          | Type                                                                       | Default                              |
+| ------------- | -------------------------------------------------------------------------- | ------------------------------------ |
+| `side`        | `"top" \| "bottom" \| "left" \| "right" \| "inline-start" \| "inline-end"` | `"bottom"` (submenu: `"inline-end"`) |
+| `align`       | `"start" \| "center" \| "end"`                                             | `"start"`                            |
+| `sideOffset`  | `number`                                                                   | Base UI default                      |
+| `alignOffset` | `number`                                                                   | Base UI default                      |
+
+`ContextMenuSubContent` takes the same props and inherits `variant` and `theme` from the parent content. Its defaults are `side="inline-end"`, `align="start"`, `sideOffset={0}` and `alignOffset={-3}`.
+
+### ContextMenuItem
+
+| Prop      | Type                         | Default     |
+| --------- | ---------------------------- | ----------- |
+| `variant` | `"default" \| "destructive"` | `"default"` |
+| `inset`   | `boolean`                    | `false`     |
+
+`ContextMenuLabel`, `ContextMenuCheckboxItem`, `ContextMenuRadioItem`, `ContextMenuSubTrigger` and `ContextMenuSeparator` also take `inset`.
+
+Content and item styling reads `--menu-item-radius` and `--menu-item-highlight-text`, set on `[data-slot="context-menu-content"]` and `[data-slot="context-menu-sub-content"]`. Parts carry `data-slot` names of the form `context-menu-<part>`.
+
+All other props are forwarded to the underlying [Base UI Context Menu](https://base-ui.com/react/components/context-menu) primitive. The trigger is a plain `div`, so keyboard users open the menu with the context-menu key or Shift+F10 while it has focus.
