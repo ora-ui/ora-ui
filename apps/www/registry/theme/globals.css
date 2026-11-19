@@ -219,6 +219,62 @@
   --font-mono: var(--font-geist-mono);
 
   --radius-dynamic: var(--radius);
+
+  --animate-toast-pulse-odd: toast-pulse-odd 0.32s cubic-bezier(0.5, 1, 0.89, 1);
+  --animate-toast-pulse-even: toast-pulse-even 0.32s cubic-bezier(0.5, 1, 0.89, 1);
+  --animate-toast-error-odd: toast-error-odd 0.28s cubic-bezier(0.5, 1, 0.89, 1);
+  --animate-toast-error-even: toast-error-even 0.28s cubic-bezier(0.5, 1, 0.89, 1);
+
+  @keyframes toast-pulse-odd {
+    0%,
+    100% {
+      scale: 1;
+    }
+    30% {
+      scale: 1.025;
+    }
+    60% {
+      scale: 0.99;
+    }
+  }
+  @keyframes toast-pulse-even {
+    0%,
+    100% {
+      scale: 1;
+    }
+    30% {
+      scale: 1.025;
+    }
+    60% {
+      scale: 0.99;
+    }
+  }
+  @keyframes toast-error-odd {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    25%,
+    75% {
+      translate: -3px 0;
+    }
+    50% {
+      translate: 3px 0;
+    }
+  }
+  @keyframes toast-error-even {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    25%,
+    75% {
+      translate: -3px 0;
+    }
+    50% {
+      translate: 3px 0;
+    }
+  }
   --radius-xs: min(calc(var(--radius) * 0.4), 4px);
   --radius-sm: min(calc(var(--radius) * 0.6), 6px);
   --radius-md: min(var(--radius), 10px);

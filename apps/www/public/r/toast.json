@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toast",
+  "dependencies": ["@base-ui/react", "class-variance-authority"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/ui/toast.tsx",
+      "content": "import { mergeProps } from '@base-ui/react/merge-props';\nimport { useRender } from '@base-ui/react/use-render';\nimport { cva, type VariantProps } from 'class-variance-authority';\n\nimport { cn } from '@/registry/lib/utils';\n\n// TODO: fill in the variant classes\nconst toastVariants = cva(\n  \"group/toast inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-[min(var(--radius),max(8px,calc(var(--radius)-10px)))] border border-transparent whitespace-nowrap font-medium text-ui-label text-xs h-5 min-w-4.5 px-1.5 focus-visible:outline-2 focus-visible:outline-focus [&>svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3\",\n  {\n    variants: {\n      variant: {\n        surface: '',\n        soft: '',\n        solid: '',\n      },\n    },\n    defaultVariants: {\n      variant: 'surface',\n    },\n  }\n);\n\ntype Theme = 'gray' | 'accent' | 'destructive' | 'warning' | 'success' | (string & {});\n\nfunction Toast({\n  className,\n  variant = 'surface',\n  theme = 'gray',\n  render,\n  ...props\n}: useRender.ComponentProps<'span'> & VariantProps<typeof toastVariants> & { theme?: Theme }) {\n  return useRender({\n    defaultTagName: 'span',\n    props: mergeProps<'span'>(\n      {\n        className: cn(toastVariants({ variant }), className),\n        ...({\n          'data-slot': 'toast',\n          'data-variant': variant,\n          'data-theme': theme !== 'gray' ? theme : undefined,\n        } as React.HTMLAttributes<HTMLSpanElement>),\n      },\n      props\n    ),\n    render,\n    state: {\n      slot: 'toast',\n      variant,\n    },\n  });\n}\n\nexport { Toast, toastVariants };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
