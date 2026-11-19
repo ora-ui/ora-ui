@@ -1,0 +1,149 @@
+---
+title: Number Field
+description: 'A numeric input with increment and decrement buttons, keyboard stepping and optional drag-to-scrub.'
+links:
+  doc: https://base-ui.com/react/components/number-field
+  api: https://base-ui.com/react/components/number-field#api-reference
+---
+
+<ComponentPreview name="number-field-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/number-field.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/number-field.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/number-field.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/number-field.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="number-field" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  NumberField,
+  NumberFieldGroup,
+  NumberFieldDecrement,
+  NumberFieldInput,
+  NumberFieldIncrement,
+} from '@/registry/ui/number-field';
+
+<NumberField defaultValue={1}>
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberField>;
+```
+
+## Examples
+
+### Variants
+
+The `variant` prop controls the visual style of the field. It matches the variants of [Input](/docs/components/input).
+
+<ComponentPreview name="number-field-variants" select={['surface', 'outline', 'soft']} />
+
+### Range
+
+Set `min` and `max` to limit the value. The buttons disable at the limits.
+
+<ComponentPreview name="number-field-range" />
+
+### Step
+
+Set `step` to change how far each press moves the value. Hold Shift for `largeStep` and Alt for `smallStep`.
+
+<ComponentPreview name="number-field-step" />
+
+### Format
+
+Pass `format` with `Intl.NumberFormat` options, and `locale` to pick the locale.
+
+<ComponentPreview name="number-field-format" />
+
+### Scrub
+
+Wrap a label in `NumberFieldScrubArea` so that dragging it changes the value. `NumberFieldScrubAreaCursor` replaces the pointer while dragging.
+
+<ComponentPreview name="number-field-scrub" />
+
+### Field
+
+Use the field inside `Field` to get a label, a description and an error message. The group shows the invalid state.
+
+<ComponentPreview name="number-field-field" />
+
+### Disabled
+
+Set `disabled` to stop all interaction.
+
+<ComponentPreview name="number-field-disabled" />
+
+## API Reference
+
+### NumberField
+
+#### Appearance
+
+| Prop      | Type                               | Default     |
+| --------- | ---------------------------------- | ----------- |
+| `variant` | `"surface" \| "outline" \| "soft"` | `"surface"` |
+
+`variant` flows to `NumberFieldGroup`, `NumberFieldDecrement` and `NumberFieldIncrement` through context. A `variant` set on a part wins.
+
+All other props are forwarded to the underlying [Base UI Number Field](https://base-ui.com/react/components/number-field) primitive.
+
+### NumberFieldGroup
+
+| Prop      | Type                               | Default                  |
+| --------- | ---------------------------------- | ------------------------ |
+| `variant` | `"surface" \| "outline" \| "soft"` | `variant` of NumberField |
+
+### NumberFieldDecrement and NumberFieldIncrement
+
+| Prop      | Type                               | Default                  |
+| --------- | ---------------------------------- | ------------------------ |
+| `variant` | `"surface" \| "outline" \| "soft"` | `variant` of NumberField |
+
+The buttons reflect `variant` as `data-variant`. They render an Ora [Button](/docs/components/button) with the `ghost` variant and the `icon` size.
+
+### Other parts
+
+`NumberFieldInput`, `NumberFieldScrubArea` and `NumberFieldScrubAreaCursor` forward their props to the matching Base UI part.
+
+Each part sets `data-slot` to `number-field-<part>`, for example `number-field-group`.
