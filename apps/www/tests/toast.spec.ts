@@ -26,7 +26,9 @@ test('a toast appears with its title and description', async ({ page }) => {
 test('a visible toast has no axe violations', async ({ page }) => {
   await openDocs(page);
   const toast = await fire(page);
-  await expect(toast).toBeVisible();
+  await expect
+    .poll(() => toast.evaluate((el) => el.getAnimations({ subtree: true }).length))
+    .toBe(0);
   const { violations } = await new AxeBuilder({ page }).include('[data-slot="toaster"]').analyze();
   expect(violations.map((v) => v.id)).toEqual([]);
 });
