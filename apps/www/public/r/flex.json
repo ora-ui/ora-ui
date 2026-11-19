@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "flex",
+  "dependencies": ["@base-ui/react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/ui/flex.tsx",
+      "content": "import { mergeProps } from '@base-ui/react/merge-props';\nimport { useRender } from '@base-ui/react/use-render';\n\nimport { cn } from '@/registry/lib/utils';\n\nfunction Flex({ className, render, ...props }: useRender.ComponentProps<'div'>) {\n  return useRender({\n    defaultTagName: 'div',\n    props: mergeProps<'div'>(\n      {\n        className: cn('flex', className),\n        ...({ 'data-slot': 'flex' } as React.HTMLAttributes<HTMLDivElement>),\n      },\n      props\n    ),\n    render,\n    state: { slot: 'flex' },\n  });\n}\n\nexport { Flex };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

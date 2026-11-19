@@ -1,0 +1,77 @@
+---
+title: Grid
+description: 'A grid container for arranging items in rows and columns.'
+---
+
+<ComponentPreview name="grid-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/grid.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/grid.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/grid.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/grid.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="grid" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import { Grid } from '@/registry/ui/grid';
+
+<Grid className="gap-4">…</Grid>;
+```
+
+Grid sets `display: grid`. Style everything else with Tailwind utilities in `className`.
+
+## Examples
+
+### Render
+
+Use the `render` prop to output a semantic element in place of the default `div`.
+
+<ComponentPreview name="grid-render" />
+
+## API Reference
+
+### Grid
+
+| Prop        | Type                 | Default |
+| ----------- | -------------------- | ------- |
+| `render`    | `React.ReactElement` | `<div>` |
+| `className` | `string`             | —       |
+
+All other props are forwarded to the rendered element.

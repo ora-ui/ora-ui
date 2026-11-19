@@ -29,6 +29,8 @@ import * as BadgeIconOnlyModule from './badge/badge-icon-only';
 import * as BadgeThemeModule from './badge/badge-theme';
 import * as BadgeVariantsModule from './badge/badge-variants';
 import * as BadgeWithIconModule from './badge/badge-with-icon';
+import * as BoxHeroModule from './box/box-hero';
+import * as BoxRenderModule from './box/box-render';
 import * as ButtonHeroModule from './button/button-hero';
 import * as ButtonIconButtonModule from './button/button-icon-button';
 import * as ButtonThemeModule from './button/button-theme';
@@ -41,6 +43,8 @@ import * as ButtonGroupVerticalModule from './button-group/button-group-vertical
 import * as ButtonGroupWithIconsModule from './button-group/button-group-with-icons';
 import * as ButtonGroupWithSeparatorModule from './button-group/button-group-with-separator';
 import * as ButtonGroupWithTextModule from './button-group/button-group-with-text';
+import * as CenterHeroModule from './center/center-hero';
+import * as CenterRenderModule from './center/center-render';
 import * as CheckboxDefaultModule from './checkbox/checkbox-default';
 import * as CheckboxHeroModule from './checkbox/checkbox-hero';
 import * as CheckboxIndeterminateModule from './checkbox/checkbox-indeterminate';
@@ -84,8 +88,12 @@ import * as DropdownMenuBasicModule from './dropdown-menu/dropdown-menu-basic';
 import * as DropdownMenuHeroModule from './dropdown-menu/dropdown-menu-hero';
 import * as DropdownMenuThemeModule from './dropdown-menu/dropdown-menu-theme';
 import * as DropdownMenuVariantModule from './dropdown-menu/dropdown-menu-variant';
+import * as FlexHeroModule from './flex/flex-hero';
+import * as FlexRenderModule from './flex/flex-render';
 import * as FormHeroModule from './form/form-hero';
 import * as FormProductModule from './form/form-product';
+import * as GridHeroModule from './grid/grid-hero';
+import * as GridRenderModule from './grid/grid-render';
 import * as InputHeroModule from './input/input-hero';
 import * as InputVariantModule from './input/input-variant';
 import * as KbdCombinationModule from './kbd/kbd-combination';
@@ -382,6 +390,22 @@ export const registry: Record<string, PreviewEntry> = {
     ],
     source: "import { StarIcon } from '@heroicons/react/16/solid';\nimport { Badge } from '@/registry/ui/badge';\n\nexport function BadgeLeading() {\n  return (\n    <Badge>\n      <StarIcon />\n      Featured\n    </Badge>\n  );\n}\n\nexport function BadgeTrailing() {\n  return (\n    <Badge>\n      Featured\n      <StarIcon />\n    </Badge>\n  );\n}\n\nexport default BadgeLeading;\n",
   },
+  "box-hero": {
+    slug: "box-hero",
+    defaultExport: { name: "BoxHero", value: "hero", label: "Hero", component: BoxHeroModule.default, snippet: "export default function BoxHero() {\n  return (\n    <Box className=\"w-64 rounded-md border border-separator p-4 text-sm\">\n      A Box is a div. Style it with className.\n    </Box>\n  );\n}" },
+    exports: [
+    { name: "BoxHero", value: "hero", label: "Hero", component: BoxHeroModule.default, snippet: "export default function BoxHero() {\n  return (\n    <Box className=\"w-64 rounded-md border border-separator p-4 text-sm\">\n      A Box is a div. Style it with className.\n    </Box>\n  );\n}" },
+    ],
+    source: "import { Box } from '@/registry/ui/box';\n\nexport default function BoxHero() {\n  return (\n    <Box className=\"w-64 rounded-md border border-separator p-4 text-sm\">\n      A Box is a div. Style it with className.\n    </Box>\n  );\n}\n",
+  },
+  "box-render": {
+    slug: "box-render",
+    defaultExport: { name: "BoxRender", value: "render", label: "Render", component: BoxRenderModule.default, snippet: "export default function BoxRender() {\n  return (\n    <Box\n      render={<section />}\n      aria-label=\"Release notes\"\n      className=\"w-64 rounded-md border border-separator p-4 text-sm\"\n    >\n      This Box renders a section element.\n    </Box>\n  );\n}" },
+    exports: [
+    { name: "BoxRender", value: "render", label: "Render", component: BoxRenderModule.default, snippet: "export default function BoxRender() {\n  return (\n    <Box\n      render={<section />}\n      aria-label=\"Release notes\"\n      className=\"w-64 rounded-md border border-separator p-4 text-sm\"\n    >\n      This Box renders a section element.\n    </Box>\n  );\n}" },
+    ],
+    source: "import { Box } from '@/registry/ui/box';\n\nexport default function BoxRender() {\n  return (\n    <Box\n      render={<section />}\n      aria-label=\"Release notes\"\n      className=\"w-64 rounded-md border border-separator p-4 text-sm\"\n    >\n      This Box renders a section element.\n    </Box>\n  );\n}\n",
+  },
   "button-hero": {
     slug: "button-hero",
     defaultExport: { name: "ButtonHero", value: "hero", label: "Hero", component: ButtonHeroModule.default, snippet: "export default function ButtonHero() {\n  return <Button>Get started</Button>;\n}" },
@@ -484,6 +508,22 @@ export const registry: Record<string, PreviewEntry> = {
     { name: "ButtonGroupWithText", value: "with-text", label: "With Text", component: ButtonGroupWithTextModule.default, snippet: "export default function ButtonGroupWithText() {\n  return (\n    <ButtonGroup>\n      <ButtonGroupText>Sort by</ButtonGroupText>\n      <Button variant=\"surface\">Name</Button>\n      <Button variant=\"surface\">Date</Button>\n      <Button variant=\"surface\">Size</Button>\n    </ButtonGroup>\n  );\n}" },
     ],
     source: "import { ButtonGroup, ButtonGroupText } from '@/registry/ui/button-group';\nimport { Button } from '@/registry/ui/button';\n\nexport default function ButtonGroupWithText() {\n  return (\n    <ButtonGroup>\n      <ButtonGroupText>Sort by</ButtonGroupText>\n      <Button variant=\"surface\">Name</Button>\n      <Button variant=\"surface\">Date</Button>\n      <Button variant=\"surface\">Size</Button>\n    </ButtonGroup>\n  );\n}\n",
+  },
+  "center-hero": {
+    slug: "center-hero",
+    defaultExport: { name: "CenterHero", value: "hero", label: "Hero", component: CenterHeroModule.default, snippet: "export default function CenterHero() {\n  return (\n    <Center className=\"size-40 rounded-md border border-separator\">\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Centred</div>\n    </Center>\n  );\n}" },
+    exports: [
+    { name: "CenterHero", value: "hero", label: "Hero", component: CenterHeroModule.default, snippet: "export default function CenterHero() {\n  return (\n    <Center className=\"size-40 rounded-md border border-separator\">\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Centred</div>\n    </Center>\n  );\n}" },
+    ],
+    source: "import { Center } from '@/registry/ui/center';\n\nexport default function CenterHero() {\n  return (\n    <Center className=\"size-40 rounded-md border border-separator\">\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Centred</div>\n    </Center>\n  );\n}\n",
+  },
+  "center-render": {
+    slug: "center-render",
+    defaultExport: { name: "CenterRender", value: "render", label: "Render", component: CenterRenderModule.default, snippet: "export default function CenterRender() {\n  return (\n    <Center render={<figure />} className=\"size-40 rounded-md border border-separator\">\n      <figcaption className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Centred</figcaption>\n    </Center>\n  );\n}" },
+    exports: [
+    { name: "CenterRender", value: "render", label: "Render", component: CenterRenderModule.default, snippet: "export default function CenterRender() {\n  return (\n    <Center render={<figure />} className=\"size-40 rounded-md border border-separator\">\n      <figcaption className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Centred</figcaption>\n    </Center>\n  );\n}" },
+    ],
+    source: "import { Center } from '@/registry/ui/center';\n\nexport default function CenterRender() {\n  return (\n    <Center render={<figure />} className=\"size-40 rounded-md border border-separator\">\n      <figcaption className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Centred</figcaption>\n    </Center>\n  );\n}\n",
   },
   "checkbox-default": {
     slug: "checkbox-default",
@@ -841,6 +881,22 @@ export const registry: Record<string, PreviewEntry> = {
     ],
     source: "'use client';\n\nimport { Button } from '@/registry/ui/button';\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuGroup,\n  DropdownMenuItem,\n  DropdownMenuSeparator,\n  DropdownMenuTrigger,\n} from '@/registry/ui/dropdown-menu';\n\nfunction EditMenu({ variant }: { variant: 'soft' | 'solid' }) {\n  return (\n    <DropdownMenu>\n      <DropdownMenuTrigger render={<Button variant=\"outline\">Edit</Button>} />\n      <DropdownMenuContent align=\"start\" variant={variant}>\n        <DropdownMenuGroup>\n          <DropdownMenuItem>Cut</DropdownMenuItem>\n          <DropdownMenuItem>Copy</DropdownMenuItem>\n          <DropdownMenuItem>Paste</DropdownMenuItem>\n        </DropdownMenuGroup>\n        <DropdownMenuSeparator />\n        <DropdownMenuGroup>\n          <DropdownMenuItem>Find</DropdownMenuItem>\n          <DropdownMenuItem>Select all</DropdownMenuItem>\n        </DropdownMenuGroup>\n      </DropdownMenuContent>\n    </DropdownMenu>\n  );\n}\n\nexport function DropdownMenuSoft() {\n  return <EditMenu variant=\"soft\" />;\n}\n\nexport function DropdownMenuSolid() {\n  return <EditMenu variant=\"solid\" />;\n}\n\nexport default DropdownMenuSoft;\n",
   },
+  "flex-hero": {
+    slug: "flex-hero",
+    defaultExport: { name: "FlexHero", value: "hero", label: "Hero", component: FlexHeroModule.default, snippet: "export default function FlexHero() {\n  return (\n    <Flex className=\"items-center gap-3\">\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</div>\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</div>\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</div>\n    </Flex>\n  );\n}" },
+    exports: [
+    { name: "FlexHero", value: "hero", label: "Hero", component: FlexHeroModule.default, snippet: "export default function FlexHero() {\n  return (\n    <Flex className=\"items-center gap-3\">\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</div>\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</div>\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</div>\n    </Flex>\n  );\n}" },
+    ],
+    source: "import { Flex } from '@/registry/ui/flex';\n\nexport default function FlexHero() {\n  return (\n    <Flex className=\"items-center gap-3\">\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</div>\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</div>\n      <div className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</div>\n    </Flex>\n  );\n}\n",
+  },
+  "flex-render": {
+    slug: "flex-render",
+    defaultExport: { name: "FlexRender", value: "render", label: "Render", component: FlexRenderModule.default, snippet: "export default function FlexRender() {\n  return (\n    <Flex render={<ul />} className=\"flex-col gap-2\">\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</li>\n    </Flex>\n  );\n}" },
+    exports: [
+    { name: "FlexRender", value: "render", label: "Render", component: FlexRenderModule.default, snippet: "export default function FlexRender() {\n  return (\n    <Flex render={<ul />} className=\"flex-col gap-2\">\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</li>\n    </Flex>\n  );\n}" },
+    ],
+    source: "import { Flex } from '@/registry/ui/flex';\n\nexport default function FlexRender() {\n  return (\n    <Flex render={<ul />} className=\"flex-col gap-2\">\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</li>\n    </Flex>\n  );\n}\n",
+  },
   "form-hero": {
     slug: "form-hero",
     defaultExport: { name: "FormHero", value: "hero", label: "Hero", component: FormHeroModule.default, snippet: "export default function FormHero() {\n  return (\n    <Form className=\"flex w-80 flex-col gap-5\">\n      <Field name=\"email\">\n        <FieldLabel>Email</FieldLabel>\n        <Input type=\"email\" placeholder=\"you@company.com\" />\n        <FieldError />\n      </Field>\n      <Field name=\"password\">\n        <FieldLabel>Password</FieldLabel>\n        <Input type=\"password\" placeholder=\"••••••••\" />\n        <FieldDescription>Must be at least 8 characters.</FieldDescription>\n        <FieldError />\n      </Field>\n      <label className=\"flex cursor-pointer items-center gap-2 text-sm text-primary\">\n        <Checkbox name=\"remember\" />\n        Remember me for 30 days\n      </label>\n      <Button type=\"submit\" className=\"w-full\">\n        Sign in\n      </Button>\n    </Form>\n  );\n}" },
@@ -856,6 +912,22 @@ export const registry: Record<string, PreviewEntry> = {
     { name: "FormProduct", value: "product", label: "Product", component: FormProductModule.default, snippet: "export default function FormProduct() {\n  return (\n    <Form className=\"flex w-96 flex-col gap-8\">\n      <Fieldset>\n        <FieldsetLegend>Profile</FieldsetLegend>\n        <Field name=\"name\">\n          <FieldLabel>Display name</FieldLabel>\n          <Input placeholder=\"Jane Smith\" />\n          <FieldError />\n        </Field>\n        <Field name=\"email\">\n          <FieldLabel>Email</FieldLabel>\n          <Input type=\"email\" placeholder=\"jane@company.com\" />\n          <FieldDescription>Used for notifications and sign-in.</FieldDescription>\n          <FieldError />\n        </Field>\n      </Fieldset>\n      <Fieldset>\n        <FieldsetLegend>Notifications</FieldsetLegend>\n        {NOTIFICATION_OPTIONS.map(({ value, label }) => (\n          <label\n            key={value}\n            className=\"flex cursor-pointer items-center gap-2 text-sm text-primary\"\n          >\n            <Checkbox name={value} />\n            {label}\n          </label>\n        ))}\n      </Fieldset>\n      <Fieldset>\n        <FieldsetLegend>Delivery frequency</FieldsetLegend>\n        <RadioGroup defaultValue=\"daily\" className=\"gap-2\">\n          {FREQUENCY_OPTIONS.map(({ value, label }) => (\n            <label\n              key={value}\n              className=\"flex cursor-pointer items-center gap-2 text-sm text-primary\"\n            >\n              <RadioGroupItem value={value} />\n              {label}\n            </label>\n          ))}\n        </RadioGroup>\n      </Fieldset>\n      <Button type=\"submit\">Save changes</Button>\n    </Form>\n  );\n}" },
     ],
     source: "'use client';\n\nimport { Button } from '@/registry/ui/button';\nimport { Checkbox } from '@/registry/ui/checkbox';\nimport {\n  Field,\n  FieldDescription,\n  FieldError,\n  FieldLabel,\n  Fieldset,\n  FieldsetLegend,\n  Form,\n} from '@/registry/ui/form';\nimport { Input } from '@/registry/ui/input';\nimport { RadioGroup, RadioGroupItem } from '@/registry/ui/radio-group';\n\nconst NOTIFICATION_OPTIONS = [\n  { value: 'comments', label: 'New comments' },\n  { value: 'mentions', label: 'Mentions & replies' },\n  { value: 'updates', label: 'Product updates' },\n];\n\nconst FREQUENCY_OPTIONS = [\n  { value: 'realtime', label: 'Real-time' },\n  { value: 'daily', label: 'Daily digest' },\n  { value: 'weekly', label: 'Weekly summary' },\n];\n\nexport default function FormProduct() {\n  return (\n    <Form className=\"flex w-96 flex-col gap-8\">\n      <Fieldset>\n        <FieldsetLegend>Profile</FieldsetLegend>\n        <Field name=\"name\">\n          <FieldLabel>Display name</FieldLabel>\n          <Input placeholder=\"Jane Smith\" />\n          <FieldError />\n        </Field>\n        <Field name=\"email\">\n          <FieldLabel>Email</FieldLabel>\n          <Input type=\"email\" placeholder=\"jane@company.com\" />\n          <FieldDescription>Used for notifications and sign-in.</FieldDescription>\n          <FieldError />\n        </Field>\n      </Fieldset>\n      <Fieldset>\n        <FieldsetLegend>Notifications</FieldsetLegend>\n        {NOTIFICATION_OPTIONS.map(({ value, label }) => (\n          <label\n            key={value}\n            className=\"flex cursor-pointer items-center gap-2 text-sm text-primary\"\n          >\n            <Checkbox name={value} />\n            {label}\n          </label>\n        ))}\n      </Fieldset>\n      <Fieldset>\n        <FieldsetLegend>Delivery frequency</FieldsetLegend>\n        <RadioGroup defaultValue=\"daily\" className=\"gap-2\">\n          {FREQUENCY_OPTIONS.map(({ value, label }) => (\n            <label\n              key={value}\n              className=\"flex cursor-pointer items-center gap-2 text-sm text-primary\"\n            >\n              <RadioGroupItem value={value} />\n              {label}\n            </label>\n          ))}\n        </RadioGroup>\n      </Fieldset>\n      <Button type=\"submit\">Save changes</Button>\n    </Form>\n  );\n}\n",
+  },
+  "grid-hero": {
+    slug: "grid-hero",
+    defaultExport: { name: "GridHero", value: "hero", label: "Hero", component: GridHeroModule.default, snippet: "export default function GridHero() {\n  return (\n    <Grid className=\"w-72 grid-cols-3 gap-3\">\n      {['One', 'Two', 'Three', 'Four', 'Five', 'Six'].map((label) => (\n        <div key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </div>\n      ))}\n    </Grid>\n  );\n}" },
+    exports: [
+    { name: "GridHero", value: "hero", label: "Hero", component: GridHeroModule.default, snippet: "export default function GridHero() {\n  return (\n    <Grid className=\"w-72 grid-cols-3 gap-3\">\n      {['One', 'Two', 'Three', 'Four', 'Five', 'Six'].map((label) => (\n        <div key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </div>\n      ))}\n    </Grid>\n  );\n}" },
+    ],
+    source: "import { Grid } from '@/registry/ui/grid';\n\nexport default function GridHero() {\n  return (\n    <Grid className=\"w-72 grid-cols-3 gap-3\">\n      {['One', 'Two', 'Three', 'Four', 'Five', 'Six'].map((label) => (\n        <div key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </div>\n      ))}\n    </Grid>\n  );\n}\n",
+  },
+  "grid-render": {
+    slug: "grid-render",
+    defaultExport: { name: "GridRender", value: "render", label: "Render", component: GridRenderModule.default, snippet: "export default function GridRender() {\n  return (\n    <Grid render={<ul />} className=\"w-72 grid-cols-2 gap-3\">\n      {['One', 'Two', 'Three', 'Four'].map((label) => (\n        <li key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </li>\n      ))}\n    </Grid>\n  );\n}" },
+    exports: [
+    { name: "GridRender", value: "render", label: "Render", component: GridRenderModule.default, snippet: "export default function GridRender() {\n  return (\n    <Grid render={<ul />} className=\"w-72 grid-cols-2 gap-3\">\n      {['One', 'Two', 'Three', 'Four'].map((label) => (\n        <li key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </li>\n      ))}\n    </Grid>\n  );\n}" },
+    ],
+    source: "import { Grid } from '@/registry/ui/grid';\n\nexport default function GridRender() {\n  return (\n    <Grid render={<ul />} className=\"w-72 grid-cols-2 gap-3\">\n      {['One', 'Two', 'Three', 'Four'].map((label) => (\n        <li key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </li>\n      ))}\n    </Grid>\n  );\n}\n",
   },
   "input-hero": {
     slug: "input-hero",
