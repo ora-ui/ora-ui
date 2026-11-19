@@ -10,6 +10,7 @@
     "switch-theme/gray": ["aria-toggle-field-name"]
   },
   "light": {
+    "autocomplete-invalid/invalid": ["color-contrast"],
     "avatar-group/group-preview": ["color-contrast"],
     "badge-hero/hero": ["color-contrast"],
     "badge-theme/accent": ["color-contrast"],
