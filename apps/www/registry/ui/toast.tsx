@@ -29,6 +29,7 @@ type SwipeDirection = 'up' | 'down' | 'left' | 'right';
 interface ToastData {
   theme?: Theme;
   variant?: ToastVariant;
+  fire?: number;
 }
 
 const typeThemes: Record<ToastType, Theme> = {
@@ -83,17 +84,16 @@ function resolveTheme(toast: ToastObject<ToastData>): Theme {
 }
 
 /*
- * Base UI increments `updateKey` whenever a toast with an existing id is added
- * again or updated. The odd and even animations are identical keyframes under
- * two names, so swapping the class restarts the animation on every re-fire.
+ * Base UI bumps `updateKey` on every update, including `toast.update` and a
+ * promise settling, so it cannot tell a re-fire from a change. `fire` is
+ * stamped only when `toast()` or a helper is called with an explicit id, and it
+ * alternates for each id. The odd and even animations are identical keyframes
+ * under two names, so swapping the class restarts the animation.
  */
-function replayClassName(toast: ToastObject<ToastData>, theme: Theme) {
-  const key = toast.updateKey ?? 0;
-  if (key <= 0) return undefined;
-  const even = key % 2 === 0;
-  if (toast.type === 'error' || theme === 'destructive') {
-    return even ? 'animate-toast-error-even' : 'animate-toast-error-odd';
-  }
+function replayClassName(fire: number | undefined, firstFire: number | undefined, error: boolean) {
+  if (fire === undefined || fire === firstFire) return undefined;
+  const even = fire % 2 === 0;
+  if (error) return even ? 'animate-toast-error-even' : 'animate-toast-error-odd';
   return even ? 'animate-toast-pulse-even' : 'animate-toast-pulse-odd';
 }
 
@@ -155,6 +155,7 @@ function Toast({
   const defaults = React.useContext(ToastDefaultsContext);
   const theme = themeProp ?? resolveTheme(toast);
   const variant = variantProp ?? toast.data?.variant ?? defaults.variant;
+  const [firstFire] = React.useState(() => toast.data?.fire);
   const context = React.useMemo(
     () => ({ theme, type: toast.type, variant }),
     [theme, toast.type, variant]
@@ -194,7 +195,11 @@ function Toast({
           'data-[swipe-direction=right]:data-ending-style:transform-[translateX(calc(var(--toast-swipe-movement-x)+100%+var(--toast-inset)))_translateY(var(--toast-calc-offset-y))]',
           'data-[swipe-direction=up]:data-ending-style:transform-[translateY(calc(var(--toast-swipe-movement-y)-100%-var(--toast-inset)))]',
           'data-[swipe-direction=down]:data-ending-style:transform-[translateY(calc(var(--toast-swipe-movement-y)+100%+var(--toast-inset)))]',
-          replayClassName(toast, theme),
+          replayClassName(
+            toast.data?.fire,
+            firstFire,
+            toast.type === 'error' || theme === 'destructive'
+          ),
           'motion-reduce:animate-none',
           className
         )}
@@ -232,7 +237,7 @@ function ToastDescription({ className, ...props }: ToastPrimitive.Description.Pr
     <ToastPrimitive.Description
       data-slot="toast-description"
       className={cn(
-        'leading-5 text-secondary group-data-[variant=solid]/toast:text-on-solid/80',
+        'leading-5 text-secondary group-data-[variant=solid]/toast:text-on-solid',
         className
       )}
       {...props}
@@ -246,7 +251,7 @@ function ToastAction({ className, ...props }: ToastPrimitive.Action.Props) {
       data-slot="toast-action"
       render={<Button variant="soft" size="sm" />}
       className={cn(
-        'group-data-[variant=solid]/toast:bg-on-solid/15 group-data-[variant=solid]/toast:text-on-solid group-data-[variant=solid]/toast:hover:bg-on-solid/25',
+        'group-data-[variant=solid]/toast:bg-transparent group-data-[variant=solid]/toast:text-on-solid group-data-[variant=solid]/toast:hover:bg-on-solid/15',
         className
       )}
       {...props}
@@ -359,6 +364,8 @@ function isOptions(value: unknown): value is ToastOptions {
   );
 }
 
+const fireCounts = new Map<string, number>();
+
 function addToast(
   type: ToastType | undefined,
   titleOrOptions: React.ReactNode | ToastOptions,
@@ -367,9 +374,15 @@ function addToast(
   const resolved: ToastOptions = isOptions(titleOrOptions)
     ? titleOrOptions
     : { ...options, title: titleOrOptions };
+  const base = toBaseOptions(resolved);
+  if (resolved.id !== undefined) {
+    const fire = (fireCounts.get(resolved.id) ?? 0) + 1;
+    fireCounts.set(resolved.id, fire);
+    base.data = { ...base.data, fire };
+  }
   return toastManager.add({
     priority: type === 'error' || type === 'warning' ? 'high' : 'low',
-    ...toBaseOptions(resolved),
+    ...base,
     type,
   });
 }
@@ -377,16 +390,12 @@ function addToast(
 function resolvePromiseOption<Arg>(
   option: PromiseOption<Arg>,
   priority?: 'high'
-):
-  | string
-  | ToastManagerUpdateOptions<ToastData>
-  | ((arg: Arg) => ToastManagerUpdateOptions<ToastData>) {
+): ToastManagerUpdateOptions<ToastData> | ((arg: Arg) => ToastManagerUpdateOptions<ToastData>) {
   const normalize = (value: string | ToastUpdateOptions): ToastManagerUpdateOptions<ToastData> => ({
     ...(priority ? { priority } : null),
     ...toBaseOptions(typeof value === 'string' ? { title: value } : value),
   });
-  if (typeof option === 'function') return (arg: Arg) => normalize(option(arg));
-  return typeof option === 'string' && !priority ? option : normalize(option);
+  return typeof option === 'function' ? (arg: Arg) => normalize(option(arg)) : normalize(option);
 }
 
 type ToastArgs = [titleOrOptions: React.ReactNode | ToastOptions, options?: ToastOptions];
@@ -408,9 +417,7 @@ const toast = Object.assign((...args: ToastArgs) => addToast(undefined, ...args)
     }
   ) =>
     toastManager.promise(promise, {
-      loading: resolvePromiseOption(options.loading) as
-        | ToastManagerUpdateOptions<ToastData>
-        | string,
+      loading: resolvePromiseOption(options.loading) as ToastManagerUpdateOptions<ToastData>,
       success: resolvePromiseOption(options.success),
       error: resolvePromiseOption(options.error, 'high'),
     }),
@@ -426,7 +433,10 @@ const toast = Object.assign((...args: ToastArgs) => addToast(undefined, ...args)
               ...(variant && { variant }),
             }
           : undefined;
-      return merged ? { ...rest, data: merged } : rest;
+      const highPriority =
+        (rest.type === 'error' || rest.type === 'warning') && rest.priority === undefined;
+      const next = highPriority ? { ...rest, priority: 'high' as const } : rest;
+      return merged ? { ...next, data: merged } : next;
     }),
   dismiss: (id?: string) => toastManager.close(id),
 });

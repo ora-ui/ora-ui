@@ -79,6 +79,10 @@ import { toast } from '@/registry/ui/toast';
 toast('Export complete', { description: 'Your file is ready to download.' });
 ```
 
+`toast()` only runs in the browser. Do not call it from a server component or a server action. Call it from an event handler or a client component.
+
+Fire toasts from events. A `toast()` called in a mount effect can run before the `Toaster` has subscribed, and the toast is dropped.
+
 ## Examples
 
 ### Theme
@@ -138,7 +142,7 @@ Toasts stack and fan out on hover or focus. `Toaster` shows at most `limit` toas
 
 ### Update in place
 
-Firing a toast with an `id` that is already on screen updates that toast instead of adding another. The toast replays a short animation to show the change. It pulses, and an error toast shakes. Reduced motion turns the animation off.
+Firing a toast with an `id` that is already on screen updates that toast instead of adding another. Calling `toast()` or a helper again with that id replays a short animation to show the change. It pulses, and an error toast shakes. `toast.update` and a `toast.promise` settling change the toast without the animation. Reduced motion turns the animation off.
 
 <ComponentPreview name="toast-update-in-place" />
 
@@ -171,7 +175,6 @@ Call `toast(title, options)` or `toast({ title, ...options })`. It returns the t
 
 | Option    | Type                                                            | Default                    |
 | --------- | --------------------------------------------------------------- | -------------------------- |
-| `type`    | `"success" \| "error" \| "warning" \| "info" \| "loading"`      | none                       |
 | `theme`   | `"gray" \| "accent" \| "destructive" \| "warning" \| "success"` | from `type`, else `"gray"` |
 | `variant` | `"surface" \| "soft" \| "solid"`                                | the `Toaster` variant      |
 
@@ -190,7 +193,7 @@ Call `toast(title, options)` or `toast({ title, ...options })`. It returns the t
 | `timeout`  | `number`          | the `Toaster` timeout, `0` never auto-closes     |
 | `priority` | `"low" \| "high"` | `"high"` for `error` and `warning`, else `"low"` |
 
-The helper also has `toast.success`, `toast.error`, `toast.warning`, `toast.info` and `toast.loading`, which set `type`. `toast.promise(promise, { loading, success, error })` tracks a promise. `toast.update(id, options)` changes a toast and keeps its previous theme and variant. `toast.dismiss(id)` closes one toast, or all of them when called with no id.
+The helper also has `toast.success`, `toast.error`, `toast.warning`, `toast.info` and `toast.loading`, which set the type, since `toast()` takes no `type` option. `toast.promise(promise, { loading, success, error })` tracks a promise. `toast.update(id, options)` changes a toast and keeps its previous theme and variant. `toast.dismiss(id)` closes one toast, or all of them when called with no id.
 
 ### useToast
 
@@ -222,7 +225,7 @@ Press `F6` to move focus to the viewport, then use `Tab` to reach each toast. Ea
 | `--toast-width` | `22.5rem` | Width of the viewport and toasts |
 | `--toast-gap`   | `0.75rem` | Gap between expanded toasts      |
 
-Slots are `toaster`, `toast-viewport`, `toast`, `toast-content`, `toast-title`, `toast-description`, `toast-action` and `toast-close`.
+Slots are `toaster`, `toast-viewport`, `toast`, `toast-content`, `toast-icon`, `toast-title`, `toast-description`, `toast-action` and `toast-close`.
 
 Anchored toasts, which attach to a trigger element, are not supported yet.
 
