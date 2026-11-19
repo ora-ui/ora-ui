@@ -7,7 +7,10 @@ export default function TypographyHero() {
       <p className="mt-6 text-xl text-secondary">
         How a four-person team rebuilt its onboarding docs in a single sprint.
       </p>
-      <h2 className="mt-10 scroll-m-20 border-b border-separator pb-2 text-3xl font-semibold tracking-tight">
+      <h2
+        id="where-we-started"
+        className="mt-10 scroll-m-20 border-b border-separator pb-2 text-3xl font-semibold tracking-tight"
+      >
         Where we started
       </h2>
       <p className="leading-7 not-first:mt-6">
@@ -15,7 +18,7 @@ export default function TypographyHero() {
         they were spread across{' '}
         <a
           href="#where-we-started"
-          className="font-medium underline underline-offset-4 hover:text-secondary"
+          className="font-medium underline decoration-secondary underline-offset-4 hover:decoration-2"
         >
           three wikis
         </a>{' '}
@@ -29,7 +32,7 @@ export default function TypographyHero() {
         <li>One page per task, written as steps.</li>
         <li>
           Commands in code blocks, such as{' '}
-          <code className="relative rounded-xs bg-ui px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+          <code className="rounded-xs bg-ui px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
             pnpm dev
           </code>
           .
