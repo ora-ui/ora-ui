@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "preview-card",
+  "dependencies": ["@base-ui/react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/ui/preview-card.tsx",
+      "content": "'use client';\n\nimport { PreviewCard as PreviewCardPrimitive } from '@base-ui/react/preview-card';\n\nimport { cn } from '@/registry/lib/utils';\n\nfunction PreviewCard({ ...props }: PreviewCardPrimitive.Root.Props) {\n  return <PreviewCardPrimitive.Root data-slot=\"preview-card\" {...props} />;\n}\n\nfunction PreviewCardTrigger({ ...props }: PreviewCardPrimitive.Trigger.Props) {\n  return <PreviewCardPrimitive.Trigger data-slot=\"preview-card-trigger\" {...props} />;\n}\n\nfunction PreviewCardContent({\n  className,\n  children,\n  side = 'bottom',\n  sideOffset = 4,\n  align = 'center',\n  alignOffset = 0,\n  ...props\n}: PreviewCardPrimitive.Popup.Props &\n  Pick<PreviewCardPrimitive.Positioner.Props, 'align' | 'alignOffset' | 'side' | 'sideOffset'>) {\n  return (\n    <PreviewCardPrimitive.Portal>\n      <PreviewCardPrimitive.Positioner\n        align={align}\n        alignOffset={alignOffset}\n        side={side}\n        sideOffset={sideOffset}\n        className=\"isolate z-50 outline-none\"\n      >\n        <PreviewCardPrimitive.Popup\n          data-slot=\"preview-card-content\"\n          className={cn(\n            'z-50 max-h-(--available-height) w-64 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md bg-overlay p-3 text-sm text-primary shadow-md ring-1 ring-line duration-100 outline-none',\n            'data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',\n            'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95',\n            'data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95',\n            className\n          )}\n          {...props}\n        >\n          {children}\n        </PreviewCardPrimitive.Popup>\n      </PreviewCardPrimitive.Positioner>\n    </PreviewCardPrimitive.Portal>\n  );\n}\n\nexport { PreviewCard, PreviewCardContent, PreviewCardTrigger };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

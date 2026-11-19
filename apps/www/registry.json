@@ -53,6 +53,26 @@
       ]
     },
     {
+      "name": "autocomplete",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/autocomplete.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "input",
+        "input-group",
+        "utils"
+      ]
+    },
+    {
       "name": "avatar-group",
       "type": "registry:ui",
       "files": [
@@ -165,6 +185,24 @@
       ],
       "registryDependencies": [
         "checkbox-group",
+        "utils"
+      ]
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/collapsible.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@heroicons/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
         "utils"
       ]
     },
@@ -332,6 +370,60 @@
       ],
       "registryDependencies": [
         "button",
+        "utils"
+      ]
+    },
+    {
+      "name": "number-field",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/number-field.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "utils"
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/popover.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ],
+      "registryDependencies": [
+        "button",
+        "utils"
+      ]
+    },
+    {
+      "name": "preview-card",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/preview-card.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
         "utils"
       ]
     },
