@@ -1,0 +1,109 @@
+---
+title: Preview Card
+description: "Shows a preview of a link's destination in a popup when the link is hovered or focused."
+links:
+  doc: https://base-ui.com/react/components/preview-card
+  api: https://base-ui.com/react/components/preview-card#api-reference
+---
+
+<ComponentPreview name="preview-card-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/preview-card.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/preview-card.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/preview-card.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/preview-card.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react' },
+        ]}
+      />
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="preview-card" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import { Link } from '@/registry/ui/link';
+import { PreviewCard, PreviewCardContent, PreviewCardTrigger } from '@/registry/ui/preview-card';
+
+<PreviewCard>
+  <PreviewCardTrigger render={<Link href="https://ora-ui.com" />}>Ora UI</PreviewCardTrigger>
+  <PreviewCardContent>Styled primitives for building accessible interfaces.</PreviewCardContent>
+</PreviewCard>;
+```
+
+<Callout variant="warning" title="Accessibility">
+  The card opens on mouse hover and keyboard focus only. Touch devices and screen readers never see
+  it, so it must not hold anything the reader needs that the link's own page does not repeat.
+</Callout>
+
+## Examples
+
+### Placement
+
+Set `side` and `align` on `PreviewCardContent` to choose where the card opens. It flips to the opposite side when there is no room.
+
+<ComponentPreview name="preview-card-placement" select={['bottom', 'top', 'right', 'left']} />
+
+### Delay
+
+Set `delay` and `closeDelay` on `PreviewCardTrigger` to tune the timing. The card opens after 600ms by default.
+
+<ComponentPreview name="preview-card-delay" />
+
+### Inline
+
+A link inside a paragraph of text opens a card when hovered or focused.
+
+<ComponentPreview name="preview-card-inline" />
+
+## API Reference
+
+### PreviewCardContent
+
+#### Structure
+
+| Prop          | Type                                                                       | Default    |
+| ------------- | -------------------------------------------------------------------------- | ---------- |
+| `side`        | `"top" \| "right" \| "bottom" \| "left" \| "inline-start" \| "inline-end"` | `"bottom"` |
+| `sideOffset`  | `number`                                                                   | `4`        |
+| `align`       | `"start" \| "center" \| "end"`                                             | `"center"` |
+| `alignOffset` | `number`                                                                   | `0`        |
+
+`PreviewCardTrigger` renders an unstyled `<a>`. Compose it with Ora's `Link` through `render`.
+
+The card is `w-64` with `p-3` padding. Override either with `className`.
+
+Slots are `preview-card`, `preview-card-trigger` and `preview-card-content`.
+
+All other props are forwarded to the underlying [Base UI Preview Card](https://base-ui.com/react/components/preview-card) primitive.
