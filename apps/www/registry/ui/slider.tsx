@@ -76,18 +76,20 @@ function Slider({
   size?: Size;
   theme?: Theme;
 }) {
+  const contextValue = React.useMemo(() => ({ variant, size, theme }), [variant, size, theme]);
+
   return (
     <SliderPrimitive.Root
       data-slot="slider"
       data-variant={variant}
       data-size={size}
       className={cn(
-        'group/slider grid w-full grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-auto data-[orientation=vertical]:grid-cols-1 data-[orientation=vertical]:justify-items-center',
+        'group/slider grid w-full grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 data-[orientation=vertical]:flex data-[orientation=vertical]:h-full data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-center data-[orientation=vertical]:gap-y-2',
         className
       )}
       {...props}
     >
-      <SliderContext.Provider value={{ variant, size, theme }}>{children}</SliderContext.Provider>
+      <SliderContext.Provider value={contextValue}>{children}</SliderContext.Provider>
     </SliderPrimitive.Root>
   );
 }
@@ -106,10 +108,7 @@ function SliderValue({ className, ...props }: SliderPrimitive.Value.Props) {
   return (
     <SliderPrimitive.Value
       data-slot="slider-value"
-      className={cn(
-        'col-start-2 text-right text-sm text-secondary tabular-nums group-data-[orientation=vertical]/slider:col-start-1',
-        className
-      )}
+      className={cn('col-start-2 text-right text-sm text-secondary tabular-nums', className)}
       {...props}
     />
   );
@@ -120,7 +119,7 @@ function SliderControl({ className, ...props }: SliderPrimitive.Control.Props) {
     <SliderPrimitive.Control
       data-slot="slider-control"
       className={cn(
-        'relative col-span-full flex touch-none items-center select-none data-[orientation=horizontal]:w-full data-[orientation=horizontal]:py-2 data-[orientation=vertical]:h-full data-[orientation=vertical]:flex-col data-[orientation=vertical]:px-2 data-disabled:cursor-not-allowed data-disabled:opacity-50',
+        'relative col-span-full flex touch-none items-center select-none data-[orientation=horizontal]:w-full data-[orientation=horizontal]:py-2 data-[orientation=vertical]:min-h-0 data-[orientation=vertical]:flex-1 data-[orientation=vertical]:flex-col data-[orientation=vertical]:px-2 data-disabled:cursor-not-allowed data-disabled:opacity-50',
         className
       )}
       {...props}
