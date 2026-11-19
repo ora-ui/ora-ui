@@ -388,15 +388,69 @@ pre.shiki code .line:last-child:empty {
 }
 
 /* Concentric border radius for menu-style items.
-   Containers use rounded-md (--radius capped at 10px), padding is 4px (p-1).
-   Item radius = container radius - padding, clamped to 2px-6px.
-   --radius-md lives in `@theme inline` so its custom property is not emitted
-   at runtime — recompute the formula directly from --radius. */
-[data-slot='dropdown-menu-content'],
-[data-slot='dropdown-menu-sub-content'],
-[data-slot='select-content'] {
-  --menu-item-radius: min(max(calc(min(var(--radius), 10px) - 3px), 2px), 6px);
+   Containers use rounded-md (--radius capped at 10px) and pad their items by
+   --menu-pad (4px, or 2px / 0px for the select, combobox and autocomplete
+   density prop). An item corner that faces the container is exactly
+   container radius - pad, floored at min(--radius, 2px) so small radii
+   stay visibly round while radius none stays square. Corners between items follow it,
+   capped at 6px, except flush (density none) items, which stay square. The
+   first item's top corners and the last item's bottom corners take the
+   container-facing value. --radius-md lives in `@theme inline` so its custom
+   property is not emitted at runtime, so recompute it from --radius. Select
+   groups add their own pad, so items inside them sit slightly inside the
+   concentric curve. */
+:is(
+  [data-slot='dropdown-menu-content'],
+  [data-slot='dropdown-menu-sub-content'],
+  [data-slot='context-menu-content'],
+  [data-slot='context-menu-sub-content'],
+  [data-slot='menubar'],
+  [data-slot='menubar-content'],
+  [data-slot='menubar-sub-content'],
+  [data-slot='select-content'],
+  [data-slot='combobox-content'],
+  [data-slot='autocomplete-content']
+) {
+  --menu-pad: 4px;
+  --menu-item-radius-outer: max(
+    calc(min(var(--radius), 10px) - var(--menu-pad)),
+    min(var(--radius), 2px)
+  );
+  --menu-item-radius: min(var(--menu-item-radius-outer), 6px);
   --menu-item-highlight-text: var(--primary);
+
+  &[data-density='compact'] {
+    --menu-pad: 2px;
+  }
+
+  &[data-density='none'] {
+    --menu-pad: 0px;
+    --menu-item-radius: 0px;
+  }
+
+  & > :is([data-slot$='-item'], [data-slot$='-sub-trigger']):first-child,
+  &
+    > :nth-child(1 of :not([data-slot$='-empty'], [data-slot$='-status']))
+    > :is([data-slot$='-item'], [data-slot$='-sub-trigger']):first-child,
+  &
+    > :nth-child(1 of :not([data-slot$='-empty'], [data-slot$='-status']))
+    > :first-child
+    > :is([data-slot$='-item'], [data-slot$='-sub-trigger']):first-child {
+    border-top-left-radius: var(--menu-item-radius-outer);
+    border-top-right-radius: var(--menu-item-radius-outer);
+  }
+
+  & > :is([data-slot$='-item'], [data-slot$='-sub-trigger']):last-child,
+  &
+    > :nth-last-child(1 of :not([data-slot$='-empty'], [data-slot$='-status']))
+    > :is([data-slot$='-item'], [data-slot$='-sub-trigger']):last-child,
+  &
+    > :nth-last-child(1 of :not([data-slot$='-empty'], [data-slot$='-status']))
+    > :last-child
+    > :is([data-slot$='-item'], [data-slot$='-sub-trigger']):last-child {
+    border-bottom-left-radius: var(--menu-item-radius-outer);
+    border-bottom-right-radius: var(--menu-item-radius-outer);
+  }
 }
 
 /* Highlighted menu item text: primary on gray, secondary on any other theme.
@@ -406,6 +460,14 @@ pre.shiki code .line:last-child:empty {
 [data-slot='dropdown-menu-content'][data-theme],
 [data-slot='dropdown-menu-sub-content'][data-theme],
 [data-slot='dropdown-menu-item'][data-theme],
-[data-slot='select-content'][data-theme] {
+[data-slot='select-content'][data-theme],
+[data-slot='combobox-content'][data-theme],
+[data-slot='menubar-content'][data-theme],
+[data-slot='menubar-sub-content'][data-theme],
+[data-slot='menubar-item'][data-theme],
+[data-slot='context-menu-content'][data-theme],
+[data-slot='context-menu-sub-content'][data-theme],
+[data-slot='context-menu-item'][data-theme],
+[data-slot='autocomplete-content'][data-theme] {
   --menu-item-highlight-text: var(--secondary);
 }
