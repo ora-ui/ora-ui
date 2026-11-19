@@ -10,6 +10,7 @@
     "switch-theme/gray": ["aria-toggle-field-name"]
   },
   "light": {
+    "autocomplete-invalid/invalid": ["color-contrast"],
     "avatar-group/group-preview": ["color-contrast"],
     "badge-hero/hero": ["color-contrast"],
     "badge-theme/accent": ["color-contrast"],
@@ -21,7 +22,9 @@
     "button-group-vertical/vertical": ["button-name"],
     "button-theme/accent": ["color-contrast"],
     "button-theme/destructive": ["color-contrast"],
+    "combobox-invalid/invalid": ["color-contrast"],
     "kbd-combination/combination": ["color-contrast"],
+    "number-field-field/field": ["color-contrast"],
     "switch-hero/hero": ["aria-toggle-field-name"],
     "switch-theme/accent": ["aria-toggle-field-name"],
     "switch-theme/gray": ["aria-toggle-field-name"],
