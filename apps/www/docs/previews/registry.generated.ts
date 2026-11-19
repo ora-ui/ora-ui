@@ -519,11 +519,11 @@ export const registry: Record<string, PreviewEntry> = {
   },
   "center-render": {
     slug: "center-render",
-    defaultExport: { name: "CenterRender", value: "render", label: "Render", component: CenterRenderModule.default, snippet: "export default function CenterRender() {\n  return (\n    <Center render={<figure />} className=\"size-40 rounded-md border border-separator\">\n      <figcaption className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Centred</figcaption>\n    </Center>\n  );\n}" },
+    defaultExport: { name: "CenterRender", value: "render", label: "Render", component: CenterRenderModule.default, snippet: "export default function CenterRender() {\n  return (\n    <Center\n      render={<section aria-label=\"Empty state\" />}\n      className=\"size-40 rounded-md border border-separator\"\n    >\n      <p className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Nothing here yet</p>\n    </Center>\n  );\n}" },
     exports: [
-    { name: "CenterRender", value: "render", label: "Render", component: CenterRenderModule.default, snippet: "export default function CenterRender() {\n  return (\n    <Center render={<figure />} className=\"size-40 rounded-md border border-separator\">\n      <figcaption className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Centred</figcaption>\n    </Center>\n  );\n}" },
+    { name: "CenterRender", value: "render", label: "Render", component: CenterRenderModule.default, snippet: "export default function CenterRender() {\n  return (\n    <Center\n      render={<section aria-label=\"Empty state\" />}\n      className=\"size-40 rounded-md border border-separator\"\n    >\n      <p className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Nothing here yet</p>\n    </Center>\n  );\n}" },
     ],
-    source: "import { Center } from '@/registry/ui/center';\n\nexport default function CenterRender() {\n  return (\n    <Center render={<figure />} className=\"size-40 rounded-md border border-separator\">\n      <figcaption className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Centred</figcaption>\n    </Center>\n  );\n}\n",
+    source: "import { Center } from '@/registry/ui/center';\n\nexport default function CenterRender() {\n  return (\n    <Center\n      render={<section aria-label=\"Empty state\" />}\n      className=\"size-40 rounded-md border border-separator\"\n    >\n      <p className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Nothing here yet</p>\n    </Center>\n  );\n}\n",
   },
   "checkbox-default": {
     slug: "checkbox-default",
@@ -891,11 +891,11 @@ export const registry: Record<string, PreviewEntry> = {
   },
   "flex-render": {
     slug: "flex-render",
-    defaultExport: { name: "FlexRender", value: "render", label: "Render", component: FlexRenderModule.default, snippet: "export default function FlexRender() {\n  return (\n    <Flex render={<ul />} className=\"flex-col gap-2\">\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</li>\n    </Flex>\n  );\n}" },
+    defaultExport: { name: "FlexRender", value: "render", label: "Render", component: FlexRenderModule.default, snippet: "export default function FlexRender() {\n  return (\n    <Flex render={<ul role=\"list\" />} className=\"flex-col gap-2\">\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</li>\n    </Flex>\n  );\n}" },
     exports: [
-    { name: "FlexRender", value: "render", label: "Render", component: FlexRenderModule.default, snippet: "export default function FlexRender() {\n  return (\n    <Flex render={<ul />} className=\"flex-col gap-2\">\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</li>\n    </Flex>\n  );\n}" },
+    { name: "FlexRender", value: "render", label: "Render", component: FlexRenderModule.default, snippet: "export default function FlexRender() {\n  return (\n    <Flex render={<ul role=\"list\" />} className=\"flex-col gap-2\">\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</li>\n    </Flex>\n  );\n}" },
     ],
-    source: "import { Flex } from '@/registry/ui/flex';\n\nexport default function FlexRender() {\n  return (\n    <Flex render={<ul />} className=\"flex-col gap-2\">\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</li>\n    </Flex>\n  );\n}\n",
+    source: "import { Flex } from '@/registry/ui/flex';\n\nexport default function FlexRender() {\n  return (\n    <Flex render={<ul role=\"list\" />} className=\"flex-col gap-2\">\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">One</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Two</li>\n      <li className=\"rounded-sm bg-ui px-4 py-3 text-sm\">Three</li>\n    </Flex>\n  );\n}\n",
   },
   "form-hero": {
     slug: "form-hero",
@@ -923,11 +923,11 @@ export const registry: Record<string, PreviewEntry> = {
   },
   "grid-render": {
     slug: "grid-render",
-    defaultExport: { name: "GridRender", value: "render", label: "Render", component: GridRenderModule.default, snippet: "export default function GridRender() {\n  return (\n    <Grid render={<ul />} className=\"w-72 grid-cols-2 gap-3\">\n      {['One', 'Two', 'Three', 'Four'].map((label) => (\n        <li key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </li>\n      ))}\n    </Grid>\n  );\n}" },
+    defaultExport: { name: "GridRender", value: "render", label: "Render", component: GridRenderModule.default, snippet: "export default function GridRender() {\n  return (\n    <Grid render={<ul role=\"list\" />} className=\"w-72 grid-cols-2 gap-3\">\n      {['One', 'Two', 'Three', 'Four'].map((label) => (\n        <li key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </li>\n      ))}\n    </Grid>\n  );\n}" },
     exports: [
-    { name: "GridRender", value: "render", label: "Render", component: GridRenderModule.default, snippet: "export default function GridRender() {\n  return (\n    <Grid render={<ul />} className=\"w-72 grid-cols-2 gap-3\">\n      {['One', 'Two', 'Three', 'Four'].map((label) => (\n        <li key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </li>\n      ))}\n    </Grid>\n  );\n}" },
+    { name: "GridRender", value: "render", label: "Render", component: GridRenderModule.default, snippet: "export default function GridRender() {\n  return (\n    <Grid render={<ul role=\"list\" />} className=\"w-72 grid-cols-2 gap-3\">\n      {['One', 'Two', 'Three', 'Four'].map((label) => (\n        <li key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </li>\n      ))}\n    </Grid>\n  );\n}" },
     ],
-    source: "import { Grid } from '@/registry/ui/grid';\n\nexport default function GridRender() {\n  return (\n    <Grid render={<ul />} className=\"w-72 grid-cols-2 gap-3\">\n      {['One', 'Two', 'Three', 'Four'].map((label) => (\n        <li key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </li>\n      ))}\n    </Grid>\n  );\n}\n",
+    source: "import { Grid } from '@/registry/ui/grid';\n\nexport default function GridRender() {\n  return (\n    <Grid render={<ul role=\"list\" />} className=\"w-72 grid-cols-2 gap-3\">\n      {['One', 'Two', 'Three', 'Four'].map((label) => (\n        <li key={label} className=\"rounded-sm bg-ui px-4 py-3 text-sm\">\n          {label}\n        </li>\n      ))}\n    </Grid>\n  );\n}\n",
   },
   "input-hero": {
     slug: "input-hero",
