@@ -6,9 +6,9 @@ export const toastEntry: EntrySchema = {
   name: 'Toast',
   variants: {
     variant: {
-      values: ['surface', 'soft', 'solid'],
+      values: ['soft', 'solid'],
       label: 'Variant',
-      default: 'surface',
+      default: 'soft',
     },
     theme: {
       values: ['gray', 'accent', 'destructive', 'warning', 'success'],

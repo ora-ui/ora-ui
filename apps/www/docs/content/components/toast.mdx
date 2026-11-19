@@ -96,9 +96,9 @@ Pass `theme` to color a toast. When you omit it, the theme follows the toast `ty
 
 ### Variant
 
-Pass `variant` to `toast()` to change the style of one toast, or to `Toaster` to change every toast. `surface` is the default.
+Pass `variant` to `toast()` to change the style of one toast, or to `Toaster` to change every toast. `soft` is the default.
 
-<ComponentPreview name="toast-variants" select={['surface', 'soft', 'solid']} />
+<ComponentPreview name="toast-variants" select={['soft', 'solid']} />
 
 ### Types
 
@@ -142,7 +142,7 @@ Toasts stack and fan out on hover or focus. `Toaster` shows at most `limit` toas
 
 ### Update in place
 
-Firing a toast with an `id` that is already on screen updates that toast instead of adding another. Calling `toast()` or a helper again with that id replays a short animation to show the change. It pulses, and an error toast shakes. `toast.update` and a `toast.promise` settling change the toast without the animation. Reduced motion turns the animation off.
+Firing a toast with an `id` that is already on screen updates that toast instead of adding another. Fire it again and the toast pulses. An error toast shakes. Click each button twice to see it. `toast.update` and a settling `toast.promise` change the toast without the animation, and reduced motion turns it off.
 
 <ComponentPreview name="toast-update-in-place" />
 
@@ -156,7 +156,7 @@ Renders the provider, viewport and a default toast layout with a title, descript
 
 | Prop       | Type                                                               | Default          |
 | ---------- | ------------------------------------------------------------------ | ---------------- |
-| `variant`  | `"surface" \| "soft" \| "solid"`                                   | `"surface"`      |
+| `variant`  | `"soft" \| "solid"`                                                | `"soft"`         |
 | `position` | `"bottom-right" \| "bottom-center" \| "top-right" \| "top-center"` | `"bottom-right"` |
 
 #### Behavior
@@ -176,7 +176,7 @@ Call `toast(title, options)` or `toast({ title, ...options })`. It returns the t
 | Option    | Type                                                            | Default                    |
 | --------- | --------------------------------------------------------------- | -------------------------- |
 | `theme`   | `"gray" \| "accent" \| "destructive" \| "warning" \| "success"` | from `type`, else `"gray"` |
-| `variant` | `"surface" \| "soft" \| "solid"`                                | the `Toaster` variant      |
+| `variant` | `"soft" \| "solid"`                                             | the `Toaster` variant      |
 
 #### Structure
 

@@ -10,14 +10,6 @@ function showToast(variant: ToastVariant) {
   });
 }
 
-export function ToastSurface() {
-  return (
-    <Button variant="outline" onClick={() => showToast('surface')}>
-      Export data
-    </Button>
-  );
-}
-
 export function ToastSoft() {
   return (
     <Button variant="outline" onClick={() => showToast('soft')}>
@@ -34,4 +26,4 @@ export function ToastSolid() {
   );
 }
 
-export default ToastSurface;
+export default ToastSoft;

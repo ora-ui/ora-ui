@@ -21,7 +21,7 @@ import { cn } from '@/registry/lib/utils';
 import { Button } from '@/registry/ui/button';
 
 type Theme = 'gray' | 'accent' | 'destructive' | 'warning' | 'success' | (string & {});
-type ToastVariant = 'surface' | 'soft' | 'solid';
+type ToastVariant = 'soft' | 'solid';
 type ToastType = 'success' | 'error' | 'warning' | 'info' | 'loading';
 type ToastPosition = 'bottom-right' | 'bottom-center' | 'top-right' | 'top-center';
 type SwipeDirection = 'up' | 'down' | 'left' | 'right';
@@ -55,13 +55,12 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        surface: 'border-border bg-overlay text-primary',
-        soft: 'border-transparent bg-overlay bg-[image:linear-gradient(var(--ui),var(--ui))] text-primary',
+        soft: 'border-border bg-overlay bg-[image:linear-gradient(var(--ui-subtle),var(--ui-subtle))] text-primary',
         solid: 'border-transparent bg-solid text-on-solid',
       },
     },
     defaultVariants: {
-      variant: 'surface',
+      variant: 'soft',
     },
   }
 );
@@ -70,10 +69,10 @@ const ToastContext = React.createContext<{
   theme: Theme;
   type: string | undefined;
   variant: ToastVariant;
-}>({ theme: 'gray', type: undefined, variant: 'surface' });
+}>({ theme: 'gray', type: undefined, variant: 'soft' });
 
 const ToastDefaultsContext = React.createContext<{ variant: ToastVariant }>({
-  variant: 'surface',
+  variant: 'soft',
 });
 
 const ToastPositionContext = React.createContext<ToastPosition>('bottom-right');
@@ -103,7 +102,7 @@ function swipeDirectionFor(position: ToastPosition): SwipeDirection[] {
 }
 
 function ToastProvider({
-  variant = 'surface',
+  variant = 'soft',
   toastManager: manager = toastManager,
   ...props
 }: ToastPrimitive.Provider.Props & { variant?: ToastVariant }) {

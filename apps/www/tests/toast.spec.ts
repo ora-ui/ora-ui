@@ -58,19 +58,36 @@ test('the close button dismisses the toast', async ({ page }) => {
   await expect(page.locator('[data-slot="toast"]')).toHaveCount(0);
 });
 
-test('firing the same id again flips the replay animation class', async ({ page }) => {
+test('firing the same id again replays a pulse, and an error replay shakes', async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ reducedMotion: 'no-preference' });
+  const page = await context.newPage();
   await openDocs(page);
-  const button = page.getByRole('button', { name: 'Save draft' });
-  await button.click();
-  const toast = page.locator('[data-slot="toast"]').first();
-  await expect(toast).toContainText('Saved 1 time.');
+  const toast = page.locator('[data-slot="toast"]', { hasText: 'Draft saved' });
+  const runningAnimation = (target = toast) =>
+    target.evaluate((el) => el.getAnimations().find((a) => 'animationName' in a)?.animationName);
+
+  const notify = page.getByRole('button', { name: 'Notify' });
+  await notify.click();
+  await expect(toast).toContainText('Draft saved');
   await expect(toast).not.toHaveClass(/animate-toast-pulse/);
-  await button.click();
-  await expect(toast).toContainText('Saved 2 times.');
+  await notify.click();
   await expect(toast).toHaveClass(/animate-toast-pulse-even/);
-  await button.click();
+  expect(await runningAnimation()).toBe('toast-pulse-even');
+  await notify.click();
   await expect(toast).toHaveClass(/animate-toast-pulse-odd/);
-  await expect(page.locator('[data-slot="toast"]')).toHaveCount(1);
+  expect(await runningAnimation()).toBe('toast-pulse-odd');
+  await expect(toast).toHaveCount(1);
+
+  const failed = page.locator('[data-slot="toast"]', { hasText: 'Upload failed' });
+  const fail = page.getByRole('button', { name: 'Fail' });
+  await fail.click();
+  await expect(failed).toBeVisible();
+  await fail.click();
+  await expect(failed).toHaveClass(/animate-toast-error-even/);
+  expect(await runningAnimation(failed)).toBe('toast-error-even');
+  await context.close();
 });
 
 test('stacked toasts fan out on hover', async ({ page }) => {
@@ -121,7 +138,7 @@ test('a success toast is announced as a dialog', async ({ page }) => {
   await expect(toast).toHaveAttribute('role', 'dialog');
 });
 
-const variants = ['surface', 'soft', 'solid'] as const;
+const variants = ['soft', 'solid'] as const;
 const themes = ['gray', 'accent', 'destructive', 'warning', 'success'] as const;
 const modes = ['light', 'dark'] as const;
 
@@ -139,22 +156,7 @@ const KNOWN_TOKEN_CONTRAST_FAILURES_360 = new Set<string>([
       )
     )
   ),
-  ...(['destructive', 'warning'] as const).map(
-    (theme) => `light/surface/${theme}/toast-description`
-  ),
 ]);
-
-/*
- * The action is an Ora soft Button, which takes its text color from the toast
- * theme. Its light-mode 900 step measures 3.8:1 to 4.4:1 on the soft tint, the
- * same token family as the button-theme baseline. Not owned by the toast and
- * not covered by #360, so it needs its own ticket.
- */
-const KNOWN_SOFT_BUTTON_THEME_CONTRAST_FAILURES = new Set<string>(
-  (['accent', 'destructive', 'warning', 'success'] as const).map(
-    (theme) => `light/surface/${theme}/toast-action`
-  )
-);
 
 for (const mode of modes)
   for (const variant of variants)
@@ -180,11 +182,7 @@ for (const mode of modes)
         const unexpected = failures.filter((f) => {
           const [rule, slot] = f.split(':');
           const key = `${mode}/${variant}/${theme}/${slot}`;
-          return !(
-            rule === 'color-contrast' &&
-            (KNOWN_TOKEN_CONTRAST_FAILURES_360.has(key) ||
-              KNOWN_SOFT_BUTTON_THEME_CONTRAST_FAILURES.has(key))
-          );
+          return !(rule === 'color-contrast' && KNOWN_TOKEN_CONTRAST_FAILURES_360.has(key));
         });
         expect(unexpected).toEqual([]);
       });
