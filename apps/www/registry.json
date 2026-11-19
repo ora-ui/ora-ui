@@ -373,6 +373,23 @@
       ]
     },
     {
+      "name": "menubar",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/menubar.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@phosphor-icons/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
+    },
+    {
       "name": "navigation-menu",
       "type": "registry:ui",
       "files": [

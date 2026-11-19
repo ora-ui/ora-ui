@@ -460,10 +460,13 @@ pre.shiki code .line:last-child:empty {
 [data-slot='dropdown-menu-content'][data-theme],
 [data-slot='dropdown-menu-sub-content'][data-theme],
 [data-slot='dropdown-menu-item'][data-theme],
+[data-slot='menubar-content'][data-theme],
+[data-slot='menubar-sub-content'][data-theme],
+[data-slot='menubar-item'][data-theme],
+[data-slot='select-content'][data-theme],
 [data-slot='context-menu-content'][data-theme],
 [data-slot='context-menu-sub-content'][data-theme],
 [data-slot='context-menu-item'][data-theme],
-[data-slot='select-content'][data-theme],
 [data-slot='autocomplete-content'][data-theme] {
   --menu-item-highlight-text: var(--secondary);
 }
