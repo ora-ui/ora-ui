@@ -1,0 +1,180 @@
+---
+title: Combobox
+description: 'An input with a popup list of options, for choosing one or several values by typing to filter.'
+links:
+  doc: https://base-ui.com/react/components/combobox
+  api: https://base-ui.com/react/components/combobox#api-reference
+---
+
+<ComponentPreview name="combobox-hero" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsSurface>
+    <TabsList>
+      <TabsTab value="cli">CLI</TabsTab>
+      <TabsTab value="manual">Manual</TabsTab>
+    </TabsList>
+  </TabsSurface>
+  <TabsPanel value="cli">
+    <CodeBlockTabs
+      items={[
+        { label: 'pnpm', value: 'pnpm', code: 'pnpm dlx shadcn@latest add "https://ora-ui.com/r/combobox.json"' },
+        { label: 'npm', value: 'npm', code: 'npx shadcn@latest add "https://ora-ui.com/r/combobox.json"' },
+        { label: 'bun', value: 'bun', code: 'bunx --bun shadcn@latest add "https://ora-ui.com/r/combobox.json"' },
+        { label: 'yarn', value: 'yarn', code: 'yarn dlx shadcn@latest add "https://ora-ui.com/r/combobox.json"' },
+      ]}
+    />
+  </TabsPanel>
+  <TabsPanel value="manual">
+    <Steps>
+      <Step>Install dependencies</Step>
+
+      <CodeBlockTabs
+        items={[
+          { label: 'pnpm', value: 'pnpm', code: 'pnpm add @base-ui/react @phosphor-icons/react class-variance-authority' },
+          { label: 'npm', value: 'npm', code: 'npm install @base-ui/react @phosphor-icons/react class-variance-authority' },
+          { label: 'bun', value: 'bun', code: 'bun add @base-ui/react @phosphor-icons/react class-variance-authority' },
+          { label: 'yarn', value: 'yarn', code: 'yarn add @base-ui/react @phosphor-icons/react class-variance-authority' },
+        ]}
+      />
+
+      <Step>Copy the `input` and `input-group` components, which Combobox builds on</Step>
+
+      <Step>Copy the component</Step>
+
+      <ComponentSource name="combobox" />
+
+      <Step>Update the import paths if necessary to match your project setup.</Step>
+    </Steps>
+
+  </TabsPanel>
+</Tabs>
+
+## Usage
+
+```tsx
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxInputGroup,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxTrigger,
+} from '@/registry/ui/combobox';
+
+const fruits = ['Apple', 'Banana', 'Cherry'];
+
+<Combobox items={fruits}>
+  <ComboboxInputGroup>
+    <ComboboxInput aria-label="Fruit" placeholder="Select a fruit" />
+    <ComboboxTrigger />
+  </ComboboxInputGroup>
+  <ComboboxContent>
+    <ComboboxEmpty>No fruits found.</ComboboxEmpty>
+    <ComboboxList>
+      {(item: string) => (
+        <ComboboxItem key={item} value={item}>
+          {item}
+        </ComboboxItem>
+      )}
+    </ComboboxList>
+  </ComboboxContent>
+</Combobox>;
+```
+
+## Examples
+
+### Variant
+
+The `variant` prop on `ComboboxContent` styles the highlighted item.
+
+<ComponentPreview name="combobox-variants" select={['soft', 'solid']} />
+
+### Theme
+
+The `theme` prop on `ComboboxContent` recolors the highlighted item.
+
+<ComponentPreview name="combobox-theme" select={['gray', 'accent']} />
+
+### Multiple
+
+Set `multiple` on `Combobox` to pick several values. Render each one as a `ComboboxChip` with a `ComboboxChipRemove` button, and put the `ComboboxInput` inside `ComboboxChips`.
+
+<ComponentPreview name="combobox-multiple" />
+
+### Clearable
+
+Add a `ComboboxClear` button. It shows only once a value is chosen.
+
+<ComponentPreview name="combobox-clearable" />
+
+### Groups
+
+Pass grouped items to `Combobox` and render each group with `ComboboxGroup`, `ComboboxLabel` and `ComboboxCollection`. Separate groups with `ComboboxSeparator`.
+
+<ComponentPreview name="combobox-groups" />
+
+### Empty
+
+`ComboboxEmpty` renders its children only when no item matches the typed text.
+
+<ComponentPreview name="combobox-empty" />
+
+### Async search
+
+Load items from a server with `filter={null}` so Base UI does not filter them again, and report progress through `ComboboxStatus`.
+
+<ComponentPreview name="combobox-async-search" />
+
+### Input in popup
+
+Render the trigger as a button and place the input at the top of the popup, as a searchable select.
+
+<ComponentPreview name="combobox-input-in-popup" />
+
+### Invalid
+
+Inside a `Field`, the input group takes the invalid state from the field.
+
+<ComponentPreview name="combobox-invalid" />
+
+## API Reference
+
+### ComboboxInputGroup
+
+| Prop      | Type                               | Default     |
+| --------- | ---------------------------------- | ----------- |
+| `variant` | `'surface' \| 'outline' \| 'soft'` | `'surface'` |
+
+`ComboboxInputGroup` builds on `InputGroup`, and `variant` matches the `Input` variants. `ComboboxInput` reuses the `Input` styles.
+
+### ComboboxContent
+
+`ComboboxContent` renders the portal, positioner and popup in one part. Its appearance props reach every `ComboboxItem` and `ComboboxList` inside it through context.
+
+#### Appearance
+
+| Prop      | Type                                   | Default         |
+| --------- | -------------------------------------- | --------------- |
+| `variant` | `'soft' \| 'solid'`                    | `'soft'`        |
+| `theme`   | `'gray' \| 'accent' \| (string & {})`  | `'gray'`        |
+| `density` | `'none' \| 'compact' \| 'comfortable'` | `'comfortable'` |
+
+#### Structure
+
+| Prop          | Type                                                                       | Default    |
+| ------------- | -------------------------------------------------------------------------- | ---------- |
+| `side`        | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'bottom'` |
+| `sideOffset`  | `number`                                                                   | `4`        |
+| `align`       | `'start' \| 'center' \| 'end'`                                             | `'start'`  |
+| `alignOffset` | `number`                                                                   | `0`        |
+
+### Styling hooks
+
+`ComboboxContent` sizes itself with the Base UI `--anchor-width` and `--available-height` properties, and `ComboboxItem` rounds with `--menu-item-radius`. Each part sets `data-slot="combobox-<part>"`, for example `combobox-input-group`, `combobox-chip` and `combobox-item`.
+
+All other props are forwarded to the underlying [Base UI Combobox](https://base-ui.com/react/components/combobox#api-reference) primitive.

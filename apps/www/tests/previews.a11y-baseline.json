@@ -22,6 +22,7 @@
     "button-group-vertical/vertical": ["button-name"],
     "button-theme/accent": ["color-contrast"],
     "button-theme/destructive": ["color-contrast"],
+    "combobox-invalid/invalid": ["color-contrast"],
     "kbd-combination/combination": ["color-contrast"],
     "number-field-field/field": ["color-contrast"],
     "switch-hero/hero": ["aria-toggle-field-name"],
