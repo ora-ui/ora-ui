@@ -47,6 +47,10 @@ post-merge:
 post-checkout:
   commands:
     install:
-      run: git diff --name-only "$1" "$2" | grep -q pnpm-lock.yaml && pnpm install || true
+      run: |
+        [ "{3}" = "1" ] || exit 0
+        case "{1}" in *[!0]*) ;; *) exit 0 ;; esac
+        git diff --quiet {1} {2} -- pnpm-lock.yaml && exit 0
+        pnpm install
     gen-lists:
       run: pnpm -C apps/www gen:lists
