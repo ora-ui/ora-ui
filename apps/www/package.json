@@ -21,6 +21,7 @@
     "gen:manifest:check": "tsx scripts/gen-manifest.ts --check",
     "check:conventions": "tsx scripts/check-conventions.cli.ts",
     "gap-list": "tsx scripts/gap-list.cli.ts",
+    "validate-proposal": "tsx scripts/validate-proposal.cli.ts",
     "build:registry": "pnpm gen:manifest && shadcn build",
     "postinstall": "pnpm gen:lists || echo 'gen-lists failed, see the error above. Install continues, but build and typecheck will fail until it is fixed.'"
   },
