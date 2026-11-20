@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, useSyncExternalStore, type ReactNode } from 'react';
 import {
   ArrowsHorizontalIcon,
   ArrowsVerticalIcon,
@@ -21,6 +21,7 @@ import { Radio as RadioPrimitive } from '@base-ui/react/radio';
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
 import { Select as SelectPrimitive } from '@base-ui/react/select';
 
+import { DEFAULT_RADIUS, RADIUS_STEPS, RADIUS_STORAGE_KEY } from '@/playground/lib/radius';
 import { Button } from '@/registry/ui/button';
 import type {
   ContentGroup,
@@ -667,16 +668,6 @@ function SelectInput({
   );
 }
 
-const RADIUS_STORAGE_KEY = 'playground:radius';
-
-const RADIUS_STEPS = [
-  { value: 'none', label: 'None', radius: '0px' },
-  { value: 'sm', label: 'Small', radius: '0.25rem' },
-  { value: 'md', label: 'Medium', radius: '0.375rem' },
-  { value: 'lg', label: 'Large', radius: '0.75rem' },
-  { value: 'full', label: 'Full', radius: '9999px' },
-] as const;
-
 function EmptyState({ message }: { message: string }) {
   return (
     <div className="flex items-center justify-center p-(--sidebar-pad) py-8 text-center text-xs text-secondary">
@@ -712,18 +703,58 @@ function ColorSwatch({ name }: { name: string }) {
   );
 }
 
+const radiusListeners = new Set<() => void>();
+
+function subscribeRadius(onChange: () => void) {
+  radiusListeners.add(onChange);
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === RADIUS_STORAGE_KEY || e.key === null) onChange();
+  };
+  window.addEventListener('storage', onStorage);
+  return () => {
+    radiusListeners.delete(onChange);
+    window.removeEventListener('storage', onStorage);
+  };
+}
+
+function getRadius() {
+  try {
+    const stored = localStorage.getItem(RADIUS_STORAGE_KEY);
+    return RADIUS_STEPS.find((s) => s.value === stored)?.value ?? DEFAULT_RADIUS;
+  } catch {
+    return DEFAULT_RADIUS;
+  }
+}
+
+function getServerRadius() {
+  return DEFAULT_RADIUS;
+}
+
+function writeRadius(next: string) {
+  try {
+    localStorage.setItem(RADIUS_STORAGE_KEY, next);
+  } catch {}
+  radiusListeners.forEach((listener) => listener());
+}
+
+function subscribeNever() {
+  return () => {};
+}
+
+function getHydrated() {
+  return true;
+}
+
+function getNotHydrated() {
+  return false;
+}
+
 function ThemingPanel() {
   const { resolvedTheme, setTheme } = useTheme();
   const [gray, setGray] = useState('gray');
   const [accent, setAccent] = useState('accent');
-  const [radius, setRadius] = useState<string>('md');
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-detection + post-hydration read of persisted radius
-    setMounted(true);
-    const stored = localStorage.getItem(RADIUS_STORAGE_KEY);
-    if (stored && RADIUS_STEPS.some((s) => s.value === stored)) setRadius(stored);
-  }, []);
+  const radius = useSyncExternalStore(subscribeRadius, getRadius, getServerRadius);
+  const mounted = useSyncExternalStore(subscribeNever, getHydrated, getNotHydrated);
   const mode = mounted && resolvedTheme === 'dark' ? 'dark' : 'light';
   /*
    * Base UI's radio group keeps its tab stop on the value it mounted with, so the
@@ -734,9 +765,7 @@ function ThemingPanel() {
   useEffect(() => {
     if (!mounted) return;
     const step = RADIUS_STEPS.find((s) => s.value === radius);
-    if (!step) return;
-    document.documentElement.style.setProperty('--radius', step.radius);
-    localStorage.setItem(RADIUS_STORAGE_KEY, radius);
+    if (step) document.documentElement.style.setProperty('--radius', step.radius);
   }, [radius, mounted]);
 
   return (
@@ -795,7 +824,7 @@ function ThemingPanel() {
         <RadioGroupPrimitive
           key={mountKey}
           value={radius}
-          onValueChange={(next) => setRadius(next as string)}
+          onValueChange={(next) => writeRadius(next as string)}
           className="flex justify-between"
         >
           {RADIUS_STEPS.map(({ value, label, radius: r }) => (
