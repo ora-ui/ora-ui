@@ -87,6 +87,7 @@ function ToggleGroup({
       : '[--item-radius:calc(var(--radius-dynamic)-var(--item-rad-cut))]';
   return (
     <ToggleGroupPrimitive
+      orientation={orientation}
       data-slot="toggle-group"
       data-variant={variant}
       data-item-variant={itemVariant}
