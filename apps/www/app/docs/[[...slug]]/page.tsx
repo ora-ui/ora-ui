@@ -1,7 +1,9 @@
 import { source } from '@/docs/lib/source';
 import { getMDXComponents } from '@/docs/components/mdx';
+import { OpenInPlayground } from '@/docs/components/open-in-playground';
 import { TableOfContents } from '@/docs/components/table-of-contents';
 import { notFound } from 'next/navigation';
+import { getEntryBySlug } from '@/playground/entries';
 import type { Metadata } from 'next';
 
 type PageProps = {
@@ -14,12 +16,17 @@ export default async function Page(props: PageProps) {
   if (!page) notFound();
 
   const MDX = page.data.body;
+  const [section, component] = page.slugs;
+  const playgroundEntry = section === 'components' ? getEntryBySlug(component) : undefined;
 
   return (
     <div className="flex">
       <div className="flex w-full max-w-3xl flex-col mx-auto gap-6 py-8 sm:px-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-semibold tracking-tight">{page.data.title}</h1>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h1 className="text-3xl font-semibold tracking-tight">{page.data.title}</h1>
+            {playgroundEntry && <OpenInPlayground component={playgroundEntry.component} />}
+          </div>
           {page.data.description && (
             <p className="text-base text-secondary">{page.data.description}</p>
           )}

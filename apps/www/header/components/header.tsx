@@ -116,6 +116,7 @@ export function Header() {
       <div className="hidden lg:flex items-center gap-8">
         <nav aria-label="Primary navigation" className="flex items-center gap-6 text-sm">
           <Link render={<NextLink href="/docs" />}>Documentation</Link>
+          <Link render={<NextLink href="/playground" />}>Playground</Link>
         </nav>
         <HeaderDesktopActions onSearchOpen={() => setSearchOpen(true)} showSearch={showSearch} />
       </div>
