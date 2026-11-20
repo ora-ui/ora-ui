@@ -24,6 +24,7 @@ export type DefectCode =
   | 'unknown-part'
   | 'unknown-archetype'
   | 'missing-archetype-reason'
+  | 'invalid-name'
   | 'duplicate-name'
   | 'duplicate-issue'
   | 'missing-source'
@@ -129,8 +130,16 @@ export function validateProposal(proposal: Proposal, facts: Facts): Verdict {
     ['Name', proposal.name],
     ['Base UI primitive', proposal.primitive],
     ['Archetype', proposal.archetype],
+    ['Parts', proposal.parts.value],
+    ['Theme', proposal.theme.value],
+    ['Variants', proposal.variants.value],
+    ['Sizes', proposal.sizes.value],
   ]) {
     if (!value) add('missing-field', `Missing field: "${label}" has no section or no value.`);
+  }
+
+  if (proposal.name && !/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(proposal.name)) {
+    add('invalid-name', `Invalid name: "${proposal.name}" is not kebab-case.`);
   }
 
   const subpath = proposal.primitive.replace(/^@base-ui\/react\//, '');
@@ -191,6 +200,7 @@ export function validateProposal(proposal: Proposal, facts: Facts): Verdict {
   for (const field of SOURCED_FIELDS) {
     const { sources } = proposal[field];
     const label = field[0].toUpperCase() + field.slice(1);
+    if (field !== 'parts' && proposal[field].value.toLowerCase() === 'none') continue;
     if (sources.length === 0) {
       add(
         'missing-source',

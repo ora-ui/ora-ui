@@ -40,7 +40,7 @@ export async function listPrimitives(): Promise<Primitive[]> {
     primitives.push({
       subpath,
       exportName,
-      parts: isNamespace ? Object.keys(value) : ['Root'],
+      parts: isNamespace ? Object.keys(value).filter((k) => /^[A-Z]/.test(k)) : ['Root'],
     });
   }
   return primitives;

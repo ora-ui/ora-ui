@@ -153,6 +153,35 @@ describe('validateProposal', () => {
   });
 });
 
+describe('field completeness', () => {
+  it('fails an empty requirement field', () => {
+    const body = PROPOSAL.replace(
+      'gray, accent, destructive, warning, success\nSource: reference badge',
+      'Source: reference badge'
+    );
+    expect(messages(body).join('\n')).toMatch(/Missing field: "Theme"/);
+  });
+
+  it('accepts none for Variants and Sizes without a source', () => {
+    const body = PROPOSAL.replace('solid, soft\nSource: reference badge', 'none').replace(
+      'md, sm, lg\nSource: https://base-ui.com/react/components/progress',
+      'none'
+    );
+    expect(verdictFor(body).ok).toBe(true);
+  });
+
+  it('fails a name that is not kebab-case', () => {
+    const body = PROPOSAL.replace('progress\n\n### Description', 'Progress Bar\n\n### Description');
+    expect(verdictFor(body).defects.map((d) => d.code)).toEqual(['invalid-name']);
+  });
+
+  it('does not offer hooks or factories as parts', async () => {
+    const toast = facts.primitives.find((p) => p.subpath === 'toast');
+    expect(toast?.parts).not.toContain('useToastManager');
+    expect(toast?.parts).toContain('Root');
+  });
+});
+
 describe('facts read from disk and the package', () => {
   it('reads archetype slugs from the At a glance table', () => {
     expect(readArchetypes(realRoot)).toEqual([
