@@ -119,6 +119,19 @@
       ]
     },
     {
+      "name": "box",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/box.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ]
+    },
+    {
       "name": "button-group",
       "type": "registry:ui",
       "files": [
@@ -148,6 +161,22 @@
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
+    },
+    {
+      "name": "center",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/center.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react"
       ],
       "registryDependencies": [
         "utils"
@@ -295,11 +324,43 @@
       ]
     },
     {
+      "name": "flex",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/flex.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
+    },
+    {
       "name": "form",
       "type": "registry:ui",
       "files": [
         {
           "path": "registry/ui/form.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
+    },
+    {
+      "name": "grid",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "registry/ui/grid.tsx",
           "type": "registry:ui"
         }
       ],

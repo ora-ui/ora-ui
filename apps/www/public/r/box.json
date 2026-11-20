@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "box",
+  "dependencies": ["@base-ui/react"],
+  "files": [
+    {
+      "path": "registry/ui/box.tsx",
+      "content": "import { mergeProps } from '@base-ui/react/merge-props';\nimport { useRender } from '@base-ui/react/use-render';\n\nfunction Box({ className, render, ...props }: useRender.ComponentProps<'div'>) {\n  return useRender({\n    defaultTagName: 'div',\n    props: mergeProps<'div'>(\n      {\n        className,\n        ...({ 'data-slot': 'box' } as React.HTMLAttributes<HTMLDivElement>),\n      },\n      props\n    ),\n    render,\n    state: { slot: 'box' },\n  });\n}\n\nexport { Box };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

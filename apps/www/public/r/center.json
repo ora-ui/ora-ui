@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "center",
+  "dependencies": ["@base-ui/react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/ui/center.tsx",
+      "content": "import { mergeProps } from '@base-ui/react/merge-props';\nimport { useRender } from '@base-ui/react/use-render';\n\nimport { cn } from '@/registry/lib/utils';\n\nfunction Center({ className, render, ...props }: useRender.ComponentProps<'div'>) {\n  return useRender({\n    defaultTagName: 'div',\n    props: mergeProps<'div'>(\n      {\n        className: cn('grid place-items-center', className),\n        ...({ 'data-slot': 'center' } as React.HTMLAttributes<HTMLDivElement>),\n      },\n      props\n    ),\n    render,\n    state: { slot: 'center' },\n  });\n}\n\nexport { Center };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
