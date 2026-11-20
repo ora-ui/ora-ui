@@ -718,8 +718,12 @@ function subscribeRadius(onChange: () => void) {
 }
 
 function getRadius() {
-  const stored = localStorage.getItem(RADIUS_STORAGE_KEY);
-  return RADIUS_STEPS.some((s) => s.value === stored) ? (stored as string) : DEFAULT_RADIUS;
+  try {
+    const stored = localStorage.getItem(RADIUS_STORAGE_KEY);
+    return RADIUS_STEPS.find((s) => s.value === stored)?.value ?? DEFAULT_RADIUS;
+  } catch {
+    return DEFAULT_RADIUS;
+  }
 }
 
 function getServerRadius() {
@@ -727,7 +731,9 @@ function getServerRadius() {
 }
 
 function writeRadius(next: string) {
-  localStorage.setItem(RADIUS_STORAGE_KEY, next);
+  try {
+    localStorage.setItem(RADIUS_STORAGE_KEY, next);
+  } catch {}
   radiusListeners.forEach((listener) => listener());
 }
 
@@ -757,9 +763,10 @@ function ThemingPanel() {
   const mountKey = mounted ? 'mounted' : 'ssr';
 
   useEffect(() => {
+    if (!mounted) return;
     const step = RADIUS_STEPS.find((s) => s.value === radius);
     if (step) document.documentElement.style.setProperty('--radius', step.radius);
-  }, [radius]);
+  }, [radius, mounted]);
 
   return (
     <div className="flex flex-col p-(--sidebar-pad) gap-6 font-normal">
