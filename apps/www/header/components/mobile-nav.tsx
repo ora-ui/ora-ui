@@ -35,6 +35,11 @@ function MenuIcon() {
   );
 }
 
+const primaryLinks = [
+  { href: '/docs', label: 'Documentation' },
+  { href: '/playground', label: 'Playground' },
+];
+
 export function MobileNav() {
   const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
@@ -73,6 +78,20 @@ export function MobileNav() {
 
               <div className="overflow-y-auto pb-safe pb-6">
                 <SidebarContent>
+                  <SidebarGroup>
+                    <SidebarGroupContent>
+                      {primaryLinks.map((link) => (
+                        <SidebarItem
+                          key={link.href}
+                          asChild
+                          active={pathname === link.href}
+                          onClick={() => setOpen(false)}
+                        >
+                          <Link href={link.href}>{link.label}</Link>
+                        </SidebarItem>
+                      ))}
+                    </SidebarGroupContent>
+                  </SidebarGroup>
                   {tree.children.map((item) => {
                     if (item.type === 'folder') {
                       return (
