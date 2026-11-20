@@ -131,29 +131,47 @@ The draft goes to an issue, not the chat, and a maintainer reviews it
 there. Keep the **ask** items for the issue rather than asking them in
 chat. Proposal mode writes no component code.
 
-1. **Check it's new.** If `apps/www/registry/ui/<name>.tsx` exists, or
+1. **List what is missing.** To pick a component, run
+   `pnpm --filter www gap-list`. It prints each Base UI component
+   primitive that no registry component imports, with its parts. Read
+   primitives and part names from it, not from the Base UI docs.
+2. **Check it's new.** If `apps/www/registry/ui/<name>.tsx` exists, or
    `gh issue list --state open --search "New component: <name> in:title"`
    finds an issue, report that and stop.
-2. **Write the body.** One `### <label>` section per field of
+3. **Write the body.** One `### <label>` section per field of
    `new_component.yml`, with the exact label text, in the template's
    order. That is how the form renders an issue, so the approved-issue
    path above reads both the same way. Fill every field, the optional
    ones too, in the format its `description` in the template gives.
    The Archetype is one of the dropdown options, verbatim.
+   - **Sources**: end each of Parts, Theme, Variants and Sizes with a
+     `Source:` line. Its value is a `https://base-ui.com/...` URL, or
+     `reference <component>` for a registry component it follows.
+   - **Parts**: `OraName (BasePart)` per line, where `BasePart` is a
+     part that `gap-list` printed for the primitive. Write `(Ora-only)`
+     for a part with no Base UI counterpart.
    - **Playground**: the controls and content from the draft.
    - **Docs examples**: the list from the draft, one line per example.
    - **Other requirements**: radius per part, context, props, CSS
      custom properties, field state, and each **ask** item as an open
      question with a proposed answer, such as `Open: density?
 Proposed: none.` The reviewer edits the answers before approving.
-3. **File it**, then report the issue URL and stop:
+   - **No fitting archetype**: write `none` as the Archetype, and add a
+     `### No archetype fit` section after the template fields that says
+     why no row of `archetypes.md` fits.
+4. **Validate it.** Save the body to a file and run
+   `pnpm --filter www validate-proposal <file>`. Each defect prints with
+   its name. On failure, fix the body and rerun, or report the defects
+   and stop. Never file a proposal that fails. On success it prints the
+   labels to use.
+5. **File it** with the printed labels, then report the issue URL and
+   stop. A proposal with no fitting archetype gets `needs-human` as well
+   as `needs-triage`, so a human settles the archetype before anyone
+   builds it.
 
    ```bash
    gh issue create --title "New component: <name>" \
-     --label enhancement --label needs-triage --body-file - <<'EOF'
-   ### Name
-   ...
-   EOF
+     --label <each printed label> --body-file <file>
    ```
 
 ## Phase 3: Scaffold, then implement
