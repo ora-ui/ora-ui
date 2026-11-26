@@ -45,12 +45,12 @@ post-merge:
       run: pnpm install
 
 post-checkout:
-  commands:
-    install:
+  piped: true
+  jobs:
+    - name: install
       run: |
         [ "{3}" = "1" ] || exit 0
-        case "{1}" in *[!0]*) ;; *) exit 0 ;; esac
-        git diff --quiet {1} {2} -- pnpm-lock.yaml && exit 0
+        case "{1}" in *[!0]*) git diff --quiet {1} {2} -- pnpm-lock.yaml && exit 0 ;; esac
         pnpm install
-    gen-lists:
+    - name: gen-lists
       run: pnpm -C apps/www gen:lists
